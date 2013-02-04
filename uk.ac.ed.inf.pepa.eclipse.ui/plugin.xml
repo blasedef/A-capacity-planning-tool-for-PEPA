@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="uk.ac.ed.inf.pepa.eclipse.ui.editor.PEPAEditor"
+            default="true"
+            extensions="pepa"
+            icon="icons/pepa16.png"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.editor.PEPAEditor"
+            name="PEPA Editor"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            name="PEPA"/>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.astview.ASTView"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.ASTView"
+            name="AST View"/>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.statespaceexplorer.StateSpaceExplorer"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.stateSpaceView "
+            name="State Space View "/>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.utilisationview.UtilisationView"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.utilisationView"
+            name="Performance Evaluation"/>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.abstractionview.AbstractionView"
+            icon="icons/abstract.png"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.AbstractionView"
+            name="Abstraction View">
+      </view>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.modelcheckingview.ModelCheckingView"
+            icon="icons/model_check.png"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.ModelCheckingView"
+            name="Model Checking View">
+      </view>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.DifferentialExplorer"
+            icon="icons/ode.png"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.odeView"
+            name="Differential Analysis"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            id="uk.ac.ed.inf.pepa.eclipse.ui.editorActions"
+            sibling_order="&lt;action&#x0A;               class=&quot;uk.ac.ed.inf.pepa.eclipse.ui.ode.CapacityUtilisationActionDelegate&quot;&#x0A;               id=&quot;uk.ac.ed.inf.pepa.eclipse.ui.ode.capacityutilisation&quot;&#x0A;               label=&quot;Average Response Time&quot;&#x0A;               menubarPath=&quot;uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content&quot;&#x0A;               style=&quot;push&quot;&gt;&#x0A;         &lt;/action&gt;"
+            targetID="uk.ac.ed.inf.pepa.eclipse.ui.editor.PEPAEditor">
+         <menu
+               id="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu"
+               label="PEPA"
+               path="additions">
+            <groupMarker name="content"/>
+            <groupMarker
+                  name="content2">
+            </groupMarker>
+            <separator name="additions"/>
+         </menu>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.ResponseTimeActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.responseTime"
+               label="Average Response Time..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityUtilisationActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.ode.capacityutilisation"
+               label="Capacity Utilisation..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.ThroughputActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.ode.throughput"
+               label="Throughput..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.PopulationLevelActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.ode.populationlevel"
+               label="Population Level..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.ExperimentationActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.experimentation"
+               label="Experimentation..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC/content"
+               style="push"/>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.PassageTimeActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.passageTime"
+               label="Passage-Time Analysis..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC/content"
+               style="push"/>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.SteadyStateCTMCSolverDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.steadyStateCTMCSolve"
+               label="Steady State Analysis..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC/content"
+               style="push"
+               tooltip="Calculate the steady state probability distribution of the underlying CTMC"/>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.DeriveActionDelegate"
+               icon="icons/derive.gif"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.deriveAction"
+               label="Derive"
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC/content"
+               style="push"
+               tooltip="Derive the state space of the underlying CTMC"/>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.AggregateActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.aggregate_arrays"
+               label="Aggregate arrays"
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC/content"
+               style="toggle"
+               tooltip="Aggregate arrays of components">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.LatexifyActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.latexify"
+               label="LaTeXify..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content"
+               style="push">
+         </action>
+         <menu
+               id="uk.ac.ed.inf.pepa.eclipse.ui.ode.menu"
+               label="Scalable Analysis"
+               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content">
+            <groupMarker
+                  name="content">
+            </groupMarker>
+            <separator
+                  name="separator">
+            </separator>
+         </menu>
+         <menu
+               id="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC"
+               label="CTMC"
+               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content">
+            <groupMarker name="content"/>
+            <groupMarker
+                  name="additions">
+            </groupMarker>
+            <separator
+                  name="separator">
+            </separator>
+         </menu>
+         <!--<action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.TimeSeriesAnalysisActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.timeSeriesAnalysis"
+               label="Time Series Analysis Wizard"
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content2"
+               style="push"
+               tooltip="Perform time series analysis using ODEs or SSAs"/>-->
+      </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="uk.ac.ed.inf.pepa.eclipse.ui.PerspectiveFactory"
+            icon="icons/pepa16.png"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.PepaPerspective"
+            name="PEPA"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="uk.ac.ed.inf.pepa.eclipse.ui.popupMenu.cmdl"
+            nameFilter="*.cmdl"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.CMDLActionDelegate"
+               enablesFor="1"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.popupMenu.cmdl.timeSeriesAnalysis.ODE"
+               label="Time Series Analysis of CMDL"
+               menubarPath="additions"/>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>

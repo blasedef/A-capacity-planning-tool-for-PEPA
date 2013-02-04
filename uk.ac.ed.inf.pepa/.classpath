@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="cup/|jflex/" kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/concurrent.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Jama.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/java-cup-11a-runtime.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/libsbmlj.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ssj.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/colt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/fern.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-3.3-complete.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/ledatastream.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/uk.ac.ed.inf.common"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

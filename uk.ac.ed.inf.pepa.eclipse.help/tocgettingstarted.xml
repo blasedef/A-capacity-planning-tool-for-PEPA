@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
+	<topic label="Perspective" 
+		href="html/gettingstarted/perspective.html"/> 
+	<topic label="Editor"
+		href="html/gettingstarted/editor.html">
+		<topic label="Basic Syntax" 
+			href="html/gettingstarted/syntax.html"/>
+	</topic>
+	<topic label="AST View"
+		href="html/gettingstarted/astview.html"/>
+	<topic label="Graph View"
+		href="html/gettingstarted/graphview.html"/>
+	<topic label="Markovian Analysis">
+		<topic label="State Space Derivation" 
+			href="html/gettingstarted/derivation.html"/>
+		<topic label="State Space View"
+			href="html/gettingstarted/statespacederivation.html">
+			<topic label="Filtering the State Space"
+				href="html/gettingstarted/statespacefilters.html"/>
+			<topic label="Single Step Navigator"
+				href="html/gettingstarted/singlestepnavigator.html"/>
+			<topic label="Exporting the State Space"
+				href="html/gettingstarted/exportingstatespace.html"/>
+		</topic>
+		<topic label="Steady-State Analysis"
+			href="html/gettingstarted/steadystateanalysis.html"/>
+		<topic label="Performance Evaluation View"
+			href="html/gettingstarted/performanceevaluationview.html"/>
+		<topic label="Experimentation" 
+			href="html/gettingstarted/experimentation.html"/>
+	</topic>
+	<topic label="Time Series Analysis"
+		href="html/gettingstarted/timeseriesanalysis.html"/>
+	<topic label="Importing from UML"
+		href="html/gettingstarted/importinguml.html"/>
+</toc>
