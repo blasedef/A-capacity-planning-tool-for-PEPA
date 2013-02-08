@@ -165,7 +165,7 @@
             </separator>
          </menu>
          <action
-               class="uk.ac.ed.inf.pepa.eclipse.ui.CapacityPlanningActionDelegate"
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.CapacityPlanningDelegate"
                id="uk.ac.ed.inf.pepa.eclipse.ui.capacityplanning"
                label="Capacity Planning..."
                menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
