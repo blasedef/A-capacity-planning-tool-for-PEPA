@@ -94,6 +94,16 @@ public class ActionCommands {
 		dialog.setPageSize(400, 400);
 		dialog.open();
 	}
+	
+	public static void capacityplanning(IPepaModel model) {
+		ExperimentationWizard wizard = new ExperimentationWizard(
+				new PEPAEvaluator(model),
+				new ConcretePerformanceMetricFactory());
+		WizardDialog dialog = new WizardDialog(Display.getDefault()
+				.getActiveShell(), wizard);
+		dialog.setPageSize(400, 400);
+		dialog.open();
+	}
 
 	
 	public static void passageTime(IPepaModel model) {
