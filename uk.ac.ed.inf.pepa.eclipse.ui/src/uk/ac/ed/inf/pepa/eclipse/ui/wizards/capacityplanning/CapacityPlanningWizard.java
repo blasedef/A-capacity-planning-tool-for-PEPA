@@ -24,7 +24,7 @@ public class CapacityPlanningWizard extends Wizard {
 
   @Override
   public void addPages() {
-    setUpOptimiserPage = new SetUpOptimiserPage();
+    setUpOptimiserPage = new SetUpOptimiserPage(this.model);
     listOfConfigurationsPage = new ListOfConfigurationsPage();
     addPage(setUpOptimiserPage);
     addPage(listOfConfigurationsPage);

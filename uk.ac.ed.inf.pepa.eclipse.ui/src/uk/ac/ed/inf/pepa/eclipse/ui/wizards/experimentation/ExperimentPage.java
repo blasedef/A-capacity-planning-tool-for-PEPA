@@ -164,7 +164,7 @@ public class ExperimentPage extends WizardPage implements IDynamicParent {
 	 * <p>
 	 * The experiment pages reacts by passing this information on to the
 	 * experiments in order to update the status of their control. In
-	 * particular, the experiment should update their fnish status if they were
+	 * particular, the experiment should update their finish status if they were
 	 * previously set with ASTNodes that are no longer available.
 	 * 
 	 * @param astNodes

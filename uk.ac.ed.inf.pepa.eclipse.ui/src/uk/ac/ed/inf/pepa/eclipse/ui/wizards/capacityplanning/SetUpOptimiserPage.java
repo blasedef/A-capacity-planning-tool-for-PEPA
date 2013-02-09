@@ -4,18 +4,20 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+
 public class SetUpOptimiserPage extends WizardPage {
   private Text text1;
   private Text text2;
+  private IPepaModel model;
   private Composite container;
 
-  public SetUpOptimiserPage() {
+  public SetUpOptimiserPage(IPepaModel model) {
     super("Stochastic Search Optimisation");
     setTitle("Stochastic Search Optimisation");
     setDescription("Setting up Search Optimisation");
@@ -71,7 +73,11 @@ public class SetUpOptimiserPage extends WizardPage {
 
     });    
     
-    GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+    
+    Label label3 = new Label(container, SWT.NULL);
+    label3.setText(" ");
+    
+    
     // Required to avoid an error in the system
     setControl(container);
     setPageComplete(false);
