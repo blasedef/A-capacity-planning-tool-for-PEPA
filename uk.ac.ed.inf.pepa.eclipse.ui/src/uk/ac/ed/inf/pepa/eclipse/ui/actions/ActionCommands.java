@@ -97,7 +97,7 @@ public class ActionCommands {
 	}
 	
 	public static void capacityplanning(IPepaModel model) {
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard((IPepaModel) model);
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(400, 400);

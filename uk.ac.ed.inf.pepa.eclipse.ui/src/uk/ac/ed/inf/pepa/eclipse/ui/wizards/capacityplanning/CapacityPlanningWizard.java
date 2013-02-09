@@ -6,32 +6,36 @@
  * http://groups.inf.ed.ac.uk/pepa/update/licence.txt
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
-
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.eclipse.core.IProcessAlgebraModel;
+
 
 public class CapacityPlanningWizard extends Wizard {
 
-	private IPepaModel model;
-	
-	public CapacityPlanningWizard(IPepaModel model) {
-			if (model == null)
-				throw new NullPointerException();
-			if (!model.isDerivable())
-				throw new IllegalArgumentException("The model is not derivable");
-			this.model = model;
-			this.setForcePreviousAndNextButtons(true);
-			this.setNeedsProgressMonitor(true);
+  protected SetUpOptimiserPage setUpOptimiserPage;
+  protected ListOfConfigurationsPage listOfConfigurationsPage;
+  private IPepaModel model;
 
-		}
+  public CapacityPlanningWizard(IPepaModel model) {
+    super();
+    this.model = model;
+    setNeedsProgressMonitor(true);
+  }
 
-	@Override
-	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-}
+  @Override
+  public void addPages() {
+    setUpOptimiserPage = new SetUpOptimiserPage();
+    listOfConfigurationsPage = new ListOfConfigurationsPage();
+    addPage(setUpOptimiserPage);
+    addPage(listOfConfigurationsPage);
+  }
+
+  @Override
+  public boolean performFinish() {
+    // Print the result to the console
+    System.out.println(setUpOptimiserPage.getText1());
+    System.out.println(listOfConfigurationsPage.getText1());
+
+    return true;
+  }
+} 
