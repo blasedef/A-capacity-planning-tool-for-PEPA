@@ -30,6 +30,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.ctmcsolver.resourceless.SolverWizard
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ConcretePerformanceMetricFactory;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.pepa.PEPAEvaluator;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CapacityPlanningWizard;
 
 /**
  * Actual implementation of actions shared by both the text editor and the
@@ -96,9 +97,7 @@ public class ActionCommands {
 	}
 	
 	public static void capacityplanning(IPepaModel model) {
-		ExperimentationWizard wizard = new ExperimentationWizard(
-				new PEPAEvaluator(model),
-				new ConcretePerformanceMetricFactory());
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(new PEPAEvaluator(model),new ConcretePerformanceMetricFactory());
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(400, 400);
