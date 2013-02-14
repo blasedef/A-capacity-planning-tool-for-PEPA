@@ -2,22 +2,20 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-
 public class SetUpOptimiserPage extends WizardPage {
-  private Text text1;
-  private Text text2;
-  private IPepaModel model;
-  private Composite container;
-
-  public SetUpOptimiserPage(IPepaModel model) {
+  //parameters
+  private Text minimumPop;
+  private Text maximumPop;
+  
+  public SetUpOptimiserPage() {
     super("Stochastic Search Optimisation");
     setTitle("Stochastic Search Optimisation");
     setDescription("Setting up Search Optimisation");
@@ -25,66 +23,96 @@ public class SetUpOptimiserPage extends WizardPage {
 
   @Override
   public void createControl(Composite parent) {
-    container = new Composite(parent, SWT.NULL);
-    GridLayout layout = new GridLayout();
-    container.setLayout(layout);
-    layout.numColumns = 2;
-    Label label1 = new Label(container, SWT.NULL);
-    label1.setText("Maximum Agent Population for component:");
+	  
+		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(4, false));
+		setControl(composite);
 
-    
-    text1 = new Text(container, SWT.BORDER | SWT.SINGLE);
-    text1.setText("");
-    text1.addKeyListener(new KeyListener() {
+		validate();
+		
+		/* Minimum Agent Population */
+	    Label miniPop = new Label(composite, textStyle);
+	    miniPop.setText("Minimum population");
+		minimumPop = new Text(composite, textStyle);
+		minimumPop.setLayoutData(createDefaultGridData());
+		minimumPop.addListener(SWT.Modify, new Listener() {
 
-      @Override
-      public void keyPressed(KeyEvent e) {
-      }
+			public void handleEvent(Event event) {
+				validate();
+			}
+		});
+		
+		/* Maximum Agent Population */
+	    Label maxPop = new Label(composite, textStyle);
+	    maxPop.setText("Maximum population");
+		maximumPop = new Text(composite, textStyle);
+		maximumPop.setLayoutData(createDefaultGridData());
+		maximumPop.addListener(SWT.Modify, new Listener() {
 
-      @Override
-      public void keyReleased(KeyEvent e) {
-        if (!text1.getText().isEmpty()) {
-          setPageComplete(true);
-
-        }
-      }
-
-    });
-    
-    
-    Label label2 = new Label(container, SWT.NULL);
-    label2.setText("Minimum Agent Population for component:");
-    
-    text2 = new Text(container, SWT.BORDER | SWT.SINGLE);
-    text2.setText("");
-    text2.addKeyListener(new KeyListener() {
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-        if (!text2.getText().isEmpty()) {
-          setPageComplete(true);
-
-        }
-      }
-
-    });    
-    
-    
-    Label label3 = new Label(container, SWT.NULL);
-    label3.setText(" ");
-    
-    
-    // Required to avoid an error in the system
-    setControl(container);
-    setPageComplete(false);
-
+			public void handleEvent(Event event) {
+				validate();
+			}
+		});
+		
   }
 
-  public String getText1() {
-    return text1.getText();
+  public void validate() {
+	this.setErrorMessage(null);
+	this.setPageComplete(false);
+	boolean minimumPopOk = false;
+	boolean maximumPopOk = false;
+	
+	
+	//check minimum population
+	try{
+		double miniPop = Double.valueOf(minimumPop.getText());
+		if(miniPop < 1.0){
+			minimumPopOk = false;
+		} else {
+			minimumPopOk = true;
+		}
+	} catch (NumberFormatException e) {
+		maximumPopOk = false;
+	} finally {
+		if (!minimumPopOk) {
+			setErrorMessage("Value not allowed, Minimum Population must be at least 1");
+			return;
+		}
+	}
+	
+	//check maximum population
+	try{
+		double maxiPop = Double.valueOf(maximumPop.getText());
+		if(maxiPop < 1.0){
+			maximumPopOk = false;
+		} else {
+			maximumPopOk = true;
+		}
+	} catch (NumberFormatException e) {
+		maximumPopOk = false;
+	} finally {
+		if (!maximumPopOk) {
+			setErrorMessage("Value not allowed, Maximum Population must be at least 1");
+			return;
+		}
+	}
+	
+	if(minimumPopOk && maximumPopOk)
+		this.setPageComplete(true);
   }
+  
+  public double getMinimumPopulation(){
+	  return Double.valueOf(minimumPop.getText());
+  }
+  
+  public double getMaximumPopulation(){
+	  return Double.valueOf(maximumPop.getText());
+  }
+  
+  private GridData createDefaultGridData() {
+	/* ...with grabbing horizontal space */
+	return new GridData(SWT.FILL, SWT.CENTER, true, false);
+  }
+  
 } 

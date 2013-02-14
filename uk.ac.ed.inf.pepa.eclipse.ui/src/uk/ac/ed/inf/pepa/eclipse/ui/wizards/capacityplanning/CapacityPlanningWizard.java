@@ -6,36 +6,68 @@
  * http://groups.inf.ed.ac.uk/pepa/update/licence.txt
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import uk.ac.ed.inf.common.ui.wizards.SaveAsPage;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 
 
 public class CapacityPlanningWizard extends Wizard {
+	
+	/** Extension for CSV files */
+	private static final String EXTENSION = "csv";
+	private WizardNewFileCreationPage newFilePage;
+	
+	protected SetUpOptimiserPage setUpOptimiserPage;
+	private IPepaModel model;
+	
+	public CapacityPlanningWizard(IPepaModel model) {
+		super();
+	    this.model = model;
+	    setNeedsProgressMonitor(true);
+	}
+	
+	@Override
+	public void addPages() {
+		addSaveAsPage();
+		setUpOptimiserPage = new SetUpOptimiserPage();
+		addPage(setUpOptimiserPage);
+	}
+  
+	private void addSaveAsPage() {
+		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+						model.getUnderlyingResource(), EXTENSION));
+	
+		newFilePage = new SaveAsPage("newFilePage", new StructuredSelection(
+				handle), EXTENSION);
+		newFilePage.setTitle("Save to CSV");
+		newFilePage.setDescription("Save model configurations to");
+		newFilePage.setFileName(handle.getName());
+		this.addPage(newFilePage);
+	}
 
-  protected SetUpOptimiserPage setUpOptimiserPage;
-  protected ListOfConfigurationsPage listOfConfigurationsPage;
-  private IPepaModel model;
-
-  public CapacityPlanningWizard(IPepaModel model) {
-    super();
-    this.model = model;
-    setNeedsProgressMonitor(true);
-  }
-
-  @Override
-  public void addPages() {
-    setUpOptimiserPage = new SetUpOptimiserPage(this.model);
-    listOfConfigurationsPage = new ListOfConfigurationsPage();
-    addPage(setUpOptimiserPage);
-    addPage(listOfConfigurationsPage);
-  }
-
-  @Override
-  public boolean performFinish() {
-    // Print the result to the console
-    System.out.println(setUpOptimiserPage.getText1());
-    System.out.println(listOfConfigurationsPage.getText1());
-
-    return true;
-  }
+	@Override
+	public boolean performFinish() {
+		Job myJob;
+		try {
+			myJob = new MetaHeuristicJob(this.model.getAST(), this.setUpOptimiserPage, this.newFilePage.createNewFile());
+			myJob.schedule();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
 } 
