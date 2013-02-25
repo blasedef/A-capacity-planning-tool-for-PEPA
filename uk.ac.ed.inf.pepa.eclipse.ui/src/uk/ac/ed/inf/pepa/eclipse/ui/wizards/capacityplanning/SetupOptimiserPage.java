@@ -10,12 +10,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-public class SetUpOptimiserPage extends WizardPage {
+public class SetupOptimiserPage extends WizardPage {
   //parameters
   private Text minimumPop;
   private Text maximumPop;
   
-  public SetUpOptimiserPage() {
+  public SetupOptimiserPage() {
     super("Stochastic Search Optimisation");
     setTitle("Stochastic Search Optimisation");
     setDescription("Setting up Search Optimisation");
@@ -27,7 +27,7 @@ public class SetUpOptimiserPage extends WizardPage {
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(4, false));
-		setControl(composite);
+		
 
 		validate();
 		
@@ -54,7 +54,7 @@ public class SetUpOptimiserPage extends WizardPage {
 				validate();
 			}
 		});
-		
+		setControl(composite);
   }
 
   public void validate() {

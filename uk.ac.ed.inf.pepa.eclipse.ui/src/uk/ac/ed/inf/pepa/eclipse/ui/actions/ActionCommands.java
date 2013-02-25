@@ -25,12 +25,14 @@ import uk.ac.ed.inf.pepa.ctmc.solution.SolverException;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.IProcessAlgebraModel;
 import uk.ac.ed.inf.pepa.eclipse.core.PepaLog;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.RunnableGraphProvider;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.PassageTimeWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.ctmcsolver.resourceless.SolverWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ConcretePerformanceMetricFactory;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.pepa.PEPAEvaluator;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CapacityPlanningWizard;
+import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 /**
  * Actual implementation of actions shared by both the text editor and the
@@ -97,7 +99,17 @@ public class ActionCommands {
 	}
 	
 	public static void capacityplanning(IPepaModel model) {
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
+		//look in package uk.ac.ed.inf.pepa.eclipse.ui.largescale.PerformanceMetricActionDelegate for graph
+		ModelNode node = model.getAST();
+		RunnableGraphProvider gp = new RunnableGraphProvider(node);
+		try {
+			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, gp);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(gp.getGraph(),model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(400, 400);
