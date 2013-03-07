@@ -1,9 +1,13 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
 import uk.ac.ed.inf.pepa.parsing.ActivityNode;
@@ -27,233 +31,32 @@ import uk.ac.ed.inf.pepa.parsing.WildcardCooperationNode;
 
 public class MetaHeuristicPopulation {
 	
-	private IPepaModel model;
-	private ModelNode modelAsAST;
-	private Dictionary originalSystemEquationDict = new Hashtable();
-	private Dictionary tempSystemEquationDict = new Hashtable();
-	private ModelObject originalModelObject;
-	private String systemEquationAsString;
-	private String component;
-	private Double population;
-	private boolean test = false;
+	private ArrayList<ModelObject> mPopulation;
 
-	public MetaHeuristicPopulation(IPepaModel model) {
-		this.model = model;
-		this.modelAsAST = model.getAST();
-		this.systemEquationAsString = "";
-		sweepASTForSystemEquationString();
-		sweepASTForSystemEquationAsDictionary();
+	public MetaHeuristicPopulation() {
+		this.mPopulation = new ArrayList<ModelObject>();
 	}
 	
-	public void changeAValueTest() {
-		
-		this.systemEquationAsString = "";
-		
-		//me
-		this.originalModelObject = new ModelObject();
-		this.originalModelObject.copyDictionary(this.originalSystemEquationDict);
-		ModelObject secondModelObject = new ModelObject();
-		secondModelObject.copyDictionary(this.originalSystemEquationDict);
-		secondModelObject.setAnItem("Farm", 6.0);
-		setASTvalues(secondModelObject.getDictionary());
-		sweepASTForSystemEquationString();
+	public void initialise(IProgressMonitor monitor){
+		ModelObject temp = new ModelObject(monitor);
+		temp.copyDictionary(CapacityPlanningAnalysisParameters.originalSystemEquationDict);
+		this.mPopulation.add(temp);
 	}
-	
-	public void putValuesBackTest() {
-		this.systemEquationAsString = "";
-		setASTvalues(originalModelObject.getDictionary());
-		sweepASTForSystemEquationString();		
+
+	public String giveMeAModelsName(int i) {
+		return this.mPopulation.get(i).toString();
 	}
-	
+
+	public void setAModel(int i, String x, Double y) {
+		this.mPopulation.get(i).setAnItem(x, y);		
+	}
+
 	/**
-	 * Set this objects system equation variables
-	 * 
+	 * put the core AST back to how it was originally
+	 * or the values are off...
 	 */
-	public void sweepASTForSystemEquationString(){
-		modelAsAST.accept(new ModelObjectVisitor());
+	public void reset() {
+		this.mPopulation.get(0).reset();
 	}
 	
-	public String getSystemEquationAsString(){
-		return systemEquationAsString;
-	}
-	
-	public void sweepASTForSystemEquationAsDictionary(){
-		modelAsAST.accept(new ModelObjectVisitorDict());
-	}
-	
-	public void setASTvalues(Dictionary dict){
-		tempSystemEquationDict = dict;
-		modelAsAST.accept(new ModelObjectVisitorSetValues());
-	}
-	
-	private class ModelObjectVisitor implements ASTVisitor {
-
-		@Override
-		public void visitConstantProcessNode(ConstantProcessNode constant) {
-			component = constant.getName();
-			systemEquationAsString = systemEquationAsString + component + ",";
-		}
-		
-		@Override
-		public void visitRateDoubleNode(RateDoubleNode doubleRate) {
-			population = doubleRate.getValue();
-			systemEquationAsString = systemEquationAsString + population + "\n";
-		}
-		
-		@Override
-		public void visitAggregationNode(AggregationNode aggregation) {
-			aggregation.getProcessNode().accept(this);
-			aggregation.getCopies().accept(this);
-			
-		}
-
-		@Override
-		public void visitCooperationNode(CooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}
-
-		@Override
-		public void visitWildcardCooperationNode(
-				WildcardCooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}		
-
-		@Override
-		public void visitModelNode(ModelNode model) {
-			model.getSystemEquation().accept(this);
-			
-		}
-		
-		public void visitPassiveRateNode(PassiveRateNode passive) {}
-		public void visitPrefixNode(PrefixNode prefix) {}
-		public void visitProcessDefinitionNode(ProcessDefinitionNode processDefinition) {}
-		public void visitUnknownActionTypeNode(UnknownActionTypeNode unknownActionTypeNode) {}
-		public void visitVariableRateNode(VariableRateNode variableRate) {}
-		public void visitRateDefinitionNode(RateDefinitionNode rateDefinition) {}
-		public void visitActionTypeNode(ActionTypeNode actionType){}
-		public void visitBinaryOperatorRateNode(BinaryOperatorRateNode rate) {}
-		public void visitChoiceNode(ChoiceNode choice) {}
-		public void visitHidingNode(HidingNode hiding) {}
-		public void visitActivityNode(ActivityNode activity) {}
-		
-	}
-	
-	private class ModelObjectVisitorDict implements ASTVisitor {
-
-		@Override
-		public void visitConstantProcessNode(ConstantProcessNode constant) {
-			component = constant.getName();
-		}
-		
-		@Override
-		public void visitRateDoubleNode(RateDoubleNode doubleRate) {
-			population = doubleRate.getValue();
-			originalSystemEquationDict.put(component,population);
-		}
-		
-		@Override
-		public void visitAggregationNode(AggregationNode aggregation) {
-			aggregation.getProcessNode().accept(this);
-			aggregation.getCopies().accept(this);
-			
-		}
-
-		@Override
-		public void visitCooperationNode(CooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}
-
-		@Override
-		public void visitWildcardCooperationNode(
-				WildcardCooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}		
-
-		@Override
-		public void visitModelNode(ModelNode model) {
-			model.getSystemEquation().accept(this);
-			
-		}
-		
-		public void visitPassiveRateNode(PassiveRateNode passive) {}
-		public void visitPrefixNode(PrefixNode prefix) {}
-		public void visitProcessDefinitionNode(ProcessDefinitionNode processDefinition) {}
-		public void visitUnknownActionTypeNode(UnknownActionTypeNode unknownActionTypeNode) {}
-		public void visitVariableRateNode(VariableRateNode variableRate) {}
-		public void visitRateDefinitionNode(RateDefinitionNode rateDefinition) {}
-		public void visitActionTypeNode(ActionTypeNode actionType){}
-		public void visitBinaryOperatorRateNode(BinaryOperatorRateNode rate) {}
-		public void visitChoiceNode(ChoiceNode choice) {}
-		public void visitHidingNode(HidingNode hiding) {}
-		public void visitActivityNode(ActivityNode activity) {}
-		
-	}
-
-	private class ModelObjectVisitorSetValues implements ASTVisitor {
-
-		@Override
-		public void visitConstantProcessNode(ConstantProcessNode constant) {
-			component = constant.getName();
-			test = tempSystemEquationDict.get(component) != null;
-			
-		}
-		
-		@Override
-		public void visitRateDoubleNode(RateDoubleNode doubleRate) {
-			if(test){
-				doubleRate.setValue((double) tempSystemEquationDict.get(component));
-				test = false;
-			}
-				
-		}
-		
-		@Override
-		public void visitAggregationNode(AggregationNode aggregation) {
-			aggregation.getProcessNode().accept(this);
-			aggregation.getCopies().accept(this);
-			
-		}
-
-		@Override
-		public void visitCooperationNode(CooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}
-
-		@Override
-		public void visitWildcardCooperationNode(
-				WildcardCooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}		
-
-		@Override
-		public void visitModelNode(ModelNode model) {
-			model.getSystemEquation().accept(this);
-			
-		}
-		
-		public void visitPassiveRateNode(PassiveRateNode passive) {}
-		public void visitPrefixNode(PrefixNode prefix) {}
-		public void visitProcessDefinitionNode(ProcessDefinitionNode processDefinition) {}
-		public void visitUnknownActionTypeNode(UnknownActionTypeNode unknownActionTypeNode) {}
-		public void visitVariableRateNode(VariableRateNode variableRate) {}
-		public void visitRateDefinitionNode(RateDefinitionNode rateDefinition) {}
-		public void visitActionTypeNode(ActionTypeNode actionType){}
-		public void visitBinaryOperatorRateNode(BinaryOperatorRateNode rate) {}
-		public void visitChoiceNode(ChoiceNode choice) {}
-		public void visitHidingNode(HidingNode hiding) {}
-		public void visitActivityNode(ActivityNode activity) {}
-		
-	}
 }
