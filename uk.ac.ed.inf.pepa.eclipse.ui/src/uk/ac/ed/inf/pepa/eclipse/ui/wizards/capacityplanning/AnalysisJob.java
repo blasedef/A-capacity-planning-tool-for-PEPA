@@ -26,8 +26,12 @@ public abstract class AnalysisJob extends Job {
 	protected long elapsed = 0L;
 	
 	public AnalysisJob(String name,
-			IParametricDerivationGraph derivationGraph, OptionMap map,
-			IPointEstimator[] estimators, IStatisticsCollector[] collectors, String[] labels) {
+			IParametricDerivationGraph derivationGraph, 
+			OptionMap map,
+			IPointEstimator[] estimators, 
+			IStatisticsCollector[] collectors, 
+			String[] labels) {
+		
 		super(name);
 		this.labels = labels;
 		this.derivationGraph = derivationGraph;

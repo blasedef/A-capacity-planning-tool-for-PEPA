@@ -235,7 +235,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		IStatisticsCollector[] collectors = DefaultCollector
 				.create(performanceMetrics);
 		AnalysisJob job = null;
-		job = new AnalysisJobFluidSteadyState("Throughput setup", fGraph, fOptionMap, performanceMetrics,collectors, labels);
+		job = new AnalysisJobFluidSteadyState("Throughput analysis", fGraph, fOptionMap, performanceMetrics, collectors, labels);
 		return job;
 
 	}

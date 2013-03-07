@@ -20,11 +20,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
 import uk.ac.ed.inf.pepa.ctmc.derivation.DerivationException;
+import uk.ac.ed.inf.pepa.ctmc.derivation.common.State;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.ctmc.solution.SolverException;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.IProcessAlgebraModel;
 import uk.ac.ed.inf.pepa.eclipse.core.PepaLog;
+import uk.ac.ed.inf.pepa.eclipse.core.PepatoProgressMonitorAdapter;
 import uk.ac.ed.inf.pepa.eclipse.ui.largescale.RunnableGraphProvider;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.PassageTimeWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.ctmcsolver.resourceless.SolverWizard;
@@ -32,6 +34,9 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ConcretePerformanceM
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.pepa.PEPAEvaluator;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CapacityPlanningWizard;
+import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
+import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
+import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
 import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 /**
@@ -99,19 +104,32 @@ public class ActionCommands {
 	}
 	
 	public static void capacityplanning(IPepaModel model) {
-		//look in package uk.ac.ed.inf.pepa.eclipse.ui.largescale.PerformanceMetricActionDelegate for graph
+		
 		ModelNode node = model.getAST();
-		RunnableGraphProvider gp = new RunnableGraphProvider(node);
-		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, gp);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		IParametricDerivationGraph graph = null;
+		
+		try{
+			//so this is how to make the graph :)
+			graph = ParametricDerivationGraphBuilder
+					.createDerivationGraph(node, null);
+			
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Cancel Acknowledgement",
+					"The ODE generation process has been cancelled");
+			
+		} catch (DifferentialAnalysisException e) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Differential error",
+					e.getMessage());
+			
 		}
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard(gp.getGraph(),model);
+		
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(graph,model);
+		
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
+		
 		dialog.setPageSize(400, 400);
 		dialog.open();
 	}

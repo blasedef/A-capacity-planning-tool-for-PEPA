@@ -53,8 +53,10 @@ public class ParametricDerivationGraphBuilder {
 	private static final int REFRESH_MONITOR = 20;
 	
 	public static IParametricDerivationGraph createDerivationGraph(
-			ModelNode model, IProgressMonitor monitor)
-			throws DifferentialAnalysisException, InterruptedException {
+			ModelNode model, 
+			IProgressMonitor monitor)
+					throws DifferentialAnalysisException, InterruptedException {
+		
 		final ParametricDerivationGraphBuilder builder = new ParametricDerivationGraphBuilder(model);
 		builder.derive(monitor);
 		final ParametricTransitionTriple[] triples = new ParametricTransitionTriple[builder.getDerivationGraph().size()];

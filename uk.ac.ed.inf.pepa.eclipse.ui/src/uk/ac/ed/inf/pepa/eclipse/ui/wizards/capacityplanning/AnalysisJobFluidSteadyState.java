@@ -23,10 +23,14 @@ public class AnalysisJobFluidSteadyState extends AnalysisJob {
 	private SteadyStateRoutine routine;
 
 	public AnalysisJobFluidSteadyState(String name,
-			IParametricDerivationGraph derivationGraph, OptionMap map,
-			IPointEstimator[] estimators, IStatisticsCollector[] collectors,
+			IParametricDerivationGraph derivationGraph, 
+			OptionMap map,
+			IPointEstimator[] estimators, 
+			IStatisticsCollector[] collectors,
 			String[] labels) {
+		
 		super(name, derivationGraph, map, estimators, collectors, labels);
+		
 	}
 
 	@Override
@@ -108,25 +112,49 @@ public class AnalysisJobFluidSteadyState extends AnalysisJob {
 		// calculate results anyway
 		double[] estimates = new double[estimators.length];
 		results = new double[collectors.length];
+		
 		for (int i = 0; i < estimates.length; i++) {
 			estimates[i] = estimators[i].computeEstimate(timePoint, solution);
 		}
+		
 		for (int j = 0; j < collectors.length; j++)
 			results[j] = collectors[j].computeObservation(estimates);
 	}
-
+	
+	/*
+	 * Return results from ODE computation
+	 */
+	public double[] getResults (){
+		return results;
+	}
+	
+	/*
+	 * Return the labels from the ODE computation
+	 */
+	public String[] getLabels (){
+		return labels;
+	}
+	
+	
+	//Do I need this then?
 	public DisplayAction getDisplayAction() {
+		
 		double tolerance = (Double) optionMap
 				.get(OptionMap.ODE_STEADY_STATE_NORM);
+		
 		final boolean showWarning = routine.getConvergenceNorm() > tolerance;
+		
 		return new DisplayAction("Model solved", true) {
 			public void run() {
+				
 				String title = null;
 				String message = "Runtime: " + elapsed + "ms.\n\n";
+				
 				for (int i = 0; i < results.length; i++) {
 					message += labels[i] + " : "
 							+ new Formatter().format("%6f\n", results[i]);
 				}
+				
 				if (showWarning) {
 					title = "Unaccurate estimate";
 					message = "The current steady-state convergence norm is too high: "
@@ -142,8 +170,9 @@ public class AnalysisJobFluidSteadyState extends AnalysisJob {
 					MessageDialog.openInformation(Display.getCurrent()
 							.getActiveShell(), title, message);
 				}
+				
 			}
 		};
 	}
-
+	
 }
