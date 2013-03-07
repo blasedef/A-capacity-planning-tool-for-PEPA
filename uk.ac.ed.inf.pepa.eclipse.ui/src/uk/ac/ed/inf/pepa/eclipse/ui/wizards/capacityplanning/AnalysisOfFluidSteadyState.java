@@ -10,33 +10,42 @@ import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.core.PepatoProgressMonitorAdapter;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
 import uk.ac.ed.inf.pepa.ode.SteadyStateRoutine;
 
-public class AnalysisJobFluidSteadyState extends AnalysisJob {
+public class AnalysisOfFluidSteadyState {
 
 	private double[] results = null;
 	
 	private SteadyStateRoutine routine;
+	
+	protected String[] labels;
+	protected IPointEstimator[] estimators;
+	protected IStatisticsCollector[] collectors;
+	protected OptionMap optionMap;
+	protected String name;
 
-	public AnalysisJobFluidSteadyState(String name,
-			IParametricDerivationGraph derivationGraph, 
-			OptionMap map,
-			IPointEstimator[] estimators, 
-			IStatisticsCollector[] collectors,
-			String[] labels) {
+	public AnalysisOfFluidSteadyState() {
 		
-		super(name, derivationGraph, map, estimators, collectors, labels);
-		
+		this.name = "ODE";
+		this.labels = CapacityPlanningAnalysisParameters.labels;
+		this.estimators = CapacityPlanningAnalysisParameters.performanceMetrics;
+		this.collectors = CapacityPlanningAnalysisParameters.collectors;
+		this.optionMap = CapacityPlanningAnalysisParameters.fOptionMap;
 	}
-
-	@Override
-	protected IStatus doRun(final IProgressMonitor monitor) {
+	
+	/*
+	 * Return results from ODE computation
+	 */
+	public double[] getResults (IParametricDerivationGraph derivationGraph, final IProgressMonitor monitor){
+		
 		routine = new SteadyStateRoutine(optionMap,
-				this.derivationGraph);
+				derivationGraph);
+		
 		try {
 			routine.obtainSteadyState(new PepatoProgressMonitorAdapter(monitor,
 					"ODE integration") {
@@ -87,24 +96,20 @@ public class AnalysisJobFluidSteadyState extends AnalysisJob {
 				}
 			});
 		} catch (DifferentialAnalysisException e) {
-
-			if (e.getKind() != DifferentialAnalysisException.NOT_CONVERGED) {
-				return new Status(IStatus.ERROR,
-						uk.ac.ed.inf.pepa.eclipse.ui.Activator.ID,
-						"An error occurred during steady-state analysis", e);
-			}
+			//need to sort this out...
 
 		} catch (InterruptedException e) {
-			return Status.CANCEL_STATUS;
+			//need to sort this out...
 		}
+		
+		//here the results are actually computed
 		try {
 			computeResults(routine.getTimePoint(), routine.getSolution());
 		} catch (DifferentialAnalysisException e) {
-			return new Status(IStatus.ERROR,
-					uk.ac.ed.inf.pepa.eclipse.ui.Activator.ID,
-					"An error occurred during steady-state analysis", e);
+
 		}
-		return Status.OK_STATUS;
+		
+		return results;
 	}
 
 	private void computeResults(double timePoint, double[] solution)
@@ -119,60 +124,6 @@ public class AnalysisJobFluidSteadyState extends AnalysisJob {
 		
 		for (int j = 0; j < collectors.length; j++)
 			results[j] = collectors[j].computeObservation(estimates);
-	}
-	
-	/*
-	 * Return results from ODE computation
-	 */
-	public double[] getResults (){
-		return results;
-	}
-	
-	/*
-	 * Return the labels from the ODE computation
-	 */
-	public String[] getLabels (){
-		return labels;
-	}
-	
-	
-	//Do I need this then?
-	public DisplayAction getDisplayAction() {
-		
-		double tolerance = (Double) optionMap
-				.get(OptionMap.ODE_STEADY_STATE_NORM);
-		
-		final boolean showWarning = routine.getConvergenceNorm() > tolerance;
-		
-		return new DisplayAction("Model solved", true) {
-			public void run() {
-				
-				String title = null;
-				String message = "Runtime: " + elapsed + "ms.\n\n";
-				
-				for (int i = 0; i < results.length; i++) {
-					message += labels[i] + " : "
-							+ new Formatter().format("%6f\n", results[i]);
-				}
-				
-				if (showWarning) {
-					title = "Unaccurate estimate";
-					message = "The current steady-state convergence norm is too high: "
-							+ new Formatter().format("%e.\n", routine.getConvergenceNorm())
-							+ "Try to increase integration time.\n" + message;
-					MessageDialog.openWarning(Display.getCurrent()
-							.getActiveShell(), title, message);
-				} else {
-					title = "Steady-state analysis";
-					message += new Formatter().format(
-							"Convergence norm is: %e\nSteady state detetected at %5.3f time units",
-							routine.getConvergenceNorm(), routine.getTimePoint());
-					MessageDialog.openInformation(Display.getCurrent()
-							.getActiveShell(), title, message);
-				}
-				
-			}
-		};
 	}
 	
 }

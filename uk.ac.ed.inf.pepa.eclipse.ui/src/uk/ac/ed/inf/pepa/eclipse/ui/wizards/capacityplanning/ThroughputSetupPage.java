@@ -30,6 +30,7 @@ import org.eclipse.ui.progress.IProgressConstants;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
@@ -43,23 +44,18 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 
 	//model bits
 	private IParametricDerivationGraph fGraph;
-	private OptionMap fOptionMap;
 	private SolverOptionsHandler fSolverOptionsHandler;
 	private boolean solverReturned = false;
 	private boolean actionCallbackReturned = false;
 	protected Text filterText;
 	protected CheckboxTableViewer viewer;
 	private ViewerFilter filter;
-	private IPepaModel fPepaModel; 
 	
-	
-	protected ThroughputSetupPage(IParametricDerivationGraph fGraph, IPepaModel model) {
+	protected ThroughputSetupPage() {
 	    super("Stochastic Search Optimisation");
 	    setTitle("Throughput setup");
 	    setDescription("Setting up performance requirement...");
-	    this.fGraph = fGraph;
-	    this.fOptionMap = model.getOptionMap();
-	    this.fPepaModel = model;
+	    this.fGraph = CapacityPlanningAnalysisParameters.getInitialFGraph();
 	    
 	    //call back method
 	    IValidationCallback callBackOnSolver = new IValidationCallback() {
@@ -70,7 +66,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	    	}
 	    };
 	    
-	    this.fSolverOptionsHandler = new ODESolverOptionsHandler(false, fOptionMap, callBackOnSolver);
+	    this.fSolverOptionsHandler = new ODESolverOptionsHandler(false, CapacityPlanningAnalysisParameters.fOptionMap, callBackOnSolver);
 	    this.validateMe();
 	}
 	
@@ -224,20 +220,16 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	protected void validateMe(){
 		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 		if(this.solverReturned && this.actionCallbackReturned){
-			OptionMap map = fSolverOptionsHandler.updateOptionMap();
-			this.fPepaModel.setOptionMap(map);
+			setAnalysisParams();
 		}
 	}
 	
-	public AnalysisJob getAnalysisJob() {
-		String[] labels = getLabels();
-		IPointEstimator[] performanceMetrics = getPerformanceMetrics();
-		IStatisticsCollector[] collectors = DefaultCollector
-				.create(performanceMetrics);
-		AnalysisJob job = null;
-		job = new AnalysisJobFluidSteadyState("Throughput analysis", fGraph, fOptionMap, performanceMetrics, collectors, labels);
-		return job;
-
+	public void setAnalysisParams() {
+		CapacityPlanningAnalysisParameters.fOptionMap = fSolverOptionsHandler.updateOptionMap();
+		CapacityPlanningAnalysisParameters.performanceMetrics = getPerformanceMetrics();
+		CapacityPlanningAnalysisParameters.labels = getLabels();
+		CapacityPlanningAnalysisParameters.collectors = DefaultCollector
+				.create(CapacityPlanningAnalysisParameters.performanceMetrics);
 	}
 	
 	protected String[] getLabels() {
@@ -258,14 +250,6 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 					(Short) checkedElements[i], fGraph);
 		}
 		return calculators;
-	}
-	
-	static boolean isModal(Job job) {
-		Boolean isModal = (Boolean) job
-				.getProperty(IProgressConstants.PROPERTY_IN_DIALOG);
-		if (isModal == null)
-			return false;
-		return isModal.booleanValue();
 	}
 
 }

@@ -107,10 +107,14 @@ public class SteadyStateRoutine {
 
 	public void obtainSteadyState(final IProgressMonitor monitor)
 			throws DifferentialAnalysisException, InterruptedException {
+		
 		final SteadyStateConvergenceCallback callback = new SteadyStateConvergenceCallback(
 				(Double) map.get(OptionMap.ODE_STEADY_STATE_NORM), monitor);
+		
 		monitor.beginTask(IProgressMonitor.UNKNOWN);
+		
 		solver = ODESolverFactory.create(graph);
+		
 		try {
 			solver.solve(map, callback, new IProgressMonitor() {
 

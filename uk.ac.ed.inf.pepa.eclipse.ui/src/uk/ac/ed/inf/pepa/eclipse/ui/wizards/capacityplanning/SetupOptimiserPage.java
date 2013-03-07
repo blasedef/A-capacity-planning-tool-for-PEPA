@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
+
 public class SetupOptimiserPage extends WizardPage {
   //parameters
   private Text minimumPop;
@@ -36,6 +38,7 @@ public class SetupOptimiserPage extends WizardPage {
 	    miniPop.setText("Minimum population");
 		minimumPop = new Text(composite, textStyle);
 		minimumPop.setLayoutData(createDefaultGridData());
+		minimumPop.setData(1);
 		minimumPop.addListener(SWT.Modify, new Listener() {
 
 			public void handleEvent(Event event) {
@@ -100,14 +103,16 @@ public class SetupOptimiserPage extends WizardPage {
 	
 	if(minimumPopOk && maximumPopOk)
 		this.setPageComplete(true);
+	CapacityPlanningAnalysisParameters.minimumComponentPopulation = getMinimumPopulation();
+	CapacityPlanningAnalysisParameters.maximumComponentPopulation = getMaximumPopulation();
   }
   
-  public double getMinimumPopulation(){
-	  return Double.valueOf(minimumPop.getText());
+  public int getMinimumPopulation(){
+	  return Integer.valueOf(minimumPop.getText());
   }
   
-  public double getMaximumPopulation(){
-	  return Double.valueOf(maximumPop.getText());
+  public int getMaximumPopulation(){
+	  return Integer.valueOf(maximumPop.getText());
   }
   
   private GridData createDefaultGridData() {

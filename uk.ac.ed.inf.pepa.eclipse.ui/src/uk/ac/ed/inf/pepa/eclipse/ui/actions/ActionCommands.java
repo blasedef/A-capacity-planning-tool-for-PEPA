@@ -104,32 +104,9 @@ public class ActionCommands {
 	}
 	
 	public static void capacityplanning(IPepaModel model) {
-		
-		ModelNode node = model.getAST();
-		IParametricDerivationGraph graph = null;
-		
-		try{
-			//so this is how to make the graph :)
-			graph = ParametricDerivationGraphBuilder
-					.createDerivationGraph(node, null);
-			
-		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
-			
-		} catch (DifferentialAnalysisException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Differential error",
-					e.getMessage());
-			
-		}
-		
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard(graph,model);
-		
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
-		
 		dialog.setPageSize(400, 400);
 		dialog.open();
 	}

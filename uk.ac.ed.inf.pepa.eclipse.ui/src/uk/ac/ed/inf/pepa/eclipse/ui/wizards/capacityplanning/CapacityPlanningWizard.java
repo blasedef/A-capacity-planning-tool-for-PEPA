@@ -15,11 +15,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import uk.ac.ed.inf.common.ui.wizards.SaveAsPage;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 
 
@@ -36,11 +36,12 @@ public class CapacityPlanningWizard extends Wizard {
 	protected IODESolution sendToMetaheuristic;
 	private IPepaModel model;
 	private IParametricDerivationGraph fGraph;
+	private CapacityPlanningAnalysisParameters fParams;
 	
-	public CapacityPlanningWizard(IParametricDerivationGraph fGraph, IPepaModel model) {
+	public CapacityPlanningWizard(IPepaModel model) {
 		super();
 	    this.model = model;
-	    this.fGraph = fGraph;
+	    this.fParams = new CapacityPlanningAnalysisParameters(model);
 	    setNeedsProgressMonitor(true);
 	}
 	
@@ -49,7 +50,7 @@ public class CapacityPlanningWizard extends Wizard {
 		addSaveAsPage();
 		performanceRequirementSelectionPage = new PerformanceRequirementSelectionPage();
 		addPage(performanceRequirementSelectionPage);
-		throughputSetupPage = new ThroughputSetupPage(fGraph,model);
+		throughputSetupPage = new ThroughputSetupPage();
 		averageResponseTimeSetupPage = new AverageResponseTimeSetupPage();
 		addPage(throughputSetupPage);
 		addPage(averageResponseTimeSetupPage);
@@ -74,7 +75,7 @@ public class CapacityPlanningWizard extends Wizard {
 	public boolean performFinish() {
 		Job metaheuristicJob;
 		try {
-			metaheuristicJob = new MetaHeuristicJob(this.model.getAST(), this.setupOptimiserPage, this.sendToMetaheuristic, this.newFilePage.createNewFile());
+			metaheuristicJob = new MetaHeuristicJob(this.newFilePage.createNewFile());
 			metaheuristicJob.schedule();
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block

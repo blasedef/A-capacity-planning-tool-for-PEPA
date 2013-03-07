@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
 import uk.ac.ed.inf.pepa.parsing.ActivityNode;
@@ -16,6 +17,7 @@ import uk.ac.ed.inf.pepa.parsing.ModelNode;
 import uk.ac.ed.inf.pepa.parsing.PassiveRateNode;
 import uk.ac.ed.inf.pepa.parsing.PrefixNode;
 import uk.ac.ed.inf.pepa.parsing.ProcessDefinitionNode;
+import uk.ac.ed.inf.pepa.parsing.ProcessNode;
 import uk.ac.ed.inf.pepa.parsing.RateDefinitionNode;
 import uk.ac.ed.inf.pepa.parsing.RateDoubleNode;
 import uk.ac.ed.inf.pepa.parsing.UnknownActionTypeNode;
@@ -25,7 +27,8 @@ import uk.ac.ed.inf.pepa.parsing.WildcardCooperationNode;
 
 public class MetaHeuristicPopulation {
 	
-	private ModelNode originalModel;
+	private IPepaModel model;
+	private ModelNode modelAsAST;
 	private Dictionary originalSystemEquationDict = new Hashtable();
 	private Dictionary tempSystemEquationDict = new Hashtable();
 	private ModelObject originalModelObject;
@@ -34,11 +37,19 @@ public class MetaHeuristicPopulation {
 	private Double population;
 	private boolean test = false;
 
-	public MetaHeuristicPopulation(ModelNode originalModel) {
-		this.originalModel = originalModel;
+	public MetaHeuristicPopulation(IPepaModel model) {
+		this.model = model;
+		this.modelAsAST = model.getAST();
 		this.systemEquationAsString = "";
 		sweepASTForSystemEquationString();
 		sweepASTForSystemEquationAsDictionary();
+	}
+	
+	public void changeAValueTest() {
+		
+		this.systemEquationAsString = "";
+		
+		//me
 		this.originalModelObject = new ModelObject();
 		this.originalModelObject.copyDictionary(this.originalSystemEquationDict);
 		ModelObject secondModelObject = new ModelObject();
@@ -46,12 +57,20 @@ public class MetaHeuristicPopulation {
 		secondModelObject.setAnItem("Farm", 6.0);
 		setASTvalues(secondModelObject.getDictionary());
 		sweepASTForSystemEquationString();
-		setASTvalues(originalModelObject.getDictionary());
-		sweepASTForSystemEquationString();
 	}
 	
+	public void putValuesBackTest() {
+		this.systemEquationAsString = "";
+		setASTvalues(originalModelObject.getDictionary());
+		sweepASTForSystemEquationString();		
+	}
+	
+	/**
+	 * Set this objects system equation variables
+	 * 
+	 */
 	public void sweepASTForSystemEquationString(){
-		originalModel.accept(new ModelObjectVisitor());
+		modelAsAST.accept(new ModelObjectVisitor());
 	}
 	
 	public String getSystemEquationAsString(){
@@ -59,12 +78,12 @@ public class MetaHeuristicPopulation {
 	}
 	
 	public void sweepASTForSystemEquationAsDictionary(){
-		originalModel.accept(new ModelObjectVisitorDict());
+		modelAsAST.accept(new ModelObjectVisitorDict());
 	}
 	
 	public void setASTvalues(Dictionary dict){
 		tempSystemEquationDict = dict;
-		originalModel.accept(new ModelObjectVisitorSetValues());
+		modelAsAST.accept(new ModelObjectVisitorSetValues());
 	}
 	
 	private class ModelObjectVisitor implements ASTVisitor {
