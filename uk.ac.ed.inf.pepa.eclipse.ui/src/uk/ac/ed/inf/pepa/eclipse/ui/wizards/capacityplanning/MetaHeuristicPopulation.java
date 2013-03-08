@@ -7,7 +7,6 @@ import java.util.Hashtable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
 import uk.ac.ed.inf.pepa.parsing.ActivityNode;

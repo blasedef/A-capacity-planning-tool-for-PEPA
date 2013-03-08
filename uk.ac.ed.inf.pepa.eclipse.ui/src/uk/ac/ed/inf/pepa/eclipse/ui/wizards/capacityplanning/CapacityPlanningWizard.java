@@ -19,7 +19,6 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import uk.ac.ed.inf.common.ui.wizards.SaveAsPage;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
-import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 
 

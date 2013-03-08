@@ -1,15 +1,10 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.largescale.CapacityPlanningAnalysisParameters;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
