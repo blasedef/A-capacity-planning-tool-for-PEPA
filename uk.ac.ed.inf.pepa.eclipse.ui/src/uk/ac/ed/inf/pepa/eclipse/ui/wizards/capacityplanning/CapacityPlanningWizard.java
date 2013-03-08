@@ -54,10 +54,6 @@ public class CapacityPlanningWizard extends Wizard {
 		averageResponseTimeSetupPage = new AverageResponseTimeSetupPage();
 		addPage(throughputSetupPage);
 		addPage(averageResponseTimeSetupPage);
-		targetSetupPage = new TargetSetupPage();
-		addPage(targetSetupPage);
-		setupOptimiserPage = new SetupOptimiserPage();
-		addPage(setupOptimiserPage);
 	}
   
 	private void addSaveAsPage() {
@@ -92,7 +88,7 @@ public class CapacityPlanningWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == performanceRequirementSelectionPage){
 			if(performanceRequirementSelectionPage.getPerformanceRequirement()){
-				this.sendToMetaheuristic = (IODESolution) averageResponseTimeSetupPage;
+				this.sendToMetaheuristic = averageResponseTimeSetupPage;
 				return averageResponseTimeSetupPage;
 			} else {
 				this.sendToMetaheuristic = throughputSetupPage;
@@ -105,5 +101,22 @@ public class CapacityPlanningWizard extends Wizard {
 		}
 	}
 	
+	public void addRemainingPages(){
+		targetSetupPage = new TargetSetupPage();
+		this.addPage(targetSetupPage);
+		setupOptimiserPage = new SetupOptimiserPage();
+		addPage(setupOptimiserPage);
+	}
 	
+	public boolean canFinish (){
+		if(setupOptimiserPage != null){
+			if(setupOptimiserPage.isPageComplete()){
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 } 

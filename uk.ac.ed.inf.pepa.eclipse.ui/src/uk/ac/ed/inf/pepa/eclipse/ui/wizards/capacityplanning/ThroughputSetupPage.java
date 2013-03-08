@@ -30,6 +30,7 @@ import org.eclipse.ui.progress.IProgressConstants;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
@@ -220,6 +221,8 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 		if(this.solverReturned && this.actionCallbackReturned){
 			setAnalysisParams();
+			((CapacityPlanningWizard) getWizard())
+			.addRemainingPages();
 		}
 	}
 	

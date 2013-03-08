@@ -5,7 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class AverageResponseTimeSetupPage extends WizardPage {
+public class AverageResponseTimeSetupPage extends WizardPage implements IODESolution {
 
 	protected AverageResponseTimeSetupPage() {
 	    super("Stochastic Search Optimisation");
@@ -20,6 +20,12 @@ public class AverageResponseTimeSetupPage extends WizardPage {
 		composite.setLayout(layout);
 		layout.numColumns = 2;
 		setControl(composite);
+	}
+
+	@Override
+	public void setAnalysisParams() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

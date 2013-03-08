@@ -48,7 +48,9 @@ public class CapacityPlanningAnalysisParameters {
 	public static IPepaModel model = null;
 	public static int minimumComponentPopulation = 1;
 	public static int maximumComponentPopulation = 1;
+	public static double mutationProbabilty = 0.5;
 	public static Map<String, Double> originalSystemEquationDict = new HashMap<String, Double>();
+	public static Map<String, Double> targetValues = new HashMap<String, Double>();
 	
 	
 	/**

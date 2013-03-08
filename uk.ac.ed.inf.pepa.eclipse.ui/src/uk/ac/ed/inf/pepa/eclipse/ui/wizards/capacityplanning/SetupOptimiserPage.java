@@ -10,11 +10,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-
+/**
+ * Need to sort out this thing!! Needs to be more like TargetSetupPage and use arrays to make the options...
+ * @author twig
+ *
+ */
 public class SetupOptimiserPage extends WizardPage {
   //parameters
   private Text minimumPop;
   private Text maximumPop;
+  private Text mProbv;
   
   public SetupOptimiserPage() {
     super("Stochastic Search Optimisation");
@@ -33,11 +38,11 @@ public class SetupOptimiserPage extends WizardPage {
 		validate();
 		
 		/* Minimum Agent Population */
-	    Label miniPop = new Label(composite, textStyle);
+	    Label miniPop = new Label(composite, SWT.NONE);
 	    miniPop.setText("Minimum population");
 		minimumPop = new Text(composite, textStyle);
 		minimumPop.setLayoutData(createDefaultGridData());
-		minimumPop.setText("1");
+		minimumPop.setText(Integer.toString(CapacityPlanningAnalysisParameters.minimumComponentPopulation));
 		validate();
 		minimumPop.addListener(SWT.Modify, new Listener() {
 
@@ -47,11 +52,11 @@ public class SetupOptimiserPage extends WizardPage {
 		});
 		
 		/* Maximum Agent Population */
-	    Label maxPop = new Label(composite, textStyle);
+	    Label maxPop = new Label(composite, SWT.NONE);
 	    maxPop.setText("Maximum population");
 		maximumPop = new Text(composite, textStyle);
 		maximumPop.setLayoutData(createDefaultGridData());
-		maximumPop.setText("10");
+		maximumPop.setText(Integer.toString(CapacityPlanningAnalysisParameters.minimumComponentPopulation));
 		validate();
 		maximumPop.addListener(SWT.Modify, new Listener() {
 
@@ -60,6 +65,22 @@ public class SetupOptimiserPage extends WizardPage {
 			}
 		});
 		setControl(composite);
+		
+		/* Mutation Probability rate */
+	    Label mProb = new Label(composite, SWT.NONE);
+	    mProb.setText("Mutation probability");
+		mProbv = new Text(composite, textStyle);
+		mProbv.setLayoutData(createDefaultGridData());
+		mProbv.setText(Double.toString(CapacityPlanningAnalysisParameters.mutationProbabilty));
+		validate();
+		mProbv.addListener(SWT.Modify, new Listener() {
+
+			public void handleEvent(Event event) {
+				validate();
+			}
+		});
+		setControl(composite);
+		
   }
 
   public void validate() {
@@ -67,11 +88,11 @@ public class SetupOptimiserPage extends WizardPage {
 	this.setPageComplete(false);
 	boolean minimumPopOk = false;
 	boolean maximumPopOk = false;
-	
+	boolean mutateProbOk = false;
 	
 	//check minimum population
 	try{
-		double miniPop = Double.valueOf(minimumPop.getText());
+		double miniPop = Integer.valueOf(minimumPop.getText());
 		if(miniPop < 1.0){
 			minimumPopOk = false;
 		} else {
@@ -81,14 +102,14 @@ public class SetupOptimiserPage extends WizardPage {
 		maximumPopOk = false;
 	} finally {
 		if (!minimumPopOk) {
-			setErrorMessage("Value not allowed, Minimum Population must be at least 1");
+			setErrorMessage("Value not allowed, Minimum Population must be at least 1 and an Integer");
 			return;
 		}
 	}
 	
 	//check maximum population
 	try{
-		double maxiPop = Double.valueOf(maximumPop.getText());
+		double maxiPop = Integer.valueOf(maximumPop.getText());
 		if(maxiPop < 1.0){
 			maximumPopOk = false;
 		} else {
@@ -98,15 +119,37 @@ public class SetupOptimiserPage extends WizardPage {
 		maximumPopOk = false;
 	} finally {
 		if (!maximumPopOk) {
-			setErrorMessage("Value not allowed, Maximum Population must be at least 1");
+			setErrorMessage("Value not allowed, Maximum Population must be at least 1 and an Intege");
 			return;
 		}
 	}
 	
-	if(minimumPopOk && maximumPopOk)
+	//check mProb
+	try{
+		double mProbvd = Double.valueOf(mProbv.getText());
+		if(mProbvd < 1.0 && mProbvd > 0.0){
+			mutateProbOk = true;
+		} else {
+			mutateProbOk = false;
+		}
+	} catch (NumberFormatException e) {
+		mutateProbOk = false;
+	} finally {
+		if (!mutateProbOk) {
+			setErrorMessage("Mutation Probability must be between 0.0 and 1.0");
+			return;
+		}
+	}
+	
+	if(minimumPopOk && maximumPopOk && mutateProbOk)
 		this.setPageComplete(true);
 	CapacityPlanningAnalysisParameters.minimumComponentPopulation = getMinimumPopulation();
 	CapacityPlanningAnalysisParameters.maximumComponentPopulation = getMaximumPopulation();
+	CapacityPlanningAnalysisParameters.mutationProbabilty = getMutationProbability();
+  }
+  
+  public double getMutationProbability(){
+	  return Double.valueOf(mProbv.getText());
   }
   
   public int getMinimumPopulation(){
