@@ -36,9 +36,9 @@ public class MetaHeuristicJob extends Job {
 		this.population.initialise(monitor);
 		
 		
-		this.population.setAModel(0,"Farm",6.0);
-		this.population.setAModel(1,"Farm",6.0);
-		this.population.setAModel(0,"Farm",1.0);
+		//this.population.setAModel(0,"Farm",6.0);
+		//this.population.setAModel(1,"Farm",6.0);
+		//this.population.setAModel(0,"Farm",1.0);
 		
 		source += this.population.giveMeAModelsName(0) + "\n";
 		source += this.population.giveMeAModelsName(1) + "\n";
