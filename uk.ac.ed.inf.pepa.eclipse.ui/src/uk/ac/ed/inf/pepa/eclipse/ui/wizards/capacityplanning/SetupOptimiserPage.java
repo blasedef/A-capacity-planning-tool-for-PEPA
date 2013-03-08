@@ -37,7 +37,8 @@ public class SetupOptimiserPage extends WizardPage {
 	    miniPop.setText("Minimum population");
 		minimumPop = new Text(composite, textStyle);
 		minimumPop.setLayoutData(createDefaultGridData());
-		minimumPop.setData(1);
+		minimumPop.setText("1");
+		validate();
 		minimumPop.addListener(SWT.Modify, new Listener() {
 
 			public void handleEvent(Event event) {
@@ -50,6 +51,8 @@ public class SetupOptimiserPage extends WizardPage {
 	    maxPop.setText("Maximum population");
 		maximumPop = new Text(composite, textStyle);
 		maximumPop.setLayoutData(createDefaultGridData());
+		maximumPop.setText("10");
+		validate();
 		maximumPop.addListener(SWT.Modify, new Listener() {
 
 			public void handleEvent(Event event) {

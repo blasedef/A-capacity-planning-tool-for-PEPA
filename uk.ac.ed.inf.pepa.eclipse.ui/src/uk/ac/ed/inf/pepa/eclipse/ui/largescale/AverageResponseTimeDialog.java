@@ -124,12 +124,14 @@ public class AverageResponseTimeDialog extends PerformanceMetricDialog {
 	protected StructuredViewer createViewer(Composite composite) {
 		Label actions = new Label(composite, SWT.NONE);
 		actions.setText("Select local state in the passage");
+		
 		GridData actionsData = new GridData(GridData.FILL_HORIZONTAL);
 		actionsData.horizontalSpan = 2;
 		actions.setLayoutData(actionsData);
 
 		GridData checkListData = new GridData(GridData.FILL_BOTH);
 		checkListData.horizontalSpan = 2;
+		
 		viewer = new CheckboxTreeViewer(composite, SWT.NONE);
 		viewer.getTree().setLayoutData(checkListData);
 		viewer.setContentProvider(new ResponseTimeContentProvider());

@@ -32,6 +32,7 @@ public class CapacityPlanningWizard extends Wizard {
 	protected ThroughputSetupPage throughputSetupPage;
 	protected AverageResponseTimeSetupPage averageResponseTimeSetupPage;
 	protected SetupOptimiserPage setupOptimiserPage;
+	protected TargetSetupPage targetSetupPage;
 	protected IODESolution sendToMetaheuristic;
 	private IPepaModel model;
 	private IParametricDerivationGraph fGraph;
@@ -53,6 +54,8 @@ public class CapacityPlanningWizard extends Wizard {
 		averageResponseTimeSetupPage = new AverageResponseTimeSetupPage();
 		addPage(throughputSetupPage);
 		addPage(averageResponseTimeSetupPage);
+		targetSetupPage = new TargetSetupPage();
+		addPage(targetSetupPage);
 		setupOptimiserPage = new SetupOptimiserPage();
 		addPage(setupOptimiserPage);
 	}
@@ -96,7 +99,7 @@ public class CapacityPlanningWizard extends Wizard {
 				return throughputSetupPage;
 			}
 		} else if (page == averageResponseTimeSetupPage || page == throughputSetupPage){
-			return setupOptimiserPage;
+			return targetSetupPage;
 		} else {
 			return super.getNextPage(page);
 		}
