@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -25,18 +24,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.progress.IProgressConstants;
 
-import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
 import uk.ac.ed.inf.pepa.largescale.ThroughputCalculation;
 import uk.ac.ed.inf.pepa.largescale.simulation.DefaultCollector;
-import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 
 
 
@@ -53,6 +47,8 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	
 	protected ThroughputSetupPage() {
 	    super("Stochastic Search Optimisation");
+	    this.setErrorMessage(null);
+		this.setPageComplete(false);
 	    setTitle("Throughput setup");
 	    setDescription("Setting up performance requirement...");
 	    this.fGraph = CapacityPlanningAnalysisParameters.getInitialFGraph();

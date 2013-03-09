@@ -1,8 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -46,9 +44,10 @@ public class CapacityPlanningAnalysisParameters {
 	public static IStatisticsCollector[] collectors = null;
 	public static String[] labels = null;
 	public static IPepaModel model = null;
-	public static int minimumComponentPopulation = 1;
-	public static int maximumComponentPopulation = 1;
-	public static double mutationProbabilty = 0.5;
+	public static String[] mlabels;
+	public static String[] mTypes;
+	public static Map<String, String> mLabelsAndTypes= new HashMap<String, String>();
+	public static Map<String, Double> metaheuristicParameters = new HashMap<String, Double>();
 	public static Map<String, Double> originalSystemEquationDict = new HashMap<String, Double>();
 	public static Map<String, Double> targetValues = new HashMap<String, Double>();
 	
@@ -61,6 +60,7 @@ public class CapacityPlanningAnalysisParameters {
 		CapacityPlanningAnalysisParameters.model = model;
 	    fOptionMap = model.getOptionMap();
 	    sweepASTForSystemEquationAsDictionary();
+	    setupMetaheuristicParameters();
 	}
 	
 	/**
@@ -192,6 +192,59 @@ public class CapacityPlanningAnalysisParameters {
 		public void visitHidingNode(HidingNode hiding) {}
 		public void visitActivityNode(ActivityNode activity) {}
 		
-	}	
+	}
+	
+	/**
+	 * One place to set all the metaheuristic values,
+	 * this is quite messy...
+	 */
+	private void setupMetaheuristicParameters(){
+		String[] mlabels = {"Minimum population:","Maximum Population:","Mutation Probability:","Performance to Population:"};
+		String[] mTypes = {"intGT0","intGT0","percent","percent"};
+		
+		//the parameter labels
+		CapacityPlanningAnalysisParameters.mlabels = mlabels;
+		//the type of validation required on the above
+		//intGT0 means an integer greater than 0
+		//percent means a double between 0.0 and 1.0
+		CapacityPlanningAnalysisParameters.mTypes = mTypes;
+		for(int i = 0; i < mlabels.length; i++){
+			CapacityPlanningAnalysisParameters.mLabelsAndTypes.put(mlabels[i],mTypes[i]);
+				if(mTypes[i].equals("intGT0")){
+					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 1.0);
+				} else {
+					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 0.5);
+				}
+		}
+		
+	}
+	
+	/**
+	 * Validation for inputs
+	 * @param value
+	 * @param type
+	 * @return
+	 * @throws NumberFormatException
+	 */
+	public static boolean testValidation(String value, String type) throws NumberFormatException{
+		boolean test = false;
+		if(type.equals("intGT0")){
+			int v = Integer.valueOf(value);
+			if(v > 0){
+				test = true;
+			} else {
+				test = false;
+			}
+			return test;
+		} else {
+			double v = Double.valueOf(value);
+			if(v >= 0.0 && v <= 1.0){
+				test = true;
+			} else {
+				test = false;
+			}
+			return test;
+		}
+	}
 
 }

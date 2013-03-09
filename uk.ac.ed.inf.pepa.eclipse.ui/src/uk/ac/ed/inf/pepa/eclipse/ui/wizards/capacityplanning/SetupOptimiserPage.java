@@ -1,5 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -16,153 +18,101 @@ import org.eclipse.swt.widgets.Text;
  *
  */
 public class SetupOptimiserPage extends WizardPage {
-  //parameters
-  private Text minimumPop;
-  private Text maximumPop;
-  private Text mProbv;
+	//parameters
+	//turn this into an array, and then I don't need to create individual sections for each variable...
+	protected ArrayList<Text> inputs = new ArrayList<Text>(CapacityPlanningAnalysisParameters.mlabels.length);
+	protected boolean[] validation = new boolean[CapacityPlanningAnalysisParameters.mlabels.length];
+	
   
-  public SetupOptimiserPage() {
-    super("Stochastic Search Optimisation");
-    setTitle("Stochastic Search Optimisation");
-    setDescription("Setting up Search Optimisation");
-  }
-
-  @Override
-  public void createControl(Composite parent) {
+	  public SetupOptimiserPage() {
+	    super("Stochastic Search Optimisation");
+	    this.setErrorMessage(null);
+		this.setPageComplete(false);
+	    setTitle("Stochastic Search Optimisation");
+	    setDescription("Setting up Search Optimisation");
+	  }
+	
+	  @Override
+	  public void createControl(Composite parent) {
+			Composite composite = new Composite(parent, SWT.NONE);
+			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+			GridLayout layoutTP = new GridLayout();
+			layoutTP.marginWidth = 4;
+			layoutTP.numColumns = 4;
+			composite.setLayout(layoutTP);
+			createInputs(composite);
+			setControl(composite);
+	  }
 	  
-		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(4, false));
-		
+	  public void createInputs(Composite composite){
+			
+			int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
+			
+			for(int i = 0; i < CapacityPlanningAnalysisParameters.mlabels.length; i++){
+				
+				final int j = i;
+				
+				Label tempLabel = new Label(composite, SWT.NONE);
+				tempLabel.setText(CapacityPlanningAnalysisParameters.mlabels[i]);
+				tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			    
+			    Text tempText = new Text(composite, textStyle);
+			    tempText.setLayoutData(createDefaultGridData());
+			    tempText.addListener(SWT.Modify, new Listener() {
 
-		validate();
-		
-		/* Minimum Agent Population */
-	    Label miniPop = new Label(composite, SWT.NONE);
-	    miniPop.setText("Minimum population");
-		minimumPop = new Text(composite, textStyle);
-		minimumPop.setLayoutData(createDefaultGridData());
-		minimumPop.setText(Integer.toString(CapacityPlanningAnalysisParameters.minimumComponentPopulation));
-		validate();
-		minimumPop.addListener(SWT.Modify, new Listener() {
-
-			public void handleEvent(Event event) {
-				validate();
+					public void handleEvent(Event event) {
+						
+						validate(j);
+						
+					}
+				});
+			    inputs.add(tempText);
+				
 			}
-		});
-		
-		/* Maximum Agent Population */
-	    Label maxPop = new Label(composite, SWT.NONE);
-	    maxPop.setText("Maximum population");
-		maximumPop = new Text(composite, textStyle);
-		maximumPop.setLayoutData(createDefaultGridData());
-		maximumPop.setText(Integer.toString(CapacityPlanningAnalysisParameters.minimumComponentPopulation));
-		validate();
-		maximumPop.addListener(SWT.Modify, new Listener() {
-
-			public void handleEvent(Event event) {
-				validate();
+	  }
+	
+		protected void validate(int i) {
+			
+			this.setErrorMessage(null);
+			this.setPageComplete(false);
+			
+			try{
+				this.validation[i] = CapacityPlanningAnalysisParameters.testValidation(this.inputs.get(i).getText(), 
+						CapacityPlanningAnalysisParameters.mLabelsAndTypes.get(CapacityPlanningAnalysisParameters.mlabels[i]));
+			} catch (NumberFormatException e) {
+				this.validation[i] = false;
+			} finally {
+				if(!this.validation[i]){
+					setErrorMessage("Incorrect value set on '" + CapacityPlanningAnalysisParameters.mlabels[i] + "' with " + this.inputs.get(i).getText());
+				}
+				
 			}
-		});
-		setControl(composite);
-		
-		/* Mutation Probability rate */
-	    Label mProb = new Label(composite, SWT.NONE);
-	    mProb.setText("Mutation probability");
-		mProbv = new Text(composite, textStyle);
-		mProbv.setLayoutData(createDefaultGridData());
-		mProbv.setText(Double.toString(CapacityPlanningAnalysisParameters.mutationProbabilty));
-		validate();
-		mProbv.addListener(SWT.Modify, new Listener() {
-
-			public void handleEvent(Event event) {
-				validate();
+			
+			if(allTargetsValid()){
+				this.setPageComplete(true);
+			  	setTargetParameters();
 			}
-		});
-		setControl(composite);
+		}
 		
-  }
+		protected boolean allTargetsValid(){
+			boolean test = true;
+			for(boolean v: this.validation){
+				test = v && test;
+			}
+			return test;
+		}
+		  
+		protected void setTargetParameters(){
+			for(int i = 0; i < CapacityPlanningAnalysisParameters.mlabels.length; i++){
+				CapacityPlanningAnalysisParameters.metaheuristicParameters.put(CapacityPlanningAnalysisParameters.mlabels[i]
+						, Double.valueOf(this.inputs.get(i).getText()));
+			}
+		}
+		  
 
-  public void validate() {
-	this.setErrorMessage(null);
-	this.setPageComplete(false);
-	boolean minimumPopOk = false;
-	boolean maximumPopOk = false;
-	boolean mutateProbOk = false;
-	
-	//check minimum population
-	try{
-		double miniPop = Integer.valueOf(minimumPop.getText());
-		if(miniPop < 1.0){
-			minimumPopOk = false;
-		} else {
-			minimumPopOk = true;
+		private GridData createDefaultGridData() {
+				/* ...with grabbing horizontal space */
+				return new GridData(SWT.FILL, SWT.CENTER, true, false);
 		}
-	} catch (NumberFormatException e) {
-		maximumPopOk = false;
-	} finally {
-		if (!minimumPopOk) {
-			setErrorMessage("Value not allowed, Minimum Population must be at least 1 and an Integer");
-			return;
-		}
-	}
-	
-	//check maximum population
-	try{
-		double maxiPop = Integer.valueOf(maximumPop.getText());
-		if(maxiPop < 1.0){
-			maximumPopOk = false;
-		} else {
-			maximumPopOk = true;
-		}
-	} catch (NumberFormatException e) {
-		maximumPopOk = false;
-	} finally {
-		if (!maximumPopOk) {
-			setErrorMessage("Value not allowed, Maximum Population must be at least 1 and an Intege");
-			return;
-		}
-	}
-	
-	//check mProb
-	try{
-		double mProbvd = Double.valueOf(mProbv.getText());
-		if(mProbvd < 1.0 && mProbvd > 0.0){
-			mutateProbOk = true;
-		} else {
-			mutateProbOk = false;
-		}
-	} catch (NumberFormatException e) {
-		mutateProbOk = false;
-	} finally {
-		if (!mutateProbOk) {
-			setErrorMessage("Mutation Probability must be between 0.0 and 1.0");
-			return;
-		}
-	}
-	
-	if(minimumPopOk && maximumPopOk && mutateProbOk)
-		this.setPageComplete(true);
-	CapacityPlanningAnalysisParameters.minimumComponentPopulation = getMinimumPopulation();
-	CapacityPlanningAnalysisParameters.maximumComponentPopulation = getMaximumPopulation();
-	CapacityPlanningAnalysisParameters.mutationProbabilty = getMutationProbability();
-  }
-  
-  public double getMutationProbability(){
-	  return Double.valueOf(mProbv.getText());
-  }
-  
-  public int getMinimumPopulation(){
-	  return Integer.valueOf(minimumPop.getText());
-  }
-  
-  public int getMaximumPopulation(){
-	  return Integer.valueOf(maximumPop.getText());
-  }
-  
-  private GridData createDefaultGridData() {
-	/* ...with grabbing horizontal space */
-	return new GridData(SWT.FILL, SWT.CENTER, true, false);
-  }
-  
+	  
 } 

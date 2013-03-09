@@ -7,5 +7,9 @@ public interface IODESolution {
 	 * set metrics, labels, collectors, and optionplan
 	 */
 	public void setAnalysisParams();
-
+	
+	/**
+	 * 
+	 */
+	public boolean isPageComplete();
 }

@@ -22,6 +22,8 @@ public class TargetSetupPage extends WizardPage {
 	protected TargetSetupPage() {
 		
 		super("Stochastic Search Optimisation");
+		this.setErrorMessage(null);
+		this.setPageComplete(false);
 		setTitle("Target values setup");
 	    setDescription("set target values for each element:");
 	    
@@ -36,17 +38,16 @@ public class TargetSetupPage extends WizardPage {
 		layoutTP.marginWidth = 4;
 		layoutTP.numColumns = 4;
 		composite.setLayout(layoutTP);
-		createTargets(composite);
+		createInputs(composite);
 		setControl(composite);
 	}
 
-	private void createTargets(Composite composite) {
+	private void createInputs(Composite composite) {
 		
 		this.setErrorMessage(null);
 		this.setPageComplete(false);
 		
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
-		//this.labels = new ArrayList<Label>(CapacityPlanningAnalysisParameters.labels.length);
 		this.inputs = new ArrayList<Text>(CapacityPlanningAnalysisParameters.labels.length);
 		this.validation = new boolean[CapacityPlanningAnalysisParameters.labels.length];
 		
@@ -54,11 +55,9 @@ public class TargetSetupPage extends WizardPage {
 			
 			final int j = i;
 			
-			/* Maximum Agent Population */
 			Label tempLabel = new Label(composite, SWT.NONE);
 			tempLabel.setText(CapacityPlanningAnalysisParameters.labels[i]);
 			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		    //labels.add(tempLabel);
 		    
 		    Text tempText = new Text(composite, textStyle);
 		    tempText.setLayoutData(createDefaultGridData());
@@ -76,21 +75,20 @@ public class TargetSetupPage extends WizardPage {
 	}
 	
 	protected void validate(int i) {
-		//check minimum population
+		
+		this.setErrorMessage(null);
+		this.setPageComplete(false);
+		
 		try{
-			double miniPop = Double.valueOf(this.inputs.get(i).getText());
-			if(miniPop < 1.0){
-				this.validation[i] = false;
-			} else {
-				this.validation[i] = true;
-			}
+			this.validation[i] = CapacityPlanningAnalysisParameters.testValidation(this.inputs.get(i).getText(), 
+					"percent");
 		} catch (NumberFormatException e) {
 			this.validation[i] = false;
 		} finally {
-			if (!this.validation[i]) {
-				setErrorMessage("You must set a target value for each element");
-				return;
+			if(!this.validation[i]){
+				setErrorMessage("Incorrect value set on '" + CapacityPlanningAnalysisParameters.labels[i] + "' with " + this.inputs.get(i).getText());
 			}
+			
 		}
 		
 		if(allTargetsValid()){
@@ -117,6 +115,6 @@ public class TargetSetupPage extends WizardPage {
 	private GridData createDefaultGridData() {
 			/* ...with grabbing horizontal space */
 			return new GridData(SWT.FILL, SWT.CENTER, true, false);
-		  }
+	}
 	
 }
