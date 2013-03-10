@@ -39,8 +39,8 @@ public class CapacityPlanningWizard extends Wizard {
 	
 	public CapacityPlanningWizard(IPepaModel model) {
 		super();
-	    this.model = model;
-	    this.fParams = new CapacityPlanningAnalysisParameters(model);
+	    this.model = (IPepaModel) model;
+	    this.fParams = new CapacityPlanningAnalysisParameters(this.model);
 	    setNeedsProgressMonitor(true);
 	}
 	
@@ -72,7 +72,7 @@ public class CapacityPlanningWizard extends Wizard {
 	public boolean performFinish() {
 		Job metaheuristicJob;
 		try {
-			metaheuristicJob = new MetaHeuristicJob(this.newFilePage.createNewFile());
+			metaheuristicJob = new MetaHeuristicJob(this.newFilePage);
 			metaheuristicJob.schedule();
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
@@ -88,9 +88,11 @@ public class CapacityPlanningWizard extends Wizard {
 		if(page == performanceRequirementSelectionPage){
 			if(performanceRequirementSelectionPage.getPerformanceRequirement()){
 				this.sendToMetaheuristic = averageResponseTimeSetupPage;
+				CapacityPlanningAnalysisParameters.performanceRequirementType = 1;
 				return averageResponseTimeSetupPage;
 			} else {
 				this.sendToMetaheuristic = throughputSetupPage;
+				CapacityPlanningAnalysisParameters.performanceRequirementType = 0;
 				return throughputSetupPage;
 			}
 		} else if (page == averageResponseTimeSetupPage || page == throughputSetupPage){

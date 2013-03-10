@@ -51,7 +51,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		this.setPageComplete(false);
 	    setTitle("Throughput setup");
 	    setDescription("Setting up performance requirement...");
-	    this.fGraph = CapacityPlanningAnalysisParameters.getInitialFGraph();
+	    this.fGraph = CapacityPlanningAnalysisParameters.getFGraph();
 	    
 	    //call back method
 	    IValidationCallback callBackOnSolver = new IValidationCallback() {

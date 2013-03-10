@@ -9,45 +9,40 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class MetaHeuristicJob extends Job {
 	
 	private IFile output;
 	private MetaHeuristicPopulation population;
 
-	public MetaHeuristicJob(IFile file) throws InvocationTargetException, InterruptedException {
+	public MetaHeuristicJob(WizardNewFileCreationPage newFilePage) throws InvocationTargetException, InterruptedException {
 		super("MetaHeuristic");
 		this.population = new MetaHeuristicPopulation();
-		this.output = file;
+		this.output = newFilePage.createNewFile();
+		
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
-		String source = "start here... \n";
+	protected IStatus run(final IProgressMonitor monitor) {
+		
+		monitor.beginTask("MetaHeuristic", CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Generations:").intValue());
+		
+		/**
+		 * take original snap shot...
+		 */
+		CapacityPlanningAnalysisParameters.makeOriginal(monitor);
 		
 		//initialisation
-		//best - test fitness
-		//mutate
-		//selection/crossover
-		//etc etc...
-		
-		this.population.initialise(monitor);
-		this.population.initialise(monitor);
 		this.population.initialise(monitor);
 		
+		/**
+		 * reset AST
+		 */
+		CapacityPlanningAnalysisParameters.source += "\n Model reset back to: \n";
+		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.original.toString();
 		
-		//this.population.setAModel(0,"Farm",6.0);
-		//this.population.setAModel(1,"Farm",6.0);
-		//this.population.setAModel(0,"Farm",1.0);
-		
-		source += this.population.giveMeAModelsName(0) + "\n";
-		source += this.population.giveMeAModelsName(1) + "\n";
-		
-		//here to reset the AST to the original values
-		this.population.initialise(monitor);
-		this.population.reset();
-		
-		byte currentBytes[] = source.getBytes();
+		byte currentBytes[] = CapacityPlanningAnalysisParameters.source.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 				currentBytes);
 		try {
@@ -61,7 +56,6 @@ public class MetaHeuristicJob extends Job {
 				e1.printStackTrace();
 			}
 		}
-
 		monitor.done();
 
 		return Status.OK_STATUS;

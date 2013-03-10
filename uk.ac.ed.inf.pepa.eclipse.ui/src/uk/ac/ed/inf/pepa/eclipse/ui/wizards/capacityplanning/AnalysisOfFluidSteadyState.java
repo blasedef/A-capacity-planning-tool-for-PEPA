@@ -1,6 +1,8 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -19,6 +21,7 @@ import uk.ac.ed.inf.pepa.ode.SteadyStateRoutine;
 public class AnalysisOfFluidSteadyState {
 
 	private double[] results = null;
+	private Map<String, Double> resultsMap = new HashMap<String, Double>();
 	
 	private SteadyStateRoutine routine;
 	
@@ -40,7 +43,7 @@ public class AnalysisOfFluidSteadyState {
 	/*
 	 * Return results from ODE computation
 	 */
-	public double[] getResults (IParametricDerivationGraph derivationGraph, final IProgressMonitor monitor){
+	public Map<String, Double> getResults(IParametricDerivationGraph derivationGraph, final IProgressMonitor monitor){
 		
 		routine = new SteadyStateRoutine(optionMap,
 				derivationGraph);
@@ -108,7 +111,11 @@ public class AnalysisOfFluidSteadyState {
 
 		}
 		
-		return results;
+		for(int i = 0; i < results.length; i++){
+			this.resultsMap.put(this.labels[i], this.results[i]);
+		}
+		
+		return this.resultsMap;
 	}
 
 	private void computeResults(double timePoint, double[] solution)

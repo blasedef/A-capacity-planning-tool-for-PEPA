@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -13,6 +14,7 @@ import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
+import uk.ac.ed.inf.pepa.parsing.ASTSupport;
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
 import uk.ac.ed.inf.pepa.parsing.ActivityNode;
@@ -48,8 +50,15 @@ public class CapacityPlanningAnalysisParameters {
 	public static String[] mTypes;
 	public static Map<String, String> mLabelsAndTypes= new HashMap<String, String>();
 	public static Map<String, Double> metaheuristicParameters = new HashMap<String, Double>();
-	public static Map<String, Double> originalSystemEquationDict = new HashMap<String, Double>();
+	public static Map<String, Double> originalSystemEquation = new HashMap<String, Double>();
+	public static Map<String, Double> incomingSystemEquation = new HashMap<String, Double>();
 	public static Map<String, Double> targetValues = new HashMap<String, Double>();
+	public static double maximumPossibleAgentCount;
+	public static ModelObject original;
+	public static ModelObject best;
+	public static int performanceRequirementType;
+	public static boolean performanceRequirementTargetLimit = true;
+	public static String source = "";
 	
 	
 	/**
@@ -57,141 +66,19 @@ public class CapacityPlanningAnalysisParameters {
 	 * @param model
 	 */
 	public CapacityPlanningAnalysisParameters(IPepaModel model) {
-		CapacityPlanningAnalysisParameters.model = model;
+		CapacityPlanningAnalysisParameters.model = (IPepaModel) model;
 	    fOptionMap = model.getOptionMap();
-	    sweepASTForSystemEquationAsDictionary();
 	    setupMetaheuristicParameters();
+	    CapacityPlanningAnalysisParameters.source = "";
+	    maximumPossibleAgentCount = 0;
 	}
 	
 	/**
-	 * return an fGraph from a model, this function probably does not make sense being here
-	 * @param model
-	 * @return IParametricDerivationGraph
+	 * set the Maximum Agent count
 	 */
-	public static IParametricDerivationGraph getFGraph(IPepaModel model){
-	
-		IParametricDerivationGraph fGraph = null;
-		
-		try{
-			//so this is how to make the graph :)
-			fGraph = ParametricDerivationGraphBuilder
-					.createDerivationGraph(model.getAST(), null);
-			
-		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
-			
-		} catch (DifferentialAnalysisException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Differential error",
-					e.getMessage());
-			
-		}
-		
-		return fGraph;
-	}
-	
-	
-	/**
-	 * return an fGraph from a model, this function probably does not make sense being here
-	 * @param model
-	 * @return IParametricDerivationGraph
-	 */
-	public static IParametricDerivationGraph getInitialFGraph(){
-	
-		IParametricDerivationGraph fGraph = null;
-		
-		try{
-			//so this is how to make the graph :)
-			fGraph = ParametricDerivationGraphBuilder
-					.createDerivationGraph(model.getAST(), null);
-			
-		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
-			
-		} catch (DifferentialAnalysisException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Differential error",
-					e.getMessage());
-			
-		}
-		
-		return fGraph;
-	}
-	
-	/**
-	 * get the system equation...
-	 */
-	public void sweepASTForSystemEquationAsDictionary(){
-		CapacityPlanningAnalysisParameters.model.getAST().accept(new ModelObjectVisitor());
-	}
-	
-	
-	/**
-	 * I can not find any previous work that gives me access to the system equation
-	 * so I wrote/borrowed this so I can add the system equation to a dictionary
-	 * @author twig
-	 *
-	 */
-	private class ModelObjectVisitor implements ASTVisitor {
-		
-		private String component;
-		private Double population; 
-
-		@Override
-		public void visitConstantProcessNode(ConstantProcessNode constant) {
-			component = constant.getName();
-		}
-		
-		@Override
-		public void visitRateDoubleNode(RateDoubleNode doubleRate) {
-			population = doubleRate.getValue();
-			CapacityPlanningAnalysisParameters.originalSystemEquationDict.put(component,population);
-		}
-		
-		@Override
-		public void visitAggregationNode(AggregationNode aggregation) {
-			aggregation.getProcessNode().accept(this);
-			aggregation.getCopies().accept(this);
-			
-		}
-
-		@Override
-		public void visitCooperationNode(CooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}
-
-		@Override
-		public void visitWildcardCooperationNode(
-				WildcardCooperationNode cooperation) {
-			cooperation.getLeft().accept(this);
-			cooperation.getRight().accept(this);
-			
-		}		
-
-		@Override
-		public void visitModelNode(ModelNode model) {
-			model.getSystemEquation().accept(this);
-			
-		}
-		
-		public void visitPassiveRateNode(PassiveRateNode passive) {}
-		public void visitPrefixNode(PrefixNode prefix) {}
-		public void visitProcessDefinitionNode(ProcessDefinitionNode processDefinition) {}
-		public void visitUnknownActionTypeNode(UnknownActionTypeNode unknownActionTypeNode) {}
-		public void visitVariableRateNode(VariableRateNode variableRate) {}
-		public void visitRateDefinitionNode(RateDefinitionNode rateDefinition) {}
-		public void visitActionTypeNode(ActionTypeNode actionType){}
-		public void visitBinaryOperatorRateNode(BinaryOperatorRateNode rate) {}
-		public void visitChoiceNode(ChoiceNode choice) {}
-		public void visitHidingNode(HidingNode hiding) {}
-		public void visitActivityNode(ActivityNode activity) {}
-		
+	public static void setMaximumPossibleAgentCount() {
+		CapacityPlanningAnalysisParameters.maximumPossibleAgentCount = (CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Maximum Population:")
+				- (CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Minimum Population:") - 1)) * originalSystemEquation.size();
 	}
 	
 	/**
@@ -199,8 +86,8 @@ public class CapacityPlanningAnalysisParameters {
 	 * this is quite messy...
 	 */
 	private void setupMetaheuristicParameters(){
-		String[] mlabels = {"Minimum population:","Maximum Population:","Mutation Probability:","Performance to Population:"};
-		String[] mTypes = {"intGT0","intGT0","percent","percent"};
+		String[] mlabels = {"Minimum Population:","Maximum Population:","Mutation Probability:","Performance to Population:","Generations:"};
+		String[] mTypes = {"intGT0","intGT0","percent","percent","intGT0"};
 		
 		//the parameter labels
 		CapacityPlanningAnalysisParameters.mlabels = mlabels;
@@ -236,6 +123,14 @@ public class CapacityPlanningAnalysisParameters {
 				test = false;
 			}
 			return test;
+		} else if (type.equals("doubleGT0")){
+			double v = Double.valueOf(value);
+			if(v > 0.0){
+				test = true;
+			} else {
+				test = false;
+			}
+			return test;
 		} else {
 			double v = Double.valueOf(value);
 			if(v >= 0.0 && v <= 1.0){
@@ -246,5 +141,43 @@ public class CapacityPlanningAnalysisParameters {
 			return test;
 		}
 	}
+
+	public static void makeOriginal(IProgressMonitor monitor) {
+		
+		CapacityPlanningAnalysisParameters.original = new ModelObject(monitor);
+		CapacityPlanningAnalysisParameters.originalSystemEquation = CapacityPlanningAnalysisParameters.original.getSystemEquation();
+		CapacityPlanningAnalysisParameters.setMaximumPossibleAgentCount();
+		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.original.toString() + "\n";
+	}
+	
+	/**
+	 * return an fGraph from a model, this function probably does not make sense being here
+	 * @param model
+	 * @return IParametricDerivationGraph
+	 */
+	public static IParametricDerivationGraph getFGraph(){
+	
+		IParametricDerivationGraph fGraph = null;
+		
+		try{
+			//so this is how to make the graph :)
+			fGraph = ParametricDerivationGraphBuilder
+					.createDerivationGraph(model.getAST(), null);
+			
+		} catch (InterruptedException e) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Cancel Acknowledgement",
+					"The ODE generation process has been cancelled");
+			
+		} catch (DifferentialAnalysisException e) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Differential error",
+					e.getMessage());
+			
+		}
+		
+		return fGraph;
+	}
+
 
 }

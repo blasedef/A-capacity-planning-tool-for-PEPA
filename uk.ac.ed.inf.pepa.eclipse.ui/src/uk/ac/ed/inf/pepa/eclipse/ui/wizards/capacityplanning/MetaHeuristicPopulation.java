@@ -1,61 +1,80 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
-import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
-import uk.ac.ed.inf.pepa.parsing.ActivityNode;
-import uk.ac.ed.inf.pepa.parsing.AggregationNode;
-import uk.ac.ed.inf.pepa.parsing.BinaryOperatorRateNode;
-import uk.ac.ed.inf.pepa.parsing.ChoiceNode;
-import uk.ac.ed.inf.pepa.parsing.ConstantProcessNode;
-import uk.ac.ed.inf.pepa.parsing.CooperationNode;
-import uk.ac.ed.inf.pepa.parsing.HidingNode;
-import uk.ac.ed.inf.pepa.parsing.ModelNode;
-import uk.ac.ed.inf.pepa.parsing.PassiveRateNode;
-import uk.ac.ed.inf.pepa.parsing.PrefixNode;
-import uk.ac.ed.inf.pepa.parsing.ProcessDefinitionNode;
-import uk.ac.ed.inf.pepa.parsing.ProcessNode;
-import uk.ac.ed.inf.pepa.parsing.RateDefinitionNode;
-import uk.ac.ed.inf.pepa.parsing.RateDoubleNode;
-import uk.ac.ed.inf.pepa.parsing.UnknownActionTypeNode;
-import uk.ac.ed.inf.pepa.parsing.VariableRateNode;
-import uk.ac.ed.inf.pepa.parsing.WildcardCooperationNode;
-
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 public class MetaHeuristicPopulation {
 	
 	private ArrayList<ModelObject> mPopulation;
+	private boolean isCanceled = false;
 
 	public MetaHeuristicPopulation() {
 		this.mPopulation = new ArrayList<ModelObject>();
 	}
 	
-	public void initialise(IProgressMonitor monitor){
+	public IStatus initialise(final IProgressMonitor monitor){
+		
+		IStatus test = null;
+		monitor.beginTask(null, IProgressMonitor.UNKNOWN);
+		
+		//setup best
+		CapacityPlanningAnalysisParameters.best = new ModelObject(monitor);
+		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+		
+		//setup working ModelObject(s)
 		ModelObject temp = new ModelObject(monitor);
-		temp.copyDictionary(CapacityPlanningAnalysisParameters.originalSystemEquationDict);
 		this.mPopulation.add(temp);
+		
+		//Go into repeating Queue
+		test = this.generator(CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Generations:").intValue(), monitor);
+		
+		monitor.done();
+		return test;
+		
 	}
+	
+	public IStatus generator(int generations, IProgressMonitor monitor){
+		
+		while(generations > 0){
+			
+			if (monitor.isCanceled() == true) {
+				this.isCanceled = true;
+				break;
+			}
+			
+			ModelObject temp = this.mPopulation.get(0);
+			temp.mutateMe();
+			if(temp.getFitness() < CapacityPlanningAnalysisParameters.best.getFitness()){
+				CapacityPlanningAnalysisParameters.best.setModelObject(temp.getSystemEquation());
+				CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+			}
+			generations--;
+		}
+		
+		if (!isCanceled) {
+			
+			return Status.OK_STATUS;
 
-	public String giveMeAModelsName(int i) {
-		return this.mPopulation.get(i).toString();
+		} else
+			return Status.CANCEL_STATUS;
 	}
-
-	public void setAModel(int i, String x, Double y) {
-		this.mPopulation.get(i).setAnItem(x, y);		
+	
+	public void mutateAll(){
+		for(ModelObject m : this.mPopulation){
+			m.mutateMe();
+		}
 	}
+	
 
-	/**
-	 * put the core AST back to how it was originally
-	 * or the values are off...
-	 */
-	public void reset() {
-		this.mPopulation.get(0).reset();
+	public String toString() {
+		String temp = "";
+		for(ModelObject m : this.mPopulation){
+			temp += m.toString();
+		}
+		return temp;
 	}
 	
 }

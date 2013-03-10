@@ -66,7 +66,6 @@ public class TargetSetupPage extends WizardPage {
 				public void handleEvent(Event event) {
 					
 					validate(j);
-					
 				}
 			});
 		    inputs.add(tempText);
@@ -81,7 +80,7 @@ public class TargetSetupPage extends WizardPage {
 		
 		try{
 			this.validation[i] = CapacityPlanningAnalysisParameters.testValidation(this.inputs.get(i).getText(), 
-					"percent");
+					"doubleGT0");
 		} catch (NumberFormatException e) {
 			this.validation[i] = false;
 		} finally {
