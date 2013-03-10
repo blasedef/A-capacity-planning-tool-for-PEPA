@@ -51,7 +51,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		this.setPageComplete(false);
 	    setTitle("Throughput setup");
 	    setDescription("Setting up performance requirement...");
-	    this.fGraph = CapacityPlanningAnalysisParameters.getFGraph();
+	    this.fGraph = CapacityPlanningAnalysisParameters.fGraph;
 	    
 	    //call back method
 	    IValidationCallback callBackOnSolver = new IValidationCallback() {
@@ -214,28 +214,38 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	}
 	
 	protected void validateMe(){
-		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 		if(this.solverReturned && this.actionCallbackReturned){
 			setAnalysisParams();
 			((CapacityPlanningWizard) getWizard())
-			.addRemainingPages();
+			.addFitnessFunctionPage();
 		}
+		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 	}
 	
 	public void setAnalysisParams() {
 		CapacityPlanningAnalysisParameters.fOptionMap = fSolverOptionsHandler.updateOptionMap();
 		CapacityPlanningAnalysisParameters.performanceMetrics = getPerformanceMetrics();
-		CapacityPlanningAnalysisParameters.labels = getLabels();
+		CapacityPlanningAnalysisParameters.targetLabels = getTargetLabels();
+		CapacityPlanningAnalysisParameters.allLabels= getAllLabels();
 		CapacityPlanningAnalysisParameters.collectors = DefaultCollector
 				.create(CapacityPlanningAnalysisParameters.performanceMetrics);
 	}
 	
-	protected String[] getLabels() {
+	protected String[] getTargetLabels() {
 		Object[] checkedElements = viewer.getCheckedElements();
 		String[] labels = new String[checkedElements.length];
 		for (int i = 0; i < checkedElements.length; i++) {
 			labels[i] = fGraph.getSymbolGenerator().getActionLabel(
 					(Short) checkedElements[i]);
+		}
+		return labels;
+	}
+	
+	protected String[] getAllLabels() {
+		Short[] temp = getAlphabet();
+		String[] labels = new String[temp.length];
+		for(int i = 0; i < temp.length; i++){
+			labels[i] = fGraph.getSymbolGenerator().getActionLabel(temp[i]);
 		}
 		return labels;
 	}

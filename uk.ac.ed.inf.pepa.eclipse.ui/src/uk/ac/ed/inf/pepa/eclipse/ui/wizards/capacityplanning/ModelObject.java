@@ -72,8 +72,8 @@ public class ModelObject {
 	 */
 	public void mutateMe(){
 		
-		int min = CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Minimum Population:").intValue();
-		int max = CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Maximum Population:").intValue();
+		int min = CapacityPlanningAnalysisParameters.metaheuristicParametersMinimumPopulation.intValue();
+		int max = CapacityPlanningAnalysisParameters.metaheuristicParametersMaximumPopulation.intValue();
 		
 		/**
 		 * mutation section
@@ -95,13 +95,10 @@ public class ModelObject {
 	public void updateFitness(){
 		
 		Map<String, Double> results = this.analyseThis.getResults(this.fGraph, this.monitor);
-		double resultingSize = results.size();
-		//for now we treat them all evenly...
-		double pvWeighting = 1/resultingSize;
 		double pvFitness = 0;
 		Map<String, Double> scaledPerformance = new HashMap<String, Double>();
 		for(Map.Entry<String, Double> entry : results.entrySet()){
-			double target = CapacityPlanningAnalysisParameters.targetValues.get(entry.getKey());
+			double target = CapacityPlanningAnalysisParameters.pvTargetValues.get(entry.getKey());
 			if(target == 0){
 				scaledPerformance.put(entry.getKey(), 100.0);
 				pvFitness += 0;
@@ -111,16 +108,26 @@ public class ModelObject {
 				this.myIndividualFitness.put(entry.getKey(), pv);
 				double scaled = 0.0;
 				//TODO make these work correctly...
-				if(CapacityPlanningAnalysisParameters.performanceRequirementType == 0){
+				if(CapacityPlanningAnalysisParameters.performanceRequirementChoice == 0){
 					if(CapacityPlanningAnalysisParameters.performanceRequirementTargetLimit){
 						scaled = Math.abs(100-((pv/target)*100));
+					} else {
+						scaled = Math.abs((pv/target)*100);
 					}
 				} else {
-					//average response time...
+					if(CapacityPlanningAnalysisParameters.performanceRequirementTargetLimit){
+						scaled = Math.abs(100-((pv/target)*100));
+					} else {
+						scaled = Math.abs((pv/target)*100);
+					}
 				}
 				
 				scaledPerformance.put(entry.getKey(), scaled);
-				pvFitness += scaled*pvWeighting;
+				if(CapacityPlanningAnalysisParameters.pvWeightingValues.get(entry.getKey()) == 0){
+					pvFitness += 0;
+				} else {
+					pvFitness += scaled*CapacityPlanningAnalysisParameters.pvWeightingValues.get(entry.getKey());
+				}
 			}
 			
 		}

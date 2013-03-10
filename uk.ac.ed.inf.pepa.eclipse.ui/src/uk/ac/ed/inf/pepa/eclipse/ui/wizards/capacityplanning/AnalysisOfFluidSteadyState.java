@@ -34,7 +34,7 @@ public class AnalysisOfFluidSteadyState {
 	public AnalysisOfFluidSteadyState() {
 		
 		this.name = "ODE";
-		this.labels = CapacityPlanningAnalysisParameters.labels;
+		this.labels = CapacityPlanningAnalysisParameters.targetLabels;
 		this.estimators = CapacityPlanningAnalysisParameters.performanceMetrics;
 		this.collectors = CapacityPlanningAnalysisParameters.collectors;
 		this.optionMap = CapacityPlanningAnalysisParameters.fOptionMap;

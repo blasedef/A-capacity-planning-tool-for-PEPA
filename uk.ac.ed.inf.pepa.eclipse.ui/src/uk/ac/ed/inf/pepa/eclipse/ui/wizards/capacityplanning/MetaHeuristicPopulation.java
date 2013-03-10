@@ -25,8 +25,10 @@ public class MetaHeuristicPopulation {
 		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
 		
 		//setup working ModelObject(s)
-		ModelObject temp = new ModelObject(monitor);
-		this.mPopulation.add(temp);
+		for(int i = 0; i < CapacityPlanningAnalysisParameters.candidatePopulationSize; i++){
+			ModelObject temp = new ModelObject(monitor);
+			this.mPopulation.add(temp);
+		}
 		
 		//Go into repeating Queue
 		test = this.generator(CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Generations:").intValue(), monitor);
@@ -45,11 +47,13 @@ public class MetaHeuristicPopulation {
 				break;
 			}
 			
-			ModelObject temp = this.mPopulation.get(0);
-			temp.mutateMe();
-			if(temp.getFitness() < CapacityPlanningAnalysisParameters.best.getFitness()){
-				CapacityPlanningAnalysisParameters.best.setModelObject(temp.getSystemEquation());
-				CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+			for(int i = 0; i < CapacityPlanningAnalysisParameters.candidatePopulationSize; i++){
+				ModelObject temp = this.mPopulation.get(i);
+				temp.mutateMe();
+				if(temp.getFitness() < CapacityPlanningAnalysisParameters.best.getFitness()){
+					CapacityPlanningAnalysisParameters.best.setModelObject(temp.getSystemEquation());
+					CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+				}
 			}
 			generations--;
 		}

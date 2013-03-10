@@ -12,11 +12,12 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import uk.ac.ed.inf.common.ui.wizards.SaveAsPage;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 
@@ -27,91 +28,127 @@ public class CapacityPlanningWizard extends Wizard {
 	private static final String EXTENSION = "csv";
 	private WizardNewFileCreationPage newFilePage;
 	
-	protected PerformanceRequirementSelectionPage performanceRequirementSelectionPage;
+	protected ChoiceSelectionPage performanceRequirementSelectionPage;
 	protected ThroughputSetupPage throughputSetupPage;
 	protected AverageResponseTimeSetupPage averageResponseTimeSetupPage;
 	protected SetupOptimiserPage setupOptimiserPage;
-	protected TargetSetupPage targetSetupPage;
-	protected IODESolution sendToMetaheuristic;
-	private IPepaModel model;
+	protected SetupHillClimbingPage setupHillClimbingPage;
+	protected SetupGeneticAlgorithmPage setupGeneticAlgorithmPage;
+	protected FitnessFunctionSetupPage targetSetupPage;
+	protected IODESolution performanceRequirementChoice;
 	@SuppressWarnings("unused")
 	private CapacityPlanningAnalysisParameters fParams;
 	
+	/**
+	 * Initialise CPAP, CPAP requires a model (for files?) and to initialise an fGraph for the setup pages 
+	 * @param model
+	 */
 	public CapacityPlanningWizard(IPepaModel model) {
 		super();
-	    this.model = (IPepaModel) model;
-	    this.fParams = new CapacityPlanningAnalysisParameters(this.model);
+	    this.fParams = new CapacityPlanningAnalysisParameters(model);
 	    setNeedsProgressMonitor(true);
 	}
 	
 	@Override
 	public void addPages() {
-		addSaveAsPage();
-		performanceRequirementSelectionPage = new PerformanceRequirementSelectionPage();
+		performanceRequirementSelectionPage = new ChoiceSelectionPage();
 		addPage(performanceRequirementSelectionPage);
 		throughputSetupPage = new ThroughputSetupPage();
 		averageResponseTimeSetupPage = new AverageResponseTimeSetupPage();
 		addPage(throughputSetupPage);
 		addPage(averageResponseTimeSetupPage);
+		addSaveAsPage();
+		addPage(newFilePage);
 	}
   
+	/**
+	 * save page setup
+	 */
 	private void addSaveAsPage() {
 		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
 				ResourceUtilities.changeExtension(
-						model.getUnderlyingResource(), EXTENSION));
+						CapacityPlanningAnalysisParameters.model.getUnderlyingResource(), EXTENSION));
 	
-		newFilePage = new SaveAsPage("newFilePage", new StructuredSelection(
+		newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
 				handle), EXTENSION);
 		newFilePage.setTitle("Save to CSV");
 		newFilePage.setDescription("Save model configurations to");
 		newFilePage.setFileName(handle.getName());
-		this.addPage(newFilePage);
+		
 	}
 
 	@Override
 	public boolean performFinish() {
 		Job metaheuristicJob;
 		try {
-			metaheuristicJob = new MetaHeuristicJob(this.newFilePage);
+			metaheuristicJob = new MetaHeuristicJob(newFilePage);
 			metaheuristicJob.schedule();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"error",
+					e.toString());
+			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Cancel Acknowledgement",
+					"The ODE generation process has been cancelled");
 		}
 		return true;
 	}
 	
+	/**
+	 * I guess this is not the correct way of doing things, but it works, this forces a 'route' through the pages
+	 * so that the choices made, and the population of the CPAP effect the pages created later. There is dependency between
+	 * the page creation, and the page choice...
+	 */
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == performanceRequirementSelectionPage){
-			if(performanceRequirementSelectionPage.getPerformanceRequirement()){
-				this.sendToMetaheuristic = averageResponseTimeSetupPage;
-				CapacityPlanningAnalysisParameters.performanceRequirementType = 1;
-				return averageResponseTimeSetupPage;
+			if(CapacityPlanningAnalysisParameters.getPerformanceChoice() == 0){
+				
+				this.performanceRequirementChoice = throughputSetupPage;
 			} else {
-				this.sendToMetaheuristic = throughputSetupPage;
-				CapacityPlanningAnalysisParameters.performanceRequirementType = 0;
-				return throughputSetupPage;
+				
+				this.performanceRequirementChoice = averageResponseTimeSetupPage;
 			}
-		} else if (page == averageResponseTimeSetupPage || page == throughputSetupPage){
-			return targetSetupPage;
+			return (IWizardPage) this.performanceRequirementChoice;
+			
+		} else if (page == performanceRequirementChoice){
+			return this.targetSetupPage;
+			
+		} else if (page == targetSetupPage){
+			if(CapacityPlanningAnalysisParameters.getMetaHeuristicChoice() == 0){
+				this.setupOptimiserPage = this.setupHillClimbingPage;
+			} else {
+				this.setupOptimiserPage = this.setupGeneticAlgorithmPage;
+			}
+			return this.setupOptimiserPage;
+			
+		} else if (page == setupOptimiserPage){
+			return this.newFilePage;
 		} else {
-			return super.getNextPage(page);
+			return super.getNextPage(null);
 		}
 	}
 	
-	public void addRemainingPages(){
-		targetSetupPage = new TargetSetupPage();
+	public void addFitnessFunctionPage(){
+		this.targetSetupPage = new FitnessFunctionSetupPage();
 		this.addPage(targetSetupPage);
-		setupOptimiserPage = new SetupOptimiserPage();
-		addPage(setupOptimiserPage);
+		this.addPage(newFilePage);
+	}
+	
+	public void addSetupOptimiserPage(){
+		this.setupHillClimbingPage = new SetupHillClimbingPage();
+		this.setupGeneticAlgorithmPage = new SetupGeneticAlgorithmPage();
+		this.addPage(this.setupHillClimbingPage);
+		this.addPage(this.setupGeneticAlgorithmPage);
 	}
 	
 	public boolean canFinish (){
 		if(setupOptimiserPage != null){
-			if(setupOptimiserPage.isPageComplete() && sendToMetaheuristic.isPageComplete() && performanceRequirementSelectionPage.isPageComplete()){
+			if(setupOptimiserPage.isPageComplete() 
+					&& performanceRequirementChoice.isPageComplete() 
+					&& performanceRequirementSelectionPage.isPageComplete()
+					&& newFilePage.isPageComplete()){
 				return true;
 			} else {
 				return false;

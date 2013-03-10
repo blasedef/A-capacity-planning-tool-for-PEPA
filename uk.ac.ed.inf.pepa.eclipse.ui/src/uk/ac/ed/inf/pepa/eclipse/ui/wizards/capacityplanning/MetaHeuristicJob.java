@@ -19,8 +19,8 @@ public class MetaHeuristicJob extends Job {
 	public MetaHeuristicJob(WizardNewFileCreationPage newFilePage) throws InvocationTargetException, InterruptedException {
 		super("MetaHeuristic");
 		this.population = new MetaHeuristicPopulation();
+		//trying to create the file last :/
 		this.output = newFilePage.createNewFile();
-		
 	}
 
 	@Override
@@ -36,11 +36,6 @@ public class MetaHeuristicJob extends Job {
 		//initialisation
 		this.population.initialise(monitor);
 		
-		/**
-		 * reset AST
-		 */
-		CapacityPlanningAnalysisParameters.source += "\n Model reset back to: \n";
-		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.original.toString();
 		
 		byte currentBytes[] = CapacityPlanningAnalysisParameters.source.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
