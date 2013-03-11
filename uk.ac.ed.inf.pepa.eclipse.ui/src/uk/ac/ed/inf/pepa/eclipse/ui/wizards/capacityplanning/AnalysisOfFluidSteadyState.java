@@ -34,10 +34,10 @@ public class AnalysisOfFluidSteadyState {
 	public AnalysisOfFluidSteadyState() {
 		
 		this.name = "ODE";
-		this.labels = CapacityPlanningAnalysisParameters.targetLabels;
-		this.estimators = CapacityPlanningAnalysisParameters.performanceMetrics;
-		this.collectors = CapacityPlanningAnalysisParameters.collectors;
-		this.optionMap = CapacityPlanningAnalysisParameters.fOptionMap;
+		this.labels = CPAParameters.targetLabels;
+		this.estimators = CPAParameters.performanceMetrics;
+		this.collectors = CPAParameters.collectors;
+		this.optionMap = CPAParameters.fOptionMap;
 	}
 	
 	/*

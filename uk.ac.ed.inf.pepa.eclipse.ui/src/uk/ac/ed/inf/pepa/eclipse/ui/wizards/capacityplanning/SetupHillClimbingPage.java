@@ -28,18 +28,18 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 	  
 	public void createInputs(Composite composite){
 		
-		CapacityPlanningAnalysisParameters.updateHCMetaheuristicParameters();
-		inputs = new ArrayList<Text>(CapacityPlanningAnalysisParameters.mlabels.length);
-		validation = new boolean[CapacityPlanningAnalysisParameters.mlabels.length];
+		CPAParameters.updateHCMetaheuristicParameters();
+		inputs = new ArrayList<Text>(CPAParameters.mlabels.length);
+		validation = new boolean[CPAParameters.mlabels.length];
 			
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
 		
-		for(int i = 0; i < CapacityPlanningAnalysisParameters.mlabels.length; i++){
+		for(int i = 0; i < CPAParameters.mlabels.length; i++){
 			
 			final int j = i;
 			
 			Label tempLabel = new Label(composite, SWT.NONE);
-			tempLabel.setText(CapacityPlanningAnalysisParameters.mlabels[i]);
+			tempLabel.setText(CPAParameters.mlabels[i]);
 			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		    
 		    Text tempText = new Text(composite, textStyle);
@@ -60,8 +60,8 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 	@Override
 	protected void updateMetaHeuristicParameters() {
 		
-		for(int i = 0; i < CapacityPlanningAnalysisParameters.mlabels.length; i++){
-			CapacityPlanningAnalysisParameters.metaheuristicParameters.put(CapacityPlanningAnalysisParameters.mlabels[i],
+		for(int i = 0; i < CPAParameters.mlabels.length; i++){
+			CPAParameters.metaheuristicParameters.put(CPAParameters.mlabels[i],
 					Double.valueOf(this.inputs.get(i).getText()));
 		}
 		

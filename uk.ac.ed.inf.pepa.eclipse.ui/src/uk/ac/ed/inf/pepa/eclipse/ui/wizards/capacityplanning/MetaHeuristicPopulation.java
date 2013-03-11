@@ -21,17 +21,17 @@ public class MetaHeuristicPopulation {
 		monitor.beginTask(null, IProgressMonitor.UNKNOWN);
 		
 		//setup best
-		CapacityPlanningAnalysisParameters.best = new ModelObject(monitor);
-		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+		CPAParameters.best = new ModelObject(monitor);
+		CPAParameters.source += CPAParameters.best.toString();
 		
 		//setup working ModelObject(s)
-		for(int i = 0; i < CapacityPlanningAnalysisParameters.candidatePopulationSize; i++){
+		for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 			ModelObject temp = new ModelObject(monitor);
 			this.mPopulation.add(temp);
 		}
 		
 		//Go into repeating Queue
-		test = this.generator(CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Generations:").intValue(), monitor);
+		test = this.generator(CPAParameters.metaheuristicParameters.get("Generations:").intValue(), monitor);
 		
 		monitor.done();
 		return test;
@@ -47,12 +47,12 @@ public class MetaHeuristicPopulation {
 				break;
 			}
 			
-			for(int i = 0; i < CapacityPlanningAnalysisParameters.candidatePopulationSize; i++){
+			for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 				ModelObject temp = this.mPopulation.get(i);
 				temp.mutateMe();
-				if(temp.getFitness() < CapacityPlanningAnalysisParameters.best.getFitness()){
-					CapacityPlanningAnalysisParameters.best.setModelObject(temp.getSystemEquation());
-					CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.best.toString();
+				if(temp.getFitness() < CPAParameters.best.getFitness()){
+					CPAParameters.best.setModelObject(temp.getSystemEquation());
+					CPAParameters.source += CPAParameters.best.toString();
 				}
 			}
 			generations--;

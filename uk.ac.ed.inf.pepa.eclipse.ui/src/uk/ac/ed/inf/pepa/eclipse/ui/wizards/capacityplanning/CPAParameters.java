@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
@@ -21,7 +22,7 @@ import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
  * @author twig
  *
  */
-public class CapacityPlanningAnalysisParameters {
+public class CPAParameters {
 	
 	
 	//Initial
@@ -67,44 +68,42 @@ public class CapacityPlanningAnalysisParameters {
 	
 	//output
 	public static String source;
-	
-	
-	
-	
+	private static WizardNewFileCreationPage newFilePage;
+
 	/**
 	 * Build one object for storing all information for this CP package
 	 * @param model
 	 */
-	public CapacityPlanningAnalysisParameters(IPepaModel model) {
+	public CPAParameters(IPepaModel model) {
 		
 		//####---RESET
 		//init
-		CapacityPlanningAnalysisParameters.model = null;
-		CapacityPlanningAnalysisParameters.fGraph = null;
-		CapacityPlanningAnalysisParameters.fOptionMap = null;
+		CPAParameters.model = null;
+		CPAParameters.fGraph = null;
+		CPAParameters.fOptionMap = null;
 		
 		//Choice
-		CapacityPlanningAnalysisParameters.performanceRequirementChoice = 0;
-		CapacityPlanningAnalysisParameters.performanceRequirementTargetLimit = true;
-		CapacityPlanningAnalysisParameters.metaHeuristicChoice = 0;
+		CPAParameters.performanceRequirementChoice = 0;
+		CPAParameters.performanceRequirementTargetLimit = true;
+		CPAParameters.metaHeuristicChoice = 0;
 		
 		//PVr
 		
 		//MHr
-		CapacityPlanningAnalysisParameters.maximumPossibleAgentCount = 0;
+		CPAParameters.maximumPossibleAgentCount = 0;
 		
 		//output
-		CapacityPlanningAnalysisParameters.source = "";
+		CPAParameters.source = "";
 		
 		//####---INIT
 		//Store model
-		CapacityPlanningAnalysisParameters.model = (IPepaModel) model;
+		CPAParameters.model = (IPepaModel) model;
 		
 		//update Graph
-		CapacityPlanningAnalysisParameters.updateFGraph();
+		CPAParameters.updateFGraph();
 		
 		//setup PVRelated 
-		CapacityPlanningAnalysisParameters.fOptionMap = model.getOptionMap();
+		CPAParameters.fOptionMap = model.getOptionMap();
 	    
 	    //setup output
 	    
@@ -121,7 +120,7 @@ public class CapacityPlanningAnalysisParameters {
 	
 		try{
 			//so this is how to make the graph :)
-			CapacityPlanningAnalysisParameters.fGraph = ParametricDerivationGraphBuilder
+			CPAParameters.fGraph = ParametricDerivationGraphBuilder
 					.createDerivationGraph(model.getAST(), null);
 			
 		} catch (InterruptedException e) {
@@ -144,11 +143,11 @@ public class CapacityPlanningAnalysisParameters {
 	//--------------------------------------------------------------Choice
 	
 	public static int getPerformanceChoice(){
-		return CapacityPlanningAnalysisParameters.performanceRequirementChoice;
+		return CPAParameters.performanceRequirementChoice;
 	}
 	
 	public static int getMetaHeuristicChoice() {
-		return CapacityPlanningAnalysisParameters.metaHeuristicChoice;
+		return CPAParameters.metaHeuristicChoice;
 	}
 	
 	
@@ -161,8 +160,8 @@ public class CapacityPlanningAnalysisParameters {
 	 * set the Maximum Agent count
 	 */
 	public static void updateMaximumPossibleAgentCount() {
-		CapacityPlanningAnalysisParameters.maximumPossibleAgentCount = (CapacityPlanningAnalysisParameters.metaheuristicParametersMaximumPopulation
-				- (CapacityPlanningAnalysisParameters.metaheuristicParametersMinimumPopulation - 1)) * originalSystemEquation.size();
+		CPAParameters.maximumPossibleAgentCount = (CPAParameters.metaheuristicParametersMaximumPopulation
+				- (CPAParameters.metaheuristicParametersMinimumPopulation - 1)) * originalSystemEquation.size();
 	}
 	
 	
@@ -179,21 +178,21 @@ public class CapacityPlanningAnalysisParameters {
 		String[] mTypes = {"percent","percent","intGT0"};
 		
 		//the parameter labels
-		CapacityPlanningAnalysisParameters.mlabels = mlabels;
+		CPAParameters.mlabels = mlabels;
 		//the type of validation required on the above
 		//intGT0 means an integer greater than 0
 		//percent means a double between 0.0 and 1.0
-		CapacityPlanningAnalysisParameters.mTypes = mTypes;
+		CPAParameters.mTypes = mTypes;
 		for(int i = 0; i < mlabels.length; i++){
-			CapacityPlanningAnalysisParameters.mLabelsAndTypes.put(mlabels[i],mTypes[i]);
+			CPAParameters.mLabelsAndTypes.put(mlabels[i],mTypes[i]);
 				if(mTypes[i].equals("intGT0")){
-					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 1.0);
+					CPAParameters.metaheuristicParameters.put(mlabels[i], 1.0);
 				} else {
-					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 0.5);
+					CPAParameters.metaheuristicParameters.put(mlabels[i], 0.5);
 				}
 		}
 		
-		CapacityPlanningAnalysisParameters.candidatePopulationSize = 1;
+		CPAParameters.candidatePopulationSize = 1;
 		
 	}
 	
@@ -206,17 +205,17 @@ public class CapacityPlanningAnalysisParameters {
 		String[] mTypes = {"percent","percent","intGT0","intGT0"};
 		
 		//the parameter labels
-		CapacityPlanningAnalysisParameters.mlabels = mlabels;
+		CPAParameters.mlabels = mlabels;
 		//the type of validation required on the above
 		//intGT0 means an integer greater than 0
 		//percent means a double between 0.0 and 1.0
-		CapacityPlanningAnalysisParameters.mTypes = mTypes;
+		CPAParameters.mTypes = mTypes;
 		for(int i = 0; i < mlabels.length; i++){
-			CapacityPlanningAnalysisParameters.mLabelsAndTypes.put(mlabels[i],mTypes[i]);
+			CPAParameters.mLabelsAndTypes.put(mlabels[i],mTypes[i]);
 				if(mTypes[i].equals("intGT0")){
-					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 1.0);
+					CPAParameters.metaheuristicParameters.put(mlabels[i], 1.0);
 				} else {
-					CapacityPlanningAnalysisParameters.metaheuristicParameters.put(mlabels[i], 0.5);
+					CPAParameters.metaheuristicParameters.put(mlabels[i], 0.5);
 				}
 		}
 		
@@ -265,13 +264,23 @@ public class CapacityPlanningAnalysisParameters {
 
 	public static void makeOriginal(IProgressMonitor monitor) {
 		
-		CapacityPlanningAnalysisParameters.original = new ModelObject(monitor);
-		CapacityPlanningAnalysisParameters.originalSystemEquation = CapacityPlanningAnalysisParameters.original.getSystemEquation();
-		CapacityPlanningAnalysisParameters.updateMaximumPossibleAgentCount();
-		CapacityPlanningAnalysisParameters.source += CapacityPlanningAnalysisParameters.original.toString() + "\n";
+		CPAParameters.original = new ModelObject(monitor);
+		CPAParameters.originalSystemEquation = CPAParameters.original.getSystemEquation();
+		CPAParameters.updateMaximumPossibleAgentCount();
+		CPAParameters.source += CPAParameters.original.toString() + "\n";
 	}
 	
 	//--------------------------------------------------------------MH Running methods End
+	
+	//--------------------------------------------------------------OUTPUT
+	
+	public static WizardNewFileCreationPage getNewFilePage() {
+		return newFilePage;
+	}
+
+	public static void setNewFilePage(WizardNewFileCreationPage newFilePage) {
+		CPAParameters.newFilePage = newFilePage;
+	}
 
 
 }

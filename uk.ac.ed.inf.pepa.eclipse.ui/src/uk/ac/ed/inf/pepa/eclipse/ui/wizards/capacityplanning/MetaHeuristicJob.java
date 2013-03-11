@@ -16,28 +16,29 @@ public class MetaHeuristicJob extends Job {
 	private IFile output;
 	private MetaHeuristicPopulation population;
 
-	public MetaHeuristicJob(WizardNewFileCreationPage newFilePage) throws InvocationTargetException, InterruptedException {
+	public MetaHeuristicJob() throws InvocationTargetException, InterruptedException {
 		super("MetaHeuristic");
 		this.population = new MetaHeuristicPopulation();
 		//trying to create the file last :/
-		this.output = newFilePage.createNewFile();
+		
 	}
 
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
 		
-		monitor.beginTask("MetaHeuristic", CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Generations:").intValue());
+		monitor.beginTask("MetaHeuristic", CPAParameters.metaheuristicParameters.get("Generations:").intValue());
 		
 		/**
 		 * take original snap shot...
 		 */
-		CapacityPlanningAnalysisParameters.makeOriginal(monitor);
+		CPAParameters.makeOriginal(monitor);
 		
 		//initialisation
 		this.population.initialise(monitor);
 		
+		this.output = CPAParameters.getNewFilePage().createNewFile();
 		
-		byte currentBytes[] = CapacityPlanningAnalysisParameters.source.getBytes();
+		byte currentBytes[] = CPAParameters.source.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 				currentBytes);
 		try {

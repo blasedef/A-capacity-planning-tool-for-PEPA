@@ -46,13 +46,13 @@ public abstract class SetupOptimiserPage extends WizardPage {
 		this.setErrorMessage(null);
 		
 		try{
-			this.validation[i] = CapacityPlanningAnalysisParameters.testValidation(this.inputs.get(i).getText(), 
-					CapacityPlanningAnalysisParameters.mLabelsAndTypes.get(CapacityPlanningAnalysisParameters.mlabels[i]));
+			this.validation[i] = CPAParameters.testValidation(this.inputs.get(i).getText(), 
+					CPAParameters.mLabelsAndTypes.get(CPAParameters.mlabels[i]));
 		} catch (NumberFormatException e) {
 			this.validation[i] = false;
 		} finally {
 			if(!this.validation[i]){
-				setErrorMessage("Incorrect value set on '" + CapacityPlanningAnalysisParameters.mlabels[i] + "' with " + this.inputs.get(i).getText());
+				setErrorMessage("Incorrect value set on '" + CPAParameters.mlabels[i] + "' with " + this.inputs.get(i).getText());
 			}
 			
 		}

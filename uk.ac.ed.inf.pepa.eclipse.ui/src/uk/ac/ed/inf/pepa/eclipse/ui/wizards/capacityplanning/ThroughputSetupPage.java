@@ -51,7 +51,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		this.setPageComplete(false);
 	    setTitle("Throughput setup");
 	    setDescription("Setting up performance requirement...");
-	    this.fGraph = CapacityPlanningAnalysisParameters.fGraph;
+	    this.fGraph = CPAParameters.fGraph;
 	    
 	    //call back method
 	    IValidationCallback callBackOnSolver = new IValidationCallback() {
@@ -62,7 +62,7 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	    	}
 	    };
 	    
-	    this.fSolverOptionsHandler = new ODESolverOptionsHandler(false, CapacityPlanningAnalysisParameters.fOptionMap, callBackOnSolver);
+	    this.fSolverOptionsHandler = new ODESolverOptionsHandler(false, CPAParameters.fOptionMap, callBackOnSolver);
 	    this.validateMe();
 	}
 	
@@ -223,12 +223,12 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	}
 	
 	public void setAnalysisParams() {
-		CapacityPlanningAnalysisParameters.fOptionMap = fSolverOptionsHandler.updateOptionMap();
-		CapacityPlanningAnalysisParameters.performanceMetrics = getPerformanceMetrics();
-		CapacityPlanningAnalysisParameters.targetLabels = getTargetLabels();
-		CapacityPlanningAnalysisParameters.allLabels= getAllLabels();
-		CapacityPlanningAnalysisParameters.collectors = DefaultCollector
-				.create(CapacityPlanningAnalysisParameters.performanceMetrics);
+		CPAParameters.fOptionMap = fSolverOptionsHandler.updateOptionMap();
+		CPAParameters.performanceMetrics = getPerformanceMetrics();
+		CPAParameters.targetLabels = getTargetLabels();
+		CPAParameters.allLabels= getAllLabels();
+		CPAParameters.collectors = DefaultCollector
+				.create(CPAParameters.performanceMetrics);
 	}
 	
 	protected String[] getTargetLabels() {

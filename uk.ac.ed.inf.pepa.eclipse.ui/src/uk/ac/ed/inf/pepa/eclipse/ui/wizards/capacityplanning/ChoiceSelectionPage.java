@@ -66,7 +66,7 @@ public class ChoiceSelectionPage extends WizardPage {
 				if(widget instanceof Button){
 					Button button = (Button) widget;
 					if(button.getSelection()){
-						CapacityPlanningAnalysisParameters.performanceRequirementChoice = 0;
+						CPAParameters.performanceRequirementChoice = 0;
 					}
 				}
 			}
@@ -80,7 +80,7 @@ public class ChoiceSelectionPage extends WizardPage {
 				if(widget instanceof Button){
 					Button button = (Button) widget;
 					if(button.getSelection()){
-						CapacityPlanningAnalysisParameters.performanceRequirementChoice = 1;
+						CPAParameters.performanceRequirementChoice = 1;
 					}
 				}
 			}
@@ -105,7 +105,7 @@ public class ChoiceSelectionPage extends WizardPage {
 				if(widget instanceof Button){
 					Button button = (Button) widget;
 					if(button.getSelection()){
-						CapacityPlanningAnalysisParameters.metaHeuristicChoice = 0;
+						CPAParameters.metaHeuristicChoice = 0;
 					}
 				}
 			}
@@ -119,7 +119,7 @@ public class ChoiceSelectionPage extends WizardPage {
 				if(widget instanceof Button){
 					Button button = (Button) widget;
 					if(button.getSelection()){
-						CapacityPlanningAnalysisParameters.metaHeuristicChoice = 1;
+						CPAParameters.metaHeuristicChoice = 1;
 					}
 				}
 			}

@@ -34,7 +34,7 @@ public class ModelObject {
 
 	public ModelObject(IProgressMonitor monitor) {
 		this.monitor = monitor;
-		this.node = (ModelNode) ASTSupport.copy(CapacityPlanningAnalysisParameters.model.getAST());
+		this.node = (ModelNode) ASTSupport.copy(CPAParameters.model.getAST());
 		this.analyseThis = new AnalysisOfFluidSteadyState();
 		this.writeAST = new SetASTVisitor(this.mySystemEquation);
 		this.readAST = new GetASTVisitor(this.mySystemEquation);
@@ -72,15 +72,15 @@ public class ModelObject {
 	 */
 	public void mutateMe(){
 		
-		int min = CapacityPlanningAnalysisParameters.metaheuristicParametersMinimumPopulation.intValue();
-		int max = CapacityPlanningAnalysisParameters.metaheuristicParametersMaximumPopulation.intValue();
+		int min = CPAParameters.metaheuristicParametersMinimumPopulation.intValue();
+		int max = CPAParameters.metaheuristicParametersMaximumPopulation.intValue();
 		
 		/**
 		 * mutation section
 		 */
 		for(Map.Entry<String, Double> entry : this.mySystemEquation.entrySet()){
 			double p = generator.nextDouble();
-			if(p < CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Mutation Probability:")){
+			if(p < CPAParameters.metaheuristicParameters.get("Mutation Probability:")){
 				double newCount = generator.nextInt(max - min + 1) + min;
 				this.mySystemEquation.put(entry.getKey(), newCount);
 			}
@@ -98,7 +98,7 @@ public class ModelObject {
 		double pvFitness = 0;
 		Map<String, Double> scaledPerformance = new HashMap<String, Double>();
 		for(Map.Entry<String, Double> entry : results.entrySet()){
-			double target = CapacityPlanningAnalysisParameters.pvTargetValues.get(entry.getKey());
+			double target = CPAParameters.pvTargetValues.get(entry.getKey());
 			if(target == 0){
 				scaledPerformance.put(entry.getKey(), 100.0);
 				pvFitness += 0;
@@ -108,14 +108,14 @@ public class ModelObject {
 				this.myIndividualFitness.put(entry.getKey(), pv);
 				double scaled = 0.0;
 				//TODO make these work correctly...
-				if(CapacityPlanningAnalysisParameters.performanceRequirementChoice == 0){
-					if(CapacityPlanningAnalysisParameters.performanceRequirementTargetLimit){
+				if(CPAParameters.performanceRequirementChoice == 0){
+					if(CPAParameters.performanceRequirementTargetLimit){
 						scaled = Math.abs(100-((pv/target)*100));
 					} else {
 						scaled = Math.abs((pv/target)*100);
 					}
 				} else {
-					if(CapacityPlanningAnalysisParameters.performanceRequirementTargetLimit){
+					if(CPAParameters.performanceRequirementTargetLimit){
 						scaled = Math.abs(100-((pv/target)*100));
 					} else {
 						scaled = Math.abs((pv/target)*100);
@@ -123,18 +123,18 @@ public class ModelObject {
 				}
 				
 				scaledPerformance.put(entry.getKey(), scaled);
-				if(CapacityPlanningAnalysisParameters.pvWeightingValues.get(entry.getKey()) == 0){
+				if(CPAParameters.pvWeightingValues.get(entry.getKey()) == 0){
 					pvFitness += 0;
 				} else {
-					pvFitness += scaled*CapacityPlanningAnalysisParameters.pvWeightingValues.get(entry.getKey());
+					pvFitness += scaled*CPAParameters.pvWeightingValues.get(entry.getKey());
 				}
 			}
 			
 		}
 		
 		this.updateTotalAgentPopulation();
-		double scaledAgentPopulation = ((this.totalAgentPopulation/CapacityPlanningAnalysisParameters.maximumPossibleAgentCount)*100);
-		double alpha = CapacityPlanningAnalysisParameters.metaheuristicParameters.get("Performance to Population:");
+		double scaledAgentPopulation = ((this.totalAgentPopulation/CPAParameters.maximumPossibleAgentCount)*100);
+		double alpha = CPAParameters.metaheuristicParameters.get("Performance to Population:");
 		double beta = 1.0 - alpha;
 		this.pvString = pvFitness + "";
 		this.pString = scaledAgentPopulation + "";

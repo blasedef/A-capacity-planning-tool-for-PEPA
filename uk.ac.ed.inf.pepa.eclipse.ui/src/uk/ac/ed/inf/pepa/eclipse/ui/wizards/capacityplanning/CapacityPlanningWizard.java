@@ -37,7 +37,7 @@ public class CapacityPlanningWizard extends Wizard {
 	protected FitnessFunctionSetupPage targetSetupPage;
 	protected IODESolution performanceRequirementChoice;
 	@SuppressWarnings("unused")
-	private CapacityPlanningAnalysisParameters fParams;
+	private CPAParameters fParams;
 	
 	/**
 	 * Initialise CPAP, CPAP requires a model (for files?) and to initialise an fGraph for the setup pages 
@@ -45,7 +45,7 @@ public class CapacityPlanningWizard extends Wizard {
 	 */
 	public CapacityPlanningWizard(IPepaModel model) {
 		super();
-	    this.fParams = new CapacityPlanningAnalysisParameters(model);
+	    this.fParams = new CPAParameters(model);
 	    setNeedsProgressMonitor(true);
 	}
 	
@@ -67,7 +67,7 @@ public class CapacityPlanningWizard extends Wizard {
 	private void addSaveAsPage() {
 		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
 				ResourceUtilities.changeExtension(
-						CapacityPlanningAnalysisParameters.model.getUnderlyingResource(), EXTENSION));
+						CPAParameters.model.getUnderlyingResource(), EXTENSION));
 	
 		newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
 				handle), EXTENSION);
@@ -80,8 +80,9 @@ public class CapacityPlanningWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		Job metaheuristicJob;
+		CPAParameters.setNewFilePage(newFilePage);
 		try {
-			metaheuristicJob = new MetaHeuristicJob(newFilePage);
+			metaheuristicJob = new MetaHeuristicJob();
 			metaheuristicJob.schedule();
 		} catch (InvocationTargetException e) {
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
@@ -103,7 +104,7 @@ public class CapacityPlanningWizard extends Wizard {
 	 */
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == performanceRequirementSelectionPage){
-			if(CapacityPlanningAnalysisParameters.getPerformanceChoice() == 0){
+			if(CPAParameters.getPerformanceChoice() == 0){
 				
 				this.performanceRequirementChoice = throughputSetupPage;
 			} else {
@@ -116,7 +117,7 @@ public class CapacityPlanningWizard extends Wizard {
 			return this.targetSetupPage;
 			
 		} else if (page == targetSetupPage){
-			if(CapacityPlanningAnalysisParameters.getMetaHeuristicChoice() == 0){
+			if(CPAParameters.getMetaHeuristicChoice() == 0){
 				this.setupOptimiserPage = this.setupHillClimbingPage;
 			} else {
 				this.setupOptimiserPage = this.setupGeneticAlgorithmPage;
