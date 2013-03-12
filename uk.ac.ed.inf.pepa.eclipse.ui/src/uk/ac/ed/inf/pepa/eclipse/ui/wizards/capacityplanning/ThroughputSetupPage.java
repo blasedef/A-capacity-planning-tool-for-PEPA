@@ -45,6 +45,9 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	protected CheckboxTableViewer viewer;
 	private ViewerFilter filter;
 	
+	/**
+	 * Constructor
+	 */
 	protected ThroughputSetupPage() {
 	    super("Stochastic Search Optimisation");
 	    this.setErrorMessage(null);
@@ -57,23 +60,24 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 	    IValidationCallback callBackOnSolver = new IValidationCallback() {
 	    	
 	    	public void validate(){
-	    		callBackOnSolverUpdate();
 	    		callbackOnActionReturned();
 	    	}
 	    };
 	    
 	    this.fSolverOptionsHandler = new ODESolverOptionsHandler(false, CPAParameters.fOptionMap, callBackOnSolver);
-	    this.validateMe();
 	}
 	
 	/**
-	 * The callback came from the solver, what is its status
+	 * The callback came from the solver, is the configuration valid?
 	 */
 	private void callBackOnSolverUpdate(){
 		this.solverReturned = fSolverOptionsHandler.isConfigurationValid();
 		validateMe();
 	}
 	
+	/**
+	 * UI stuff
+	 */
 	@Override
 	public void createControl(Composite parent) {
 		//from PerformanceMetricDialog
@@ -117,16 +121,31 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		setControl(composite);
 	}
 	
+	/**
+	 * UI
+	 * @return
+	 */
 	protected String getViewerHeader() {
 		return "Select actions";
 	}
 	
+	/**
+	 * Some function that I have left in as it was in the XDialog, will delete later
+	 * @param composite
+	 */
 	protected void addOptions(Composite composite) {
 		// do nothing;
 	}
 	
-	protected StructuredViewer createViewer(Composite composite) {
-
+	
+	/**
+	 * UI stuff
+	 * @param parent
+	 * @return
+	 */
+	protected StructuredViewer createViewer(Composite parent) {
+		
+		Composite composite = parent;
 		GridData checkListData = new GridData(GridData.FILL_BOTH);
 		checkListData.horizontalSpan = 2;
 		viewer = CheckboxTableViewer.newCheckList(composite, SWT.NONE);
@@ -171,6 +190,10 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		return getAlphabet();
 	}
 	
+	/**
+	 * Return all of the actions from the fGraph
+	 * @return
+	 */
 	private Short[] getAlphabet() {
 		ArrayList<Short> alphabet = new ArrayList<Short>();
 		for (ISequentialComponent c : fGraph
@@ -191,7 +214,10 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		return alphabet.toArray(new Short[alphabet.size()]);
 	}
 	
-	//Checklist Performance Dialog
+	/**
+	 * Checklist, taken from PerformanceMetricsDialog
+	 * @return
+	 */
 	protected ViewerFilter getViewerFilter() {
 		filter = new ViewerFilter() {
 
@@ -207,30 +233,42 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		return filter;
 	}
 	
+	/**
+	 * Callback
+	 */
 	protected void callbackOnActionReturned(){
 		this.actionCallbackReturned = viewer.getCheckedElements().length != 0;
 		this.callBackOnSolverUpdate();
-		validateMe();
 	}
 	
+	/**
+	 * Validation and ODE parameter update
+	 */
 	protected void validateMe(){
 		if(this.solverReturned && this.actionCallbackReturned){
-			setAnalysisParams();
+			updateAnalysisParams();
 			((CapacityPlanningWizard) getWizard())
 			.addFitnessFunctionPage();
 		}
 		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 	}
 	
-	public void setAnalysisParams() {
+	/**
+	 * Update the CPAParameters (ODE)
+	 */
+	public void updateAnalysisParams() {
 		CPAParameters.fOptionMap = fSolverOptionsHandler.updateOptionMap();
 		CPAParameters.performanceMetrics = getPerformanceMetrics();
 		CPAParameters.targetLabels = getTargetLabels();
-		CPAParameters.allLabels= getAllLabels();
+		CPAParameters.allTargetLabels= getAllLabels();
 		CPAParameters.collectors = DefaultCollector
 				.create(CPAParameters.performanceMetrics);
 	}
 	
+	/**
+	 * Get the target labels, not used in AverageResponseTime. 
+	 * @return
+	 */
 	protected String[] getTargetLabels() {
 		Object[] checkedElements = viewer.getCheckedElements();
 		String[] labels = new String[checkedElements.length];
@@ -241,6 +279,10 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		return labels;
 	}
 	
+	/**
+	 * Used later to assess if one or many performance targets have been selected
+	 * @return
+	 */
 	protected String[] getAllLabels() {
 		Short[] temp = getAlphabet();
 		String[] labels = new String[temp.length];
@@ -250,6 +292,10 @@ public class ThroughputSetupPage extends WizardPage implements IODESolution {
 		return labels;
 	}
 	
+	/**
+	 * No idea. Performance Metrics here. Calculators else where. Evaluators some where else again.
+	 * @return calculators (AKA performance metrics/evaluators)
+	 */
 	protected IPointEstimator[] getPerformanceMetrics() {
 		Object[] checkedElements = viewer.getCheckedElements();
 		ThroughputCalculation[] calculators = new ThroughputCalculation[checkedElements.length];

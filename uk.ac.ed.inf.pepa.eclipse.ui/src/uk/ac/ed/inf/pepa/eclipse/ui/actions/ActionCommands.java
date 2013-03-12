@@ -107,7 +107,7 @@ public class ActionCommands {
 		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
-		dialog.setPageSize(400, 400);
+		dialog.setPageSize(500, 500);
 		dialog.open();
 	}
 

@@ -49,7 +49,7 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 		Label heading2 = new Label(composite,SWT.NONE);
 		heading2.setText("MetaHeuristic non-Target inputs:");
 		
-		int rest = CPAParameters.allLabels.length - CPAParameters.targetLabels.length;
+		int rest = CPAParameters.allTargetLabels.length - CPAParameters.targetLabels.length;
 		
 		if(rest > 0){
 			this.createNonTargetInputs(composite);

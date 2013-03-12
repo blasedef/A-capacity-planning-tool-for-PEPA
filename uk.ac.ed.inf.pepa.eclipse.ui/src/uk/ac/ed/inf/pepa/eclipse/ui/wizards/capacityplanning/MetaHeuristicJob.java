@@ -20,6 +20,7 @@ public class MetaHeuristicJob extends Job {
 		super("MetaHeuristic");
 		this.population = new MetaHeuristicPopulation();
 		//trying to create the file last :/
+		this.output = CPAParameters.getNewFilePage().createNewFile();
 		
 	}
 
@@ -35,8 +36,6 @@ public class MetaHeuristicJob extends Job {
 		
 		//initialisation
 		this.population.initialise(monitor);
-		
-		this.output = CPAParameters.getNewFilePage().createNewFile();
 		
 		byte currentBytes[] = CPAParameters.source.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(

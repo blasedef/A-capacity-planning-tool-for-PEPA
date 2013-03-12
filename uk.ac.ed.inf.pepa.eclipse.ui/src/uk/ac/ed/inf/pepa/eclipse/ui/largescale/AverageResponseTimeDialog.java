@@ -188,10 +188,15 @@ public class AverageResponseTimeDialog extends PerformanceMetricDialog {
 		final int[] insystem = new int[viewer.getCheckedElements().length];
 		for (int i = 0; i < insystem.length; i++)
 			insystem[i] = (Integer) viewer.getCheckedElements()[i];
+		
 		ISequentialComponent c = (ISequentialComponent) ((ResponseTimeContentProvider) viewer
 				.getContentProvider())
 				.getParent(viewer.getCheckedElements()[0]);
+		
+		System.out.println(c.getName());
+		
 		int j = 0;
+		
 		for (; j < fDerivationGraph.getSequentialComponents().length; j++)
 			if (fDerivationGraph.getSequentialComponents()[j] == c)
 				break;

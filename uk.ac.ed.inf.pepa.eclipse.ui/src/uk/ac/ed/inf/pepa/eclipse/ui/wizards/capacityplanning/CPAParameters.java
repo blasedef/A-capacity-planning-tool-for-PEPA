@@ -3,7 +3,6 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -13,6 +12,7 @@ import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
+import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
@@ -40,7 +40,7 @@ public class CPAParameters {
 	public static OptionMap fOptionMap = null;
 	public static IStatisticsCollector[] collectors = null;
 	public static String[] targetLabels = null;
-	public static String[] allLabels = null;
+	public static String[] allTargetLabels = null;
 	
 	//fitness function
 	public static String[] nonTargetRelatedPerformanceLabels = {"Minimum Population", "Maximum Population"};
@@ -51,6 +51,7 @@ public class CPAParameters {
 	public static Double metaheuristicParametersMaximumPopulation;
 	public static Map<String, Double> pvTargetValues = new HashMap<String, Double>();
 	public static Map<String, Double> pvWeightingValues = new HashMap<String, Double>();
+	public static Map<String, Double> systemEquationMinMax = new HashMap<String, Double>();
 	public static double maximumPossibleAgentCount;
 	
 	//MH setup parameters
@@ -105,6 +106,9 @@ public class CPAParameters {
 		//setup PVRelated 
 		CPAParameters.fOptionMap = model.getOptionMap();
 	    
+		//setup min/max labels
+		setupSystemEquationMinMax();
+		
 	    //setup output
 	    
 	}
@@ -136,6 +140,13 @@ public class CPAParameters {
 		}
 	}
 	
+	
+	private void setupSystemEquationMinMax() {
+		for (ISequentialComponent c : fGraph.getSequentialComponents()){
+			CPAParameters.systemEquationMinMax.put(c.getName(), 0.0);
+		}
+		
+	}
 	
 	//--------------------------------------------------------------Initialisation End
 	
