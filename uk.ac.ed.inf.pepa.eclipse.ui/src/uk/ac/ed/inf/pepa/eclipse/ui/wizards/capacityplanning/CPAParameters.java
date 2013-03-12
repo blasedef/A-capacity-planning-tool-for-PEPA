@@ -24,6 +24,31 @@ import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
  */
 public class CPAParameters {
 	
+	//for min/max
+	public class Tuple { 
+		  private double min; 
+		  private double max; 
+		  
+		  public Tuple() { 
+		  } 
+		  
+		  public void setMinMax(double min, double max){
+			  this.min = min;
+			  this.max = max;
+		  }
+		  
+		  public double getDistance(){
+			  return this.max - this.min + 1;
+		  }
+		  
+		  public int min(){
+			  return (int) this.min;
+		  }
+		  
+		  public int max(){
+			  return (int) this.max;
+		  }
+	}
 	
 	//Initial
 	public static IPepaModel model = null;
@@ -40,19 +65,18 @@ public class CPAParameters {
 	public static OptionMap fOptionMap = null;
 	public static IStatisticsCollector[] collectors = null;
 	public static String[] targetLabels = null;
+	public static String[] systemEquationLabels = null;
 	public static String[] allTargetLabels = null;
 	
 	//fitness function
 	public static String[] nonTargetRelatedPerformanceLabels = {"Minimum Population", "Maximum Population"};
-	public static String[] targetRelatedPerformanceLabels = {"Target", "Weight"};
+	public static String[] targetRelatedPerformanceLabels = {"Performance Target ", "Weighting in fitness  "};
 	public static String[] targetRelatedValidationTypes = {"doubleGT0", "percent"};
 	public static String[] nonTargetRelatedValidationTypes = {"intGT0", "intGT0"}; 
-	public static Double metaheuristicParametersMinimumPopulation;
-	public static Double metaheuristicParametersMaximumPopulation;
 	public static Map<String, Double> pvTargetValues = new HashMap<String, Double>();
 	public static Map<String, Double> pvWeightingValues = new HashMap<String, Double>();
-	public static Map<String, Double> systemEquationMinMax = new HashMap<String, Double>();
-	public static double maximumPossibleAgentCount;
+	public static Map<String, Tuple> systemEquationMinMax = new HashMap<String, Tuple>();
+//	public static double maximumPossibleAgentCount;
 	
 	//MH setup parameters
 	public static String[] mlabels;
@@ -91,7 +115,7 @@ public class CPAParameters {
 		//PVr
 		
 		//MHr
-		CPAParameters.maximumPossibleAgentCount = 0;
+		//CPAParameters.maximumPossibleAgentCount = 0;
 		
 		//output
 		CPAParameters.source = "";
@@ -143,10 +167,14 @@ public class CPAParameters {
 	
 	private void setupSystemEquationMinMax() {
 		for (ISequentialComponent c : fGraph.getSequentialComponents()){
-			CPAParameters.systemEquationMinMax.put(c.getName(), 0.0);
+			CPAParameters.systemEquationMinMax.put(c.getName(), new Tuple());
 		}
 		
+		CPAParameters.systemEquationLabels = new String[CPAParameters.systemEquationMinMax.size()];
+		CPAParameters.systemEquationLabels =  CPAParameters.systemEquationMinMax.keySet().toArray(CPAParameters.systemEquationLabels);
 	}
+	
+ 
 	
 	//--------------------------------------------------------------Initialisation End
 	
@@ -170,10 +198,11 @@ public class CPAParameters {
 	/**
 	 * set the Maximum Agent count
 	 */
-	public static void updateMaximumPossibleAgentCount() {
-		CPAParameters.maximumPossibleAgentCount = (CPAParameters.metaheuristicParametersMaximumPopulation
-				- (CPAParameters.metaheuristicParametersMinimumPopulation - 1)) * originalSystemEquation.size();
-	}
+//	public static void updateMaximumPossibleAgentCount() {
+//		for(Entry<String, Tuple> entry : CPAParameters.systemEquationMinMax.entrySet()){
+//			CPAParameters.maximumPossibleAgentCount += entry.getValue().getDistance();
+//		}
+//	}
 	
 	
 	//--------------------------------------------------------------Fitness Function Related End
@@ -277,8 +306,8 @@ public class CPAParameters {
 		
 		CPAParameters.original = new ModelObject(monitor);
 		CPAParameters.originalSystemEquation = CPAParameters.original.getSystemEquation();
-		CPAParameters.updateMaximumPossibleAgentCount();
-		CPAParameters.source += CPAParameters.original.toString() + "\n";
+		//CPAParameters.updateMaximumPossibleAgentCount();
+		//CPAParameters.source += CPAParameters.original.toString() + "\n";
 	}
 	
 	//--------------------------------------------------------------MH Running methods End

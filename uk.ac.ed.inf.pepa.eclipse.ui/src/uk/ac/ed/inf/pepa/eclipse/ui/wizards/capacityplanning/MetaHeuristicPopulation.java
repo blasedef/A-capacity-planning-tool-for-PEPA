@@ -22,7 +22,7 @@ public class MetaHeuristicPopulation {
 		
 		//setup best
 		CPAParameters.best = new ModelObject(monitor);
-		CPAParameters.source += CPAParameters.best.toString();
+		//CPAParameters.source += CPAParameters.best.toString();
 		
 		//setup working ModelObject(s)
 		for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
@@ -52,7 +52,7 @@ public class MetaHeuristicPopulation {
 				temp.mutateMe();
 				if(temp.getFitness() < CPAParameters.best.getFitness()){
 					CPAParameters.best.setModelObject(temp.getSystemEquation());
-					CPAParameters.source += CPAParameters.best.toString();
+					CPAParameters.source += generations + "," + CPAParameters.best.toString();
 				}
 			}
 			generations--;

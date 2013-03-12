@@ -2,12 +2,14 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CPAParameters.Tuple;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
@@ -40,7 +42,7 @@ public class ModelObject {
 		this.readAST = new GetASTVisitor(this.mySystemEquation);
 		this.readAST();
 		this.fGraph = this.getFGraph();
-		this.updateTotalAgentPopulation();
+		//this.updateTotalAgentPopulation();
 		this.myFitness = 1000000;
 		this.pvString = "";
 		this.pString = "";
@@ -72,8 +74,6 @@ public class ModelObject {
 	 */
 	public void mutateMe(){
 		
-		int min = CPAParameters.metaheuristicParametersMinimumPopulation.intValue();
-		int max = CPAParameters.metaheuristicParametersMaximumPopulation.intValue();
 		
 		/**
 		 * mutation section
@@ -81,6 +81,8 @@ public class ModelObject {
 		for(Map.Entry<String, Double> entry : this.mySystemEquation.entrySet()){
 			double p = generator.nextDouble();
 			if(p < CPAParameters.metaheuristicParameters.get("Mutation Probability:")){
+				int max = CPAParameters.systemEquationMinMax.get(entry.getKey()).max();
+				int min = CPAParameters.systemEquationMinMax.get(entry.getKey()).min();
 				double newCount = generator.nextInt(max - min + 1) + min;
 				this.mySystemEquation.put(entry.getKey(), newCount);
 			}
@@ -132,8 +134,15 @@ public class ModelObject {
 			
 		}
 		
-		this.updateTotalAgentPopulation();
-		double scaledAgentPopulation = ((this.totalAgentPopulation/CPAParameters.maximumPossibleAgentCount)*100);
+		//this.updateTotalAgentPopulation();
+		double scaledAgentPopulation = 0; //((this.totalAgentPopulation/CPAParameters.maximumPossibleAgentCount)*100);
+		
+		for(Entry<String, Double> component : this.mySystemEquation.entrySet()){
+			String name = component.getKey();
+			int count = component.getValue().intValue();
+			scaledAgentPopulation += (count/CPAParameters.systemEquationMinMax.get(name).getDistance())/this.mySystemEquation.size();
+		}
+		
 		double alpha = CPAParameters.metaheuristicParameters.get("Performance to Population:");
 		double beta = 1.0 - alpha;
 		this.pvString = pvFitness + "";
@@ -155,12 +164,12 @@ public class ModelObject {
 	/**
 	 * Do this whenever the system equation has been updated
 	 */
-	private void updateTotalAgentPopulation(){
-		this.totalAgentPopulation = 0;
-		for(Map.Entry<String, Double> entry : this.mySystemEquation.entrySet()){
-			this.totalAgentPopulation += entry.getValue();
-		}
-	}
+//	private void updateTotalAgentPopulation(){
+//		this.totalAgentPopulation = 0;
+//		for(Map.Entry<String, Double> entry : this.mySystemEquation.entrySet()){
+//			this.totalAgentPopulation += entry.getValue();
+//		}
+//	}
 	
 	/**
 	 * Read from the AST
@@ -240,7 +249,7 @@ public class ModelObject {
 		for(Map.Entry<String, Double> entry : systemEquation.entrySet()){
 			this.mySystemEquation.put(entry.getKey(),entry.getValue());
 		}
-		this.updateTotalAgentPopulation();	
+		//this.updateTotalAgentPopulation();	
 		this.writeASTUpdateGraph();
 		this.updateFitness();
 	}

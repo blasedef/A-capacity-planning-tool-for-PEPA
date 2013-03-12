@@ -38,7 +38,9 @@ public abstract class SetupOptimiserPage extends WizardPage {
 
 	protected GridData createDefaultGridData() {
 		/* ...with grabbing horizontal space */
-		return new GridData(SWT.FILL, SWT.CENTER, true, false);
+		GridData gridData = new GridData(SWT.LEFT,SWT.CENTER,true,true);
+		gridData.horizontalSpan = 1;
+		return gridData;
 	}
 	
 	protected void validate(int i) {

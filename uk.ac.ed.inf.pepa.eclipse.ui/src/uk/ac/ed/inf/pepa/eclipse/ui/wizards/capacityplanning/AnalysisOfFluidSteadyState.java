@@ -34,7 +34,11 @@ public class AnalysisOfFluidSteadyState {
 	public AnalysisOfFluidSteadyState() {
 		
 		this.name = "ODE";
-		this.labels = CPAParameters.targetLabels;
+		if(CPAParameters.performanceRequirementChoice == 0){
+			this.labels = CPAParameters.targetLabels;
+		} else {
+			this.labels = new String[]{ "Average response time" };
+		}
 		this.estimators = CPAParameters.performanceMetrics;
 		this.collectors = CPAParameters.collectors;
 		this.optionMap = CPAParameters.fOptionMap;
@@ -112,7 +116,7 @@ public class AnalysisOfFluidSteadyState {
 		}
 		
 		for(int i = 0; i < results.length; i++){
-			this.resultsMap.put(this.labels[i], this.results[i]);
+			this.resultsMap.put(CPAParameters.targetLabels[i], this.results[i]);
 		}
 		
 		return this.resultsMap;

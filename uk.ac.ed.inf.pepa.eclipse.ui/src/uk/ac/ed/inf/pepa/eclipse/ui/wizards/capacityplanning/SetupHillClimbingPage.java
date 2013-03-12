@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -26,12 +27,25 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 		setDescription("Setting up Hill Climbing Optimisation");
 	}
 	  
-	public void createInputs(Composite composite){
+	public void createInputs(Composite parent){
 		
 		CPAParameters.updateHCMetaheuristicParameters();
 		inputs = new ArrayList<Text>(CPAParameters.mlabels.length);
 		validation = new boolean[CPAParameters.mlabels.length];
+		
+		Composite composite = new Composite(parent,SWT.NONE);
+		GridLayout layout = new GridLayout(1,false);
+		composite.setLayout(layout);
+		
+		hillClimbingSettings(composite);
 			
+		
+	}
+	
+	protected void hillClimbingSettings(Composite parent){
+		Composite composite = new Composite(parent,SWT.NONE | SWT.BORDER);
+		GridLayout layout = new GridLayout(2,false);
+		composite.setLayout(layout);
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
 		
 		for(int i = 0; i < CPAParameters.mlabels.length; i++){
@@ -55,6 +69,10 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 		    inputs.add(tempText);
 			
 		}
+	}
+	
+	protected void metaHeuristicSettings(Composite composite){
+		
 	}
 	
 	@Override

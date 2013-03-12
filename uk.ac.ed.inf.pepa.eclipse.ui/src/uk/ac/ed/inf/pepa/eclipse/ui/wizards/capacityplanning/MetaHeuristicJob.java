@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class MetaHeuristicJob extends Job {
 	
@@ -28,6 +27,20 @@ public class MetaHeuristicJob extends Job {
 	protected IStatus run(final IProgressMonitor monitor) {
 		
 		monitor.beginTask("MetaHeuristic", CPAParameters.metaheuristicParameters.get("Generations:").intValue());
+		
+		CPAParameters.source += "Generation,";
+		
+		for(int i = 0; i < CPAParameters.originalSystemEquation.size(); i++){
+			CPAParameters.source += "Agent,Population,";
+		}
+		
+		CPAParameters.source += "total fitness,performance fitness,population fitness,";
+		
+		for(int i = 0; i < CPAParameters.targetLabels.length; i++){
+			CPAParameters.source += "target,actual performance,";
+		}
+		
+		CPAParameters.source += "\n";
 		
 		/**
 		 * take original snap shot...

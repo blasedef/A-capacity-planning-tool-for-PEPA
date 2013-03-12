@@ -307,7 +307,6 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 	 */
 	protected IPointEstimator[] getPerformanceMetrics() {
 		final int[] insystem = new int[viewer.getCheckedElements().length];
-		System.out.println(insystem.length);
 		for (int i = 0; i < insystem.length; i++){
 			insystem[i] = (Integer) viewer.getCheckedElements()[i];
 		}
@@ -320,13 +319,8 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 		for (; j < fGraph.getSequentialComponents().length; j++)
 			if (fGraph.getSequentialComponents()[j] == c)
 				break;
-		try{
-			AverageResponseTimeCalculation art = new AverageResponseTimeCalculation(j, insystem, fGraph);
-			return new IPointEstimator[] { art.getUsersInSystemEstimator(),art.getIncomingThroughputEstimator() };
-		} catch (IllegalArgumentException e){
-			System.out.println("hello?");
-		}
-		return null;
+		AverageResponseTimeCalculation art = new AverageResponseTimeCalculation(j, insystem, fGraph);
+		return new IPointEstimator[] { art.getUsersInSystemEstimator(),art.getIncomingThroughputEstimator() };
 	}
 	
 	/**

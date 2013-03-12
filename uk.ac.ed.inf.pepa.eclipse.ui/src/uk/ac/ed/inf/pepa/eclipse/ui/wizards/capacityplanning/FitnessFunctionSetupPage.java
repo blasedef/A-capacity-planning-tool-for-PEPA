@@ -19,7 +19,6 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 	//MetaHeuristic Related
 	protected ArrayList<Text[]> inputs;
 	protected ArrayList<boolean[]> validation;
-	protected int inputParameterLength;
 	protected ArrayList<Text[]> inputsNonTarg;
 	protected ArrayList<boolean[]> validationNonTarg;
 	
@@ -40,6 +39,9 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 		composite.setLayout(layout);
 		
 		Label heading1 = new Label(composite,SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 1;
+		heading1.setLayoutData(gridData);
 		heading1.setText("MetaHeuristic performance target inputs:");
 
 		this.updateArrays();
@@ -47,13 +49,10 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 		this.createTargetInputs(composite);
 		
 		Label heading2 = new Label(composite,SWT.NONE);
+		heading2.setLayoutData(gridData);
 		heading2.setText("MetaHeuristic non-Target inputs:");
 		
-		int rest = CPAParameters.allTargetLabels.length - CPAParameters.targetLabels.length;
-		
-		if(rest > 0){
-			this.createNonTargetInputs(composite);
-		}
+		this.createNonTargetInputs(composite);
 	}
 	
 	protected void updateArrays(){
@@ -80,14 +79,19 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 		}
 		
 		//setup all non targets with parameters (arraylist incase of future extension)
-		this.inputsNonTarg.add(new Text[CPAParameters.nonTargetRelatedPerformanceLabels.length]);
+		//boom i was right :)
+		for(int i = 0; i < CPAParameters.systemEquationMinMax.size(); i++){
+			this.inputsNonTarg.add(new Text[CPAParameters.nonTargetRelatedPerformanceLabels.length]);
+		}
 		
 		//make all parameters false
-		boolean[] temp = new boolean[CPAParameters.nonTargetRelatedPerformanceLabels.length];
-		for(int j = 0; j < CPAParameters.nonTargetRelatedPerformanceLabels.length; j++){
-			temp[j] = false;
+		for(int i = 0; i < CPAParameters.systemEquationMinMax.size(); i++){
+			boolean[] temp = new boolean[CPAParameters.nonTargetRelatedPerformanceLabels.length];
+			for(int j = 0; j < CPAParameters.nonTargetRelatedPerformanceLabels.length; j++){
+				temp[j] = false;
+			}
+			this.validationNonTarg.add(temp);
 		}
-		this.validationNonTarg.add(temp);
 		
 	}
 	
@@ -102,8 +106,10 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 			final int j = i;
 			
 			Label tempLabel = new Label(targetComposite, SWT.NONE);
-			tempLabel.setText(CPAParameters.targetLabels[i]);
-			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			tempLabel.setText(CPAParameters.targetLabels[i]+":");
+			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+			//gridData.horizontalSpan = 1;
+			tempLabel.setLayoutData(gridData);
 		    
 		    targetInternalLoop(targetComposite, j);
 			
@@ -122,12 +128,14 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 		GridLayout layout = new GridLayout(1,false);
 		targetComposite.setLayout(layout);
 		
-		for(int i = 0; i < 1; i++){
+		
+		
+		for(int i = 0; i < CPAParameters.systemEquationLabels.length; i++){
 			
 			final int j = i;
 			
 			Label tempLabel = new Label(targetComposite, SWT.NONE);
-			tempLabel.setText("Non target specific parameters");
+			tempLabel.setText(CPAParameters.systemEquationLabels[i]+":");
 			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		    
 		    targetInternalLoopNon(targetComposite, j);
@@ -140,7 +148,7 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 	protected void targetInternalLoop(Composite composite, final int j){
 		
 		Composite targetComposite = new Composite(composite, SWT.NONE);
-		GridLayout layout = new GridLayout(4,true);
+		GridLayout layout = new GridLayout(4,false);
 		targetComposite.setLayout(layout);
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
 		
@@ -149,15 +157,20 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 			final int l = k;
 			
 			Label tempLabel = new Label(targetComposite, SWT.NONE);
-			tempLabel.setText(CPAParameters.targetRelatedPerformanceLabels[k]);
-			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			tempLabel.setText(CPAParameters.targetRelatedPerformanceLabels[k]+":");
+			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+			gridData.horizontalSpan = 1;
+			tempLabel.setLayoutData(gridData);
+			
 			
 			
 			Text tempText = new Text(targetComposite, textStyle);
-		    tempText.setLayoutData(createDefaultGridData());
+			GridData thisGridData = createDefaultGridData();
+			thisGridData.horizontalSpan = 1;
+		    tempText.setLayoutData(thisGridData);
 		    
 		    if(CPAParameters.targetLabels.length == 1 &&
-		    		CPAParameters.targetRelatedPerformanceLabels[k].equals("Weight")){
+		    		CPAParameters.targetRelatedPerformanceLabels[k].equals("Weighting in fitness  ")){
 		    	tempText.setText("1.0");
 		    	tempText.setEnabled(false);
 		    	this.inputs.get(j)[k] = tempText;
@@ -180,7 +193,7 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 	protected void targetInternalLoopNon(Composite composite, final int j){
 		
 		Composite targetComposite = new Composite(composite, SWT.NONE);
-		GridLayout layout = new GridLayout(4,true);
+		GridLayout layout = new GridLayout(4,false);
 		targetComposite.setLayout(layout);
 		int textStyle = SWT.SINGLE | SWT.LEFT | SWT.BORDER;
 		
@@ -189,8 +202,10 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 			final int l = k;
 			
 			Label tempLabel = new Label(targetComposite, SWT.NONE);
-			tempLabel.setText(CPAParameters.nonTargetRelatedPerformanceLabels[k]);
-			tempLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			tempLabel.setText(CPAParameters.nonTargetRelatedPerformanceLabels[k]+":");
+			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+			gridData.horizontalSpan = 1;
+			tempLabel.setLayoutData(gridData);
 			
 			Text tempText = new Text(targetComposite, textStyle);
 		    tempText.setLayoutData(createDefaultGridData());
@@ -254,8 +269,9 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 			((CapacityPlanningWizard) getWizard())
 			.addSetupOptimiserPage();
 			this.setPageComplete(true);
-		  	setTargetParameters();
-		  	
+		  	setTargetParameters(); 	
+		} else {
+			this.setPageComplete(false);
 		}
 	}
 	
@@ -271,7 +287,38 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 				test = test && v;
 			}
 		}
+		if(test){
+			return checkMinMax();
+		} else {
+			return test;
+		}
+	}
+	
+	protected boolean checkMinMax(){
+		boolean test = true;
+		
+		for(Text[] t : this.inputsNonTarg){
+			double temp = 0.0;
+			for(Text s : t){
+				try{
+					if(temp <= Double.valueOf(s.getText())){
+						test = true;
+						temp = Double.valueOf(s.getText());
+					} else {
+						test = false;
+					}
+				} catch (NumberFormatException e) {
+					test = false;
+				} finally {
+					if(!test){
+						setErrorMessage("Minimum must be lower than Maximum!");
+					}
+				}
+			}
+			
+		}
 		return test;
+		
 	}
 	  
 	protected void setTargetParameters(){
@@ -283,8 +330,11 @@ public class FitnessFunctionSetupPage extends SetupOptimiserPage {
 					Double.valueOf(this.inputs.get(i)[1].getText()));
 		}
 		
-		CPAParameters.metaheuristicParametersMinimumPopulation = Double.valueOf(this.inputsNonTarg.get(0)[0].getText());
-		CPAParameters.metaheuristicParametersMaximumPopulation = Double.valueOf(this.inputsNonTarg.get(0)[1].getText());
+		for(int i = 0; i < CPAParameters.systemEquationLabels.length; i++){
+			CPAParameters.systemEquationMinMax.get(CPAParameters.systemEquationLabels[i]).setMinMax(Double.valueOf(this.inputsNonTarg.get(i)[0].getText()), 
+					Double.valueOf(this.inputsNonTarg.get(i)[1].getText()));
+		}
+		
 	}
 
 
