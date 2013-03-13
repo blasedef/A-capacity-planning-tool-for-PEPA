@@ -138,8 +138,8 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 			updateAnalysisParams();
 			((CapacityPlanningWizard) getWizard())
 			.addFitnessFunctionPage();
+			this.setPageComplete(true);
 		}
-		this.setPageComplete(this.solverReturned && this.actionCallbackReturned);
 	}
 	
 	/**
@@ -248,20 +248,55 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 			}
 		});
 		viewer.setInput(fGraph.getSequentialComponents());
-		viewer.addCheckStateListener(new ICheckStateListener() {
-
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				if (event.getElement() instanceof ISequentialComponent
-						&& event.getChecked() == true){
-					viewer.setChecked(event.getElement(), false);
-					
-				}
-				callbackOnActionReturned();
-			}
-
-		});
-
+		viewer.addCheckStateListener(new CPICheckStateListener(viewer));
 		return viewer;
+	}
+	
+	private class CPICheckStateListener implements ICheckStateListener{
+		
+		private CheckboxTreeViewer viewer;
+		
+		public CPICheckStateListener(CheckboxTreeViewer viewer) {
+			this.viewer = viewer;
+		}
+		
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			
+			boolean test = false;
+			if (event.getChecked() == true){
+				ISequentialComponent c = (ISequentialComponent) ((ResponseTimeContentProvider) viewer
+						.getContentProvider())
+						.getParent(viewer.getCheckedElements()[0]);
+				
+				int componentIndex = 0;
+				for (; componentIndex < fGraph.getSequentialComponents().length; componentIndex++)
+					if (fGraph.getSequentialComponents()[componentIndex] == c)
+						break;
+				
+				ArrayList<Integer> coordinates = new ArrayList<Integer>();
+				for (Entry<Short, Coordinate> entry : c.getComponentMapping()) {
+					coordinates.add(new Integer(entry.getValue().getCoordinate()));
+				}
+				
+				if(coordinates.size() > 0){
+					test = coordinates.contains(event.getElement());
+				}
+			}
+			
+			//System.out.println(test[0]);
+			if (event.getChecked() == true
+					&& (!test)){
+				System.out.println(event.getElement());
+				viewer.setChecked(event.getElement(), false);
+				
+			} else if (event.getElement() instanceof ISequentialComponent
+					&& event.getChecked() == true){
+				viewer.setChecked(event.getElement(), false);
+			}
+			callbackOnActionReturned();
+		}
+		
 	}
 	
 	//Checklist Performance Dialog
@@ -294,8 +329,7 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 		//great so in AverageResponseDialog we use this:
 		//CPAParameters.targetLabels = new String[] { "Average response time" };
 		//but in Throughput we use this...
-		CPAParameters.targetLabels = getTargetLabels();
-		//thats fucking annoying considering I have implemented everything else in the style of the later
+		CPAParameters.targetLabels = new String[] {"Average Response Time"}; //getTargetLabels();
 		//so now I will have to hack it in later.
 		CPAParameters.allTargetLabels= getAllLabels();
 		CPAParameters.collectors = new IStatisticsCollector[] { new AverageResponseTimeCollector(0, 1) };
@@ -307,6 +341,11 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 	 */
 	protected IPointEstimator[] getPerformanceMetrics() {
 		final int[] insystem = new int[viewer.getCheckedElements().length];
+//		System.out.println(insystem.length);
+//		for( Object i : viewer.getCheckedElements()){
+//			System.out.println(i.toString());
+//		}
+		
 		for (int i = 0; i < insystem.length; i++){
 			insystem[i] = (Integer) viewer.getCheckedElements()[i];
 		}
@@ -315,30 +354,31 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 				.getContentProvider())
 				.getParent(viewer.getCheckedElements()[0]);
 		
-		int j = 0;
-		for (; j < fGraph.getSequentialComponents().length; j++)
-			if (fGraph.getSequentialComponents()[j] == c)
+		int componentIndex = 0;
+		for (; componentIndex < fGraph.getSequentialComponents().length; componentIndex++)
+			if (fGraph.getSequentialComponents()[componentIndex] == c)
 				break;
-		AverageResponseTimeCalculation art = new AverageResponseTimeCalculation(j, insystem, fGraph);
+		AverageResponseTimeCalculation art = new AverageResponseTimeCalculation(componentIndex, insystem, fGraph);
 		return new IPointEstimator[] { art.getUsersInSystemEstimator(),art.getIncomingThroughputEstimator() };
 	}
 	
 	/**
 	 * So in the throughput case this would return all of the actions that we are trying to asses
 	 * in this case apparently we just set the label.... 
+	 * ...Nope! this makes no sense when looking at the ART!
 	 * @return
 	 */
-	protected String[] getTargetLabels() {
-		Object[] checkedElements = viewer.getCheckedElements();
-		String[] labels = new String[checkedElements.length];
-		for (int i = 0; i < checkedElements.length; i++) {
-			labels[i] = fGraph
-					.getSymbolGenerator()
-					.getProcessLabel(
-							fGraph.getProcessMappings()[i]);
-		}
-		return labels;
-	}
+//	protected String[] getTargetLabels() {
+//		Object[] checkedElements = viewer.getCheckedElements();
+//		String[] labels = new String[checkedElements.length];
+//		for (int i = 0; i < checkedElements.length; i++) {
+//			labels[i] = fGraph
+//					.getSymbolGenerator()
+//					.getProcessLabel(
+//							fGraph.getProcessMappings()[i]);
+//		}
+//		return labels;
+//	}
 	
 	/**
 	 * Used later to assess if one or many performance targets have been selected

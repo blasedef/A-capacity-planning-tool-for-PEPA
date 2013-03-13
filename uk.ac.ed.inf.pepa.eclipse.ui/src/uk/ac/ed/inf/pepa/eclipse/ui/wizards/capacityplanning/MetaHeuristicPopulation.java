@@ -50,9 +50,10 @@ public class MetaHeuristicPopulation {
 			for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 				ModelObject temp = this.mPopulation.get(i);
 				temp.mutateMe();
+				//System.out.println(temp.toString());
 				if(temp.getFitness() < CPAParameters.best.getFitness()){
 					CPAParameters.best.setModelObject(temp.getSystemEquation());
-					CPAParameters.source += generations + "," + CPAParameters.best.toString();
+					CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
 				}
 			}
 			generations--;

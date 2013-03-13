@@ -28,7 +28,6 @@ public class ModelObject {
 	private SetASTVisitor writeAST;
 	private GetASTVisitor readAST;
 	private double myFitness;
-	private double totalAgentPopulation;
 	private String pvString;
 	private String pString;
 	Random generator = new Random();
