@@ -15,6 +15,11 @@ public class MetaHeuristicPopulation {
 		this.mPopulation = new ArrayList<ModelObject>();
 	}
 	
+	/**
+	 * initialise the population, and start the evolution
+	 * @param monitor
+	 * @return
+	 */
 	public IStatus initialise(final IProgressMonitor monitor){
 		
 		IStatus test = null;
@@ -24,11 +29,22 @@ public class MetaHeuristicPopulation {
 		CPAParameters.best = new ModelObject(monitor);
 		//CPAParameters.source += CPAParameters.best.toString();
 		
+		//Make the candidate population even :)
+		//bit cheeky, but saves having to write more UI!
+		if(!((CPAParameters.candidatePopulationSize%2)==0)){
+			CPAParameters.candidatePopulationSize++;
+		}
+		
 		//setup working ModelObject(s)
 		for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 			ModelObject temp = new ModelObject(monitor);
+			//randomize the population seed, but keep one of them as original
+			if(i < (CPAParameters.candidatePopulationSize -1)){
+				temp.mutateMe();
+			}
 			this.mPopulation.add(temp);
 		}
+		
 		
 		//Go into repeating Queue
 		test = this.generator(CPAParameters.metaheuristicParameters.get("Generations:").intValue(), monitor);
@@ -38,24 +54,61 @@ public class MetaHeuristicPopulation {
 		
 	}
 	
+	/**
+	 * Evolution generator
+	 * @param generations
+	 * @param monitor
+	 * @return
+	 */
 	public IStatus generator(int generations, IProgressMonitor monitor){
 		
 		while(generations > 0){
 			
+			//cancel options
 			if (monitor.isCanceled() == true) {
 				this.isCanceled = true;
 				break;
 			}
 			
-			for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
-				ModelObject temp = this.mPopulation.get(i);
-				temp.mutateMe();
-				//System.out.println(temp.toString());
-				if(temp.getFitness() < CPAParameters.best.getFitness()){
-					CPAParameters.best.setModelObject(temp.getSystemEquation());
-					CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
+			//Do hill climbing
+			if(CPAParameters.performanceRequirementChoice == 0){
+				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
+					ModelObject temp = this.mPopulation.get(i);
+					if(temp.getFitness() < CPAParameters.best.getFitness()){
+						CPAParameters.best.setModelObject(temp.getSystemEquation());
+						CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
+					}
+					temp.mutateMe();
+				}
+				
+			//Do Genetic Algorithm
+			} else {
+				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
+					
+					ModelObject temp = this.mPopulation.get(i);
+					if(temp.getFitness() < CPAParameters.best.getFitness()){
+						CPAParameters.best.setModelObject(temp.getSystemEquation());
+						CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
+					}
+					temp.mutateMe();
+					
+				}
+				ArrayList<ModelObject> q = new ArrayList<ModelObject>();
+				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
+					
+					ModelObject parentA;
+					ModelObject parentB;
+					
+					//select A from pile
+					//select B from pile
+					//cross over parents to produce two children
+					//mutate both children
+					//put children into 'q'
+					//replace population with 'q'
 				}
 			}
+				
+				
 			generations--;
 		}
 		
