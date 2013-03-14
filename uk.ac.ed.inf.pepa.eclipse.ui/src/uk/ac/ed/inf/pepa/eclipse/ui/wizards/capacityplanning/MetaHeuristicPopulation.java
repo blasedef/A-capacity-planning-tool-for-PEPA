@@ -1,6 +1,10 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -10,6 +14,7 @@ public class MetaHeuristicPopulation {
 	
 	private ArrayList<ModelObject> mPopulation;
 	private boolean isCanceled = false;
+	Random generator = new Random();
 
 	public MetaHeuristicPopulation() {
 		this.mPopulation = new ArrayList<ModelObject>();
@@ -71,7 +76,7 @@ public class MetaHeuristicPopulation {
 			}
 			
 			//Do hill climbing
-			if(CPAParameters.performanceRequirementChoice == 0){
+			if(CPAParameters.metaHeuristicChoice == 0){
 				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 					ModelObject temp = this.mPopulation.get(i);
 					if(temp.getFitness() < CPAParameters.best.getFitness()){
@@ -96,16 +101,24 @@ public class MetaHeuristicPopulation {
 				ArrayList<ModelObject> q = new ArrayList<ModelObject>();
 				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 					
-					ModelObject parentA;
-					ModelObject parentB;
+					//tournament selection of ModelObjects from current population
+					ModelObject parentA = tournamentSelection();
+					ModelObject parentB = tournamentSelection();
 					
-					//select A from pile
-					//select B from pile
 					//cross over parents to produce two children
+					onePointCrossOver(parentA, parentB);
+					
 					//mutate both children
+					parentA.mutateMe();
+					parentB.mutateMe();
+					
 					//put children into 'q'
-					//replace population with 'q'
+					q.add(parentA);
+					q.add(parentB);
+					
 				}
+				//replace population with 'q'
+				mPopulation = q;
 			}
 				
 				
@@ -133,6 +146,49 @@ public class MetaHeuristicPopulation {
 			temp += m.toString();
 		}
 		return temp;
+	}
+	
+	public ModelObject tournamentSelection(){
+		
+		int index = generator.nextInt(mPopulation.size());
+		ModelObject first = mPopulation.get(index);
+		//this could become a user setting...
+		int tournamentSize = 2;
+		for(int i = 0; i < tournamentSize; i++){
+			index = generator.nextInt(mPopulation.size());
+			ModelObject second = mPopulation.get(index);
+			if(second.getFitness() > first.getFitness()){
+				first = second;
+			}
+		}
+		
+		return first;
+	}
+	
+	public void onePointCrossOver(ModelObject a, ModelObject b){
+		
+		Map<String, Double> aSystemEquation = a.getSystemEquation();
+		Map<String, Double> bSystemEquation = b.getSystemEquation();
+		
+		int index = generator.nextInt(aSystemEquation.size() + 1);
+		int i = 0;
+		
+		//wasted cycles
+		//improve this so that we only loop over the ones we need to change...
+		for(Entry<String, Double> d : aSystemEquation.entrySet()){
+			if(i > index){
+				Double aPopulation = d.getValue();
+				Double bPopulation = bSystemEquation.get(i);
+				String componentName = d.getKey();
+				
+				bSystemEquation.put(componentName, aPopulation);
+				aSystemEquation.put(componentName, bPopulation);
+			}
+		}
+		
+		a.setModelObject(aSystemEquation);
+		b.setModelObject(bSystemEquation);
+		
 	}
 	
 }
