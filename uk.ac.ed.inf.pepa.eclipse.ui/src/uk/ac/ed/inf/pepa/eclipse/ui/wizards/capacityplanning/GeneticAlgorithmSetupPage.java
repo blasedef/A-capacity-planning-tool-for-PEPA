@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
 
+
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
@@ -17,19 +18,20 @@ import org.eclipse.swt.widgets.Text;
  * @author twig
  *
  */
-public class SetupHillClimbingPage extends SetupOptimiserPage {
+public class GeneticAlgorithmSetupPage extends SetupOptimiserPage {
   
-	public SetupHillClimbingPage() {
-		super();
-		this.setErrorMessage(null);
-		this.setPageComplete(false);
-		setTitle("Stochastic Search Optimisation");
-		setDescription("Setting up Hill Climbing Optimisation");
+	public GeneticAlgorithmSetupPage() {
+		  super();
+		  this.setErrorMessage(null);
+		  this.setPageComplete(false);
+		  setTitle("Stochastic Search Optimisation");
+		  setDescription("Setting up Genetic Algorithm Optimisation");
+		  
 	}
 	  
 	public void createInputs(Composite parent){
 		
-		CPAParameters.updateHCMetaheuristicParameters();
+		CPAParameters.updateGAMetaheuristicParameters();
 		inputs = new ArrayList<Text>(CPAParameters.mlabels.length);
 		validation = new boolean[CPAParameters.mlabels.length];
 		
@@ -37,12 +39,12 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 		GridLayout layout = new GridLayout(1,false);
 		composite.setLayout(layout);
 		
-		hillClimbingSettings(composite);
+		geneticAlgorithmSettings(composite);
 			
 		
 	}
 	
-	protected void hillClimbingSettings(Composite parent){
+	protected void geneticAlgorithmSettings(Composite parent){
 		Composite composite = new Composite(parent,SWT.NONE | SWT.BORDER);
 		GridLayout layout = new GridLayout(2,false);
 		composite.setLayout(layout);
@@ -70,11 +72,7 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 			
 		}
 	}
-	
-	protected void metaHeuristicSettings(Composite composite){
-		
-	}
-	
+
 	@Override
 	protected void updateMetaHeuristicParameters() {
 		
@@ -84,5 +82,6 @@ public class SetupHillClimbingPage extends SetupOptimiserPage {
 		}
 		
 	}
-	  
+	
+
 } 

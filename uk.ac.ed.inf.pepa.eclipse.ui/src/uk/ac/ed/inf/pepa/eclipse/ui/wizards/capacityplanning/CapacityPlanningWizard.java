@@ -32,8 +32,8 @@ public class CapacityPlanningWizard extends Wizard {
 	protected ThroughputSetupPage throughputSetupPage;
 	protected AverageResponseTimeSetupPage averageResponseTimeSetupPage;
 	protected SetupOptimiserPage setupOptimiserPage;
-	protected SetupHillClimbingPage setupHillClimbingPage;
-	protected SetupGeneticAlgorithmPage setupGeneticAlgorithmPage;
+	protected HillClimbingSetupPage setupHillClimbingPage;
+	protected GeneticAlgorithmSetupPage setupGeneticAlgorithmPage;
 	protected FitnessFunctionSetupPage targetSetupPage;
 	protected IODESolution performanceRequirementChoice;
 	@SuppressWarnings("unused")
@@ -138,8 +138,8 @@ public class CapacityPlanningWizard extends Wizard {
 	}
 	
 	public void addSetupOptimiserPage(){
-		this.setupHillClimbingPage = new SetupHillClimbingPage();
-		this.setupGeneticAlgorithmPage = new SetupGeneticAlgorithmPage();
+		this.setupHillClimbingPage = new HillClimbingSetupPage();
+		this.setupGeneticAlgorithmPage = new GeneticAlgorithmSetupPage();
 		this.addPage(this.setupHillClimbingPage);
 		this.addPage(this.setupGeneticAlgorithmPage);
 	}
