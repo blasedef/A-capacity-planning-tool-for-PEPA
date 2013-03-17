@@ -36,6 +36,7 @@ public class AverageResponseTimeCalculation {
 	 */
 	public AverageResponseTimeCalculation(int componentIndex,
 			int[] inSystemIndices, IParametricDerivationGraph derivationGraph) {
+		
 		if (derivationGraph == null)
 			throw new NullPointerException("Null pointer to derivation graph");
 		if (componentIndex < 0
@@ -44,10 +45,10 @@ public class AverageResponseTimeCalculation {
 		if (inSystemIndices.length <= 0)
 			throw new IllegalArgumentException(
 					"At least one component must be in the system");
-		System.err.println("comp index: " + componentIndex);
-		System.err.print("in index:");
-		for (int k : inSystemIndices)
-			System.err.println(" " + k + " ");
+//		System.err.println("comp index: " + componentIndex);
+//		System.err.print("in index:");
+//		for (int k : inSystemIndices)
+//			System.err.println(" " + k + " ");
 		this.derivationGraph = derivationGraph;
 		this.inSystemIndices = inSystemIndices;
 		boolean[] foundInIndex = new boolean[inSystemIndices.length];
