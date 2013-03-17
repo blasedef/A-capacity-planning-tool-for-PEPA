@@ -289,6 +289,7 @@ public class AverageResponseTimeSetupPage extends WizardPage implements IODESolu
 					&& (!test)){
 				System.out.println(event.getElement());
 				viewer.setChecked(event.getElement(), false);
+				setErrorMessage("Invalid selection");
 				
 			} else if (event.getElement() instanceof ISequentialComponent
 					&& event.getChecked() == true){

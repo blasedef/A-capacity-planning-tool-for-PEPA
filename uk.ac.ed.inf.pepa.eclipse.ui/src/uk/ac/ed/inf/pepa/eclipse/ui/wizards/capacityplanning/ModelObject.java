@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CPAParameters.Tuple;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
