@@ -36,7 +36,10 @@ public class MetaHeuristicPopulation {
 		
 		//Make the candidate population even :)
 		//bit cheeky, but saves having to write more UI!
-		CPAParameters.candidatePopulationSize = CPAParameters.metaheuristicParameters.get("Candidate Population Size:").intValue();
+		//and now also sloppy code...
+		if(CPAParameters.metaheuristicParameters.get("Candidate Population Size:") != null){
+			CPAParameters.candidatePopulationSize = CPAParameters.metaheuristicParameters.get("Candidate Population Size:").intValue();
+		}
 		if(!((CPAParameters.candidatePopulationSize%2)==0)){
 			CPAParameters.candidatePopulationSize++;
 		}
