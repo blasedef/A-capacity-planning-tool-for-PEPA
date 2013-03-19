@@ -141,6 +141,8 @@ public class ModelObject {
 			scaledAgentPopulation += (count/CPAParameters.systemEquationMinMax.get(name).getDistance())/this.mySystemEquation.size();
 		}
 		
+		scaledAgentPopulation += scaledAgentPopulation*100;
+		
 		double alpha = CPAParameters.metaheuristicParameters.get("Performance to Population:");
 		double beta = 1.0 - alpha;
 		this.pvString = pvFitness + "";
