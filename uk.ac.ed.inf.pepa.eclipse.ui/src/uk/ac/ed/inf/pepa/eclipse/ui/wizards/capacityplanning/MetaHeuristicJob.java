@@ -26,29 +26,47 @@ public class MetaHeuristicJob extends Job {
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
 		
-		monitor.beginTask("MetaHeuristic", CPAParameters.metaheuristicParameters.get("Generations:").intValue());
+		int j = 9;
 		
-		CPAParameters.source += "Generation,";
-		
-		for(int i = 0; i < CPAParameters.originalSystemEquation.size(); i++){
-			CPAParameters.source += "Agent,Population,";
-		}
-		
-		CPAParameters.source += "total fitness,performance fitness,population fitness,";
-		
-		for(int i = 0; i < CPAParameters.targetLabels.length; i++){
-			CPAParameters.source += "target,actual performance,";
-		}
-		
-		CPAParameters.source += "\n";
+		CPAParameters.source = "Start batteries... \n";
 		
 		/**
 		 * take original snap shot...
 		 */
 		CPAParameters.makeOriginal(monitor);
 		
-		//initialisation
-		this.population.initialise(monitor);
+		while(j < 10){
+			
+			System.out.println(j);
+			
+			CPAParameters.source += "Battery ," + j + "\n";
+			
+			CPAParameters.starttime = System.currentTimeMillis();
+			
+			monitor.beginTask("MetaHeuristic", CPAParameters.metaheuristicParameters.get("Generations:").intValue());
+			
+			CPAParameters.source += "Generation,";
+			
+			for(int i = 0; i < CPAParameters.originalSystemEquation.size(); i++){
+				CPAParameters.source += "Agent,Population,";
+			}
+			
+			CPAParameters.source += "total fitness,performance fitness,population fitness,";
+			
+			for(int i = 0; i < CPAParameters.targetLabels.length; i++){
+				CPAParameters.source += "target,actual performance,time found";
+			}
+			
+			CPAParameters.source += "\n";
+			
+			//initialisation
+			this.population.initialise(monitor);
+			
+			CPAParameters.source += "Finishing time ," + (System.currentTimeMillis() - CPAParameters.starttime)/1000 + ",seconds \n";
+			
+			j++;
+		
+		}
 		
 		byte currentBytes[] = CPAParameters.source.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(

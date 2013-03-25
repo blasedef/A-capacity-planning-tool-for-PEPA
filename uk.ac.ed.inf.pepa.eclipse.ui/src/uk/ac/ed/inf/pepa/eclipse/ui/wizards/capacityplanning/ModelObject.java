@@ -29,6 +29,7 @@ public class ModelObject {
 	private double myFitness;
 	private String pvString;
 	private String pString;
+	private double myTime;
 	Random generator = new Random();
 
 
@@ -38,13 +39,14 @@ public class ModelObject {
 		this.analyseThis = new AnalysisOfFluidSteadyState();
 		this.writeAST = new SetASTVisitor(this.mySystemEquation);
 		this.readAST = new GetASTVisitor(this.mySystemEquation);
-		this.readAST();
+		this.updateSystemEquationFromAST();
 		this.fGraph = this.getFGraph();
 		//this.updateTotalAgentPopulation();
 		this.myFitness = 1000000;
 		this.pvString = "";
 		this.pString = "";
-		this.updateFitness();
+		this.myTime = 0.0;
+		//this.updateFitness();
 	}
 	
 
@@ -60,6 +62,7 @@ public class ModelObject {
 		for(Map.Entry<String, Double> entry : this.myIndividualFitness.entrySet()){
 			name += entry.getKey() + "," + entry.getValue() + ",";
 		}
+		name += this.myTime;
 		name += "\n";
 		return name;
 	}
@@ -86,13 +89,14 @@ public class ModelObject {
 			}
 		}
 		
-		this.writeASTUpdateGraph();
 	}
 	
 	/**
 	 * assumes graph has been updated with this models sys.equation
 	 */
 	public void updateFitness(){
+		
+		writeASTUpdateGraph();
 		
 		Map<String, Double> results = this.analyseThis.getResults(this.fGraph, this.monitor);
 		double pvFitness = 0;
@@ -135,14 +139,16 @@ public class ModelObject {
 		//this.updateTotalAgentPopulation();
 		double scaledAgentPopulation = 0; //((this.totalAgentPopulation/CPAParameters.maximumPossibleAgentCount)*100);
 		
+		
+		
 		for(Entry<String, Double> component : this.mySystemEquation.entrySet()){
 			String name = component.getKey();
 			int count = component.getValue().intValue();
+			
 			scaledAgentPopulation += (count/CPAParameters.systemEquationMinMax.get(name).getDistance())/this.mySystemEquation.size();
 		}
 		
 		scaledAgentPopulation += scaledAgentPopulation*100;
-		
 		double alpha = CPAParameters.metaheuristicParameters.get("Performance to Population:");
 		double beta = 1.0 - alpha;
 		this.pvString = pvFitness + "";
@@ -155,10 +161,19 @@ public class ModelObject {
 	 * update and return the fitness of this ModelObject
 	 * @return
 	 */
-	public double getFitness(){
+	public double updateAndGetFitness(){
 		this.updateFitness();
 		return this.myFitness;
 		
+	}
+	
+	/**
+	 * update and return the fitness of this ModelObject
+	 * assumes updateFitness has been run previously
+	 * @return
+	 */
+	public double getFitness(){
+		return this.myFitness;
 	}
 	
 	/**
@@ -174,7 +189,7 @@ public class ModelObject {
 	/**
 	 * Read from the AST
 	 */
-	public void readAST(){
+	public void updateSystemEquationFromAST(){
 		this.writeAST.setSystemEquation(this.mySystemEquation);
 		this.node.accept(this.readAST);
 		this.mySystemEquation = this.writeAST.getSystemEquation();
@@ -241,7 +256,7 @@ public class ModelObject {
 	}
 	
 	/**
-	 * copy incoming system equation, update total population, update AST node, update Graph, and update fitness
+	 * copy incoming system equation, set time of creation
 	 * @param systemEquation
 	 */
 	public void setModelObject(Map<String, Double> systemEquation) {
@@ -249,9 +264,39 @@ public class ModelObject {
 		for(Map.Entry<String, Double> entry : systemEquation.entrySet()){
 			this.mySystemEquation.put(entry.getKey(),entry.getValue());
 		}
-		//this.updateTotalAgentPopulation();	
-		this.writeASTUpdateGraph();
-		this.updateFitness();
+		this.myTime = (System.currentTimeMillis() - CPAParameters.starttime)/1000;
+	}
+	
+	public void setPVString(String pvString){
+		this.pvString = pvString;
+	}
+	
+	public void setPString(String pString){
+		this.pString = pString;
+	}
+	
+	public String getPVString(){
+		return this.pvString;
+	}
+	
+	public String getPString(){
+		return this.pString;
+	}
+	
+	public void setIndividualFitness(Map<String, Double> myIndividualFitness){
+		for(Map.Entry<String, Double> entry : myIndividualFitness.entrySet()){
+			this.myIndividualFitness.put(entry.getKey(), entry.getValue());
+		}
+	}
+	
+	public Map<String, Double> getMyIndividualFitness(){
+		return this.myIndividualFitness;
+	}
+
+
+	public void setFitness(double fitness) {
+		this.myFitness = fitness;
+		
 	}
 	
 }

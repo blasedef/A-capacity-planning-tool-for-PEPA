@@ -90,6 +90,7 @@ public class CPAParameters {
 	public static ModelObject original;
 	public static ModelObject best;
 	public static boolean performanceRequirementTargetLimit;
+	public static double starttime;
 	
 	//output
 	public static String source;
@@ -241,8 +242,8 @@ public class CPAParameters {
 	 * 
 	 */
 	public static void updateGAMetaheuristicParameters(){
-		String[] mlabels = {"Mutation Probability:","Performance to Population:","Generations:","Candidate Population Size:"};
-		String[] mTypes = {"percent","percent","intGT0","intGT0"};
+		String[] mlabels = {"Mutation Probability:","Cross Over Probability","Performance to Population:","Generations:","Candidate Population Size:"};
+		String[] mTypes = {"percent","percent","percent","intGT0","intGT0"};
 		
 		//the parameter labels
 		CPAParameters.mlabels = mlabels;

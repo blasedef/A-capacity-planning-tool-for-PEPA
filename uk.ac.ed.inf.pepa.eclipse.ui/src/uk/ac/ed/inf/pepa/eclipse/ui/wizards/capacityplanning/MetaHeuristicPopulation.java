@@ -40,8 +40,10 @@ public class MetaHeuristicPopulation {
 		if(CPAParameters.metaheuristicParameters.get("Candidate Population Size:") != null){
 			CPAParameters.candidatePopulationSize = CPAParameters.metaheuristicParameters.get("Candidate Population Size:").intValue();
 		}
-		if(!((CPAParameters.candidatePopulationSize%2)==0)){
-			CPAParameters.candidatePopulationSize++;
+		if(CPAParameters.metaHeuristicChoice != 0){
+			if(!((CPAParameters.candidatePopulationSize%2)==0)){
+				CPAParameters.candidatePopulationSize++;
+			}
 		}
 		
 		//setup working ModelObject(s)
@@ -73,6 +75,8 @@ public class MetaHeuristicPopulation {
 		
 		while(generations > 0){
 			
+			System.out.println("Generation: " + generations);
+			
 			//cancel options
 			if (monitor.isCanceled() == true) {
 				this.isCanceled = true;
@@ -81,10 +85,15 @@ public class MetaHeuristicPopulation {
 			
 			//Do hill climbing
 			if(CPAParameters.metaHeuristicChoice == 0){
+				//System.out.println("HC");
 				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
 					ModelObject temp = this.mPopulation.get(i);
-					if(temp.getFitness() < CPAParameters.best.getFitness()){
+					if(temp.updateAndGetFitness() < CPAParameters.best.getFitness()){
 						CPAParameters.best.setModelObject(temp.getSystemEquation());
+						CPAParameters.best.setPString(temp.getPString());
+						CPAParameters.best.setPVString(temp.getPVString());
+						CPAParameters.best.setIndividualFitness(temp.getMyIndividualFitness());
+						CPAParameters.best.setFitness(temp.getFitness());
 						CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
 					}
 					temp.mutateMe();
@@ -92,25 +101,30 @@ public class MetaHeuristicPopulation {
 				
 			//Do Genetic Algorithm
 			} else {
+				//System.out.println("GA");
 				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
-					
 					ModelObject temp = this.mPopulation.get(i);
-					if(temp.getFitness() < CPAParameters.best.getFitness()){
+					if(temp.updateAndGetFitness() < CPAParameters.best.getFitness()){
 						CPAParameters.best.setModelObject(temp.getSystemEquation());
+						CPAParameters.best.setPString(temp.getPString());
+						CPAParameters.best.setPVString(temp.getPVString());
+						CPAParameters.best.setIndividualFitness(temp.getMyIndividualFitness());
+						CPAParameters.best.setFitness(temp.getFitness());
 						CPAParameters.source += (CPAParameters.metaheuristicParameters.get("Generations:").intValue() - generations) + "," + CPAParameters.best.toString();
 					}
-					temp.mutateMe();
-					
 				}
 				ArrayList<ModelObject> q = new ArrayList<ModelObject>();
-				for(int i = 0; i < CPAParameters.candidatePopulationSize; i++){
+				for(int i = 0; i < (CPAParameters.candidatePopulationSize/2); i++){
 					
 					//tournament selection of ModelObjects from current population
 					ModelObject parentA = tournamentSelection();
 					ModelObject parentB = tournamentSelection();
 					
 					//cross over parents to produce two children
-					onePointCrossOver(parentA, parentB);
+					double p = generator.nextDouble();
+					if(p < CPAParameters.metaheuristicParameters.get("Cross Over Probability")){
+						onePointCrossOver(parentA, parentB);
+					}
 					
 					//mutate both children
 					parentA.mutateMe();
@@ -125,7 +139,7 @@ public class MetaHeuristicPopulation {
 				mPopulation = q;
 			}
 				
-				
+			System.out.println(CPAParameters.best.getFitness());
 			generations--;
 		}
 		
@@ -161,7 +175,7 @@ public class MetaHeuristicPopulation {
 		for(int i = 0; i < tournamentSize; i++){
 			index = generator.nextInt(mPopulation.size());
 			ModelObject second = mPopulation.get(index);
-			if(second.getFitness() > first.getFitness()){
+			if(second.getFitness() < first.getFitness()){
 				first = second;
 			}
 		}
