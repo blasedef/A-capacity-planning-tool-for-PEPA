@@ -22,7 +22,7 @@ public class MetaHeuristicCapacityPlanningDelegate extends BasicProcessAlgebraMo
 
 	@Override
 	public void run(IAction action) {
-		ActionCommands.capacityplanning((IPepaModel)model);
+		ActionCommands.metaHeuristicCapacityPlanning((IPepaModel)model);
 	}
 
 }
