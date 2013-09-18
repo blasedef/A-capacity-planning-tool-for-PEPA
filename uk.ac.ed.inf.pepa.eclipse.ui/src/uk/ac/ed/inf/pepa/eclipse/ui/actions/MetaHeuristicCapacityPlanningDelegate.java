@@ -12,7 +12,7 @@ import org.eclipse.ui.IEditorActionDelegate;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 
-public class CapacityPlanningDelegate extends BasicProcessAlgebraModelActionDelegate
+public class MetaHeuristicCapacityPlanningDelegate extends BasicProcessAlgebraModelActionDelegate
 		implements IEditorActionDelegate {
 
 	@Override
@@ -22,7 +22,7 @@ public class CapacityPlanningDelegate extends BasicProcessAlgebraModelActionDele
 
 	@Override
 	public void run(IAction action) {
-		ActionCommands.capacityPlanning((IPepaModel)model);
+		ActionCommands.capacityplanning((IPepaModel)model);
 	}
 
 }

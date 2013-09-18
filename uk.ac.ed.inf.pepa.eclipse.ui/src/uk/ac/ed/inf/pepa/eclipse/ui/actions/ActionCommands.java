@@ -34,6 +34,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ConcretePerformanceM
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.pepa.PEPAEvaluator;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.CapacityPlanningWizard;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.MetaHeuristicCapacityPlanningWizard;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
 import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
@@ -103,8 +104,16 @@ public class ActionCommands {
 		dialog.open();
 	}
 	
-	public static void capacityplanning(IPepaModel model) {
+	public static void capacityPlanning(IPepaModel model) {
 		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
+		WizardDialog dialog = new WizardDialog(Display.getDefault()
+				.getActiveShell(), wizard);
+		dialog.setPageSize(500, 500);
+		dialog.open();
+	}
+	
+	public static void metaHeuristicCapacityPlanning(IPepaModel model) {
+		MetaHeuristicCapacityPlanningWizard wizard = new MetaHeuristicCapacityPlanningWizard(model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(500, 500);
