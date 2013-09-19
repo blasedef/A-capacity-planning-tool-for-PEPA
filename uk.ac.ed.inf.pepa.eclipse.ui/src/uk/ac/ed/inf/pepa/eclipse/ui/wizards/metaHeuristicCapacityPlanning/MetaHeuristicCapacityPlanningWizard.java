@@ -22,6 +22,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.parameters.*;
 
 
 /**
@@ -43,14 +44,21 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	
 	//Wizard pages
 	PerformanceValueTypeAndMetaHeuristicSelectionPage performanceValueTypeAndMetaHeuristicSelectionPage;
+	MetaHeuristicConfigurationPage metaHeuristicConfiguration;
+	
+	//Page name
+	String pageTitle = "Metaheuristic Capacity Planning";
 	
 	
 	public MetaHeuristicCapacityPlanningWizard(IPepaModel model){
+		//claim model
 		this.model = model;
 		
 		//wizard pages
-		this.performanceValueTypeAndMetaHeuristicSelectionPage = new PerformanceValueTypeAndMetaHeuristicSelectionPage();
+		this.performanceValueTypeAndMetaHeuristicSelectionPage = new PerformanceValueTypeAndMetaHeuristicSelectionPage(this.pageTitle);
 		wizardPageList.add(this.performanceValueTypeAndMetaHeuristicSelectionPage);
+		this.metaHeuristicConfiguration = new MetaHeuristicConfigurationPage(this.pageTitle);
+		wizardPageList.add(this.metaHeuristicConfiguration);
 		
 	}
 	
