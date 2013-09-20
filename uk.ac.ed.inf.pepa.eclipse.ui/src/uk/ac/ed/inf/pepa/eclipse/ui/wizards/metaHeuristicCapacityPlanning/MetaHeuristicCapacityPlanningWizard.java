@@ -7,22 +7,16 @@
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.swt.widgets.Composite;
+
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.parameters.*;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
 
 
 /**
@@ -43,8 +37,12 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
 	
 	//Wizard pages
-	PerformanceValueTypeAndMetaHeuristicSelectionPage performanceValueTypeAndMetaHeuristicSelectionPage;
-	MetaHeuristicConfigurationPage metaHeuristicConfiguration;
+	MetaHeuristicCapacityPlanningWizardPage performanceEvaluatorAndMetaHeuristicSelectionPage;
+	MetaHeuristicCapacityPlanningWizardPage metaHeuristicConfigurationPage;
+	MetaHeuristicCapacityPlanningWizardPage additionalCostsPage;
+	MetaHeuristicCapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
+	MetaHeuristicCapacityPlanningWizardPage targetConfigurationPage;
+	MetaHeuristicCapacityPlanningWizardPage	fitnessFunctionConfigurationPage;
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
@@ -55,10 +53,50 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		this.model = model;
 		
 		//wizard pages
-		this.performanceValueTypeAndMetaHeuristicSelectionPage = new PerformanceValueTypeAndMetaHeuristicSelectionPage(this.pageTitle);
-		wizardPageList.add(this.performanceValueTypeAndMetaHeuristicSelectionPage);
-		this.metaHeuristicConfiguration = new MetaHeuristicConfigurationPage(this.pageTitle);
-		wizardPageList.add(this.metaHeuristicConfiguration);
+		this.performanceEvaluatorAndMetaHeuristicSelectionPage = new PerformanceEvaluatorAndMetaHeuristicSelectionPage(this.pageTitle);
+		wizardPageList.add(this.performanceEvaluatorAndMetaHeuristicSelectionPage);
+		
+		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
+		wizardPageList.add(this.metaHeuristicConfigurationPage);
+		
+		this.additionalCostsPage = new PlaceHolderWizardPage("This is for additional costs");
+		wizardPageList.add(this.additionalCostsPage);
+		
+		this.ordinaryDifferentialEquationConfigurationPage = new PlaceHolderWizardPage("ODE config");
+		wizardPageList.add(this.ordinaryDifferentialEquationConfigurationPage);
+		
+		this.targetConfigurationPage = new PlaceHolderWizardPage("Action / State selection");
+		wizardPageList.add(this.targetConfigurationPage);
+		
+		this.fitnessFunctionConfigurationPage = new PlaceHolderWizardPage("Target and Population range");
+		wizardPageList.add(this.fitnessFunctionConfigurationPage);
+		
+	}
+	
+	public void updateMetaHeuristicConfigurationPage(){
+		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
+		addPage(this.metaHeuristicConfigurationPage);
+	}
+	
+	public IWizardPage getNextPage(IWizardPage page){
+		if(page == performanceEvaluatorAndMetaHeuristicSelectionPage)	{
+			return this.metaHeuristicConfigurationPage;
+		}
+		else if(page == metaHeuristicConfigurationPage)	{
+			return this.additionalCostsPage;
+		}
+		else if(page == additionalCostsPage)	{
+			return this.ordinaryDifferentialEquationConfigurationPage;
+		}
+		else if(page == ordinaryDifferentialEquationConfigurationPage)	{
+			return this.targetConfigurationPage;
+		}
+		else if(page == targetConfigurationPage)	{
+			return this.fitnessFunctionConfigurationPage;
+		}
+		else {
+			return super.getNextPage(null);
+		}
 		
 	}
 	
