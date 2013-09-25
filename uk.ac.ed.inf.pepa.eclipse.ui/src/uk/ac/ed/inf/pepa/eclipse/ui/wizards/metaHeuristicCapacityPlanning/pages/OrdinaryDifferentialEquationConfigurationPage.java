@@ -15,6 +15,7 @@ import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.simulation.AverageResponseTimeCollector;
 import uk.ac.ed.inf.pepa.largescale.simulation.DefaultCollector;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
+import uk.ac.ed.inf.pepa.parsing.ModelNode;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 
 public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristicCapacityPlanningWizardPage {
@@ -23,7 +24,7 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 	private IPepaModel model;
 	private PerformanceMetricContainer performanceMetricContainer;
 	
-	public OrdinaryDifferentialEquationConfigurationPage(String s, IParametricDerivationGraph dGraph, IPepaModel model) {
+	public OrdinaryDifferentialEquationConfigurationPage(String s, IParametricDerivationGraph dGraph, IPepaModel model, ModelNode node) {
 		
 		//copy title upwards
 		super(s,"Ordinary Differential Equation page",
@@ -31,6 +32,9 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 		
 		this.dGraph = dGraph;
 		this.model = model;
+		
+		//setup the models
+		Models.oDEConfig.setModels(model,node,dGraph);
 		
 		setPageComplete(false);
 		

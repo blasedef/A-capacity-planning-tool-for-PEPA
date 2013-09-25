@@ -12,7 +12,13 @@ public class MetaHeuristicType extends ModelType{
 	private static String[] hillClimbingFitnessFunctionAttributeList = new String[] {GENERATION_S,ALPHABETA_S,MUTATIONPROBABILITY_S};
 	private static String[] geneticAlgorithmFitnessFunctionAttributeList = new String[] {GENERATION_S,ALPHABETA_S,MUTATIONPROBABILITY_S,CROSSOVERPROBABILITY_S,INITIALCANDIDATEPOPULATION_S};
 	private static String[] particleSwarmOptimisationFitnessFunctionAttributeList = new String[] {GENERATION_S,TOBESET1_S,TOBESET2_S};
-	private static FitnessFunction fitnessFunction;
+	
+	//sub classes
+	public static FitnessFunction fitnessFunction;
+	public static Targets targets;
+	public static PopulationRanges minPopulationRanges;
+	public static PopulationRanges maxPopulationRanges;
+	
 	
 	//option mapping for fitness options
 	private static final Map<String,String[]> attributeListMap = new HashMap<String, String[]>()
@@ -31,14 +37,30 @@ public class MetaHeuristicType extends ModelType{
 	public MetaHeuristicType(String defaultType){
 		super(defaultType, metaHeuristicTypeList, "Metaheurstic Type");
 		MetaHeuristicType.fitnessFunction = new FitnessFunction(attributeListMap.get(defaultType));
+		MetaHeuristicType.targets = new Targets();
+		MetaHeuristicType.minPopulationRanges = new PopulationRanges();
+		MetaHeuristicType.maxPopulationRanges = new PopulationRanges();
 	}
 	
 	public void updateFitnessFunctionValues(){
 		MetaHeuristicType.fitnessFunction.updateFitnessMap(attributeListMap.get(this.value));
 	}
 	
+	
 	public void resetFitnessFunctionValues(){
 		MetaHeuristicType.fitnessFunction.updateFitnessMapToDefault(attributeListMap.get(this.value));
+	}
+	
+	public void updateTargetValues(){
+		MetaHeuristicType.targets.updateTargetMap();
+	}
+	
+	public void updateMinPopulationRanges(){
+		MetaHeuristicType.minPopulationRanges.updatePopulationMap();
+	}
+	
+	public void updateMaxPopulationRanges(){
+		MetaHeuristicType.maxPopulationRanges.updatePopulationMap();
 	}
 
 	@Override
@@ -50,14 +72,9 @@ public class MetaHeuristicType extends ModelType{
 	@Override
 	public void setValue(String type){
 		this.value = type;
-		updateFitnessFunctionValues();
 	}
 	
-	public FitnessFunction getFitnessFunction(){
-		return MetaHeuristicType.fitnessFunction;
-	}
-	
-	public Target getTarget(){
+	public Targets getTarget(){
 		return null;
 	}
 	

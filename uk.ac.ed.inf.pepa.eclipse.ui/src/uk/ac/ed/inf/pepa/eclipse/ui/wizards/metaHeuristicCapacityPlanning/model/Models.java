@@ -14,5 +14,5 @@ public abstract class Models {
 	public static final MetaHeuristicType metaHeuristicType = new MetaHeuristicType(ModelType.HILLCLIMBING_S);
 	public static MetaHeuristicNetworkType metaHeuristicNetworkType = new MetaHeuristicNetworkType(ModelType.METAHEURISTICSINGLE_S);
 	public static AdditionalCosts additionalCosts = new AdditionalCosts(ModelType.ADDITIONALCOSTSNO_S);
-	public static ODEConfig oDEConfig = new ODEConfig("ODE Config");
+	public static ODEAndPEPAModelConfig oDEConfig = new ODEAndPEPAModelConfig("ODE Config");
 }

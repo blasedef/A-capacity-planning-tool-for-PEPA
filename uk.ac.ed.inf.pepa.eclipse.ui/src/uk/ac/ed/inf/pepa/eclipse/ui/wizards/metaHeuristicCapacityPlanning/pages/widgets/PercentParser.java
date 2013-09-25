@@ -1,8 +1,8 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets;
 
-public class DoubleParser extends Parser{
+public class PercentParser extends Parser{
 
-	public DoubleParser(String text) {
+	public PercentParser(String text) {
 		super(text);
 	}
 
@@ -19,7 +19,12 @@ public class DoubleParser extends Parser{
 			return false;
 		}
 		if(i >= 0.0) {
-			return true;
+			if(i <= 1.0){
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		else {
 			return false;

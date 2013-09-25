@@ -174,8 +174,6 @@ public class AverageResponseTimeContainer extends PerformanceMetricContainer {
 				.getContentProvider())
 				.getParent(viewer.getCheckedElements()[0]);
 		
-		System.out.println(c.getName());
-		
 		int j = 0;
 		
 		for (; j < fDerivationGraph.getSequentialComponents().length; j++)

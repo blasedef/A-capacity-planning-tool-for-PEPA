@@ -6,12 +6,12 @@ public abstract class CapacityPlanningWidget {
 	
 	protected IValidationCallback cb;
 	protected String value;
-	protected String title;
+	protected String key;
 	
 	
-	public CapacityPlanningWidget(String value, IValidationCallback cb, String title) {
+	public CapacityPlanningWidget(String value, IValidationCallback cb, String key) {
 		this.value = value;
-		this.title = title;
+		this.key = key;
 		this.cb = cb;
 	
 	}

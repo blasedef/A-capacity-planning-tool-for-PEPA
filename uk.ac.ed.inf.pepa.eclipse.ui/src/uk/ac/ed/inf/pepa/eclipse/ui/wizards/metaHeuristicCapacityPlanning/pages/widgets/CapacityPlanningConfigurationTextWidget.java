@@ -26,7 +26,7 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 		
 		Label aLabel = new Label(container,SWT.LEFT);
 		aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		aLabel.setText(title + ":");
+		aLabel.setText(key + ":");
 		aText = new Text(container, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
 		aText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		aText.setText("" + value);
@@ -52,13 +52,20 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 			} 
 			return parser.isCorrect();
 		}
+		else if(type.equals(ModelType.PERCENT)){
+			PercentParser parser = new PercentParser(aText.getText());
+			if(parser.isCorrect()){
+				setValue();
+			} 
+			return parser.isCorrect();
+		} 
 		else if(type.equals(ModelType.DOUBLE)){
 			DoubleParser parser = new DoubleParser(aText.getText());
 			if(parser.isCorrect()){
 				setValue();
 			} 
 			return parser.isCorrect();
-		} 
+		}
 		else {
 			return false;
 		}
@@ -69,7 +76,7 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 	 */
 	@Override
 	public void setValue() {
-		this.map.put(title, Double.parseDouble(aText.getText()));	
+		this.map.put(key, Double.parseDouble(aText.getText()));	
 	}
 
 }

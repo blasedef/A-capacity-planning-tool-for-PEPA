@@ -37,15 +37,6 @@ import uk.ac.ed.inf.pepa.parsing.ModelNode;
  */
 public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 
-	//The underlying PEPAModel
-	private IPepaModel model;
-	
-	//An AST ModelNode
-	private ModelNode node;
-	
-	//A derivation of the model for the wizard
-	private IParametricDerivationGraph dGraph;
-	
 	//Wizard page iterator
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
 	
@@ -58,6 +49,16 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
+	
+	
+	//The underlying PEPAModel
+	private IPepaModel model;
+	
+	//An AST ModelNode
+	private ModelNode node;
+	
+	//A derivation of the model for the wizard
+	private IParametricDerivationGraph dGraph;
 	
 	
 	public MetaHeuristicCapacityPlanningWizard(IPepaModel model){
@@ -94,7 +95,7 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		this.additionalCostsPage = new PlaceHolderWizardPage("This is for additional costs (Place holder page for later work)");
 		wizardPageList.add(this.additionalCostsPage);
 		
-		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model);
+		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model, node);
 		wizardPageList.add(this.ordinaryDifferentialEquationConfigurationPage);
 		
 		this.targetConfigurationPage = new PlaceHolderWizardPage("Target and Population range");
@@ -105,7 +106,7 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	public void updateMHAndODEPages(){
 		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
 		addPage(this.metaHeuristicConfigurationPage);
-		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model);
+		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model, node);
 		addPage(this.ordinaryDifferentialEquationConfigurationPage);
 	}
 	
@@ -149,5 +150,8 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		return false;
 	}
 	
+	public boolean canFinish(){
+		return (this.targetConfigurationPage.isPageComplete() && this.ordinaryDifferentialEquationConfigurationPage.isPageComplete());
+	}
 
 } 

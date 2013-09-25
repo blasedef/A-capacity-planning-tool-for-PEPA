@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.MetaHeuristicType;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Models;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningConfigurationTextWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningWidget;
@@ -22,18 +23,20 @@ public class MetaHeuristicConfigurationPage extends MetaHeuristicCapacityPlannin
 				Models.metaHeuristicType.getValue() + " " +
 				"Metaheuristic...");
 		
+		Models.metaHeuristicType.updateFitnessFunctionValues();
+		
 	}
 
 	@Override
 	protected void constructPage(Composite container, IValidationCallback cb) {
 		
-		String[] options = Models.metaHeuristicType.getFitnessFunction().getFitnessMapKeys();
-		Map<String,Number> map = Models.metaHeuristicType.getFitnessFunction().getMap();
+		String[] options = MetaHeuristicType.fitnessFunction.getFitnessMapKeys();
+		Map<String,Number> map = MetaHeuristicType.fitnessFunction.getMap();
 		String type; 
 		
 		for(String option : options){
-			type = Models.metaHeuristicType.getFitnessFunction().getTypeMap().get(option);
-			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,Models.metaHeuristicType.getFitnessFunction().getFitnessMapValue(option),map,type,cb));
+			type = MetaHeuristicType.fitnessFunction.getTypeMap().get(option);
+			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,MetaHeuristicType.fitnessFunction.getFitnessMapValue(option),map,type,cb));
 		}
 		
 		

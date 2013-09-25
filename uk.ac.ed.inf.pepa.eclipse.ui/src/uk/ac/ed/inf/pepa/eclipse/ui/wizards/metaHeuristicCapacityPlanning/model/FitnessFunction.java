@@ -21,7 +21,7 @@ public class FitnessFunction extends MetaHeuristicConfigurations {
 		put(ModelType.CROSSOVERPROBABILITY_S,0.2);
 		put(ModelType.INITIALCANDIDATEPOPULATION_S,100);
 		put(ModelType.TOBESET1_S,5);
-		put(ModelType.TOBESET2_S,10);
+		put(ModelType.TOBESET2_S,10.0);
 	}};
 	
 	/**
@@ -40,12 +40,12 @@ public class FitnessFunction extends MetaHeuristicConfigurations {
 
 	{
 		put(ModelType.GENERATION_S,ModelType.INTEGER);
-		put(ModelType.ALPHABETA_S,ModelType.DOUBLE);
-		put(ModelType.MUTATIONPROBABILITY_S,ModelType.DOUBLE);
-		put(ModelType.CROSSOVERPROBABILITY_S,ModelType.DOUBLE);
+		put(ModelType.ALPHABETA_S,ModelType.PERCENT);
+		put(ModelType.MUTATIONPROBABILITY_S,ModelType.PERCENT);
+		put(ModelType.CROSSOVERPROBABILITY_S,ModelType.PERCENT);
 		put(ModelType.INITIALCANDIDATEPOPULATION_S,ModelType.INTEGER);
 		put(ModelType.TOBESET1_S,ModelType.INTEGER);
-		put(ModelType.TOBESET2_S,ModelType.DOUBLE);
+		put(ModelType.TOBESET2_S,ModelType.PERCENT);
 	}};
 	
 	public FitnessFunction(String[] defaultOptions){

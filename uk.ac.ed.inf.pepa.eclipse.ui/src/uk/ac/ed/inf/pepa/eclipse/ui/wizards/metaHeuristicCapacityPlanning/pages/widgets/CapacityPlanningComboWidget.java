@@ -24,7 +24,7 @@ public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 		
 		Label aLabel = new Label(container,SWT.LEFT);
 		aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		aLabel.setText(title + ":");
+		aLabel.setText(key + ":");
 		aCombo = new Combo(container, SWT.READ_ONLY | SWT.NONE);
 		aCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		aCombo.setItems(model.getOptions());
