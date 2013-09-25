@@ -2,6 +2,8 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages
 
 import org.eclipse.swt.widgets.Composite;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+
 public class PlaceHolderWizardPage extends MetaHeuristicCapacityPlanningWizardPage {
 	
 	public PlaceHolderWizardPage(String title) {
@@ -10,13 +12,15 @@ public class PlaceHolderWizardPage extends MetaHeuristicCapacityPlanningWizardPa
 		super(title,title,"nan");
 		
 	}
-	
-	protected void completePage(Composite container){
+
+	@Override
+	public void completePage() {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updateNextPage() {
+	protected void constructPage(Composite container, IValidationCallback cb) {
 		// TODO Auto-generated method stub
 		
 	}

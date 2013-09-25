@@ -10,13 +10,20 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Models;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
+import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
+import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
+import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
+import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 
 /**
@@ -31,7 +38,13 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.
 public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 
 	//The underlying PEPAModel
-	IPepaModel model;
+	private IPepaModel model;
+	
+	//An AST ModelNode
+	private ModelNode node;
+	
+	//A derivation of the model for the wizard
+	private IParametricDerivationGraph dGraph;
 	
 	//Wizard page iterator
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
@@ -42,15 +55,34 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	MetaHeuristicCapacityPlanningWizardPage additionalCostsPage;
 	MetaHeuristicCapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
 	MetaHeuristicCapacityPlanningWizardPage targetConfigurationPage;
-	MetaHeuristicCapacityPlanningWizardPage	fitnessFunctionConfigurationPage;
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
 	
 	
 	public MetaHeuristicCapacityPlanningWizard(IPepaModel model){
+		
 		//claim model
 		this.model = model;
+		
+		this.node = model.getAST();
+		
+		try{
+			//so this is how to make the graph :)
+			this.dGraph = ParametricDerivationGraphBuilder
+					.createDerivationGraph(model.getAST(), null);
+			
+		} catch (InterruptedException e) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Cancel Acknowledgement",
+					"The ODE generation process has been cancelled");
+			
+		} catch (DifferentialAnalysisException e) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					"Differential error",
+					e.getMessage());
+			
+		}
 		
 		//wizard pages
 		this.performanceEvaluatorAndMetaHeuristicSelectionPage = new PerformanceEvaluatorAndMetaHeuristicSelectionPage(this.pageTitle);
@@ -59,40 +91,44 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
 		wizardPageList.add(this.metaHeuristicConfigurationPage);
 		
-		this.additionalCostsPage = new PlaceHolderWizardPage("This is for additional costs");
+		this.additionalCostsPage = new PlaceHolderWizardPage("This is for additional costs (Place holder page for later work)");
 		wizardPageList.add(this.additionalCostsPage);
 		
-		this.ordinaryDifferentialEquationConfigurationPage = new PlaceHolderWizardPage("ODE config");
+		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model);
 		wizardPageList.add(this.ordinaryDifferentialEquationConfigurationPage);
 		
-		this.targetConfigurationPage = new PlaceHolderWizardPage("Action / State selection");
+		this.targetConfigurationPage = new PlaceHolderWizardPage("Target and Population range");
 		wizardPageList.add(this.targetConfigurationPage);
-		
-		this.fitnessFunctionConfigurationPage = new PlaceHolderWizardPage("Target and Population range");
-		wizardPageList.add(this.fitnessFunctionConfigurationPage);
 		
 	}
 	
-	public void updateMetaHeuristicConfigurationPage(){
+	public void updateMHAndODEPages(){
 		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
 		addPage(this.metaHeuristicConfigurationPage);
+		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model);
+		addPage(this.ordinaryDifferentialEquationConfigurationPage);
+	}
+	
+	public void updateTargetPage(){
+		this.targetConfigurationPage = new TargetConfigurationPage(this.pageTitle);
+		addPage(this.targetConfigurationPage);
 	}
 	
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == performanceEvaluatorAndMetaHeuristicSelectionPage)	{
 			return this.metaHeuristicConfigurationPage;
 		}
-		else if(page == metaHeuristicConfigurationPage)	{
+		else if(page == metaHeuristicConfigurationPage && (Models.additionalCosts.getValue().equals(ModelType.ADDITIONALCOSTSYES_S)))	{
 			return this.additionalCostsPage;
 		}
-		else if(page == additionalCostsPage)	{
+		else if(page == metaHeuristicConfigurationPage && (Models.additionalCosts.getValue().equals(ModelType.ADDITIONALCOSTSNO_S)))	{
+			return this.ordinaryDifferentialEquationConfigurationPage;
+		}
+		else if(page == additionalCostsPage )	{
 			return this.ordinaryDifferentialEquationConfigurationPage;
 		}
 		else if(page == ordinaryDifferentialEquationConfigurationPage)	{
 			return this.targetConfigurationPage;
-		}
-		else if(page == targetConfigurationPage)	{
-			return this.fitnessFunctionConfigurationPage;
 		}
 		else {
 			return super.getNextPage(null);

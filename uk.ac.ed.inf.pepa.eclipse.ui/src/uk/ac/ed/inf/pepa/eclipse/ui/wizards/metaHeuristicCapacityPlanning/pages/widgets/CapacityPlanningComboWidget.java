@@ -1,41 +1,55 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.CapacityPlanningOptionsMap;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.MetaHeuristicCapacityPlanningWizardPage;
+import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
 
 
 public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 	
-	public CapacityPlanningComboWidget(Composite container, String labelText, String[] combos, WizardPage w) {
+	ModelType model;
+	final Combo aCombo;
+	
+	public CapacityPlanningComboWidget(Composite container, ModelType model, final IValidationCallback cb) {
+		super(model.getValue(),cb,model.getTitle());
+		this.model = model;
 		
-		final String targetText = labelText;
-		final MetaHeuristicCapacityPlanningWizardPage listeningWizard = (MetaHeuristicCapacityPlanningWizardPage) w;
-		
-		Label aLabel = new Label(container,SWT.CENTER);
-		aLabel.setText(targetText + ":");
-		final Combo aCombo = new Combo(container, SWT.SIMPLE);
-		aCombo.setItems(combos);
-		aCombo.setText(combos[0]);
+		Label aLabel = new Label(container,SWT.LEFT);
+		aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		aLabel.setText(title + ":");
+		aCombo = new Combo(container, SWT.READ_ONLY | SWT.NONE);
+		aCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		aCombo.setItems(model.getOptions());
+		aCombo.setText(model.getOptions()[0]);
 
 		aCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-					String key = targetText;
-					Number value = CapacityPlanningOptionsMap.optionMap.get(aCombo.getText());
-					CapacityPlanningOptionsMap.optionMap.put(key,value);
-					CapacityPlanningOptionsMap.optionMap_S.put(key, aCombo.getText());
-					listeningWizard.updateNextPage();
+				//ready the value
+				setValue();	
+				//call back...
+				cb.validate();
 			}
 		});
 	
 	}
+
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+
+	@Override
+	public void setValue() {
+		this.model.setValue(aCombo.getText());
+	}
+
 
 }

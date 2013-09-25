@@ -1,4 +1,4 @@
-package uk.ac.ed.inf.pepa.eclipse.ui.largescale;
+package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.largescale;
 
 import java.util.ArrayList;
 
@@ -16,8 +16,10 @@ import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.ConfigurationText;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.ConfigurationWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.NonNegativeDoubleConfigurationText;
+import uk.ac.ed.inf.pepa.eclipse.ui.largescale.PositiveIntegerConfigurationText;
 
-abstract class SolverOptionsHandler {
+public abstract class SolverOptionsHandler {
 
 	private boolean isTransient = false;
 
@@ -51,7 +53,7 @@ abstract class SolverOptionsHandler {
 		transientCombo = new Combo(composite, SWT.READ_ONLY | SWT.NONE);
 		transientCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		transientCombo.add("Steady state");
-		if (supportsTransient)
+		if (false)
 			transientCombo.add("Transient");
 		transientCombo.select(0);
 		transientCombo.addSelectionListener(new SelectionListener() {
@@ -60,7 +62,7 @@ abstract class SolverOptionsHandler {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				setTransient(transientCombo.getText().equals("Transient"));
+				setTransient(false);
 				cb.validate();
 			}
 
