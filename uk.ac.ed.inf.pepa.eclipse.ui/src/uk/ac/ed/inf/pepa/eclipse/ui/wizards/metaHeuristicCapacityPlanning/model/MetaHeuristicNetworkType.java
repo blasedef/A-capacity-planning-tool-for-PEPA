@@ -1,17 +1,28 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model;
 
-public class MetaHeuristicNetworkType extends ModelType{
-
-	private static final String[] metaHeuristicNetworkList = new String[] {METAHEURISTICSINGLE_S, METAHEURISTICDRIVEN_S, METAHEURISTICPIPELINE_S};
+public class MetaHeuristicNetworkType extends Configuration{
 	
-	public MetaHeuristicNetworkType(String defaultType) {
-		super(defaultType,metaHeuristicNetworkList,"Metaheuristic Network type");
+	public MetaHeuristicNetworkType(String key, String value, String[] options) {
+		super(key, value, options);
+	}
+	
+	public String getDescription(){
+		if(value.equals(ExperimentConfiguration.METAHEURISTICDRIVEN_S)){
+			return "driving";
+		} else if (value.equals(ExperimentConfiguration.METAHEURISTICPIPELINE_S)){
+			return "primary";
+		} else {
+			return "single";
+		}
 	}
 
 	@Override
 	public void setOptions(String option) {
-		super.options = metaHeuristicNetworkList;
 		
+	}
+
+	public String getDescriptionSecondary() {
+		return "secondary";
 	}
 
 }

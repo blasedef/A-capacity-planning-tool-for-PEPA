@@ -11,6 +11,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.editor.IProcessAlgebraEditor;
 
 public class MetaHeuristicCapacityPlanningDelegate extends BasicProcessAlgebraModelActionDelegate
 		implements IEditorActionDelegate {

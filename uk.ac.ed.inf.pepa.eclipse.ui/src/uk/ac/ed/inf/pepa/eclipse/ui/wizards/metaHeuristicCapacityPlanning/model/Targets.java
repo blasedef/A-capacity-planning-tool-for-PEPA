@@ -22,13 +22,13 @@ public class Targets extends MetaHeuristicConfigurations {
 
 	public void updateTargetMap() {
 		
-		String[] options = Models.oDEConfig.getLabels();
+		String[] options = ExperimentConfiguration.oDEConfig.getLabels();
 		
 		Map<String,Number> map = new HashMap<String, Number>();
 		
 		for(String key : options){
 			if(!this.targetOptionMap.containsKey(key)){
-				Number value = 0.0;
+				Number value = 1.0;
 				map.put(key,value);
 			} else {
 				Number value = this.targetOptionMap.get(key);
@@ -40,8 +40,16 @@ public class Targets extends MetaHeuristicConfigurations {
 		
 	}
 
-	public String getTargetMapValue(String option) {
-		return "" + this.targetOptionMap.get(option);
+	public String getMapValue(String key) {
+		
+		Number number;
+		
+		if(targetOptionMap.containsKey(key)){
+			number = this.targetOptionMap.get(key);
+		} else {
+			number = 0.0;
+		}
+		return "" + (Double) number;
 	}
 
 }

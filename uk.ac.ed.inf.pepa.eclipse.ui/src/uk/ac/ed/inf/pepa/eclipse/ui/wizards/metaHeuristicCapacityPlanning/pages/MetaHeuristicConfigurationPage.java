@@ -7,8 +7,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.MetaHeuristicType;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Models;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningConfigurationTextWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningWidget;
 
@@ -19,24 +18,24 @@ public class MetaHeuristicConfigurationPage extends MetaHeuristicCapacityPlannin
 	public MetaHeuristicConfigurationPage(String s) {
 		
 		//copy title upwards
-		super(s,Models.metaHeuristicType.getValue() + " Metaheuristic configuration page","Set up the " + Models.metaHeuristicNetworkType.getValue() + " " + 
-				Models.metaHeuristicType.getValue() + " " +
+		super(s,"Primary Metaheuristic configuration page","Set up the " + ExperimentConfiguration.metaHeuristicNetworkType.getDescription() + " " + 
+				ExperimentConfiguration.metaHeuristicPrimary.getValue() + " " +
 				"Metaheuristic...");
 		
-		Models.metaHeuristicType.updateFitnessFunctionValues();
+		ExperimentConfiguration.metaHeuristicPrimary.updateAttributeValues();
 		
 	}
 
 	@Override
 	protected void constructPage(Composite container, IValidationCallback cb) {
 		
-		String[] options = MetaHeuristicType.fitnessFunction.getFitnessMapKeys();
-		Map<String,Number> map = MetaHeuristicType.fitnessFunction.getMap();
+		String[] options = ExperimentConfiguration.metaHeuristicPrimary.getAttributeMapKeys();
+		Map<String,Number> map = ExperimentConfiguration.metaHeuristicPrimary.getAttributeMap();
 		String type; 
 		
 		for(String option : options){
-			type = MetaHeuristicType.fitnessFunction.getTypeMap().get(option);
-			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,MetaHeuristicType.fitnessFunction.getFitnessMapValue(option),map,type,cb));
+			type = ExperimentConfiguration.defaultOptionTypeMap.get(option);
+			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,ExperimentConfiguration.metaHeuristicPrimary.getAttributeMapValue(option),map,type,cb));
 		}
 		
 		

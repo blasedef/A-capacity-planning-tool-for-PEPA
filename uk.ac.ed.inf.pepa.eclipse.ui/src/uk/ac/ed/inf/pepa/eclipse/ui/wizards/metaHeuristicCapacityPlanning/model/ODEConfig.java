@@ -3,14 +3,14 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 
-public class ODEConfig extends ModelType{
+public class ODEConfig extends Configuration{
 	
 	private IPointEstimator[] estimators;
 	private IStatisticsCollector[] collectors;
 	private String[] labels;
 
-	public ODEConfig(String defaultType) {
-		super(defaultType, null, "ODE Configuration");
+	public ODEConfig(String key, String value, String[] options) {
+		super(key, value, options);
 	}
 
 	@Override
@@ -42,5 +42,5 @@ public class ODEConfig extends ModelType{
 	public String[] getLabels(){
 		return this.labels;
 	}
-	
+
 }

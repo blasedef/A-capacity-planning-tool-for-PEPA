@@ -10,15 +10,15 @@ import org.eclipse.swt.widgets.Label;
 
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Configuration;
 
 
 public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 	
-	ModelType model;
+	Configuration model;
 	final Combo aCombo;
 	
-	public CapacityPlanningComboWidget(Composite container, ModelType model, final IValidationCallback cb) {
+	public CapacityPlanningComboWidget(Composite container, Configuration model, final IValidationCallback cb) {
 		super(model.getValue(),cb,model.getTitle());
 		this.model = model;
 		

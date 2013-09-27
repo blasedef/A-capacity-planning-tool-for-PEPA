@@ -1,17 +1,13 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model;
 
-public class EvaluatorType extends ModelType{
+public class EvaluatorType extends Configuration{
 	
-	private static final String[] evaluatorList = new String[] {THROUGHPUT_S,AVERAGERESPONSETIME_S};
-	
-	public EvaluatorType(String defaultType){
-		super(defaultType,evaluatorList, "Evaluator type");
+	public EvaluatorType(String key, String value, String[] options){
+		super(key, value, options);
 	}
 
 	@Override
 	public void setOptions(String option) {
-		super.options = evaluatorList;
-		
 	}
 	
 }

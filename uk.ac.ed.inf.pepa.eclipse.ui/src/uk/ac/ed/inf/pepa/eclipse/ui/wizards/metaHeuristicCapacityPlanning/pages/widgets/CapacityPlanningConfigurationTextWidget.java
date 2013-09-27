@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
 public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWidget {
 	
@@ -45,21 +45,21 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 
 	@Override
 	public boolean isValid() {
-		if(type.equals(ModelType.INTEGER)){
+		if(type.equals(ExperimentConfiguration.INTEGER)){
 			IntegerParser parser = new IntegerParser(aText.getText());
 			if(parser.isCorrect()){
 				setValue();
 			} 
 			return parser.isCorrect();
 		}
-		else if(type.equals(ModelType.PERCENT)){
+		else if(type.equals(ExperimentConfiguration.PERCENT)){
 			PercentParser parser = new PercentParser(aText.getText());
 			if(parser.isCorrect()){
 				setValue();
 			} 
 			return parser.isCorrect();
 		} 
-		else if(type.equals(ModelType.DOUBLE)){
+		else if(type.equals(ExperimentConfiguration.DOUBLE)){
 			DoubleParser parser = new DoubleParser(aText.getText());
 			if(parser.isCorrect()){
 				setValue();
@@ -77,6 +77,10 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 	@Override
 	public void setValue() {
 		this.map.put(key, Double.parseDouble(aText.getText()));	
+	}
+	
+	public Number getValue() {
+		return Double.parseDouble(aText.getText());
 	}
 
 }

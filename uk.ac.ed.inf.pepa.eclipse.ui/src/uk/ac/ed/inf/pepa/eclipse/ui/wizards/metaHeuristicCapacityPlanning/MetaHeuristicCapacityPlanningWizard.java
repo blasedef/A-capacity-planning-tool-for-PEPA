@@ -17,8 +17,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Models;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.MetaHeuristicPopulation;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
@@ -43,9 +43,11 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	//Wizard pages
 	MetaHeuristicCapacityPlanningWizardPage performanceEvaluatorAndMetaHeuristicSelectionPage;
 	MetaHeuristicCapacityPlanningWizardPage metaHeuristicConfigurationPage;
+	MetaHeuristicCapacityPlanningWizardPage pipelineMetaHeuristicConfigurationPage;
 	MetaHeuristicCapacityPlanningWizardPage additionalCostsPage;
 	MetaHeuristicCapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
 	MetaHeuristicCapacityPlanningWizardPage targetConfigurationPage;
+	MetaHeuristicCapacityPlanningWizardPage summaryPage;
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
@@ -101,9 +103,22 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		this.targetConfigurationPage = new PlaceHolderWizardPage("Target and Population range");
 		wizardPageList.add(this.targetConfigurationPage);
 		
+		this.summaryPage = new PlaceHolderWizardPage("Summary");
+		wizardPageList.add(this.summaryPage);
+		
 	}
 	
 	public void updateMHAndODEPages(){
+		if(!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S)){
+			String value = ExperimentConfiguration.metaHeuristicPrimary.getValue();
+			ExperimentConfiguration.metaHeuristicPrimary.setFitnessMinPopulation(value);
+			ExperimentConfiguration.metaHeuristicPrimary.setFitnessMaxPopulation(value);
+			ExperimentConfiguration.metaHeuristicPrimary.setValue(ExperimentConfiguration.HILLCLIMBING_S);
+			ExperimentConfiguration.metaHeuristicPrimary.getFitnessMap().put(ExperimentConfiguration.DELTASIGMA_S, 0.5);
+			
+		} else {
+			ExperimentConfiguration.metaHeuristicPrimary.resetFitnessMap();
+		}
 		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
 		addPage(this.metaHeuristicConfigurationPage);
 		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model, node);
@@ -115,21 +130,35 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		addPage(this.targetConfigurationPage);
 	}
 	
+	public void updateSummaryPage(){
+		this.summaryPage = new SummaryPage(this.pageTitle);
+		addPage(this.summaryPage);
+	}
+	
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == performanceEvaluatorAndMetaHeuristicSelectionPage)	{
 			return this.metaHeuristicConfigurationPage;
 		}
-		else if(page == metaHeuristicConfigurationPage && (Models.additionalCosts.getValue().equals(ModelType.ADDITIONALCOSTSYES_S)))	{
+		else if(page == metaHeuristicConfigurationPage && (ExperimentConfiguration.additionalCosts.getValue().equals(ExperimentConfiguration.ADDITIONALCOSTSYES_S)))	{
 			return this.additionalCostsPage;
 		}
-		else if(page == metaHeuristicConfigurationPage && (Models.additionalCosts.getValue().equals(ModelType.ADDITIONALCOSTSNO_S)))	{
+		else if(page == metaHeuristicConfigurationPage && (ExperimentConfiguration.additionalCosts.getValue().equals(ExperimentConfiguration.ADDITIONALCOSTSNO_S)))	{
 			return this.ordinaryDifferentialEquationConfigurationPage;
 		}
-		else if(page == additionalCostsPage )	{
+		else if(page == additionalCostsPage)	{
 			return this.ordinaryDifferentialEquationConfigurationPage;
 		}
-		else if(page == ordinaryDifferentialEquationConfigurationPage)	{
+		else if(page == ordinaryDifferentialEquationConfigurationPage){ // && (!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICPIPELINE_S))){
 			return this.targetConfigurationPage;
+		}
+//		else if(page == ordinaryDifferentialEquationConfigurationPage && (ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICPIPELINE_S))){
+//			return this.pipelineMetaHeuristicConfigurationPage;
+//		}
+		else if(page == pipelineMetaHeuristicConfigurationPage){
+			return this.targetConfigurationPage;
+		}
+		else if(page == targetConfigurationPage){
+			return this.summaryPage;
 		}
 		else {
 			return super.getNextPage(null);

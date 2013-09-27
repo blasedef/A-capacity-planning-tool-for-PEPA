@@ -19,23 +19,39 @@ public class PopulationRanges extends MetaHeuristicConfigurations {
 		return this.populationOptionMap;
 	}
 
-	public void updatePopulationMap() {
-		
-		String[] options = Models.oDEConfig.getSystemEquation();
-		Integer[] values = Models.oDEConfig.getInitialPopulation();
+	public void updatePopulationMap(String[] options, Number[] values, boolean min) {
 		
 		Map<String,Number> map = new HashMap<String, Number>();
 		
-		for(int i = 0; i < options.length; i++){
+		//String[] options = ExperimentConfiguration.pEPAConfig.getSystemEquation();
+		//Integer[] values = ExperimentConfiguration.pEPAConfig.getInitialPopulation();
+		if(min){
 			
-			String key = options[i];
+			for(int i = 0; i < options.length; i++){
+				
+				String key = options[i];
+				
+				if(!this.populationOptionMap.containsKey(key)){
+					Number value = 1;
+					map.put(key,value);
+				} else {
+					Number value = this.populationOptionMap.get(key);
+					map.put(key,value);
+				}
+			}
+		} else {
 			
-			if(!this.populationOptionMap.containsKey(key)){
-				Number value = values[i];
-				map.put(key,value);
-			} else {
-				Number value = this.populationOptionMap.get(key);
-				map.put(key,value);
+			for(int i = 0; i < options.length; i++){
+				
+				String key = options[i];
+				
+				if(!this.populationOptionMap.containsKey(key)){
+					Number value = values[i];
+					map.put(key,value);
+				} else {
+					Number value = this.populationOptionMap.get(key);
+					map.put(key,value);
+				}
 			}
 		}
 		
@@ -43,8 +59,41 @@ public class PopulationRanges extends MetaHeuristicConfigurations {
 		
 	}
 
-	public String getTargetMapValue(String option) {
-		return "" + this.populationOptionMap.get(option);
+	public String getMapValue(String key) {
+		
+		Number number;
+		
+		if(populationOptionMap.containsKey(key)){
+			number = this.populationOptionMap.get(key);
+		} else {
+			number = 0;
+		}
+		return "" + number.intValue();
+	}
+	
+	public String getMapValueOfDifferentTypes(String key) {
+		
+		Number number;
+		
+		if(populationOptionMap.containsKey(key)){
+			if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
+				number = this.populationOptionMap.get(key).intValue();
+			} else {
+				number = this.populationOptionMap.get(key).doubleValue();
+			}
+		} else {
+			number = 0;
+		}
+		return "" + number;
+	}
+
+	public void setMap(Map<String, Number> map) {
+		this.populationOptionMap = map;
+		
+	}
+	
+	public String[] getMapKeys() {
+		return this.populationOptionMap.keySet().toArray(new String[0]);
 	}
 
 }

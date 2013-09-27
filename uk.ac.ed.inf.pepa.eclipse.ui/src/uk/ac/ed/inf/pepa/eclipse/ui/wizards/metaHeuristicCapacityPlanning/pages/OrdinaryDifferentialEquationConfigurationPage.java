@@ -5,8 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.MetaHeuristicCapacityPlanningWizard;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ModelType;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Models;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.AverageResponseTimeContainer;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.PerformanceMetricContainer;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.ThroughputContainer;
@@ -34,7 +33,7 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 		this.model = model;
 		
 		//setup the models
-		Models.oDEConfig.setModels(model,node,dGraph);
+		ExperimentConfiguration.pEPAConfig.setModels(model,node,dGraph);
 		
 		setPageComplete(false);
 		
@@ -42,7 +41,7 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 	
 	@Override
 	protected void constructPage(Composite container, IValidationCallback cb) {
-		if(Models.evaluator.getValue().equals(ModelType.THROUGHPUT_S)){
+		if(ExperimentConfiguration.evaluator.getValue().equals(ExperimentConfiguration.THROUGHPUT_S)){
 			this.performanceMetricContainer = new ThroughputContainer(cb, dGraph, model, container);
 		} else {
 			this.performanceMetricContainer = new AverageResponseTimeContainer(cb, dGraph, model, container);
@@ -57,19 +56,19 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 			setErrorMessage(null);
 			
 			IPointEstimator[] estimators = this.performanceMetricContainer.getPerformanceMetrics();
-			Models.oDEConfig.setEstimators(estimators);
+			ExperimentConfiguration.oDEConfig.setEstimators(estimators);
 			
 			IStatisticsCollector[] collectors;
-			if(Models.evaluator.getValue().equals(ModelType.THROUGHPUT_S)){
+			if(ExperimentConfiguration.evaluator.getValue().equals(ExperimentConfiguration.THROUGHPUT_S)){
 				collectors = DefaultCollector.create(estimators);
 			} else {
 				collectors = new IStatisticsCollector[] { new AverageResponseTimeCollector(
 						0, 1) };
 			}
-			Models.oDEConfig.setCollectors(collectors);
+			ExperimentConfiguration.oDEConfig.setCollectors(collectors);
 			
 			String[] labels = this.performanceMetricContainer.getLabels();
-			Models.oDEConfig.setLabels(labels);
+			ExperimentConfiguration.oDEConfig.setLabels(labels);
 			
 			((MetaHeuristicCapacityPlanningWizard) getWizard()).updateTargetPage();
 			
