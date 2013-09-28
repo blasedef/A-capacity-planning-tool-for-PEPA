@@ -9,7 +9,7 @@ public abstract class CapacityPlanningWidget {
 	protected String key;
 	
 	
-	public CapacityPlanningWidget(String value, IValidationCallback cb, String key) {
+	public CapacityPlanningWidget(String key, String value, IValidationCallback cb) {
 		this.value = value;
 		this.key = key;
 		this.cb = cb;

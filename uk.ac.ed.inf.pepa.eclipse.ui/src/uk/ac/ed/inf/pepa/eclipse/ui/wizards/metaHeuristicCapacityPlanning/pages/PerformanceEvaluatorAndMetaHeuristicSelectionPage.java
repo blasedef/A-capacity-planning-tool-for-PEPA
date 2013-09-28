@@ -29,7 +29,7 @@ public class PerformanceEvaluatorAndMetaHeuristicSelectionPage extends MetaHeuri
 		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.evaluator, parentCallBack));
 		
 		//metaheuristic type combo
-		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristicPrimary, parentCallBack));
+		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristic, parentCallBack));
 		
 		//network type combo
 		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristicNetworkType, parentCallBack));

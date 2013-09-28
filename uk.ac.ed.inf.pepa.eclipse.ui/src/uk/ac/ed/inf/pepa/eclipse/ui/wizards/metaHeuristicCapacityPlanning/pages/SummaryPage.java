@@ -41,7 +41,7 @@ public class SummaryPage extends MetaHeuristicCapacityPlanningWizardPage {
 		
 		metaheuristicType.setLayoutData(gridData1);
 		boolean hasNetwork = !ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S);
-		metaheuristicType.setText(ExperimentConfiguration.metaHeuristicPrimary.summary(hasNetwork));
+		metaheuristicType.setText(ExperimentConfiguration.metaHeuristic.summary(hasNetwork));
 
 	}
 

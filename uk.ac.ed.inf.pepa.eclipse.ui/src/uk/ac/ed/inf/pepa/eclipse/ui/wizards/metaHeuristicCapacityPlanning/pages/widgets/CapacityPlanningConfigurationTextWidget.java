@@ -20,7 +20,7 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 	final Text aText;
 	
 	public CapacityPlanningConfigurationTextWidget(Composite container, String key, String value, Map<String,Number> map, String type, final IValidationCallback cb) {
-		super(value,cb,key);
+		super(key,value,cb);
 		this.map = map;
 		this.type = type;
 		
@@ -66,6 +66,13 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 			} 
 			return parser.isCorrect();
 		}
+		else if(type.equals(ExperimentConfiguration.EVEN)){
+			EvenParser parser = new EvenParser(aText.getText());
+			if(parser.isCorrect()){
+				setValue();
+			} 
+			return parser.isCorrect();
+		}
 		else {
 			return false;
 		}
@@ -76,7 +83,8 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 	 */
 	@Override
 	public void setValue() {
-		this.map.put(key, Double.parseDouble(aText.getText()));	
+		this.map.put(key, Double.parseDouble(aText.getText()));
+		this.value = aText.getText();
 	}
 	
 	public Number getValue() {

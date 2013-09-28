@@ -19,7 +19,7 @@ public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 	final Combo aCombo;
 	
 	public CapacityPlanningComboWidget(Composite container, Configuration model, final IValidationCallback cb) {
-		super(model.getValue(),cb,model.getTitle());
+		super(model.getTitle(),model.getValue(),cb);
 		this.model = model;
 		
 		Label aLabel = new Label(container,SWT.LEFT);

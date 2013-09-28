@@ -35,7 +35,7 @@ public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 		private static final long serialVersionUID = -2355214272600633041L;
 	{
 		put(ExperimentConfiguration.EXPERIMENTS_S,1);
-		put(ExperimentConfiguration.GENERATION_S,1000);
+		put(ExperimentConfiguration.GENERATION_S,100);
 		put(ExperimentConfiguration.ALPHABETA_S,0.5);
 		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,0.5);
 		put(ExperimentConfiguration.CROSSOVERPROBABILITY_S,0.2);
@@ -98,6 +98,8 @@ public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 		}
 		
 		if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
+			return "" + (Integer) number;
+		} else if (ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.EVEN)) {
 			return "" + (Integer) number;
 		} else {
 			return "" + (Double) number;

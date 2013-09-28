@@ -7,10 +7,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
 public abstract class MetaHeuristicCapacityPlanningWizardPage extends WizardPage {
 	
-	private Composite container;
+	protected Composite container;
 	
 	protected final IValidationCallback parentCallBack = new IValidationCallback() {
 
@@ -18,6 +19,83 @@ public abstract class MetaHeuristicCapacityPlanningWizardPage extends WizardPage
 			completePage();
 		}
 	};
+	
+	public interface Command {
+		
+		public String getMapValue(String key);
+		
+	}
+	
+	public abstract class GetValue implements Command {
+
+		public abstract String getMapValue(String key);
+		
+	}
+	
+	public class GetTargetValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getTargetMapValue(key);
+		}
+
+	}
+	
+	public class GetFitnessValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getFitnessMapValue(key);
+		}
+
+	}
+	
+	public class GetMinPopValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getMinPopMapValue(key);
+		}
+	}
+	
+	public class GetMaxPopValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getMaxPopMapValue(key);
+		}
+	}
+	
+	public class GetEMinPopValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getSecondExperimentMinPopMapValue(key);
+		}
+	}
+	
+	public class GetEMaxPopValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getSecondExperimentMaxPopMapValue(key);
+		}
+	}
+	
+	public interface Validation {
+		
+		public boolean testLeftRight(Double left, Double right);
+		
+	}
+	
+	public abstract class TestValues implements Validation {
+
+		public abstract boolean testLeftRight(Double left, Double right);
+		
+	}
+	
+	public class LeftLessThanOrEqualToRight extends TestValues implements Validation {
+
+		@Override
+		public boolean testLeftRight(Double left, Double right) {
+			return (left <= right);
+		}
+
+	}
 
 	protected MetaHeuristicCapacityPlanningWizardPage(String s, String title, String description) {
 		

@@ -70,7 +70,7 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 			String[] labels = this.performanceMetricContainer.getLabels();
 			ExperimentConfiguration.oDEConfig.setLabels(labels);
 			
-			((MetaHeuristicCapacityPlanningWizard) getWizard()).updateTargetPage();
+			((MetaHeuristicCapacityPlanningWizard) getWizard()).updateSystemEquationTargetPage();
 			
 		} else {
 			setPageComplete(false);

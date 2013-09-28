@@ -13,8 +13,9 @@ public class MetaHeuristicType extends Configuration{
 	private PopulationRanges maxPopulationRanges;
 	private Fitness fitness;
 	private String name;
-	private PopulationRanges metaheuristicMax;
-	private PopulationRanges metaheuristicMin;
+	private PopulationRanges secondExperimentMaxRange;
+	private PopulationRanges secondExperimentMinRange;
+	private String second;
 	
 	public MetaHeuristicType(String key, String value, String[] options, String name){
 		super(key, value, options);
@@ -24,8 +25,46 @@ public class MetaHeuristicType extends Configuration{
 		this.maxPopulationRanges = new PopulationRanges();
 		this.fitness = new Fitness();
 		this.name = name;
-		this.metaheuristicMax = new PopulationRanges();
-		this.metaheuristicMin = new PopulationRanges();
+		this.secondExperimentMaxRange = new PopulationRanges();
+		this.secondExperimentMinRange = new PopulationRanges();
+	}
+	
+	public void updateNetwork(String networkType){
+		
+		this.second = this.getValue();
+		this.setValue(ExperimentConfiguration.HILLCLIMBING_S);
+		getFitnessMap().put(ExperimentConfiguration.DELTASIGMA_S, 0.5);
+		
+		if(networkType.equals(ExperimentConfiguration.METAHEURISTICDRIVEN_S)){
+			this.setSecondExperimentMinRangesToDrivenMode(this.second);
+			this.setSecondExperimentMaxRangesToDrivenMode(this.second);
+		} else {
+			this.setSecondExperimentRangesToPipeLineMode();
+		}
+	}
+	
+	private void setSecondExperimentRangesToPipeLineMode() {
+		
+		String[] keys = ExperimentConfiguration.pEPAConfig.getSystemEquation();
+		Number[] maxRange = new Number[keys.length];
+		for(int i = 0; i < maxRange.length; i++){
+			int distance;
+			if(maxPopulationRanges.getMap().containsKey(keys[i]) && minPopulationRanges.getMap().containsKey(keys[i])){
+				distance = maxPopulationRanges.getMap().get(keys[i]).intValue() - minPopulationRanges.getMap().get(keys[i]).intValue();
+				maxRange[i] = Math.ceil(distance * 0.10);
+			} else {
+				maxRange[i] = Math.ceil(ExperimentConfiguration.pEPAConfig.getInitialPopulation()[i].doubleValue() * 0.10);
+			}
+		};
+		
+		this.secondExperimentMinRange.updatePopulationMap(keys,ExperimentConfiguration.pEPAConfig.getInitialPopulation(),true);
+		this.secondExperimentMaxRange.updatePopulationMap(keys,maxRange,false);
+		
+	}
+	
+
+	public String getSecondaryType(){
+		return this.second;
 	}
 	
 	public void updateAttributeValues(){
@@ -81,12 +120,12 @@ public class MetaHeuristicType extends Configuration{
 		return this.fitness.getMapKeys();
 	}
 	
-	public void setFitnessMaxPopulation(String type){
+	public void setSecondExperimentMaxRangesToDrivenMode(String type){
 		
 		String[] options = attributes.getAttributes(type);
 		
 		Map<String,Number> map = new HashMap<String, Number>();
-		Map<String,Number> fitness = this.metaheuristicMax.getMap();
+		Map<String,Number> fitness = this.secondExperimentMaxRange.getMap();
 		Map<String,Number> defaults = this.attributes.getDefaultValueMap();
 		Map<String,String> types = ExperimentConfiguration.defaultOptionTypeMap;
 		
@@ -97,6 +136,8 @@ public class MetaHeuristicType extends Configuration{
 					value = 1.0;
 				} else if (types.get(key).equals(ExperimentConfiguration.DOUBLE)){
 					value = (Number) defaults.get(key);
+				} else if (types.get(key).equals(ExperimentConfiguration.EVEN)){
+					value = (Number) defaults.get(key);
 				} else {
 					value = (Number) defaults.get(key);
 				}
@@ -107,15 +148,15 @@ public class MetaHeuristicType extends Configuration{
 			}
 		}
 		
-		this.metaheuristicMax.setMap(map);
+		this.secondExperimentMaxRange.setMap(map);
 	}
 	
-	public void setFitnessMinPopulation(String type){
+	public void setSecondExperimentMinRangesToDrivenMode(String type){
 		
 		String[] options = attributes.getAttributes(type);
 		
 		Map<String,Number> map = new HashMap<String, Number>();
-		Map<String,Number> fitness = this.metaheuristicMin.getMap();
+		Map<String,Number> fitness = this.secondExperimentMinRange.getMap();
 		Map<String,String> types = ExperimentConfiguration.defaultOptionTypeMap;
 		
 		for(String key : options){
@@ -125,6 +166,8 @@ public class MetaHeuristicType extends Configuration{
 					value = 0.0;
 				} else if (types.get(key).equals(ExperimentConfiguration.DOUBLE)){
 					value = 1;
+				} else if (types.get(key).equals(ExperimentConfiguration.EVEN)){
+					value = 2;
 				} else {
 					value = 1;
 				}
@@ -135,23 +178,23 @@ public class MetaHeuristicType extends Configuration{
 			}
 		}
 		
-		this.metaheuristicMin.setMap(map);
+		this.secondExperimentMinRange.setMap(map);
 	}
 	
-	public String[] getFitnessMinPopulationOptions(){
-		return this.metaheuristicMin.getMapKeys();
+	public String[] getExperimentMinPopulationOptions(){
+		return this.secondExperimentMinRange.getMapKeys();
 	}
 	
-	public String[] getFitnessMaxPopulationOptions(){
-		return this.metaheuristicMax.getMapKeys();
+	public String[] getExperimentMaxPopulationOptions(){
+		return this.secondExperimentMaxRange.getMapKeys();
 	}
 	
-	public Map<String,Number> getFitnessMinPopulationMap(){
-		return this.metaheuristicMin.getMap();
+	public Map<String,Number> getExperimentMinPopulationMap(){
+		return this.secondExperimentMinRange.getMap();
 	}
 	
-	public Map<String,Number> getFitnessMaxPopulationMap(){
-		return this.metaheuristicMax.getMap();
+	public Map<String,Number> getExperimentMaxPopulationMap(){
+		return this.secondExperimentMaxRange.getMap();
 	}
 	
 	public Map<String,Number> getMinPopMap(){
@@ -170,36 +213,49 @@ public class MetaHeuristicType extends Configuration{
 		return this.maxPopulationRanges.getMapValue(key);
 	}
 	
-	public String getFitnessMinPopMapValue(String key){
+	public String getSecondExperimentMinPopMapValue(String key){
 		Number number;
 		
-		if(this.metaheuristicMin.getMap().containsKey(key)){
-			number = this.metaheuristicMin.getMap().get(key);
+		if(this.secondExperimentMinRange.getMap().containsKey(key)){
+			number = this.secondExperimentMinRange.getMap().get(key);
 		} else {
 			number = attributes.getDefaultValueMap().get(key);
 		}
 		
-		if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
-			return "" + number.intValue();
+		if(ExperimentConfiguration.defaultOptionTypeMap.containsKey(key)){
+			if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
+				return "" + number.intValue();
+			} else if (ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.EVEN)) {
+				return "" + number.intValue();
+			} else {
+				return "" + (Double) number;
+			}
 		} else {
-			return "" + (Double) number;
+			return "" + number.intValue();
 		}
 		
 	}
 
-	public String getFitnessMaxPopMapValue(String key){
+	public String getSecondExperimentMaxPopMapValue(String key){
 		Number number;
 		
-		if(this.metaheuristicMax.getMap().containsKey(key)){
-			number = this.metaheuristicMax.getMap().get(key);
+		if(this.secondExperimentMaxRange.getMap().containsKey(key)){
+			number = this.secondExperimentMaxRange.getMap().get(key);
+			
 		} else {
 			number = attributes.getDefaultValueMap().get(key);
 		}
 		
-		if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
-			return "" + number.intValue();
+		if(ExperimentConfiguration.defaultOptionTypeMap.containsKey(key)){
+			if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
+				return "" + number.intValue();
+			} else if (ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.EVEN)) {
+				return "" + number.intValue();
+			} else {
+				return "" + (Double) number;
+			}
 		} else {
-			return "" + (Double) number;
+			return "" + number.intValue();
 		}
 	}
 	
@@ -218,7 +274,14 @@ public class MetaHeuristicType extends Configuration{
 	public String summary(boolean hasSecondary){
 		String output;
 		
-		output = "" + this.key + " : " + this.value + "\n \n";
+		
+		
+		if(!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S)){
+			output = "Search the metaheuristic space using: " + this.value + "\n";
+			output += "Search the system equation space using: " + this.second + "\n \n";
+		} else {
+			output = "" + this.key + " : " + this.value + "\n \n";
+		}
 		
 		output += this.name + " Metaheuristic attributes: \n";
 		output += this.attributes.summary() + "\n";
@@ -232,14 +295,16 @@ public class MetaHeuristicType extends Configuration{
 			output += s + ": " + this.minPopulationRanges.getMapValue(s) + " / " + this.maxPopulationRanges.getMapValue(s) + "\n";
 		}
 		
+		System.out.println(output);
+		
 		output += "\n";
 			
 		if(hasSecondary){
 			output += "Minimum / Maximum values for secondary Metaheuristic: \n";
 			
-			options = this.metaheuristicMin.getMapKeys();
+			options = this.secondExperimentMinRange.getMapKeys();
 			for(String s : options){
-				output += s + ": " + this.metaheuristicMin.getMapValueOfDifferentTypes(s) + " / " + this.metaheuristicMax.getMapValueOfDifferentTypes(s) + "\n";
+				output += s + ": " + this.secondExperimentMinRange.getMapValueOfDifferentTypes(s) + " / " + this.secondExperimentMaxRange.getMapValueOfDifferentTypes(s) + "\n";
 			}
 		}
 		

@@ -23,8 +23,6 @@ public class PopulationRanges extends MetaHeuristicConfigurations {
 		
 		Map<String,Number> map = new HashMap<String, Number>();
 		
-		//String[] options = ExperimentConfiguration.pEPAConfig.getSystemEquation();
-		//Integer[] values = ExperimentConfiguration.pEPAConfig.getInitialPopulation();
 		if(min){
 			
 			for(int i = 0; i < options.length; i++){
@@ -76,10 +74,16 @@ public class PopulationRanges extends MetaHeuristicConfigurations {
 		Number number;
 		
 		if(populationOptionMap.containsKey(key)){
-			if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
-				number = this.populationOptionMap.get(key).intValue();
+			if(ExperimentConfiguration.defaultOptionTypeMap.containsKey(key)){
+				if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
+					number = this.populationOptionMap.get(key).intValue();
+				} else if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.EVEN)){
+					number = this.populationOptionMap.get(key).intValue();
+				} else {
+					number = this.populationOptionMap.get(key).doubleValue();
+				}
 			} else {
-				number = this.populationOptionMap.get(key).doubleValue();
+				number = this.populationOptionMap.get(key).intValue();
 			}
 		} else {
 			number = 0;

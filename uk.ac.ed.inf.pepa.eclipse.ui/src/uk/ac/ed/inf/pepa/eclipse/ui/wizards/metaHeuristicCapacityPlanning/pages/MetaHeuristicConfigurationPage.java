@@ -19,23 +19,23 @@ public class MetaHeuristicConfigurationPage extends MetaHeuristicCapacityPlannin
 		
 		//copy title upwards
 		super(s,"Primary Metaheuristic configuration page","Set up the " + ExperimentConfiguration.metaHeuristicNetworkType.getDescription() + " " + 
-				ExperimentConfiguration.metaHeuristicPrimary.getValue() + " " +
+				ExperimentConfiguration.metaHeuristic.getValue() + " " +
 				"Metaheuristic...");
 		
-		ExperimentConfiguration.metaHeuristicPrimary.updateAttributeValues();
+		ExperimentConfiguration.metaHeuristic.updateAttributeValues();
 		
 	}
 
 	@Override
 	protected void constructPage(Composite container, IValidationCallback cb) {
 		
-		String[] options = ExperimentConfiguration.metaHeuristicPrimary.getAttributeMapKeys();
-		Map<String,Number> map = ExperimentConfiguration.metaHeuristicPrimary.getAttributeMap();
+		String[] options = ExperimentConfiguration.metaHeuristic.getAttributeMapKeys();
+		Map<String,Number> map = ExperimentConfiguration.metaHeuristic.getAttributeMap();
 		String type; 
 		
 		for(String option : options){
 			type = ExperimentConfiguration.defaultOptionTypeMap.get(option);
-			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,ExperimentConfiguration.metaHeuristicPrimary.getAttributeMapValue(option),map,type,cb));
+			widgets.add(new CapacityPlanningConfigurationTextWidget(container,option,ExperimentConfiguration.metaHeuristic.getAttributeMapValue(option),map,type,cb));
 		}
 		
 		

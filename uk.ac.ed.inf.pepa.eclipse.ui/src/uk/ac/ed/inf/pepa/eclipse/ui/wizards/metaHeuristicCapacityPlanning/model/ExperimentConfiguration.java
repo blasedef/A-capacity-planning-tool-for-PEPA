@@ -21,6 +21,7 @@ public abstract class ExperimentConfiguration {
 	public static final String INTEGER = "INTEGER";
 	public static final String PERCENT = "PERCENT";
 	public static final String DOUBLE = "DOUBLE";
+	public static final String EVEN = "EVEN";
 	
 	//evaluator types
 	public static final String THROUGHPUT_S = "Throughput";
@@ -54,7 +55,7 @@ public abstract class ExperimentConfiguration {
 	//metaheuristic network
 	public static final String METAHEURISTICSINGLE_S = "Single";
 	public static final String METAHEURISTICDRIVEN_S = "Driven";
-	public static final String METAHEURISTICPIPELINE_S = "Pipe Lined";
+	public static final String METAHEURISTICPIPELINE_S = "Pipe lined";
 	public static final String METAHEURISTICNETWORKTYPE_S = "Metaheuristic Network Type";
 	
 	/*
@@ -72,7 +73,7 @@ public abstract class ExperimentConfiguration {
 		put(ExperimentConfiguration.ALPHABETA_S,ExperimentConfiguration.PERCENT);
 		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,ExperimentConfiguration.PERCENT);
 		put(ExperimentConfiguration.CROSSOVERPROBABILITY_S,ExperimentConfiguration.PERCENT);
-		put(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S,ExperimentConfiguration.INTEGER);
+		put(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S,ExperimentConfiguration.EVEN);
 		put(ExperimentConfiguration.TOBESET1_S,ExperimentConfiguration.INTEGER);
 		put(ExperimentConfiguration.TOBESET2_S,ExperimentConfiguration.DOUBLE);
 		put(ExperimentConfiguration.DELTASIGMA_S,ExperimentConfiguration.PERCENT);
@@ -90,10 +91,7 @@ public abstract class ExperimentConfiguration {
 	public static EvaluatorType evaluator = new EvaluatorType("Evaluator type", ExperimentConfiguration.THROUGHPUT_S, evaluatorOptions);
 	
 	//Single, or First (in the pipeline), or Driving metaheuristic
-	public static MetaHeuristicType metaHeuristicPrimary = new MetaHeuristicType("Search for System equation using", ExperimentConfiguration.HILLCLIMBING_S, metaHeuristicOptions, "Primary");
-	
-	//Second pipeline, or Driven metaheuristic
-	//public static MetaHeuristicType metaHeuristicSecondary = new MetaHeuristicType("Metaheurstic Type",ExperimentConfiguration.HILLCLIMBING_S, metaHeuristicOptions, "Secondary");
+	public static MetaHeuristicType metaHeuristic = new MetaHeuristicType("Search for System equation using", ExperimentConfiguration.HILLCLIMBING_S, metaHeuristicOptions, "Primary");
 	
 	//what kind of network we have
 	public static MetaHeuristicNetworkType metaHeuristicNetworkType = new MetaHeuristicNetworkType("Metaheuristic Network type",ExperimentConfiguration.METAHEURISTICSINGLE_S,networkOptions);
