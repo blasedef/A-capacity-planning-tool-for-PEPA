@@ -9,9 +9,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
 import uk.ac.ed.inf.pepa.largescale.ThroughputCalculation;
@@ -36,17 +34,12 @@ public class ThroughputContainer extends ChecklistPerformanceMetricContainer {
 		}
 	}
 
-	public ThroughputContainer(IValidationCallback cb, IParametricDerivationGraph derivationGraph, IPepaModel model,
-			Composite container) {
-		super(true, cb, derivationGraph, model, container);
+	public ThroughputContainer(IValidationCallback cb, Composite container) {
+		super(true, cb, container);
 	}
 	
 	protected String getViewerHeader() {
 		return "Select actions";
-	}
-
-	protected String getDialogTitle() {
-		return "Throughput Analysis";
 	}
 	
 	ITableLabelProvider getProvider() {

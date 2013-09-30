@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -17,35 +18,33 @@ import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.largescale.*;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
 public abstract class PerformanceMetricContainer {
 	
 	protected IValidationCallback cb;
 	protected IParametricDerivationGraph fDerivationGraph;
-	protected SolverOptionsHandler fSolverOptionsHandler;
+	protected CapacityPlanningHandler capacityPlanningHandler;
 	protected Text filterText;
-
-	/*
-	 * It is not strictly necessary to have this field because it can be
-	 * obtained by fPepaModel
-	 */
 	protected OptionMap fOptionMap;
-
 	protected IPepaModel fPepaModel;
 	
-	public PerformanceMetricContainer(boolean supportsTransient, IValidationCallback cb, IParametricDerivationGraph derivationGraph,
-			IPepaModel model, Composite container) {
+	public PerformanceMetricContainer(boolean supportsTransient, IValidationCallback cb, Composite container) {
 		
 		this.cb = cb;
-		this.fOptionMap = model.getOptionMap();
-		this.fDerivationGraph = derivationGraph;
-		this.fSolverOptionsHandler = new ODESolverOptionsHandler(
-				supportsTransient, fOptionMap, cb);
+		ExperimentConfiguration.oDEConfig.setOptionMap(ExperimentConfiguration.pEPAConfig.getPepaModel().getOptionMap());
+		this.fOptionMap = ExperimentConfiguration.oDEConfig.getOptionMap();
+		this.fDerivationGraph = ExperimentConfiguration.pEPAConfig.getGraph();
+	
+	}
+	
+	public final Control createDialogArea(Composite parent) {
 		
-		Composite composite = (Composite) fSolverOptionsHandler
-		.createDialogArea(container);
-		
+		//ODE configuration options
+		this.capacityPlanningHandler = new CapacityPlanningHandler(this.fOptionMap, cb);
+		Composite composite = (Composite) capacityPlanningHandler.createDialogArea(parent);
+
+		//Bottom box from here
 		addOptions(composite);
 		Label actions = new Label(composite, SWT.NONE);
 		actions.setText(getViewerHeader());
@@ -65,7 +64,7 @@ public abstract class PerformanceMetricContainer {
 		filterText.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
-					//viewer.resetFilters();
+					viewer.resetFilters();
 				}
 			}
 
@@ -73,13 +72,14 @@ public abstract class PerformanceMetricContainer {
 		filterText.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				//viewer.setFilters(filter);
+				viewer.setFilters(filter);
 			}
 
 		});
-		container.pack();
-	
+		parent.pack();
+		return composite;
 	}
+	
 	
 	protected abstract void addOptions(Composite composite);
 	
@@ -90,8 +90,12 @@ public abstract class PerformanceMetricContainer {
 	protected abstract ViewerFilter getViewerFilter();
 	
 	public boolean validConfiguration() {
-		return fSolverOptionsHandler.isConfigurationValid();
+		return capacityPlanningHandler.isConfigurationValid();
 
+	}
+	
+	public CapacityPlanningHandler getSolver(){
+		return this.capacityPlanningHandler;
 	}
 	
 	public abstract IPointEstimator[] getPerformanceMetrics();

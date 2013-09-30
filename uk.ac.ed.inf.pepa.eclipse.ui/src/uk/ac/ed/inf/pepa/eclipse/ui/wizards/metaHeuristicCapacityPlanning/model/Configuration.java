@@ -39,5 +39,7 @@ public abstract class Configuration {
 	public String summary(){
 		return "" + this.key + " : " + this.value;
 	}
+
+	public abstract String getDescription();
 	
 }

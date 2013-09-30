@@ -28,7 +28,7 @@ public class BorderedCompositeLabelWidget extends CapacityPlanningWidget{
 		GridData gridDataHeading = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataHeading.horizontalSpan = span;
 		label.setLayoutData(gridDataHeading);
-		label.setText(heading+":");
+		label.setText(heading);
 		
 	}
 	

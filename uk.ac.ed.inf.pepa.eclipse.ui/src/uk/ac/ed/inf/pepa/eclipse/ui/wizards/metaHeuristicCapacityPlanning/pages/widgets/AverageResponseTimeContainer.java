@@ -16,10 +16,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.largescale.AverageResponseTimeCalculation;
-import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.ISequentialComponent;
 import uk.ac.ed.inf.pepa.largescale.expressions.Coordinate;
@@ -82,9 +80,8 @@ public class AverageResponseTimeContainer extends PerformanceMetricContainer {
 
 	private ViewerFilter filter;
 
-	public AverageResponseTimeContainer(IValidationCallback cb,	IParametricDerivationGraph derivationGraph, IPepaModel model,
-			Composite container) {
-		super(true, cb, derivationGraph, model, container);
+	public AverageResponseTimeContainer(IValidationCallback cb,	Composite container) {
+		super(true, cb, container);
 		filter = new ViewerFilter() {
 
 			@Override

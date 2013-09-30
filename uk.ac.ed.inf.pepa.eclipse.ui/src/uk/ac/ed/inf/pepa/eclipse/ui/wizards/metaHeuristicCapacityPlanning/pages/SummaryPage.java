@@ -34,13 +34,13 @@ public class SummaryPage extends MetaHeuristicCapacityPlanningWizardPage {
 		evaluator.setText(ExperimentConfiguration.evaluator.summary());
 		
 		metaheuristicNetwork.setLayoutData(gridData);
-		metaheuristicNetwork.setText(ExperimentConfiguration.metaHeuristicNetworkType.summary());
+		metaheuristicNetwork.setText(ExperimentConfiguration.networkType.summary());
 		
 		GridData gridData1 = new GridData(GridData.FILL_HORIZONTAL);
 		gridData1.horizontalSpan = 1;
 		
 		metaheuristicType.setLayoutData(gridData1);
-		boolean hasNetwork = !ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S);
+		boolean hasNetwork = !ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S);
 		metaheuristicType.setText(ExperimentConfiguration.metaHeuristic.summary(hasNetwork));
 
 	}

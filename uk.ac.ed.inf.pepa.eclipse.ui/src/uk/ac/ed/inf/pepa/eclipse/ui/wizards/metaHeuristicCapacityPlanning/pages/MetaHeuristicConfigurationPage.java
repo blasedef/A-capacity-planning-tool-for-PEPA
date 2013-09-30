@@ -18,7 +18,7 @@ public class MetaHeuristicConfigurationPage extends MetaHeuristicCapacityPlannin
 	public MetaHeuristicConfigurationPage(String s) {
 		
 		//copy title upwards
-		super(s,"Primary Metaheuristic configuration page","Set up the " + ExperimentConfiguration.metaHeuristicNetworkType.getDescription() + " " + 
+		super(s,"Primary Metaheuristic configuration page","Set up the " + ExperimentConfiguration.networkType.getDescriptionForPage() + " " + 
 				ExperimentConfiguration.metaHeuristic.getValue() + " " +
 				"Metaheuristic...");
 		

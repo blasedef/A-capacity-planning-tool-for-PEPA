@@ -19,8 +19,6 @@ import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 
 public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristicCapacityPlanningWizardPage {
 	
-	private IParametricDerivationGraph dGraph;
-	private IPepaModel model;
 	private PerformanceMetricContainer performanceMetricContainer;
 	
 	public OrdinaryDifferentialEquationConfigurationPage(String s, IParametricDerivationGraph dGraph, IPepaModel model, ModelNode node) {
@@ -28,9 +26,6 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 		//copy title upwards
 		super(s,"Ordinary Differential Equation page",
 				"Configure Ordinary Differential Equation...");
-		
-		this.dGraph = dGraph;
-		this.model = model;
 		
 		//setup the models
 		ExperimentConfiguration.pEPAConfig.setModels(model,node,dGraph);
@@ -42,10 +37,13 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 	@Override
 	protected void constructPage(Composite container, IValidationCallback cb) {
 		if(ExperimentConfiguration.evaluator.getValue().equals(ExperimentConfiguration.THROUGHPUT_S)){
-			this.performanceMetricContainer = new ThroughputContainer(cb, dGraph, model, container);
+			this.performanceMetricContainer = new ThroughputContainer(cb, container);
 		} else {
-			this.performanceMetricContainer = new AverageResponseTimeContainer(cb, dGraph, model, container);
+			this.performanceMetricContainer = new AverageResponseTimeContainer(cb, container);
 		}
+		
+		@SuppressWarnings("unused")
+		Composite composite = (Composite) this.performanceMetricContainer.createDialogArea(container);
 		
 	}
 
@@ -55,9 +53,14 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 			setPageComplete(true);
 			setErrorMessage(null);
 			
+			//Nope! Keep the optionMap separate, the functions I need do not take a Model so why change the underlying model?
+//			ExperimentConfiguration.pEPAConfig.getPepaModel().setOptionMap(ExperimentConfiguration.oDEConfig.getOptionMap());
+			
+			//Used for calculation later
 			IPointEstimator[] estimators = this.performanceMetricContainer.getPerformanceMetrics();
 			ExperimentConfiguration.oDEConfig.setEstimators(estimators);
 			
+			//User for calculation later
 			IStatisticsCollector[] collectors;
 			if(ExperimentConfiguration.evaluator.getValue().equals(ExperimentConfiguration.THROUGHPUT_S)){
 				collectors = DefaultCollector.create(estimators);
@@ -67,6 +70,7 @@ public class OrdinaryDifferentialEquationConfigurationPage extends MetaHeuristic
 			}
 			ExperimentConfiguration.oDEConfig.setCollectors(collectors);
 			
+			//The labels of actions/states
 			String[] labels = this.performanceMetricContainer.getLabels();
 			ExperimentConfiguration.oDEConfig.setLabels(labels);
 			

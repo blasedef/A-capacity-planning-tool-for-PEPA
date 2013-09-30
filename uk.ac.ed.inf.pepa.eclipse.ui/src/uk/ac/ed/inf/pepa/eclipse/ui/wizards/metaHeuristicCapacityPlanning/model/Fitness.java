@@ -73,9 +73,4 @@ public class Fitness extends MetaHeuristicConfigurations {
 		return this.fitnessOptionMap.keySet().toArray(new String[0]);
 	}
 
-	public void reset() {
-		this.fitnessOptionMap = new HashMap<String, Number>();
-		this.fitnessOptionMap.put(ExperimentConfiguration.ALPHABETA_S,defaultAttributeOptionMap.get(ExperimentConfiguration.ALPHABETA_S));
-	}
-
 }

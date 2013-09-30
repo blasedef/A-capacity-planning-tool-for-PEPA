@@ -44,13 +44,13 @@ public class BorderedCompositeWithDoubleTextWidget extends BorderedCompositeLabe
 		GridData gridDataHeadingLeft = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataHeadingLeft.horizontalSpan = 2;
 		labelLeft.setLayoutData(gridDataHeadingLeft);
-		labelLeft.setText(secondaryHeadingLeft+":");
+		labelLeft.setText(secondaryHeadingLeft);
 		
 		Label labelRight = new Label(this.composite,SWT.NONE | SWT.BOLD);
 		GridData gridDataHeadingRight = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataHeadingRight.horizontalSpan = 2;
 		labelRight.setLayoutData(gridDataHeadingRight);
-		labelRight.setText(secondaryHeadingRight+":");
+		labelRight.setText(secondaryHeadingRight);
 		
 		Composite left = new Composite(composite,SWT.NONE);
 		GridData leftGridData = new GridData(GridData.FILL_HORIZONTAL);

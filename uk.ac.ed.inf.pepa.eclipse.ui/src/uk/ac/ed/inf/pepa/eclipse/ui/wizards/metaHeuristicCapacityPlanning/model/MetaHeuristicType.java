@@ -31,15 +31,21 @@ public class MetaHeuristicType extends Configuration{
 	
 	public void updateNetwork(String networkType){
 		
-		this.second = this.getValue();
-		this.setValue(ExperimentConfiguration.HILLCLIMBING_S);
-		getFitnessMap().put(ExperimentConfiguration.DELTASIGMA_S, 0.5);
-		
-		if(networkType.equals(ExperimentConfiguration.METAHEURISTICDRIVEN_S)){
-			this.setSecondExperimentMinRangesToDrivenMode(this.second);
-			this.setSecondExperimentMaxRangesToDrivenMode(this.second);
+		if(networkType.equals(ExperimentConfiguration.NETWORKSINGLE_S)){
+			
 		} else {
-			this.setSecondExperimentRangesToPipeLineMode();
+		
+			this.second = this.getValue();
+			
+			this.setValue(ExperimentConfiguration.HILLCLIMBING_S);
+			getFitnessMap().put(ExperimentConfiguration.DELTASIGMA_S, 0.5);
+			
+			if(networkType.equals(ExperimentConfiguration.NETWORKDRIVEN_S)){
+				this.setSecondExperimentMinRangesToDrivenMode(this.second);
+				this.setSecondExperimentMaxRangesToDrivenMode(this.second);
+			} else {
+				this.setSecondExperimentRangesToPipeLineMode();
+			}
 		}
 	}
 	
@@ -80,11 +86,11 @@ public class MetaHeuristicType extends Configuration{
 		this.targets.updateTargetMap();
 	}
 	
-	public void updateMinPopulationRanges(){
+	public void updateToDefaultMinPopulationRanges(){
 		this.minPopulationRanges.updatePopulationMap(ExperimentConfiguration.pEPAConfig.getSystemEquation(),ExperimentConfiguration.pEPAConfig.getInitialPopulation(),true);
 	}
 	
-	public void updateMaxPopulationRanges(){
+	public void updateToDefaultMaxPopulationRanges(){
 		this.maxPopulationRanges.updatePopulationMap(ExperimentConfiguration.pEPAConfig.getSystemEquation(),ExperimentConfiguration.pEPAConfig.getInitialPopulation(),false);
 	}
 
@@ -165,7 +171,7 @@ public class MetaHeuristicType extends Configuration{
 				if(types.get(key).equals(ExperimentConfiguration.PERCENT)){
 					value = 0.0;
 				} else if (types.get(key).equals(ExperimentConfiguration.DOUBLE)){
-					value = 1;
+					value = 1.0;
 				} else if (types.get(key).equals(ExperimentConfiguration.EVEN)){
 					value = 2;
 				} else {
@@ -276,7 +282,7 @@ public class MetaHeuristicType extends Configuration{
 		
 		
 		
-		if(!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S)){
+		if(!ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S)){
 			output = "Search the metaheuristic space using: " + this.value + "\n";
 			output += "Search the system equation space using: " + this.second + "\n \n";
 		} else {
@@ -295,8 +301,6 @@ public class MetaHeuristicType extends Configuration{
 			output += s + ": " + this.minPopulationRanges.getMapValue(s) + " / " + this.maxPopulationRanges.getMapValue(s) + "\n";
 		}
 		
-		System.out.println(output);
-		
 		output += "\n";
 			
 		if(hasSecondary){
@@ -306,14 +310,19 @@ public class MetaHeuristicType extends Configuration{
 			for(String s : options){
 				output += s + ": " + this.secondExperimentMinRange.getMapValueOfDifferentTypes(s) + " / " + this.secondExperimentMaxRange.getMapValueOfDifferentTypes(s) + "\n";
 			}
+			output += "\n";
 		}
+		
+		
+		
+		output += ExperimentConfiguration.oDEConfig.getDescription();
 		
 		return output;
 	}
 
-	public void resetFitnessMap() {
-		this.fitness.reset();
-		
+	@Override
+	public String getDescription() {
+		return this.getTitle() + ExperimentConfiguration.METAHEURISTICDESCRIPTION; 
 	}
 	
 }

@@ -21,12 +21,10 @@ public class PEPAConfig extends Configuration{
 
 	public PEPAConfig(String key, String value, String[] options) {
 		super(key, value, options);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void setOptions(String option) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -66,6 +64,15 @@ public class PEPAConfig extends Configuration{
 	
 	public ModelNode getModelNode(){
 		return this.node;
+	}
+	
+	public IParametricDerivationGraph getGraph(){
+		return this.dGraph;
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
 	}
 	
 }

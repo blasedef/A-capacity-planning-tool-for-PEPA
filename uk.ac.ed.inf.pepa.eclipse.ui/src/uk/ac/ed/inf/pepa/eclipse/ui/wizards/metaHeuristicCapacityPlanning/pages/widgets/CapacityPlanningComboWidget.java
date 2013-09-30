@@ -16,21 +16,21 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.
 public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 	
 	Configuration model;
-	final Combo aCombo;
+	final Combo combo;
 	
 	public CapacityPlanningComboWidget(Composite container, Configuration model, final IValidationCallback cb) {
 		super(model.getTitle(),model.getValue(),cb);
 		this.model = model;
 		
-		Label aLabel = new Label(container,SWT.LEFT);
-		aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		aLabel.setText(key + ":");
-		aCombo = new Combo(container, SWT.READ_ONLY | SWT.NONE);
-		aCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		aCombo.setItems(model.getOptions());
-		aCombo.setText(model.getOptions()[0]);
+		Label label = new Label(container,SWT.LEFT);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		label.setText(key + ":");
+		combo = new Combo(container, SWT.READ_ONLY | SWT.NONE);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(model.getOptions());
+		combo.setText(model.getOptions()[0]);
 
-		aCombo.addSelectionListener(new SelectionAdapter() {
+		combo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				//ready the value
 				setValue();	
@@ -48,7 +48,7 @@ public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 
 	@Override
 	public void setValue() {
-		this.model.setValue(aCombo.getText());
+		this.model.setValue(combo.getText());
 	}
 
 

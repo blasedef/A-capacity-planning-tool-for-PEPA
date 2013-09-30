@@ -12,4 +12,9 @@ public class AdditionalCosts extends Configuration{
 	public void setOptions(String option) {
 		
 	}
+
+	@Override
+	public String getDescription() {
+		return this.getTitle() + ExperimentConfiguration.ADDITIONALCOSTDESCRIPTION; 
+	}
 }

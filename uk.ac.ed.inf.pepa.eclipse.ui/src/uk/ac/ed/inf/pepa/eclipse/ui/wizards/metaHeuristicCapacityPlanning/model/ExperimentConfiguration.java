@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,8 +45,9 @@ public abstract class ExperimentConfiguration {
 	public static String MUTATIONPROBABILITY_S = "Mutation Probability";
 	public static String CROSSOVERPROBABILITY_S = "Crossover Probability";
 	public static String INITIALCANDIDATEPOPULATION_S = "Initial Candidate Population";
-	public static String TOBESET1_S = "tobeset1";
-	public static String TOBESET2_S = "tobeset2";
+	public static String PERSONALBEST = "Personal best";
+	public static String GLOBALBEST = "Global best";
+	public static String ORIGINALVELO = "Original velocity";
 	
 	//Additional Pages
 	public static final String ADDITIONALCOSTS_S = "Additional Costs";
@@ -53,10 +55,15 @@ public abstract class ExperimentConfiguration {
 	public static final String ADDITIONALCOSTSYES_S = "Yes";
 	
 	//metaheuristic network
-	public static final String METAHEURISTICSINGLE_S = "Single";
-	public static final String METAHEURISTICDRIVEN_S = "Driven";
-	public static final String METAHEURISTICPIPELINE_S = "Pipe lined";
-	public static final String METAHEURISTICNETWORKTYPE_S = "Metaheuristic Network Type";
+	public static final String NETWORKSINGLE_S = "Single";
+	public static final String NETWORKDRIVEN_S = "Driven";
+	public static final String NETWORKPIPELINE_S = "Pipe lined";
+	public static final String NETWORKTYPE_S = "Metaheuristic Network Type";
+	
+	public static final String EVALUATORDESCRIPTION = " placeholder"; 
+	public static final String METAHEURISTICDESCRIPTION = " placeholder";
+	public static final String NETWORKDESCRIPTION = " placeholder";
+	public static final String ADDITIONALCOSTDESCRIPTION = " placeholder";
 	
 	/*
 	 * Value types
@@ -74,9 +81,10 @@ public abstract class ExperimentConfiguration {
 		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,ExperimentConfiguration.PERCENT);
 		put(ExperimentConfiguration.CROSSOVERPROBABILITY_S,ExperimentConfiguration.PERCENT);
 		put(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S,ExperimentConfiguration.EVEN);
-		put(ExperimentConfiguration.TOBESET1_S,ExperimentConfiguration.INTEGER);
-		put(ExperimentConfiguration.TOBESET2_S,ExperimentConfiguration.DOUBLE);
+		put(ExperimentConfiguration.PERSONALBEST,ExperimentConfiguration.DOUBLE);
+		put(ExperimentConfiguration.GLOBALBEST,ExperimentConfiguration.DOUBLE);
 		put(ExperimentConfiguration.DELTASIGMA_S,ExperimentConfiguration.PERCENT);
+		put(ExperimentConfiguration.ORIGINALVELO,ExperimentConfiguration.DOUBLE);
 	}};
 	
 	/*
@@ -84,7 +92,7 @@ public abstract class ExperimentConfiguration {
 	 */
 	private static final String[] evaluatorOptions = new String[] {ExperimentConfiguration.THROUGHPUT_S, ExperimentConfiguration.AVERAGERESPONSETIME_S};
 	private static final String[] metaHeuristicOptions = new String[] {ExperimentConfiguration.HILLCLIMBING_S, ExperimentConfiguration.GENETICALGORITHM_S, ExperimentConfiguration.PARTICLESWARMOPTIMISATION_S};
-	private static final String[] networkOptions = new String[] {ExperimentConfiguration.METAHEURISTICSINGLE_S, ExperimentConfiguration.METAHEURISTICDRIVEN_S, ExperimentConfiguration.METAHEURISTICPIPELINE_S};
+	private static final String[] networkOptions = new String[] {ExperimentConfiguration.NETWORKSINGLE_S, ExperimentConfiguration.NETWORKDRIVEN_S, ExperimentConfiguration.NETWORKPIPELINE_S};
 	private static final String[] additionalCostsOptions = new String[] {ExperimentConfiguration.ADDITIONALCOSTSNO_S, ExperimentConfiguration.ADDITIONALCOSTSYES_S};
 	
 	//What kind of performance evaluation are we doing?
@@ -94,7 +102,7 @@ public abstract class ExperimentConfiguration {
 	public static MetaHeuristicType metaHeuristic = new MetaHeuristicType("Search for System equation using", ExperimentConfiguration.HILLCLIMBING_S, metaHeuristicOptions, "Primary");
 	
 	//what kind of network we have
-	public static MetaHeuristicNetworkType metaHeuristicNetworkType = new MetaHeuristicNetworkType("Metaheuristic Network type",ExperimentConfiguration.METAHEURISTICSINGLE_S,networkOptions);
+	public static MetaHeuristicNetworkType networkType = new MetaHeuristicNetworkType("Metaheuristic Network type",ExperimentConfiguration.NETWORKSINGLE_S,networkOptions);
 	
 	//whether we want to deal with additional costs
 	public static AdditionalCosts additionalCosts = new AdditionalCosts("Additional Costs",ExperimentConfiguration.ADDITIONALCOSTSNO_S,additionalCostsOptions);
@@ -104,5 +112,44 @@ public abstract class ExperimentConfiguration {
 	
 	//PEPA related values are saved here
 	public static PEPAConfig pEPAConfig = new PEPAConfig("PEPA Config",null,null);
+	
+	public static ArrayList<Configuration> performanceEvaluatorAndMetaheuristic = new ArrayList<Configuration>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4028323174259971730L;
+
+		{
+			add((Configuration) ExperimentConfiguration.evaluator);
+			add(ExperimentConfiguration.metaHeuristic);
+			add(ExperimentConfiguration.networkType);
+			add(ExperimentConfiguration.additionalCosts);
+		}
+	};
+
+	public static void resetToDefaults() {
+		evaluator = new EvaluatorType("Evaluator type", ExperimentConfiguration.THROUGHPUT_S, evaluatorOptions);
+		metaHeuristic = new MetaHeuristicType("Search for System equation using", ExperimentConfiguration.HILLCLIMBING_S, metaHeuristicOptions, "Primary");
+		networkType = new MetaHeuristicNetworkType("Metaheuristic Network type",ExperimentConfiguration.NETWORKSINGLE_S,networkOptions);
+		additionalCosts = new AdditionalCosts("Additional Costs",ExperimentConfiguration.ADDITIONALCOSTSNO_S,additionalCostsOptions);
+		oDEConfig = new ODEConfig("ODE Config",null, null);
+		pEPAConfig = new PEPAConfig("PEPA Config",null,null);
+		
+		ExperimentConfiguration.performanceEvaluatorAndMetaheuristic = new ArrayList<Configuration>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4028323174259971730L;
+
+			{
+				add((Configuration) ExperimentConfiguration.evaluator);
+				add(ExperimentConfiguration.metaHeuristic);
+				add(ExperimentConfiguration.networkType);
+				add(ExperimentConfiguration.additionalCosts);
+			}
+		};
+
+	}
+	
 
 }

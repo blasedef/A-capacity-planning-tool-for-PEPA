@@ -12,9 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 
 public abstract class ChecklistPerformanceMetricContainer extends PerformanceMetricContainer {
@@ -24,9 +22,8 @@ public abstract class ChecklistPerformanceMetricContainer extends PerformanceMet
 
 	
 	
-	public ChecklistPerformanceMetricContainer(boolean supportsTransient, IValidationCallback cb, IParametricDerivationGraph derivationGraph, IPepaModel model,
-			Composite container) {
-		super(supportsTransient, cb, derivationGraph, model, container);
+	public ChecklistPerformanceMetricContainer(boolean supportsTransient, IValidationCallback cb, Composite container) {
+		super(supportsTransient, cb, container);
 		
 		filter = new ViewerFilter() {
 

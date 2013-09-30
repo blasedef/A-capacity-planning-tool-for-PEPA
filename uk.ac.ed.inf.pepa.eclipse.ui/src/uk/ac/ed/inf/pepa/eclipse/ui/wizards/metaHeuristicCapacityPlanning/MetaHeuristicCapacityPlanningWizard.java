@@ -17,6 +17,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.job.MetaHeuristicJob;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
@@ -30,7 +31,7 @@ import uk.ac.ed.inf.pepa.parsing.ModelNode;
  * MPP2 Minf project, A capacity planning tool for PEPA Eclipse
  * 
  * @author Christoper Williams
- * @version 1.1 (in terms of this wizard
+ * @version 1.1 (in terms of this wizard)
  * 
  *
  */
@@ -66,7 +67,7 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	public MetaHeuristicCapacityPlanningWizard(IPepaModel model){
 		
 		//claim model
-		this.model = model;
+		this.model = (IPepaModel) model;
 		
 		this.node = model.getAST();
 		
@@ -86,6 +87,8 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 					e.getMessage());
 			
 		}
+		
+		ExperimentConfiguration.resetToDefaults();
 		
 		//wizard pages
 		this.performanceEvaluatorAndMetaHeuristicSelectionPage = new PerformanceEvaluatorAndMetaHeuristicSelectionPage(this.pageTitle);
@@ -112,11 +115,11 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	}
 	
 	public void updateMHAndODEPages(){
-		if(!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S)){
-			ExperimentConfiguration.metaHeuristic.updateNetwork(ExperimentConfiguration.metaHeuristicNetworkType.getValue());
-		} else {
-			ExperimentConfiguration.metaHeuristic.resetFitnessMap();
-		}
+		ExperimentConfiguration.metaHeuristic.updateNetwork(ExperimentConfiguration.networkType.getValue());
+		
+		/*
+		 * These pages need updating with the user choices
+		 */
 		this.metaHeuristicConfigurationPage = new MetaHeuristicConfigurationPage(this.pageTitle);
 		addPage(this.metaHeuristicConfigurationPage);
 		this.ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(this.pageTitle, dGraph, model, node);
@@ -124,12 +127,23 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	}
 	
 	public void updateSystemEquationTargetPage(){
+		
+		/*
+		 * Important to update the values for the re-created SystemEquationPage
+		 */
+		ExperimentConfiguration.metaHeuristic.updateTargetValues();
+		ExperimentConfiguration.metaHeuristic.updateToDefaultMinPopulationRanges();
+		ExperimentConfiguration.metaHeuristic.updateToDefaultMaxPopulationRanges();
+		
+		/*
+		 * Now the page is recreated
+		 */
 		this.systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(this.pageTitle);
 		addPage(this.systemEquationTargetConfigurationPage);
 	}
 	
 	public void updateExperimentTargetPage(){
-		ExperimentConfiguration.metaHeuristic.updateNetwork(ExperimentConfiguration.metaHeuristicNetworkType.getValue());
+		//ExperimentConfiguration.metaHeuristic.updateNetwork(ExperimentConfiguration.networkType.getValue());
 		this.experimentTargetConfigurationPage = new ExperimentTargetConfigurationPage(this.pageTitle);
 		addPage(this.experimentTargetConfigurationPage);
 	}
@@ -158,10 +172,10 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		else if(page == pipelineMetaHeuristicConfigurationPage){
 			return this.systemEquationTargetConfigurationPage;
 		}
-		else if(page == systemEquationTargetConfigurationPage && (ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S))){
+		else if(page == systemEquationTargetConfigurationPage && (ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S))){
 			return this.summaryPage;
 		}
-		else if(page == systemEquationTargetConfigurationPage && (!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S))){
+		else if(page == systemEquationTargetConfigurationPage && (!ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S))){
 			return this.experimentTargetConfigurationPage;
 		}
 		else if(page == experimentTargetConfigurationPage){
@@ -182,12 +196,16 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		return false;
+		MetaHeuristicJob job = new MetaHeuristicJob("Running the search");
+		job.setUser(true);
+		job.schedule();
+		return true;
 	}
 	
 	public boolean canFinish(){
-		return (this.systemEquationTargetConfigurationPage.isPageComplete() && this.ordinaryDifferentialEquationConfigurationPage.isPageComplete());
+		return (this.systemEquationTargetConfigurationPage.isPageComplete() 
+				&& this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() 
+				&& this.experimentTargetConfigurationPage.isPageComplete());
 	}
 
 } 

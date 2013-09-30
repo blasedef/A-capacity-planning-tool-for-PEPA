@@ -9,5 +9,10 @@ public class EvaluatorType extends Configuration{
 	@Override
 	public void setOptions(String option) {
 	}
+
+	@Override
+	public String getDescription() {
+		return this.getTitle() + ExperimentConfiguration.EVALUATORDESCRIPTION; 
+	}
 	
 }

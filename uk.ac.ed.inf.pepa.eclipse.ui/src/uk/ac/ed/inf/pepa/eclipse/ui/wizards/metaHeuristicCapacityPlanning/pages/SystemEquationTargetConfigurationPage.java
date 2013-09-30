@@ -21,10 +21,6 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		//copy title upwards
 		super(title,"Performance target and System Equation population range","Determine the performance targets and population ranges...");
 		
-		ExperimentConfiguration.metaHeuristic.updateTargetValues();
-		ExperimentConfiguration.metaHeuristic.updateMinPopulationRanges();
-		ExperimentConfiguration.metaHeuristic.updateMaxPopulationRanges();
-		
 	}
 
 	@Override
@@ -38,11 +34,12 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		} else {
 			setErrorMessage(null);
 		}
-		if(!ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICSINGLE_S)){
+		if(!ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S)){
 			((MetaHeuristicCapacityPlanningWizard) getWizard()).updateExperimentTargetPage();
 		}
 		((MetaHeuristicCapacityPlanningWizard) getWizard()).updateSummaryPage();
 		setPageComplete(bool);
+		
 	}
 
 	@Override
@@ -52,7 +49,7 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		String[] topKeys = new String[] {ExperimentConfiguration.ALPHABETA_S};
 		Map<String,Number> topMap = ExperimentConfiguration.metaHeuristic.getFitnessMap();
 		
-		BorderedCompositeWithTextWidget topBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("System equation target balance", 
+		BorderedCompositeWithTextWidget topBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("System equation target balance:", 
 				topKeys, 
 				topMap, 
 				cb, 
@@ -65,7 +62,7 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		String[] middleKeys = ExperimentConfiguration.oDEConfig.getLabels();
 		Map<String,Number> middleMap = ExperimentConfiguration.metaHeuristic.getTargetMap();
 		
-		BorderedCompositeWithTextWidget middleBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Performance target(s)", 
+		BorderedCompositeWithTextWidget middleBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Performance target(s):", 
 				middleKeys, 
 				middleMap, 
 				cb, 
@@ -84,7 +81,9 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		String typeMinPop = ExperimentConfiguration.INTEGER;
 		String typeMaxPop = ExperimentConfiguration.INTEGER;
 		
-		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("System Equation population ranges","Minimum population","Maximum population", 
+		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("System Equation population ranges:",
+				"Minimum population:",
+				"Maximum population:", 
 				optionsMinPop,
 				optionsMaxPop,
 				mapMinPop,

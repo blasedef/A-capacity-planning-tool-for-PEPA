@@ -6,7 +6,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.MetaHeuristicCapacityPlanningWizard;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Configuration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.BorderedCompositeLabelWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningComboWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets.CapacityPlanningWidget;
 
@@ -25,17 +27,23 @@ public class PerformanceEvaluatorAndMetaHeuristicSelectionPage extends MetaHeuri
 	@Override
 	protected void constructPage(Composite container, IValidationCallback parentCallBack) {
 		
-		//evaluator choice combo
-		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.evaluator, parentCallBack));
+		for(Configuration c : ExperimentConfiguration.performanceEvaluatorAndMetaheuristic){
+			new BorderedCompositeLabelWidget(c.getDescription(), null, null, parentCallBack, container, 2);
+			widgets.add(new CapacityPlanningComboWidget(container, c, parentCallBack));
+		}
 		
-		//metaheuristic type combo
-		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristic, parentCallBack));
 		
-		//network type combo
-		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristicNetworkType, parentCallBack));
-		
-		//additional costs page combo
-		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.additionalCosts, parentCallBack));
+//		//evaluator choice combo
+//		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.evaluator, parentCallBack));
+//		
+//		//metaheuristic type combo
+//		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristic, parentCallBack));
+//		
+//		//network type combo
+//		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.metaHeuristicNetworkType, parentCallBack));
+//		
+//		//additional costs page combo
+//		widgets.add(new CapacityPlanningComboWidget(container, ExperimentConfiguration.additionalCosts, parentCallBack));
 		
 
 	}

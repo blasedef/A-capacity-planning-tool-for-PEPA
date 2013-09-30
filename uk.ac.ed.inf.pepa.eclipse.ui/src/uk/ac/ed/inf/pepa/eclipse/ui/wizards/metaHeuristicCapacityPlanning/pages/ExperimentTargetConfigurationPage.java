@@ -21,10 +21,6 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 		//copy title upwards
 		super(title,"Candidate metaheuristic performance target and population range","Determine the performance targets and population ranges...");
 		
-		ExperimentConfiguration.metaHeuristic.updateTargetValues();
-		ExperimentConfiguration.metaHeuristic.updateMinPopulationRanges();
-		ExperimentConfiguration.metaHeuristic.updateMaxPopulationRanges();
-		
 	}
 
 	@Override
@@ -40,6 +36,7 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 		}
 		((MetaHeuristicCapacityPlanningWizard) getWizard()).updateSummaryPage();
 		setPageComplete(bool);
+		
 	}
 
 	@Override
@@ -49,7 +46,7 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 		String[] topKeys = new String[] {ExperimentConfiguration.DELTASIGMA_S};
 		Map<String,Number> topMap = ExperimentConfiguration.metaHeuristic.getFitnessMap();
 		
-		BorderedCompositeWithTextWidget topBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Experiment target balance", 
+		BorderedCompositeWithTextWidget topBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Experiment target balance:", 
 				topKeys, 
 				topMap, 
 				cb, 
@@ -58,7 +55,7 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 				null);
 		widgets.add(topBorderedCompositeWithTextWidget);
 		
-		if(ExperimentConfiguration.metaHeuristicNetworkType.getValue().equals(ExperimentConfiguration.METAHEURISTICDRIVEN_S)){
+		if(ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKDRIVEN_S)){
 			createDrivenTargets(cb);
 		} else {
 			createPipeLineTargets(cb);
@@ -81,7 +78,9 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 		String typeMinPop = null;
 		String typeMaxPop = null;
 		
-		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Second metaheuristic setting ranges","Minimum population","Maximum population", 
+		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Second metaheuristic setting ranges:",
+				"Minimum population",
+				"Maximum population", 
 				optionsMinPop,
 				optionsMaxPop,
 				mapMinPop,
@@ -110,7 +109,9 @@ public class ExperimentTargetConfigurationPage extends MetaHeuristicCapacityPlan
 		String typeMinPop = ExperimentConfiguration.INTEGER;
 		String typeMaxPop = ExperimentConfiguration.INTEGER;
 		
-		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Second metaheuristic population ranges","Minimum population","Maximum population", 
+		BorderedCompositeWithDoubleTextWidget bottomBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Second metaheuristic population ranges:",
+				"Minimum population:",
+				"Maximum population:", 
 				optionsMinPop,
 				optionsMaxPop,
 				mapMinPop,

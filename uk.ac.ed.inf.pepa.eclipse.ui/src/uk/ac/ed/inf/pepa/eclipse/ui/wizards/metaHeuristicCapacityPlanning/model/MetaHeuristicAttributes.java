@@ -6,9 +6,22 @@ import java.util.Map;
 public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 	
 	//metaheuristic attribute lists
-	private String[] hillClimbingAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, ExperimentConfiguration.GENERATION_S,ExperimentConfiguration.MUTATIONPROBABILITY_S};
-	private String[] particleSwarmOptimisationAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, ExperimentConfiguration.GENERATION_S,ExperimentConfiguration.TOBESET1_S,ExperimentConfiguration.TOBESET2_S};
-	private String[] geneticAlgorithmAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, ExperimentConfiguration.GENERATION_S,ExperimentConfiguration.MUTATIONPROBABILITY_S,ExperimentConfiguration.CROSSOVERPROBABILITY_S,ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S};
+	private String[] hillClimbingAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, 
+			ExperimentConfiguration.GENERATION_S,
+			ExperimentConfiguration.MUTATIONPROBABILITY_S};
+	
+	private String[] particleSwarmOptimisationAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, 
+			ExperimentConfiguration.GENERATION_S,
+			ExperimentConfiguration.PERSONALBEST,
+			ExperimentConfiguration.GLOBALBEST,
+			ExperimentConfiguration.ORIGINALVELO,
+			ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S};
+	
+	private String[] geneticAlgorithmAttributeList = new String[] {ExperimentConfiguration.EXPERIMENTS_S, 
+			ExperimentConfiguration.GENERATION_S,
+			ExperimentConfiguration.MUTATIONPROBABILITY_S,
+			ExperimentConfiguration.CROSSOVERPROBABILITY_S,
+			ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S};
 	
 	//option mapping for attribute options
 	private final Map<String,String[]> attributeListMap = new HashMap<String, String[]>()
@@ -40,8 +53,9 @@ public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,0.5);
 		put(ExperimentConfiguration.CROSSOVERPROBABILITY_S,0.2);
 		put(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S,100);
-		put(ExperimentConfiguration.TOBESET1_S,5);
-		put(ExperimentConfiguration.TOBESET2_S,10.0);
+		put(ExperimentConfiguration.PERSONALBEST,33.3);
+		put(ExperimentConfiguration.GLOBALBEST,33.3);
+		put(ExperimentConfiguration.ORIGINALVELO,33.3);
 	}};
 	
 	/**

@@ -6,10 +6,10 @@ public class MetaHeuristicNetworkType extends Configuration{
 		super(key, value, options);
 	}
 	
-	public String getDescription(){
-		if(value.equals(ExperimentConfiguration.METAHEURISTICDRIVEN_S)){
+	public String getDescriptionForPage(){
+		if(value.equals(ExperimentConfiguration.NETWORKDRIVEN_S)){
 			return "driving";
-		} else if (value.equals(ExperimentConfiguration.METAHEURISTICPIPELINE_S)){
+		} else if (value.equals(ExperimentConfiguration.NETWORKPIPELINE_S)){
 			return "primary";
 		} else {
 			return "single";
@@ -21,8 +21,9 @@ public class MetaHeuristicNetworkType extends Configuration{
 		
 	}
 
-	public String getDescriptionSecondary() {
-		return "secondary";
+	@Override
+	public String getDescription() {
+		return this.getTitle() + ExperimentConfiguration.NETWORKDESCRIPTION; 
 	}
 
 }
