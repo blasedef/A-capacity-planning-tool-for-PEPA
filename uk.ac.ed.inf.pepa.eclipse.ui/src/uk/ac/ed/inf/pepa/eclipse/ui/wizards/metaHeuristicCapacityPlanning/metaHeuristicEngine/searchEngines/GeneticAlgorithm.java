@@ -5,8 +5,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class GeneticAlgorithm extends Metaheuristic {
 
-	public GeneticAlgorithm(IProgressMonitor monitor, int processors) {
-		super(monitor, processors);
+	public GeneticAlgorithm(IProgressMonitor monitor) {
+		super(monitor);
 		// TODO Auto-generated constructor stub
 	}
 

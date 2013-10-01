@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.searchEngines.*;
@@ -16,13 +15,11 @@ public class Experiment extends Candidate{
 	
 	private IProgressMonitor monitor;
 	private int totalWork;
-	private int processors;
 	private int experiments;
 
-	public Experiment(IProgressMonitor monitor, int totalWork, int processors, boolean candidate) {
+	public Experiment(IProgressMonitor monitor, int totalWork, boolean candidate) {
 		this.monitor = monitor;
 		this.totalWork = totalWork;
-		this.processors = processors;
 	}
 	
 	public IStatus startExperiments(){
@@ -37,7 +34,7 @@ public class Experiment extends Candidate{
 				if(monitor.isCanceled())
 					return Status.CANCEL_STATUS;
 				
-				((Metaheuristic) this.getNewMetaheuristic(this.monitor, this.processors)).search();
+				((Metaheuristic) this.getNewMetaheuristic(this.monitor)).search();
 				
 			}
 			
@@ -48,13 +45,13 @@ public class Experiment extends Candidate{
 		return Status.OK_STATUS;
 	}
 	
-	public Metaheuristic getNewMetaheuristic(IProgressMonitor monitor, int processors){
+	public Metaheuristic getNewMetaheuristic(IProgressMonitor monitor){
 		if(ExperimentConfiguration.metaHeuristic.getValue().equals(ExperimentConfiguration.HILLCLIMBING_S)){
-			return new HillClimbing(monitor, processors);
+			return new HillClimbing(monitor);
 		} else if (ExperimentConfiguration.metaHeuristic.getValue().equals(ExperimentConfiguration.GENETICALGORITHM_S)){
-			return new GeneticAlgorithm(monitor, processors);
+			return new GeneticAlgorithm(monitor);
 		} else {
-			return new ParticleSwarmOptimisation(monitor, processors);
+			return new ParticleSwarmOptimisation(monitor);
 		}
 	}
 

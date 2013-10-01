@@ -6,20 +6,17 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.threadAndSubprogressExample.SmallJobTest;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.AnalysisOfFluidSteadyState;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.NodeHandler;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporting;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Tools;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
-import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 
 
 public class SystemEquation extends Candidate {
 	
 	private double created;
 	private NodeHandler myNode;
-	private IParametricDerivationGraph myDevGraph;
 	private HashMap<String, Double> mySystemEquation = new HashMap<String, Double>();
 	private IProgressMonitor monitor;
 	
@@ -27,8 +24,8 @@ public class SystemEquation extends Candidate {
 		this.created = Reporting.createdTime();
 		//def my own copy...
 		this.myNode = new NodeHandler();
-		this.myDevGraph = this.myNode.getGraph(null);
 		this.mySystemEquation = this.myNode.getSystemEquation();
+		this.monitor = monitor;
 	}
 	
 	public Map<String, Double> getMap(){
@@ -124,6 +121,31 @@ public class SystemEquation extends Candidate {
 	@Override
 	public void run() {
 		
+		for(Map.Entry<String, Double> entry : myNode.getSystemEquation().entrySet()){
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
+		}
+		
+		Map<String, Double> results = getPerformanceFitness();
+		
+//		for(Map.Entry<String, Double> entry : results.entrySet()){
+//			System.out.println(entry.getKey());
+//			System.out.println(entry.getValue());
+//		}
+		
+//		mutate();
+//		
+//		for(Map.Entry<String, Double> entry : myNode.getSystemEquation().entrySet()){
+//			System.out.println(entry.getKey());
+//			System.out.println(entry.getValue());
+//		}
+		
+//		results = getPerformanceFitness();
+		
+//		for(Map.Entry<String, Double> entry : results.entrySet()){
+//			System.out.println(entry.getKey());
+//			System.out.println(entry.getValue());
+//		}
 		
 	}
 	

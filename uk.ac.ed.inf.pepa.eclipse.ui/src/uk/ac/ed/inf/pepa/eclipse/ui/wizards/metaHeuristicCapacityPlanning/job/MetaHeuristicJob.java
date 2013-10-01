@@ -10,14 +10,12 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.
 
 public class MetaHeuristicJob extends Job{
 	
-	private int processors;
 	private int totalWork;
 	public static Reporting reporter;
 
 	public MetaHeuristicJob(String name) {
 		super(name);
 		MetaHeuristicJob.reporter = new Reporting();
-		this.processors = Runtime.getRuntime().availableProcessors();
 		this.postProcessing();
 		
 		/*
@@ -53,7 +51,7 @@ public class MetaHeuristicJob extends Job{
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		
-		IStatus status = (new Experiment(monitor, this.totalWork, this.processors, false)).startExperiments();
+		IStatus status = (new Experiment(monitor, this.totalWork, false)).startExperiments();
 		
 		System.out.println(MetaHeuristicJob.reporter.reportRunTime());
 		

@@ -18,20 +18,17 @@ public class Tools {
 		IParametricDerivationGraph dGraph;
 		
 		try{
+			
 			//so this is how to make the graph :)
 			dGraph = ParametricDerivationGraphBuilder
 					.createDerivationGraph(node, null);
 			
 		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
+			System.out.println(e);
 			dGraph = null;
 			
 		} catch (DifferentialAnalysisException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Differential error",
-					e.getMessage());
+			System.out.println(e);
 			dGraph = null;
 			
 		}

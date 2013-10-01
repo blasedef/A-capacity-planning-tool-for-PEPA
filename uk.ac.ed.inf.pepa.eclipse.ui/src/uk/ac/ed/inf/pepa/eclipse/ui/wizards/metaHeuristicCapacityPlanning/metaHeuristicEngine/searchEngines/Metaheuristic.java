@@ -5,10 +5,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Candidate;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.SystemEquation;
 
 public abstract class Metaheuristic {
 	
@@ -17,10 +15,14 @@ public abstract class Metaheuristic {
 	protected int processors;
 	public static ExecutorService executor;
 	
-	public Metaheuristic (IProgressMonitor monitor, int processors){
+	public Metaheuristic (IProgressMonitor monitor){
 		this.monitor = monitor;
-		this.processors = processors;
-		Metaheuristic.executor = Executors.newFixedThreadPool(this.processors - 1);
+		this.processors = Runtime.getRuntime().availableProcessors();
+		if(this.processors > 1){
+			this.processors = this.processors - 1;
+		}
+		this.candidatePopulation = new ArrayList<Candidate>();
+		Metaheuristic.executor = Executors.newFixedThreadPool(1);
 	}
 	
 	public abstract void search();
