@@ -2,8 +2,22 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaH
 
 import java.util.Map;
 
-public abstract class Candidate {
+public abstract class Candidate implements Runnable {
 	
-	public abstract Map<String,Double> getFitness();
+	public abstract Double getTotalFitness();
+	
+	public abstract Map<String, Double> getPerformanceFitness();
+	
+	public abstract Double[] getPopulationFitness();
+	
+	public abstract void mutate();
+	
+	public abstract Candidate Crossover(Candidate candidate);
+	
+	public abstract void newVector();
+	
+	public abstract void initialise();
+
+	public abstract void updateFitness();
 	
 }

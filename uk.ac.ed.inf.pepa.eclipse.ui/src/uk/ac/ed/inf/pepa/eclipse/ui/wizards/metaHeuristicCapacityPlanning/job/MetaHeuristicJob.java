@@ -4,8 +4,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.Reporting;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Experiment;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporting;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
 public class MetaHeuristicJob extends Job{
@@ -21,16 +21,19 @@ public class MetaHeuristicJob extends Job{
 		this.postProcessing();
 		
 		/*
-		 * SINGLE = Experiments * Candidates * Generation
-		 * PIPE = Experiments * Candidates * Generation + Experiments' * Candidates' * Generation'
-		 * DRIVEN = Experiments * (Experiments * Candidates * Generation) * Generation
+		 * SINGLE = Experiments * Candidates * Generation * Analysis
+		 * PIPE = Experiments * Candidates * Generation + Experiments' * Candidates' * Generation' * Analysis
+		 * DRIVEN = Experiments * (Experiments * Candidates * Generation) * Generation * Analysis
+		 * 
+		 * Analysis = a little extra added on so that the monitor can progress during the analysis phase
+		 * 
 		 */
 		
 		if(ExperimentConfiguration.networkType.getValue().equals(ExperimentConfiguration.NETWORKSINGLE_S)){
 			int experiments = ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.EXPERIMENTS_S).intValue();
 			int candidates = ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S).intValue();
 			int generation = ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.GENERATION_S).intValue();
-			this.totalWork = experiments * candidates * generation;
+			this.totalWork = experiments * candidates * generation * 10;
 		}
 		
 	}

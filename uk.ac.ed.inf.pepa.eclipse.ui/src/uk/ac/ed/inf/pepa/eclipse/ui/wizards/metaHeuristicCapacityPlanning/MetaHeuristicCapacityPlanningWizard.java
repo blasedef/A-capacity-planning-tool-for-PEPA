@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.job.MetaHeuristicJob;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Tools;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
@@ -71,22 +72,7 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		
 		this.node = model.getAST();
 		
-		try{
-			//so this is how to make the graph :)
-			this.dGraph = ParametricDerivationGraphBuilder
-					.createDerivationGraph(model.getAST(), null);
-			
-		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
-			
-		} catch (DifferentialAnalysisException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Differential error",
-					e.getMessage());
-			
-		}
+		this.dGraph = Tools.getDevGraphFromAST(node);
 		
 		ExperimentConfiguration.resetToDefaults();
 		

@@ -59,21 +59,48 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		widgets.add(topBorderedCompositeWithTextWidget);
 		
 		GetValue getTarget = new GetTargetValue();
-		String[] middleKeys = ExperimentConfiguration.oDEConfig.getLabels();
-		Map<String,Number> middleMap = ExperimentConfiguration.metaHeuristic.getTargetMap();
+		GetValue getTargetWeight = new GetTargetWeightValue();
+		TestValues test1 = new SumToUnderOneRight();
+		String[] optionsTarget = ExperimentConfiguration.oDEConfig.getLabels();
+		String[] optionsTargetWeight = ExperimentConfiguration.oDEConfig.getLabels();
+		Map<String,Number> mapTarget = ExperimentConfiguration.metaHeuristic.getTargetMap();
+		Map<String,Number> mapTargetWeight = ExperimentConfiguration.metaHeuristic.getTargetWeightMap();
+		String typeTarget = ExperimentConfiguration.DOUBLE;
+		String typeTargetWegith = ExperimentConfiguration.PERCENT;
 		
-		BorderedCompositeWithTextWidget middleBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Performance target(s):", 
-				middleKeys, 
-				middleMap, 
+		BorderedCompositeWithDoubleTextWidget topBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Performance target(s):",
+				"Performance target:",
+				"Performance weight:", 
+				optionsTarget,
+				optionsTargetWeight,
+				mapTarget,
+				mapTargetWeight,
 				cb, 
 				container, 
-				getTarget, 
-				ExperimentConfiguration.DOUBLE);
-		widgets.add(middleBorderedCompositeWithTextWidget);
+				getTarget,
+				getTargetWeight,
+				typeTarget,
+				typeTargetWegith,
+				test1);
+		
+		widgets.add(topBorderedCompositeWithDoubleTextWidget);
+		
+//		GetValue getTarget = new GetTargetValue();
+//		String[] middleKeys = ExperimentConfiguration.oDEConfig.getLabels();
+//		Map<String,Number> middleMap = ExperimentConfiguration.metaHeuristic.getTargetMap();
+//		
+//		BorderedCompositeWithTextWidget middleBorderedCompositeWithTextWidget = new BorderedCompositeWithTextWidget("Performance target(s):", 
+//				middleKeys, 
+//				middleMap, 
+//				cb, 
+//				container, 
+//				getTarget, 
+//				ExperimentConfiguration.DOUBLE);
+//		widgets.add(middleBorderedCompositeWithTextWidget);
 		
 		GetValue getMinPop = new GetMinPopValue();
 		GetValue getMaxPop = new GetMaxPopValue();
-		TestValues test = new LeftLessThanOrEqualToRight();
+		TestValues test2 = new LeftLessThanOrEqualToRight();
 		String[] optionsMinPop = ExperimentConfiguration.pEPAConfig.getSystemEquation(); 
 		String[] optionsMaxPop = ExperimentConfiguration.pEPAConfig.getSystemEquation();
 		Map<String,Number> mapMinPop = ExperimentConfiguration.metaHeuristic.getMinPopMap();
@@ -94,7 +121,7 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 				getMaxPop,
 				typeMinPop,
 				typeMaxPop,
-				test);
+				test2);
 		
 		widgets.add(bottomBorderedCompositeWithDoubleTextWidget);
 		

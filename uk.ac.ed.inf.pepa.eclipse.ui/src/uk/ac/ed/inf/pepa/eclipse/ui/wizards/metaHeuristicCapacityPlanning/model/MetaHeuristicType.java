@@ -110,8 +110,16 @@ public class MetaHeuristicType extends Configuration{
 		return this.targets.getMap();
 	}
 	
+	public Map<String,Number> getTargetWeightMap(){
+		return this.targets.getWeightMap();
+	}
+	
 	public String getTargetMapValue(String key) {
 		return this.targets.getMapValue(key);
+	}
+	
+	public String getTargetWeightMapValue(String key) {
+		return this.targets.getMapWeightValue(key);
 	}
 	
 	public Map<String,Number> getFitnessMap(){

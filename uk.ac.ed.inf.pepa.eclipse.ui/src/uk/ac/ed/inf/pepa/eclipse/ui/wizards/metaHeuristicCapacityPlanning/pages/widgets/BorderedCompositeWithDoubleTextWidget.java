@@ -117,9 +117,15 @@ public class BorderedCompositeWithDoubleTextWidget extends BorderedCompositeLabe
 			bool = bool & w.isValid();
 		}
 		if(bool){
+			
+			Double[] x = new Double[widgetsLeft.size()];
+			Double[] y = new Double[widgetsLeft.size()];
+			
 			for(int i = 0; i < widgetsLeft.size(); i++){
-				bool = bool & this.test.testLeftRight(Double.parseDouble(widgetsLeft.get(i).value), Double.parseDouble(widgetsRight.get(i).value));
+				x[i] = Double.parseDouble(widgetsLeft.get(i).value);
+				y[i] = Double.parseDouble(widgetsRight.get(i).value);
 			}
+			bool = bool & this.test.test(x,y);
 		}
 		return bool;
 	}

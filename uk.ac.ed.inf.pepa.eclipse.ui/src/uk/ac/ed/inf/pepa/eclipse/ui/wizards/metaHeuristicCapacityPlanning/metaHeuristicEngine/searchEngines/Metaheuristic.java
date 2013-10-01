@@ -1,41 +1,28 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.searchEngines;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-public class Metaheuristic {
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.SystemEquation;
+
+public abstract class Metaheuristic {
 	
-	private IProgressMonitor monitor;
+	protected IProgressMonitor monitor;
+	protected ArrayList<Candidate> candidatePopulation;
+	protected int processors;
+	public static ExecutorService executor;
 	
-	public Metaheuristic (IProgressMonitor monitor){
+	public Metaheuristic (IProgressMonitor monitor, int processors){
 		this.monitor = monitor;
+		this.processors = processors;
+		Metaheuristic.executor = Executors.newFixedThreadPool(this.processors - 1);
 	}
 	
-	public SubProgressMonitor getSubProgressMonitor(int i){
-		return new SubProgressMonitor(this.monitor,i);
-	}
-	
-	public void search(int i, int j){
-		
-		IProgressMonitor m = getSubProgressMonitor(i);
-		
-		try{
-			
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			m.beginTask("some meta", j);
-			m.subTask("busy little bee");
-			System.out.println("busy little bee");
-			m.worked(1);
-			
-		} finally {
-			m.done();
-		}
-	}
+	public abstract void search();
 	
 }

@@ -40,6 +40,14 @@ public abstract class MetaHeuristicCapacityPlanningWizardPage extends WizardPage
 
 	}
 	
+	public class GetTargetWeightValue extends GetValue implements Command {
+		
+		public String getMapValue(String key){
+			return ExperimentConfiguration.metaHeuristic.getTargetWeightMapValue(key);
+		}
+
+	}
+	
 	public class GetFitnessValue extends GetValue implements Command {
 		
 		public String getMapValue(String key){
@@ -78,21 +86,68 @@ public abstract class MetaHeuristicCapacityPlanningWizardPage extends WizardPage
 	
 	public interface Validation {
 		
-		public boolean testLeftRight(Double left, Double right);
+		public boolean test(Double[] x, Double[] y);
 		
 	}
 	
 	public abstract class TestValues implements Validation {
 
-		public abstract boolean testLeftRight(Double left, Double right);
+		public abstract boolean test(Double[] x, Double[] y);
 		
 	}
 	
 	public class LeftLessThanOrEqualToRight extends TestValues implements Validation {
 
 		@Override
-		public boolean testLeftRight(Double left, Double right) {
-			return (left <= right);
+		public boolean test(Double[] x, Double[] y) {
+			boolean test = true;
+			for(int i = 0; i < x.length; i++){
+				test = test & (x[i] <= y[i]);
+			}
+			return test;
+		}
+
+	}
+	
+	public class SumToUnderOne extends TestValues implements Validation {
+
+		@Override
+		public boolean test(Double[] x, Double[] y) {
+			Double sumX = 0.0;
+			Double sumY = 0.0;
+			boolean test = true;
+			
+			for(int i = 0; i < x.length; i++){
+				sumX += x[i];
+				if(y != null){
+					sumY += y[i];
+				}
+			}
+			
+			if(y != null){
+				test = test & (sumY <= 1.0);
+			}
+			
+			test = test & (sumX <= 1.0);
+			
+			return test;
+		}
+
+	}
+	
+	public class SumToUnderOneRight extends TestValues implements Validation {
+
+		@Override
+		public boolean test(Double[] x, Double[] y) {
+			Double sumY = 0.0;
+			boolean test = true;
+			
+			for(int i = 0; i < y.length; i++){
+				sumY += y[i];
+			}
+			
+			test = test & (sumY <= 1.0);
+			return test;
 		}
 
 	}
