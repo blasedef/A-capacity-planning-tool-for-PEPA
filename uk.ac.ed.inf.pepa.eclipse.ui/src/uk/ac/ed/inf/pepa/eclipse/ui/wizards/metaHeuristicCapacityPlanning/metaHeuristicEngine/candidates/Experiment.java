@@ -17,6 +17,7 @@ public class Experiment extends Candidate{
 	private IProgressMonitor monitor;
 	private int totalWork;
 	private int experiments;
+	private IStatus status;
 
 	public Experiment(IProgressMonitor monitor, int totalWork, boolean candidate) {
 		this.monitor = monitor;
@@ -35,7 +36,7 @@ public class Experiment extends Candidate{
 				if(monitor.isCanceled())
 					return Status.CANCEL_STATUS;
 				
-				((Metaheuristic) this.getNewMetaheuristic(this.monitor)).search();
+				this.status = ((Metaheuristic) this.getNewMetaheuristic(this.monitor)).search();
 				
 			}
 			
@@ -43,7 +44,7 @@ public class Experiment extends Candidate{
 			this.monitor.done();
 		}
 		
-		return Status.OK_STATUS;
+		return this.status;
 	}
 	
 	public Metaheuristic getNewMetaheuristic(IProgressMonitor monitor){
@@ -57,9 +58,8 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
-	public Candidate Crossover(Candidate candidate) {
+	public void Crossover(Candidate candidate) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -105,12 +105,6 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
-	public void mutate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void mutate(boolean isHillClimbing) {
 		// TODO Auto-generated method stub
 		
@@ -132,6 +126,18 @@ public class Experiment extends Candidate{
 	public void updateFitness() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int compare(Candidate arg0, Candidate arg1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int compareTo(Candidate arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

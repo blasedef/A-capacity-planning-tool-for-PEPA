@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.searchEngines;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 
 public class ParticleSwarmOptimisation extends Metaheuristic {
@@ -11,9 +12,11 @@ public class ParticleSwarmOptimisation extends Metaheuristic {
 	}
 
 	@Override
-	public void search() {
+	public IStatus search() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+
 	
 }

@@ -133,8 +133,15 @@ public class AnalysisOfFluidSteadyState {
 		
 		HashMap<String, Double> resultsMap = new HashMap<String, Double>();
 		
-		for(int i = 0; i < labels.length; i++){
-			resultsMap.put(labels[i], results[i]);
+		if(results == null){
+			for(int i = 0; i < labels.length; i++){
+				resultsMap.put(labels[i], 10000.0);
+			}
+			
+		} else {
+			for(int i = 0; i < labels.length; i++){
+				resultsMap.put(labels[i], results[i]);
+			}
 		}
 		
 		return resultsMap;

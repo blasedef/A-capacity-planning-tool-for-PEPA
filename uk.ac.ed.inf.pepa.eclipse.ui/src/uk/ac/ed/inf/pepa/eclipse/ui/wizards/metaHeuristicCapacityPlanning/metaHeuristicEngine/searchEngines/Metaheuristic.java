@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaH
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Candidate;
 
@@ -21,6 +22,6 @@ public abstract class Metaheuristic {
 		this.candidatePopulation = new ArrayList<Candidate>();
 	}
 	
-	public abstract void search();
+	public abstract IStatus search();
 	
 }

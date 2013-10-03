@@ -1,8 +1,9 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates;
 
+import java.util.Comparator;
 import java.util.Map;
 
-public abstract class Candidate {
+public abstract class Candidate implements Comparator<Candidate>, Comparable<Candidate> {
 	
 	public abstract Double getTotalFitness();
 	
@@ -10,9 +11,7 @@ public abstract class Candidate {
 	
 	public abstract Map<String, Double> getPopulationFitness();
 	
-	public abstract void mutate();
-	
-	public abstract Candidate Crossover(Candidate candidate);
+	public abstract void Crossover(Candidate candidate);
 	
 	public abstract void newVector();
 	
@@ -34,6 +33,10 @@ public abstract class Candidate {
 	}
 
 	public abstract Double getCreatedTime();
+	
+	public abstract int compare(Candidate arg0, Candidate arg1);
+	
+	public abstract int compareTo(Candidate arg0);
 		
 	
 }

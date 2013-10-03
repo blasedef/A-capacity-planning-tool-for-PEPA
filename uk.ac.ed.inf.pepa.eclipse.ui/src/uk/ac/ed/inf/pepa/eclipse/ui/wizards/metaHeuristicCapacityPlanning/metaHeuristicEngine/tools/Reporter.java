@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaH
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Candidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.SystemEquation;
@@ -14,6 +15,7 @@ public class Reporter {
 	private double totalTime;
 	private ArrayList<HashMap<String,Integer>> generationMixture;
 	private HashMap<String,Double> totalFitness;
+	PriorityQueue<Solutions> queue = new PriorityQueue<Solutions>();
 	
 	public Reporter(){
 		startTime = System.currentTimeMillis();
@@ -55,6 +57,15 @@ public class Reporter {
 			Candidate c, 
 			Double f) {
 		
+		queue.add(new Solutions(c.getAttributeString(), 
+				c.getTotalFitness(), 
+				c.getTotalPerformanceFitness(), 
+				c.getTotalPopulationFitness(),
+				c.getPerformanceFitness(),
+				c.getPopulationFitness(),
+				createdTime(),
+				i));
+		
 		if(this.generationMixture.size() == i + 1){
 			if(this.generationMixture.get(i).containsKey(c.getAttributeString())){
 				Integer j = this.generationMixture.get(i).get(c.getAttributeString());
@@ -89,8 +100,8 @@ public class Reporter {
 		return this.totalFitness;
 	}
 
-	public void reportSolutions(Solutions poll) {
-		System.out.println(poll.summary());
+	public void reportSolutions() {
+		System.out.println(queue.poll().summary());
 		
 	}
 	

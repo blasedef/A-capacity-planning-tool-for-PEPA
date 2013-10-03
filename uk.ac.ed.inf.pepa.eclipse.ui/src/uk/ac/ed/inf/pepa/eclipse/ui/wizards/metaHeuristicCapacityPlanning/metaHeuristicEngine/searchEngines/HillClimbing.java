@@ -1,8 +1,9 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.searchEngines;
 
-import java.util.PriorityQueue;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.*;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporter;
@@ -12,14 +13,14 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.
 public class HillClimbing extends Metaheuristic {
 	
 	Reporter reporter;
-	PriorityQueue<Solutions> queue = new PriorityQueue<Solutions>();
+	
 
 	public HillClimbing(IProgressMonitor monitor) {
 		super(monitor);
 		reporter = new Reporter();
 	}
 	
-	public void search(){
+	public IStatus search(){
 		
 		for(int i = 0; i < ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S).intValue(); i++){
 			
@@ -38,16 +39,10 @@ public class HillClimbing extends Metaheuristic {
 			
 			for(Candidate c : candidatePopulation){
 				
-				c.updateFitness();
+				if(monitor.isCanceled())
+					return Status.CANCEL_STATUS;
 				
-				queue.add(new Solutions(c.getAttributeString(), 
-						c.getTotalFitness(), 
-						c.getTotalPerformanceFitness(), 
-						c.getTotalPopulationFitness(),
-						c.getPerformanceFitness(),
-						c.getPopulationFitness(),
-						reporter.createdTime(),
-						i));
+				c.updateFitness();
 				
 				this.reporter.addToGenerationMixture(i,c,c.getTotalFitness());
 				
@@ -59,8 +54,10 @@ public class HillClimbing extends Metaheuristic {
 		}
 		
 		for(int i = 0; i < 10; i++){
-			reporter.reportSolutions(queue.poll());
+			reporter.reportSolutions();
 		}
+		
+		return Status.OK_STATUS;
 		
 	}
 	

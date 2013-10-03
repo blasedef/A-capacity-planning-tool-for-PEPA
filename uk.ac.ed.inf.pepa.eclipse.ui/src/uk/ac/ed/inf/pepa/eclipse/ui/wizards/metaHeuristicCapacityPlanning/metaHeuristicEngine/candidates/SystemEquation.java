@@ -50,9 +50,23 @@ public class SystemEquation extends Candidate {
 	}
 
 	@Override
-	public Candidate Crossover(Candidate candidate) {
-		// TODO Auto-generated method stub
-		return null;
+	public void Crossover(Candidate candidate) {
+		int split = Tools.returnRandomInRange(0.0, ((Integer) mySystemEquation.size()).doubleValue(), ExperimentConfiguration.INTEGER).intValue();
+		SystemEquation parentB = (SystemEquation) candidate;
+		
+		System.out.println("A before :" + this.mySystemEquation);
+		System.out.println("B before :" + parentB.mySystemEquation);
+		
+		String[] options = mySystemEquation.keySet().toArray(new String[0]);
+		
+		for(int i = 0; i < split; i++){
+			Double temp = mySystemEquation.get(options[i]);
+			mySystemEquation.put(options[i],parentB.mySystemEquation.get(options[i]));
+			parentB.mySystemEquation.put(options[i], temp);
+		}
+		
+		System.out.println("A after :" + this.mySystemEquation);
+		System.out.println("B after :" + parentB.mySystemEquation);
 	}
 
 	@Override
@@ -213,11 +227,34 @@ public class SystemEquation extends Candidate {
 		return this.totalPopulationFitness;
 		
 	}
-
+	
 	@Override
-	public void mutate() {
-		//TODO for GA
+	public int compare(Candidate arg0, Candidate arg1) {
 		
+		SystemEquation sarg0 = (SystemEquation) arg0;
+		SystemEquation sarg1 = (SystemEquation) arg1;
+		
+		if(sarg0.myFitness.intValue() < sarg1.myFitness.intValue()){
+			return -1;
+		}
+		if(sarg0.myFitness.intValue() > sarg1.myFitness.intValue()){
+			return 1;
+		}
+		return 0;
+	}
+	
+	@Override
+	public int compareTo(Candidate arg0) {
+		
+		SystemEquation sarg0 = (SystemEquation) arg0;
+		
+		if(this.myFitness.intValue() < sarg0.myFitness.intValue()){
+			return -1;
+		}
+		if(this.myFitness.intValue() > sarg0.myFitness.intValue()){
+			return 1;
+		}
+		return 0;
 	}
 	
 }
