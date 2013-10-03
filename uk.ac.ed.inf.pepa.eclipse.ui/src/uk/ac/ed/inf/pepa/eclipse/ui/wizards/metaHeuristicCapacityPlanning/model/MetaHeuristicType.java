@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class MetaHeuristicType extends Configuration{
@@ -16,6 +17,7 @@ public class MetaHeuristicType extends Configuration{
 	private PopulationRanges secondExperimentMaxRange;
 	private PopulationRanges secondExperimentMinRange;
 	private String second;
+	private HashMap<String, Double> fullComponentRange;
 	
 	public MetaHeuristicType(String key, String value, String[] options, String name){
 		super(key, value, options);
@@ -27,6 +29,21 @@ public class MetaHeuristicType extends Configuration{
 		this.name = name;
 		this.secondExperimentMaxRange = new PopulationRanges();
 		this.secondExperimentMinRange = new PopulationRanges();
+		this.fullComponentRange = null;
+	}
+	
+	public Map<String, Double> getComponentRange(){
+		if(this.fullComponentRange == null){
+			this.fullComponentRange = new HashMap<String, Double>();
+			for(Entry<String, Number> entry : this.minPopulationRanges.getMap().entrySet()){
+				Double min = this.minPopulationRanges.getMap().get(entry.getKey()).doubleValue();
+				Double max = this.maxPopulationRanges.getMap().get(entry.getKey()).doubleValue() + 1.0;
+				Double range = max - min;
+				fullComponentRange.put(entry.getKey(), range);
+			}
+		}
+		
+		return this.fullComponentRange;
 	}
 	
 	public void updateNetwork(String networkType){

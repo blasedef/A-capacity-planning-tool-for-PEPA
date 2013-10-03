@@ -12,11 +12,13 @@ public class NodeHandler {
 	private ModelNode node;
 	private SetASTVisitor writeAST;
 	private GetASTVisitor readAST;
+	private Grapher grapher;
 
 	public NodeHandler(){
 		this.node = (ModelNode) ASTSupport.copy(ExperimentConfiguration.pEPAConfig.getPepaModel().getAST());
 		this.readAST = new GetASTVisitor();
 		this.writeAST = new SetASTVisitor();
+		this.grapher = new Grapher();
 	}
 	
 	private void readAST(){
@@ -39,10 +41,10 @@ public class NodeHandler {
 	
 	public IParametricDerivationGraph getGraph(HashMap<String, Double> map) {
 		if(map == null){
-			return Tools.getDevGraphFromAST(this.node);
+			return grapher.getDevGraphFromAST(this.node);
 		} else {
 			setSystemEquation(map);
-			return Tools.getDevGraphFromAST(this.node);
+			return grapher.getDevGraphFromAST(this.node);
 		}
 	}
 

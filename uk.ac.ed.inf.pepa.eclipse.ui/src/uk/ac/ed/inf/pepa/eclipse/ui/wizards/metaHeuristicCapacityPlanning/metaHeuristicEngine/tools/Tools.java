@@ -2,40 +2,10 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaH
 
 import java.util.Random;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
-import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
-import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
-import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
-import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 public class Tools {
-	
-	public static IParametricDerivationGraph getDevGraphFromAST(ModelNode node){
-		
-		IParametricDerivationGraph dGraph;
-		
-		try{
-			
-			//so this is how to make the graph :)
-			dGraph = ParametricDerivationGraphBuilder
-					.createDerivationGraph(node, null);
-			
-		} catch (InterruptedException e) {
-			System.out.println(e);
-			dGraph = null;
-			
-		} catch (DifferentialAnalysisException e) {
-			System.out.println(e);
-			dGraph = null;
-			
-		}
-		
-		return dGraph;
-		
-	}
 	
 	public static Double returnRandomInRange(Double min, Double max, String type){
 		

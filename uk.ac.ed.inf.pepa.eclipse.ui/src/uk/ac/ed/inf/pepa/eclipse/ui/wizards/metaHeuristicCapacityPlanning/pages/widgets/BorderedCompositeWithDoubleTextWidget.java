@@ -73,7 +73,7 @@ public class BorderedCompositeWithDoubleTextWidget extends BorderedCompositeLabe
 						key,
 						getTarget1.getMapValue(key),
 						map1,
-						type2,
+						type1,
 						cb));
 			}
 		}

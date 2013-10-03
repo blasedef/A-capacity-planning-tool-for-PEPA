@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.AnalysisOfFluidSteadyState;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.NodeHandler;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporting;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporter;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Tools;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
@@ -19,13 +19,30 @@ public class SystemEquation extends Candidate {
 	private NodeHandler myNode;
 	private HashMap<String, Double> mySystemEquation = new HashMap<String, Double>();
 	private IProgressMonitor monitor;
+	Reporter reporter;
+	private Map<String, Double> performanceFitness;
+	private Map<String, Double> populationFitness;
+	private Double totalPopulationFitness;
+	private Double totalPerformanceFitness;
+	private Double myFitness;
+	private Double maximumPopulationSize;
 	
-	public SystemEquation(IProgressMonitor monitor){
-		this.created = Reporting.createdTime();
+	public SystemEquation(IProgressMonitor monitor, Reporter reporter){
+		this.created = reporter.createdTime();
 		//def my own copy...
 		this.myNode = new NodeHandler();
 		this.mySystemEquation = this.myNode.getSystemEquation();
 		this.monitor = monitor;
+		this.reporter = reporter;
+		this.totalPerformanceFitness = 100000.0;
+		setMaximumpopulationSize();
+	}
+	
+	public void setMaximumpopulationSize(){
+		this.maximumPopulationSize = 1.0;
+		for(Map.Entry<String, Double> entry : ExperimentConfiguration.metaHeuristic.getComponentRange().entrySet()){
+			this.maximumPopulationSize *= entry.getValue(); 
+		}
 	}
 	
 	public Map<String, Double> getMap(){
@@ -39,32 +56,46 @@ public class SystemEquation extends Candidate {
 	}
 
 	@Override
-	public void mutate() {
+	public void mutate(boolean isHillClimbing) {
 		
-		if(Tools.rollDice(ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.MUTATIONPROBABILITY_S).doubleValue())){
-			for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
-				Double min = ExperimentConfiguration.metaHeuristic.getMinPopMap().get(entry.getKey()).doubleValue();
-				Double max = ExperimentConfiguration.metaHeuristic.getMaxPopMap().get(entry.getKey()).doubleValue();
-				Double d = Tools.returnRandomInRange(min, max, ExperimentConfiguration.INTEGER);
-				this.mySystemEquation.put(entry.getKey(),d);
+		if(this.maximumPopulationSize > this.reporter.getTotalPerformanceFitness().size()){
+			if(Tools.rollDice(ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.MUTATIONPROBABILITY_S).doubleValue())){
+				for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
+					Double min = ExperimentConfiguration.metaHeuristic.getMinPopMap().get(entry.getKey()).doubleValue();
+					Double max = ExperimentConfiguration.metaHeuristic.getMaxPopMap().get(entry.getKey()).doubleValue();
+					Double d = Tools.returnRandomInRange(min, max, ExperimentConfiguration.INTEGER);
+					this.mySystemEquation.put(entry.getKey(),d);
+				}
+				
+				this.myNode.setSystemEquation(this.mySystemEquation);
 			}
 			
-			this.myNode.setSystemEquation(this.mySystemEquation);
+			if(isHillClimbing){
+				String temp = getAttributeString();
+				if(this.reporter.getTotalPerformanceFitness().containsKey(temp)){
+					mutate(isHillClimbing);
+				} else {
+					this.mySystemEquation = myNode.getSystemEquation();
+				}
+			} else {
+				this.mySystemEquation = myNode.getSystemEquation();
+			}
 		}
 		
-		this.mySystemEquation = myNode.getSystemEquation();
-		Reporting.reportSystemEquation(this);
-		
 	}
 
+	public void setTotalFitness(){
+		Double alpha = ExperimentConfiguration.metaHeuristic.getFitnessMap().get(ExperimentConfiguration.ALPHABETA_S).doubleValue();
+		Double beta = 1 - alpha;
+		this.myFitness = (alpha * this.totalPerformanceFitness) + (beta * this.totalPopulationFitness);
+	}
+	
 	@Override
 	public Double getTotalFitness() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.myFitness;
 	}
 
-	@Override
-	public Map<String, Double> getPerformanceFitness() {
+	public void setPerformanceFitness() {
 		
 		AnalysisOfFluidSteadyState aOSS = new AnalysisOfFluidSteadyState(this.myNode.getGraph(null), 
 				ExperimentConfiguration.oDEConfig.getOptionMap(), 
@@ -73,13 +104,26 @@ public class SystemEquation extends Candidate {
 				ExperimentConfiguration.oDEConfig.getLabels(), 
 				new SubProgressMonitor(monitor,10));
 		
-		return aOSS.getResults();
+		this.performanceFitness = aOSS.getResults();
 	}
 
 	@Override
-	public Double[] getPopulationFitness() {
+	public Map<String, Double> getPopulationFitness() {
+		return this.populationFitness;
+	}
+	
+	public void setPopulationFitness() {
 		
-		return null;
+		this.populationFitness = new HashMap<String, Double>();
+		
+		for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
+			String component = entry.getKey();
+			Double value = entry.getValue();
+			Double range = ExperimentConfiguration.metaHeuristic.getComponentRange().get(component);
+			Double weight = ((Integer) ExperimentConfiguration.metaHeuristic.getComponentRange().size()).doubleValue(); //so this needs to be in the GUI... bah!!!!
+			this.populationFitness.put(component, ((value/range)*100)/weight);
+		}
+		
 	}
 
 	@Override
@@ -98,7 +142,6 @@ public class SystemEquation extends Candidate {
 		}
 		
 		this.mySystemEquation = myNode.getSystemEquation();
-		Reporting.reportSystemEquation(this);
 		
 	}
 
@@ -108,44 +151,72 @@ public class SystemEquation extends Candidate {
 		
 	}
 
-	public Double getCreated() {
+	public Double getCreatedTime() {
 		return this.created;
 	}
 	
 	@Override
 	public void updateFitness() {
-		// TODO Auto-generated method stub
+		setPerformanceFitness();
+		setPopulationFitness();
+		setTotalPerformanceFitness();
+		setTotalPopulationFitness();
+		setTotalFitness();
 		
 	}
 
 	@Override
-	public void run() {
+	public String getAttributeString() {
+		String temp = "";
 		
-		for(Map.Entry<String, Double> entry : myNode.getSystemEquation().entrySet()){
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
+		for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
+			temp += " " + entry.getKey() + "[" + entry.getValue().longValue() + "] ";
 		}
 		
-		Map<String, Double> results = getPerformanceFitness();
+		return temp;
+	}
+
+	@Override
+	public Map<String, Double> getPerformanceFitness() {
+		return this.performanceFitness;
+	}
+	
+	@Override
+	public void setTotalPerformanceFitness(){
+		this.totalPerformanceFitness = 0.0; 
+		for(Map.Entry<String, Double> entry : this.performanceFitness.entrySet()){
+			Double ode = entry.getValue();
+			Double target = ExperimentConfiguration.metaHeuristic.getTargetMap().get(entry.getKey()).doubleValue();
+			Double targetWeight = ExperimentConfiguration.metaHeuristic.getTargetWeightMap().get(entry.getKey()).doubleValue();
+			this.totalPerformanceFitness += (Math.abs(100 -((ode/target)*100))) * targetWeight;
+		}
+			
+	}
+	
+	public void setTotalPopulationFitness(){
+		this.totalPopulationFitness = 0.0; 
+		for(Map.Entry<String, Double> entry : this.populationFitness.entrySet()){
+			Double value = entry.getValue();
+			this.totalPopulationFitness += value;
+		}
+			
+	}
+	
+	@Override
+	public Double getTotalPerformanceFitness(){
+		return this.totalPerformanceFitness;
 		
-//		for(Map.Entry<String, Double> entry : results.entrySet()){
-//			System.out.println(entry.getKey());
-//			System.out.println(entry.getValue());
-//		}
+	}
+	
+	@Override
+	public Double getTotalPopulationFitness(){
+		return this.totalPopulationFitness;
 		
-//		mutate();
-//		
-//		for(Map.Entry<String, Double> entry : myNode.getSystemEquation().entrySet()){
-//			System.out.println(entry.getKey());
-//			System.out.println(entry.getValue());
-//		}
-		
-//		results = getPerformanceFitness();
-		
-//		for(Map.Entry<String, Double> entry : results.entrySet()){
-//			System.out.println(entry.getKey());
-//			System.out.println(entry.getValue());
-//		}
+	}
+
+	@Override
+	public void mutate() {
+		//TODO for GA
 		
 	}
 	

@@ -10,20 +10,16 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Display;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.job.MetaHeuristicJob;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Tools;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Grapher;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.*;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
-import uk.ac.ed.inf.pepa.largescale.ParametricDerivationGraphBuilder;
-import uk.ac.ed.inf.pepa.ode.DifferentialAnalysisException;
 import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 
@@ -61,6 +57,9 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 	//An AST ModelNode
 	private ModelNode node;
 	
+	//Graph creator
+	private Grapher grapher;
+	
 	//A derivation of the model for the wizard
 	private IParametricDerivationGraph dGraph;
 	
@@ -72,7 +71,9 @@ public class MetaHeuristicCapacityPlanningWizard extends Wizard {
 		
 		this.node = model.getAST();
 		
-		this.dGraph = Tools.getDevGraphFromAST(node);
+		this.grapher = new Grapher();
+		
+		this.dGraph = grapher.getDevGraphFromAST(node);
 		
 		ExperimentConfiguration.resetToDefaults();
 		

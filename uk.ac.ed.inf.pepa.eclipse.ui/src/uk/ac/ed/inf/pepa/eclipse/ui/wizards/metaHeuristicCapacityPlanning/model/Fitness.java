@@ -22,7 +22,17 @@ public class Fitness extends MetaHeuristicConfigurations {
 	/**
 	 * fitness mapping
 	 */
-	private Map<String,Number> fitnessOptionMap = new HashMap<String, Number>();
+	private Map<String,Number> fitnessOptionMap = new HashMap<String, Number>()	
+	{
+
+	/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7778843389993990902L;
+
+	{
+		put(ExperimentConfiguration.ALPHABETA_S,0.5);
+	}};
 
 	@Override
 	public Map<String, Number> getMap() {

@@ -66,7 +66,7 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 		Map<String,Number> mapTarget = ExperimentConfiguration.metaHeuristic.getTargetMap();
 		Map<String,Number> mapTargetWeight = ExperimentConfiguration.metaHeuristic.getTargetWeightMap();
 		String typeTarget = ExperimentConfiguration.DOUBLE;
-		String typeTargetWegith = ExperimentConfiguration.PERCENT;
+		String typeTargetWeight = ExperimentConfiguration.PERCENT;
 		
 		BorderedCompositeWithDoubleTextWidget topBorderedCompositeWithDoubleTextWidget = new BorderedCompositeWithDoubleTextWidget("Performance target(s):",
 				"Performance target:",
@@ -80,7 +80,7 @@ public class SystemEquationTargetConfigurationPage extends MetaHeuristicCapacity
 				getTarget,
 				getTargetWeight,
 				typeTarget,
-				typeTargetWegith,
+				typeTargetWeight,
 				test1);
 		
 		widgets.add(topBorderedCompositeWithDoubleTextWidget);

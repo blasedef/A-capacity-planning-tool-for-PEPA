@@ -5,17 +5,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates.Experiment;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporting;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools.Reporter;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 
 public class MetaHeuristicJob extends Job{
 	
 	private int totalWork;
-	public static Reporting reporter;
+	public static Reporter reporter;
 
 	public MetaHeuristicJob(String name) {
 		super(name);
-		MetaHeuristicJob.reporter = new Reporting();
+		MetaHeuristicJob.reporter = new Reporter();
 		this.postProcessing();
 		
 		/*

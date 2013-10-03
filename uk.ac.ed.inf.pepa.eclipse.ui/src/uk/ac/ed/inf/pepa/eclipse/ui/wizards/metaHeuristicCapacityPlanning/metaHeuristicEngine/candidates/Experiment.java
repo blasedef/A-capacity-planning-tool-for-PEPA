@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.candidates;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -62,13 +63,13 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
-	public void mutate() {
+	public String getAttributeString() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public Double getTotalFitness() {
+	public Double getCreatedTime() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -80,7 +81,19 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
-	public Double[] getPopulationFitness() {
+	public HashMap<String, Double> getPopulationFitness() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Double getTotalFitness() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Double getTotalPerformanceFitness() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -92,13 +105,25 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
+	public void mutate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mutate(boolean isHillClimbing) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void newVector() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void run() {
+	public void setTotalPerformanceFitness() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -108,5 +133,7 @@ public class Experiment extends Candidate{
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 	
 }
