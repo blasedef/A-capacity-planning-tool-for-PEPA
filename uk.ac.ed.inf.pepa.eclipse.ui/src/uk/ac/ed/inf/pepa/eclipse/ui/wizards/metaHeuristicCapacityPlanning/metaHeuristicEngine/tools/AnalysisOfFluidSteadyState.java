@@ -129,7 +129,7 @@ public class AnalysisOfFluidSteadyState {
 			results[j] = collectors[j].computeObservation(estimates);
 	}
 	
-	public Map<String, Double> getResults(){
+	public HashMap<String, Double> getResults(){
 		
 		HashMap<String, Double> resultsMap = new HashMap<String, Double>();
 		

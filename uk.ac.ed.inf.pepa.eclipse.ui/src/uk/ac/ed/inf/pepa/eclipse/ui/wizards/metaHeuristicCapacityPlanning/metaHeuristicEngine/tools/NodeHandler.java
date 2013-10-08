@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
@@ -27,7 +28,14 @@ public class NodeHandler {
 	
 	public HashMap<String, Double> getSystemEquation(){
 		this.readAST();
-		return this.readAST.systemEquation;
+		
+		HashMap<String, Double> map = new HashMap<String, Double>();
+			
+		for(Map.Entry<String, Double> entry : readAST.systemEquation.entrySet()){
+			map.put(entry.getKey(), entry.getValue());
+		}
+		
+		return map;
 	}
 	
 	private void writeAST(){

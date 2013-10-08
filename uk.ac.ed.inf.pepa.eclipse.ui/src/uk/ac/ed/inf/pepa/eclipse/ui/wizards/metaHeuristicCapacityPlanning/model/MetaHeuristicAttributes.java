@@ -50,7 +50,7 @@ public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 		put(ExperimentConfiguration.EXPERIMENTS_S,1);
 		put(ExperimentConfiguration.GENERATION_S,100);
 		put(ExperimentConfiguration.ALPHABETA_S,0.5);
-		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,0.5);
+		put(ExperimentConfiguration.MUTATIONPROBABILITY_S,0.02);
 		put(ExperimentConfiguration.CROSSOVERPROBABILITY_S,0.2);
 		put(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S,100);
 		put(ExperimentConfiguration.PERSONALBEST,33.3);
@@ -112,7 +112,7 @@ public class MetaHeuristicAttributes extends MetaHeuristicConfigurations {
 		}
 		
 		if(ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.INTEGER)){
-			return "" + (Integer) number;
+			return "" + number.intValue();
 		} else if (ExperimentConfiguration.defaultOptionTypeMap.get(key).equals(ExperimentConfiguration.EVEN)) {
 			return "" + (Integer) number;
 		} else {

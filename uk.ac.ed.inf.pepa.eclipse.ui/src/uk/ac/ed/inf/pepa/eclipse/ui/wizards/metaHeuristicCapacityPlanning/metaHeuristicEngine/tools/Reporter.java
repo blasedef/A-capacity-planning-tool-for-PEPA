@@ -13,15 +13,48 @@ public class Reporter {
 	private double startTime;
 	private double stopTime; 
 	private double totalTime;
+	private int generation;
 	private ArrayList<HashMap<String,Integer>> generationMixture;
 	private HashMap<String,Double> totalFitness;
-	PriorityQueue<Solutions> queue = new PriorityQueue<Solutions>();
+	private int convergence;
+	PriorityQueue<Solutions> queue = new PriorityQueue<Solutions>() {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean offer(Solutions e) {
+			if(this.contains(e)){
+				return false;
+			} else {
+				return super.offer(e);
+			}
+		}
+
+		@Override
+		public boolean add(Solutions e) {
+			
+			
+			if(this.contains(e)){
+				return false;
+			} else {
+				return super.offer(e);
+			}
+		}
+		
+		
+	};
+
 	
 	public Reporter(){
 		startTime = System.currentTimeMillis();
 		totalTime = 0.0;
 		generationMixture = new ArrayList<HashMap<String,Integer>>();
 		totalFitness = new HashMap<String,Double>();
+		convergence = 0;
+		generation = 0;
 	}
 	
 	private void now(){
@@ -53,23 +86,35 @@ public class Reporter {
 		
 	}
 
-	public void addToGenerationMixture(Integer i, 
-			Candidate c, 
-			Double f) {
+	public void addToGenerationMixture(Integer j, 
+			Candidate c) {
+		
+		/* tidy this up */
+		
+		int i;
+		
+		if(j < 0){
+			i = this.generation;
+		} else {
+			this.generation = j;
+			i = this.generation;
+		}
 		
 		queue.add(new Solutions(c.getAttributeString(), 
 				c.getTotalFitness(), 
 				c.getTotalPerformanceFitness(), 
 				c.getTotalPopulationFitness(),
-				c.getPerformanceFitness(),
-				c.getPopulationFitness(),
+				c.getNewMap(c.getPerformanceFitness()),
+				c.getNewMap(c.getPopulationFitness()),
 				createdTime(),
 				i));
 		
+		System.out.println(c.getTotalFitness());
+		
 		if(this.generationMixture.size() == i + 1){
 			if(this.generationMixture.get(i).containsKey(c.getAttributeString())){
-				Integer j = this.generationMixture.get(i).get(c.getAttributeString());
-				this.generationMixture.get(i).put(c.getAttributeString(), j++ );
+				Integer k = this.generationMixture.get(i).get(c.getAttributeString());
+				this.generationMixture.get(i).put(c.getAttributeString(), k++ );
 			} else {
 				this.generationMixture.get(i).put(c.getAttributeString(), 1);
 			}
@@ -78,7 +123,7 @@ public class Reporter {
 			this.generationMixture.get(i).put(c.getAttributeString(), 1);
 		}
 		
-		this.totalFitness.put(c.getAttributeString(), f);
+		this.totalFitness.put(c.getAttributeString(), c.getTotalFitness());
 	}
 	
 	public void reportGenerationMix(Integer i){
@@ -89,20 +134,33 @@ public class Reporter {
 		for(String s : options){
 			System.out.println(i + " : " + s 
 					+ " : " 
-					+ (((Integer) this.generationMixture.get(i).get(s)).doubleValue()/size)*100 
+					+ (this.generationMixture.get(i).get(s).doubleValue())
 					+ "% :  "
 					+ this.totalFitness.get(s));
 		}
 		
 	}
 	
-	public HashMap<String,Double> getTotalPerformanceFitness(){
+	public HashMap<String,Double> getTotalFitness(){
 		return this.totalFitness;
 	}
 
 	public void reportSolutions() {
-		System.out.println(queue.poll().summary());
+		if(!queue.isEmpty()){
+			System.out.println(queue.poll().summary());
+		}
 		
+	}
+	
+	public boolean hasConverged(int i){
+		if (this.generationMixture.get(i).size() == 1){
+			this.convergence++;
+		} else {
+			if(this.convergence > 0) {
+				this.convergence--;
+			} 
+		}
+		return (this.convergence > 3);
 	}
 	
 }

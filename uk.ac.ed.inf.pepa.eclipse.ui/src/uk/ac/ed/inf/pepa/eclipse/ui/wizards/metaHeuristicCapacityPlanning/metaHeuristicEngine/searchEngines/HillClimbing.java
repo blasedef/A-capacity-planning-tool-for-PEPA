@@ -28,13 +28,19 @@ public class HillClimbing extends Metaheuristic {
 			
 		}
 		
-		for(Candidate c : candidatePopulation){
-			c.initialise();
-		}
-		
 		System.out.println("Generation : System Equation : Population % of generation : Total fitness");
 		
-		for(int i = 0; i < ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.GENERATION_S).intValue(); i++){
+		for(Candidate c : candidatePopulation){
+			
+			c.updateFitness();
+			
+			this.reporter.addToGenerationMixture(0,c);
+			
+		}
+		
+		reporter.reportGenerationMix(0);
+		
+		for(int i = 1; i < ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.GENERATION_S).intValue(); i++){
 			
 			
 			for(Candidate c : candidatePopulation){
@@ -42,11 +48,11 @@ public class HillClimbing extends Metaheuristic {
 				if(monitor.isCanceled())
 					return Status.CANCEL_STATUS;
 				
+				c.mutate(true);
+				
 				c.updateFitness();
 				
-				this.reporter.addToGenerationMixture(i,c,c.getTotalFitness());
-				
-				c.mutate(true);
+				this.reporter.addToGenerationMixture(i,c);
 			}	
 			
 			reporter.reportGenerationMix(i);

@@ -20,8 +20,8 @@ public class SystemEquation extends Candidate {
 	private HashMap<String, Double> mySystemEquation = new HashMap<String, Double>();
 	private IProgressMonitor monitor;
 	Reporter reporter;
-	private Map<String, Double> performanceFitness;
-	private Map<String, Double> populationFitness;
+	private HashMap<String, Double> performanceFitness;
+	private HashMap<String, Double> populationFitness;
 	private Double totalPopulationFitness;
 	private Double totalPerformanceFitness;
 	private Double myFitness;
@@ -36,6 +36,7 @@ public class SystemEquation extends Candidate {
 		this.reporter = reporter;
 		this.totalPerformanceFitness = 100000.0;
 		setMaximumpopulationSize();
+		initialise();
 	}
 	
 	public void setMaximumpopulationSize(){
@@ -54,9 +55,6 @@ public class SystemEquation extends Candidate {
 		int split = Tools.returnRandomInRange(0.0, ((Integer) mySystemEquation.size()).doubleValue(), ExperimentConfiguration.INTEGER).intValue();
 		SystemEquation parentB = (SystemEquation) candidate;
 		
-		System.out.println("A before :" + this.mySystemEquation);
-		System.out.println("B before :" + parentB.mySystemEquation);
-		
 		String[] options = mySystemEquation.keySet().toArray(new String[0]);
 		
 		for(int i = 0; i < split; i++){
@@ -65,34 +63,59 @@ public class SystemEquation extends Candidate {
 			parentB.mySystemEquation.put(options[i], temp);
 		}
 		
-		System.out.println("A after :" + this.mySystemEquation);
-		System.out.println("B after :" + parentB.mySystemEquation);
 	}
-
+	
+	public HashMap<String, Double> getMutated(){
+		
+		boolean happened = false;
+		HashMap<String, Double> newSystemEquation = getNewMap(this.mySystemEquation);
+		
+		for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
+			if(Tools.rollDice(ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.MUTATIONPROBABILITY_S).doubleValue())){
+				happened = true;
+				Double min = ExperimentConfiguration.metaHeuristic.getMinPopMap().get(entry.getKey()).doubleValue();
+				Double max = ExperimentConfiguration.metaHeuristic.getMaxPopMap().get(entry.getKey()).doubleValue();
+				Double d = Tools.returnRandomInRange(min, max, ExperimentConfiguration.INTEGER);
+				newSystemEquation.put(entry.getKey(),d);
+			} 
+		}
+		
+		if(happened){		
+			return newSystemEquation;
+		} else {
+			return null;
+		}
+		
+	}
+	
 	@Override
 	public void mutate(boolean isHillClimbing) {
 		
-		if(this.maximumPopulationSize > this.reporter.getTotalPerformanceFitness().size()){
-			if(Tools.rollDice(ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.MUTATIONPROBABILITY_S).doubleValue())){
-				for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
-					Double min = ExperimentConfiguration.metaHeuristic.getMinPopMap().get(entry.getKey()).doubleValue();
-					Double max = ExperimentConfiguration.metaHeuristic.getMaxPopMap().get(entry.getKey()).doubleValue();
-					Double d = Tools.returnRandomInRange(min, max, ExperimentConfiguration.INTEGER);
-					this.mySystemEquation.put(entry.getKey(),d);
-				}
-				
-				this.myNode.setSystemEquation(this.mySystemEquation);
-			}
+		/**
+		 * if you have not searched the entire search space...
+		 */
+		if(this.maximumPopulationSize > this.reporter.getTotalFitness().size()){
+			
+			HashMap<String, Double> newSystemEquation = getMutated();
 			
 			if(isHillClimbing){
-				String temp = getAttributeString();
-				if(this.reporter.getTotalPerformanceFitness().containsKey(temp)){
-					mutate(isHillClimbing);
+				if(newSystemEquation == null){
+					mutate(true);
 				} else {
-					this.mySystemEquation = myNode.getSystemEquation();
+					String temp = getAttributeString(newSystemEquation);
+					if(this.reporter.getTotalFitness().containsKey(temp)){
+						mutate(true);
+					} else {
+						System.out.println("mutation happened! old: " + this.mySystemEquation + " new: " + newSystemEquation);
+						this.mySystemEquation = getNewMap(newSystemEquation);
+					}
 				}
+				
 			} else {
-				this.mySystemEquation = myNode.getSystemEquation();
+				if(newSystemEquation != null){
+					System.out.println("mutation happened! old: " + this.mySystemEquation + " new: " + newSystemEquation);
+					this.mySystemEquation = getNewMap(newSystemEquation);
+				}
 			}
 		}
 		
@@ -111,7 +134,7 @@ public class SystemEquation extends Candidate {
 
 	public void setPerformanceFitness() {
 		
-		AnalysisOfFluidSteadyState aOSS = new AnalysisOfFluidSteadyState(this.myNode.getGraph(null), 
+		AnalysisOfFluidSteadyState aOSS = new AnalysisOfFluidSteadyState(this.myNode.getGraph(this.mySystemEquation), 
 				ExperimentConfiguration.oDEConfig.getOptionMap(), 
 				ExperimentConfiguration.oDEConfig.getEstimators(), 
 				ExperimentConfiguration.oDEConfig.getCollectors(), 
@@ -122,7 +145,7 @@ public class SystemEquation extends Candidate {
 	}
 
 	@Override
-	public Map<String, Double> getPopulationFitness() {
+	public HashMap<String, Double> getPopulationFitness() {
 		return this.populationFitness;
 	}
 	
@@ -144,7 +167,7 @@ public class SystemEquation extends Candidate {
 	public void initialise() {
 		
 		//'10%' of user system equations make it into the original population
-		if(Tools.rollDice(0.1)){
+		if(Tools.rollDice(0.9)){
 			for(Map.Entry<String, Double> entry : mySystemEquation.entrySet()){
 				Double min = ExperimentConfiguration.metaHeuristic.getMinPopMap().get(entry.getKey()).doubleValue();
 				Double max = ExperimentConfiguration.metaHeuristic.getMaxPopMap().get(entry.getKey()).doubleValue();
@@ -171,11 +194,16 @@ public class SystemEquation extends Candidate {
 	
 	@Override
 	public void updateFitness() {
-		setPerformanceFitness();
-		setPopulationFitness();
-		setTotalPerformanceFitness();
-		setTotalPopulationFitness();
-		setTotalFitness();
+		String temp = getAttributeString();
+		if(!this.reporter.getTotalFitness().containsKey(temp)){
+			setPerformanceFitness();
+			setPopulationFitness();
+			setTotalPerformanceFitness();
+			setTotalPopulationFitness();
+			setTotalFitness();
+		} else {
+			this.myFitness = this.reporter.getTotalFitness().get(temp);
+		}
 		
 	}
 
@@ -189,9 +217,19 @@ public class SystemEquation extends Candidate {
 		
 		return temp;
 	}
+	
+	public String getAttributeString(HashMap<String, Double> map) {
+		String temp = "";
+		
+		for(Map.Entry<String, Double> entry : map.entrySet()){
+			temp += " " + entry.getKey() + "[" + entry.getValue().longValue() + "] ";
+		}
+		
+		return temp;
+	}
 
 	@Override
-	public Map<String, Double> getPerformanceFitness() {
+	public HashMap<String, Double> getPerformanceFitness() {
 		return this.performanceFitness;
 	}
 	

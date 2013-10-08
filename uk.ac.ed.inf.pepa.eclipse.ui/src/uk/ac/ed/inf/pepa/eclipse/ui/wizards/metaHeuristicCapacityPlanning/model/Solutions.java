@@ -3,9 +3,11 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model
 import java.util.Comparator;
 import java.util.Map;
 
+import org.hamcrest.core.IsInstanceOf;
+
 public class Solutions implements Comparator<Solutions>, Comparable<Solutions> {
 	
-	private String systemEquation;
+	public String systemEquation;
 	public Double fitness;
 	private Double performanceFitness;
 	private Double populationFitness;
@@ -36,10 +38,10 @@ public class Solutions implements Comparator<Solutions>, Comparable<Solutions> {
 	@Override
 	public int compare(Solutions arg0, Solutions arg1) {
 		
-		if(arg0.fitness.intValue() < arg1.fitness.intValue()){
+		if(arg0.fitness.doubleValue() < arg1.fitness.doubleValue()){
 			return -1;
 		}
-		if(arg0.fitness.intValue() > arg1.fitness.intValue()){
+		if(arg0.fitness.doubleValue() > arg1.fitness.doubleValue()){
 			return 1;
 		}
 		return 0;
@@ -60,13 +62,29 @@ public class Solutions implements Comparator<Solutions>, Comparable<Solutions> {
 	@Override
 	public int compareTo(Solutions arg0) {
 		
-		if(this.fitness.intValue() < arg0.fitness.intValue()){
+		if(this.fitness.doubleValue() < arg0.fitness.doubleValue()){
 			return -1;
 		}
-		if(this.fitness.intValue() > arg0.fitness.intValue()){
+		if(this.fitness.doubleValue() > arg0.fitness.doubleValue()){
 			return 1;
 		}
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(obj instanceof Solutions){
+			Solutions sol = (Solutions) obj;
+			if(this.systemEquation.equals(sol.systemEquation)){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	
 
 }

@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.metaHeuristicEngine.tools;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import uk.ac.ed.inf.pepa.parsing.ASTVisitor;
 import uk.ac.ed.inf.pepa.parsing.ActionTypeNode;
@@ -38,7 +39,9 @@ class SetASTVisitor implements ASTVisitor {
 	}
 	
 	public void setSystemEquation(HashMap<String, Double> systemEquation){
-		this.systemEquation = systemEquation;
+		for(Map.Entry<String, Double> entry : systemEquation.entrySet()){
+			this.systemEquation.put(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	@Override

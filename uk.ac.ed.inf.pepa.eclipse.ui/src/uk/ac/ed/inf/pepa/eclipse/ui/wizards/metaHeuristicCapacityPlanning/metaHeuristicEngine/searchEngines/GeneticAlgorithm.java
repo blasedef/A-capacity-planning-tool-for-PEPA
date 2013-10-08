@@ -25,56 +25,87 @@ public class GeneticAlgorithm extends Metaheuristic {
 	
 	public IStatus search(){
 		
+		IStatus status;
+		
+		createPopulation();
+		
+		System.out.println("Generation : System Equation : Population % of generation : Total fitness");
+		
+		status = cycleGenerations();
+		
+		for(int i = 0; i < 10; i++){
+			reporter.reportSolutions();
+		}
+		
+		return status;
+		
+	}
+	
+	public void createPopulation(){
+		
 		for(int i = 0; i < ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.INITIALCANDIDATEPOPULATION_S).intValue(); i++){
 			
 			candidatePopulation.add(new SystemEquation(monitor, this.reporter));
 			
 		}
 		
-		for(Candidate c : candidatePopulation){
-			c.initialise();
-		}
+	}
+	
+	public IStatus cycleGenerations(){
 		
-		System.out.println("Generation : System Equation : Population % of generation : Total fitness");
+		IStatus status = Status.OK_STATUS;
 		
 		for(int i = 0; i < ExperimentConfiguration.metaHeuristic.getAttributeMap().get(ExperimentConfiguration.GENERATION_S).intValue(); i++){
 			
+			status = updateFitness();	
 			
-			for(Candidate c : candidatePopulation){
-				
-				if(monitor.isCanceled())
-					return Status.CANCEL_STATUS;
-				
-				c.updateFitness();
-				
-				this.reporter.addToGenerationMixture(i,c,c.getTotalFitness());
-				
-			}	
-			
-			ArrayList<Candidate> newGeneration = new ArrayList<Candidate>();
-			
-			for(int j = 0; j < candidatePopulation.size()/2; j++){
-			
-				Candidate candidateA = tournamentSelection();
-				Candidate candidateB = tournamentSelection();
-			
-				candidateA.Crossover(candidateB);
-			
-				candidateA.mutate(false);
-				candidateB.mutate(false);
-			
-				newGeneration.add(candidateA);
-				newGeneration.add(candidateB);
-			}
-			
-			this.candidatePopulation = newGeneration;
+			tournamentCrossMutate(i);
 			
 			reporter.reportGenerationMix(i);
 			
+			if(reporter.hasConverged(i))
+				break;
+			
 		}
 		
-		for(int i = 0; i < 10; i++){
-			reporter.reportSolutions();
+		return status;
+	}
+	
+	public void tournamentCrossMutate(int i) {
+		
+		ArrayList<Candidate> newGeneration = new ArrayList<Candidate>();
+		
+		for(int j = 0; j < candidatePopulation.size()/2; j++){
+		
+			Candidate candidateA = tournamentSelection();
+			Candidate candidateB = tournamentSelection();
+		
+			//candidateA.Crossover(candidateB);
+		
+			candidateA.mutate(false);
+			candidateB.mutate(false);
+			
+		
+			newGeneration.add(candidateA);
+			newGeneration.add(candidateB);
+			
+			this.reporter.addToGenerationMixture(i,candidateA);
+			this.reporter.addToGenerationMixture(i,candidateB);
+		}
+		
+		this.candidatePopulation = newGeneration;
+		
+	}
+	
+	public IStatus updateFitness(){
+		
+		for(Candidate c : candidatePopulation){
+			
+			if(monitor.isCanceled())
+				return Status.CANCEL_STATUS;
+			
+			c.updateFitness();
+			
 		}
 		
 		return Status.OK_STATUS;
