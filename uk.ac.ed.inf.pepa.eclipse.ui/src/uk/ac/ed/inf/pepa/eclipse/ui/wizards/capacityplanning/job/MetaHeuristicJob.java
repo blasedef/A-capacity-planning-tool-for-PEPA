@@ -108,14 +108,14 @@ public class MetaHeuristicJob extends Job{
 		
 		for(int i = 0; i < lab.experiments; i++){
 			output += "Experiment;" + i + ";\n";
-			output += lab.metaheuristics.get(i).recorder.getTopX(10);
+			output += lab.recorders.get(i).getTopX(10);
 			output += ";\n";
 		}
 		
 		for(int i = 0; i < lab.experiments; i++){
 			output += "Experiment;" + i + ";\n";
-			for(int j = 0; j < lab.metaheuristics.get(i).recorder.getGeneration().size(); j++){
-				output += lab.metaheuristics.get(i).recorder.thisGenerationsMix(j);
+			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
+				output += lab.recorders.get(i).thisGenerationsMix(j);
 			}
 		}
 		

@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.Metaheuristic;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
@@ -14,7 +15,8 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Configuratio
 public abstract class Lab {
 	
 	public int experiments;
-	public ArrayList<Metaheuristic> metaheuristics;
+//	public ArrayList<Metaheuristic> metaheuristics;
+	public ArrayList<Recorder> recorders;
 	protected int totalWork;
 	protected ConfigurationModel configurationModel;
 	protected HashMap<String,Double> systemEquationPopulationRanges;
@@ -25,7 +27,8 @@ public abstract class Lab {
 			HashMap<String,Double> systemEquationPopulationRanges,
 			int experiments) {
 		
-		this.metaheuristics = new ArrayList<Metaheuristic>();
+//		this.metaheuristics = new ArrayList<Metaheuristic>();
+		this.recorders = new ArrayList<Recorder>();
 		this.experiments = experiments;
 		this.configurationModel = configurationModel;
 		this.totalWork = totalWork;
@@ -73,7 +76,9 @@ public abstract class Lab {
 			
 			status = temp.search();
 			
-			metaheuristics.add(temp);
+			recorders.add(temp.recorder);
+			
+//			metaheuristics.add(temp);
 			
 //			status = metaheuristics.get(i).search();
 		}

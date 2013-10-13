@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Map.Entry;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.ExperimentConfiguration;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 public class Tool {
 	
@@ -30,15 +30,15 @@ public class Tool {
 		
 		Random generator = new Random();
 		
-		if(type.equals(ExperimentConfiguration.INTEGER)){
+		if(type.equals(Config.INTEGER)){
 			
 			return generator.nextInt((int)(max - min) + 1) + min; 
 			
-		} else if (type.equals(ExperimentConfiguration.DOUBLE)) {
+		} else if (type.equals(Config.DOUBLE)) {
 			
 			return generator.nextDouble() * (max - min) + min; 
 			
-		} else if (type.equals(ExperimentConfiguration.PERCENT)) {
+		} else if (type.equals(Config.PERCENT)) {
 			
 			return generator.nextDouble() * (max - min) + min;
 			

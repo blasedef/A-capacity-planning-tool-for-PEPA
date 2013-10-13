@@ -171,13 +171,6 @@
                menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
                style="push">
          </action>
-         <action
-               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.MetaHeuristicCapacityPlanningDelegate"
-               id="uk.ac.ed.inf.pepa.eclipse.ui.capacityplanning"
-               label="Metaheuristic Capacity Planning..."
-               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.ode.menu/content"
-               style="push">
-         </action>
          <!--<action
                class="uk.ac.ed.inf.pepa.eclipse.ui.actions.TimeSeriesAnalysisActionDelegate"
                id="uk.ac.ed.inf.pepa.eclipse.ui.timeSeriesAnalysis"

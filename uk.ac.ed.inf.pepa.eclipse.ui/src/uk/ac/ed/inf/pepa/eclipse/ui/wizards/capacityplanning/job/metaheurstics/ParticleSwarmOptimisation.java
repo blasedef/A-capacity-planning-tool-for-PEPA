@@ -9,11 +9,13 @@ import org.eclipse.core.runtime.Status;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.ParticleSwarmOptimisationSystemEquationCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 public class ParticleSwarmOptimisation extends Metaheuristic {
 	
 	protected PriorityQueue<Candidate> globalBestQueue;
+	protected Candidate globalBest;
 	protected double originalVelocityWeight;
 	protected double personalBestVelocityWeight;
 	protected double globalBestVelocityWeight;
@@ -68,17 +70,23 @@ public class ParticleSwarmOptimisation extends Metaheuristic {
 			
 		}
 		
+		this.globalBest = ((ParticleSwarmOptimisationSystemEquationCandidate) this.globalBestQueue.poll()).copySelf();
+		this.globalBestQueue.clear();
+		
 		for(int i = 1; i < generationSize; i++){
 			for(Candidate c : candidatePopulation){
 				
 				if(monitor.isCanceled())
 					return Status.CANCEL_STATUS;
 				
-				c.setVelocity(this.globalBestQueue.peek(), this.originalVelocityWeight, this.personalBestVelocityWeight, globalBestVelocityWeight);
+				c.setVelocity(this.globalBest, this.originalVelocityWeight, this.personalBestVelocityWeight, globalBestVelocityWeight);
 				c.updateFitness();
 				this.globalBestQueue.add(c.copySelf());
 				recorder.addNewCandidate(c, i);
 			}
+			
+			this.globalBest = ((ParticleSwarmOptimisationSystemEquationCandidate) this.globalBestQueue.poll()).copySelf();
+			this.globalBestQueue.clear();
 		}
 		
 		recorder.stopTimer();

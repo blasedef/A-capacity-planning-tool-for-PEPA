@@ -13,6 +13,8 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEquationCandidate {
 
 	protected PriorityQueue<Candidate> personalBestQueue;
+	protected Candidate personalBest;
+	protected HashMap<String,Double> personalBestMap;
 	protected HashMap<String,Double> velocityVector;
 	
 	public ParticleSwarmOptimisationSystemEquationCandidate(int i,
@@ -97,6 +99,10 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 		this.fitness = ((ParticleSwarmOptimsationSystemEquationFitnessFunction) fitnessFunction).getFitness(candidateMap,this.maximumPopulation);
 		this.performanceResultsMap = ((SystemEquationFitnessFunction) this.fitnessFunction).getPerformanceResultsMap();
 		this.personalBestQueue.add(this.copySelf());
+		this.personalBestMap = Tool.copyHashMap(this.personalBestQueue.peek().getCandidateMap());
+		this.personalBest = this.personalBestQueue.poll();
+		this.personalBestQueue.clear();
+		this.personalBestQueue.add(this.personalBest);
 	}
 	
 	@Override
@@ -105,9 +111,7 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 			double personalBestVelocityWeight,
 			double globalBestVelocityWeight) {
 		
-		Candidate personalBestCandidate = this.personalBestQueue.peek();
-		
-		HashMap<String,Double> personalBestCandidateMap = Tool.copyHashMap(personalBestCandidate.getCandidateMap());
+		HashMap<String,Double> personalBestCandidateMap = this.personalBestMap;
 		HashMap<String,Double> globalBestCandidateMap = Tool.copyHashMap(globalBest.getCandidateMap());
 		HashMap<String,Double> originalVelocityMap = Tool.copyHashMap(this.velocityVector);
 		
