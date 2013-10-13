@@ -29,7 +29,7 @@ public abstract class Config {
 	//MetaHeuristic Configuration Parameters
 	public static String EXPERIMENTS_S = "Experiments";
 	public static String GENERATION_S = "Generation";
-	public static String GENERATIONHC_S = "GenerationHC";
+	public static String GENERATIONHC_S = "HillClimbing generation";
 	public static String FITNESS_ALPHA_PERFORMANCE_S = "Performance";
 	public static String FITNESS_BETA_POPULATION_S = "Population";
 	public static String FITNESS_DELTA_PERFORMANCE_S = "Performance";

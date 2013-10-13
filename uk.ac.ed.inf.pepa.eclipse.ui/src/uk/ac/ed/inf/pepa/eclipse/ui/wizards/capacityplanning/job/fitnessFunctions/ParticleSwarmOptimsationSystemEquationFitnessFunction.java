@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.SystemEquationRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ODEConfig;
@@ -75,10 +76,16 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 	}
 	
 	private void setFitness(HashMap<String,Double> maximumPopulation){
-		setPerformanceFitness();
-		setPopulationFitness(maximumPopulation);
-		Double alpha = this.fitnessMap.get(Config.FITNESS_ALPHA_PERFORMANCE_S);
-		Double beta = this.fitnessMap.get(Config.FITNESS_BETA_POPULATION_S);
-		this.fitness = (alpha*this.performanceFitness) + (beta*this.populationFitness);
+		if(recorder.getCandidateMapToFitnessHash().containsKey(getName(candidate))){
+			this.fitness = recorder.getCandidateMapToFitnessHash().get(getName(candidate));
+			this.performanceResultsMap = Tool.copyHashMap(((SystemEquationRecorder) recorder).getNameToPerformanceResultsMapHash().get(getName(candidate)));
+			monitor.worked(1);
+		} else {
+			setPerformanceFitness();
+			setPopulationFitness(maximumPopulation);
+			Double alpha = this.fitnessMap.get(Config.FITNESS_ALPHA_PERFORMANCE_S);
+			Double beta = this.fitnessMap.get(Config.FITNESS_BETA_POPULATION_S);
+			this.fitness = (alpha*this.performanceFitness) + (beta*this.populationFitness);
+		}
 	}
 }

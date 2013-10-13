@@ -17,7 +17,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	
 	protected Double populationFitness;
 	protected Double performanceFitness;
-	private HashMap <String,Double> performanceResultsMap;
+	protected HashMap <String,Double> performanceResultsMap;
 	protected HashMap <String,Double> populationResultsMap;
 	protected HashMap <String,Double> candidate;
 	private NodeHandler nodeHandler;
@@ -139,6 +139,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		if(recorder.getCandidateMapToFitnessHash().containsKey(getName(candidate))){
 			this.fitness = recorder.getCandidateMapToFitnessHash().get(getName(candidate));
 			this.performanceResultsMap = Tool.copyHashMap(((SystemEquationRecorder) recorder).getNameToPerformanceResultsMapHash().get(getName(candidate)));
+			monitor.worked(1);
 		} else {
 			setPerformanceFitness();
 			setPopulationFitness();

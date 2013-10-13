@@ -100,9 +100,6 @@ public class CapacityPlanningWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page){
 		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
 			
-			addSaveAsPage();
-			addPage(newFilePage);
-			
 			if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
 				((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(configurationModel.dropDownListsList.get(1).getValue());
 			} else {
@@ -155,6 +152,10 @@ public class CapacityPlanningWizard extends Wizard {
 			return this.systemEquationTargetConfigurationPage;
 		}
 		else if(page == systemEquationTargetConfigurationPage && (configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
+			
+			addSaveAsPage();
+			addPage(newFilePage);
+			
 			return newFilePage;
 		}
 		else if(page == systemEquationTargetConfigurationPage && (!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
@@ -169,6 +170,10 @@ public class CapacityPlanningWizard extends Wizard {
 			return this.metaheuristicParameterConfigurationPageTwo;
 		}
 		else if(page == this.metaheuristicParameterConfigurationPageTwo){
+			
+			addSaveAsPage();
+			addPage(newFilePage);
+			
 			return this.newFilePage;
 		}
 		else {
@@ -194,7 +199,9 @@ public class CapacityPlanningWizard extends Wizard {
 		"_" + 
 		configurationModel.dropDownListsList.get(1).getValue() +
 		"_" + 
-		configurationModel.dropDownListsList.get(2).getValue();
+		configurationModel.dropDownListsList.get(2).getValue() + 
+		"_" + 
+		configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S);
 		
 		this.newFilePage.setFileName(fileName + "_" + (System.currentTimeMillis()/1000) + "_" + handle.getName()  );
 
