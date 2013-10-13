@@ -1,4 +1,4 @@
-package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets;
+package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -10,15 +10,15 @@ import org.eclipse.swt.widgets.Label;
 
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.model.Configuration;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.DropDownLists;
 
 
 public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 	
-	Configuration model;
+	DropDownLists model;
 	final Combo combo;
 	
-	public CapacityPlanningComboWidget(Composite container, Configuration model, final IValidationCallback cb) {
+	public CapacityPlanningComboWidget(Composite container, DropDownLists model, final IValidationCallback cb) {
 		super(model.getKey(),model.getValue(),cb);
 		this.model = model;
 		
@@ -46,7 +46,6 @@ public class CapacityPlanningComboWidget extends CapacityPlanningWidget {
 		return true;
 	}
 
-	@Override
 	public void setValue() {
 		this.model.setValue(combo.getText());
 	}

@@ -347,7 +347,7 @@ public class MetaHeuristicType extends Configuration{
 
 	@Override
 	public String getDescription() {
-		return this.getTitle() + ExperimentConfiguration.METAHEURISTICDESCRIPTION; 
+		return this.getKey() + ExperimentConfiguration.METAHEURISTICDESCRIPTION; 
 	}
 	
 }

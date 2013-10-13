@@ -4,158 +4,238 @@
  * are made available under the terms of the BSD Licence, which
  * accompanies this feature and can be downloaded from
  * http://groups.inf.ed.ac.uk/pepa/update/licence.txt
+ * 
+ * Author: Christopher Williams
+ * 
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
-import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.MetaHeuristicJob;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.dropDownLists.EvaluatorType;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.MetaheuristicParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.SystemEquation;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.Targets;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 
 public class CapacityPlanningWizard extends Wizard {
+	
+	//Page name
+	String pageTitle = "Metaheuristic Capacity Planning";
+	
+	public ConfigurationModel configurationModel;
+	
+	//Wizard page iterator
+	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
+	
+	//wizard pages
+	public CapacityPlanningWizardPage evaluatorAndMetaHeuristicSelectionPage;
+	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageOne;
+	public CapacityPlanningWizardPage additionalCostsPage;
+	public CapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
+	public CapacityPlanningWizardPage systemEquationTargetConfigurationPage;
+	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageTwo;
+	public CapacityPlanningWizardPage fileSaveAsPage;
+	public CapacityPlanningWizardPage summaryPage;
 	
 	/** Extension for CSV files */
 	private static final String EXTENSION = "csv";
 	private WizardNewFileCreationPage newFilePage;
 	
-	protected ChoiceSelectionPage performanceRequirementSelectionPage;
-	protected ThroughputSetupPage throughputSetupPage;
-	protected AverageResponseTimeSetupPage averageResponseTimeSetupPage;
-	protected SetupOptimiserPage setupOptimiserPage;
-	protected HillClimbingSetupPage setupHillClimbingPage;
-	protected GeneticAlgorithmSetupPage setupGeneticAlgorithmPage;
-	protected FitnessFunctionSetupPage targetSetupPage;
-	protected IODESolution performanceRequirementChoice;
-	@SuppressWarnings("unused")
-	private CPAParameters fParams;
-	
-	/**
-	 * Initialise CPAP, CPAP requires a model (for files?) and to initialise an fGraph for the setup pages 
-	 * @param model
-	 */
-	public CapacityPlanningWizard(IPepaModel model) {
-		super();
-	    this.fParams = new CPAParameters(model);
-	    setNeedsProgressMonitor(true);
-	}
-	
-	@Override
-	public void addPages() {
-		performanceRequirementSelectionPage = new ChoiceSelectionPage();
-		addPage(performanceRequirementSelectionPage);
-		throughputSetupPage = new ThroughputSetupPage();
-		averageResponseTimeSetupPage = new AverageResponseTimeSetupPage();
-		addPage(throughputSetupPage);
-		addPage(averageResponseTimeSetupPage);
+	public CapacityPlanningWizard(IPepaModel model){
+		
+		this.configurationModel = new ConfigurationModel(model);
+		
+		evaluatorAndMetaHeuristicSelectionPage = new EvaluatorAndMetaheuristicSelectionPage(pageTitle, 
+				configurationModel.dropDownListsList);
+		wizardPageList.add(evaluatorAndMetaHeuristicSelectionPage);
+		
+		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+				configurationModel.metaheuristicParameters,
+				null,
+				false);
+		wizardPageList.add(metaheuristicParameterConfigurationPageOne);
+		
+		additionalCostsPage = new AdditionalCostsPage(pageTitle);
+		wizardPageList.add(additionalCostsPage);
+		
+		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
+				configurationModel.configPEPA, 
+				configurationModel.configODE, 
+				(EvaluatorType) configurationModel.dropDownListsList.get(0));
+		wizardPageList.add(ordinaryDifferentialEquationConfigurationPage);
+		
+		systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
+				configurationModel.systemEquationFitnessWeights,
+				configurationModel.performanceTargetsAndWeights,
+				configurationModel.systemEquationCandidate);
+		wizardPageList.add(systemEquationTargetConfigurationPage);
+		
+		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
+				configurationModel.metaheuristicParametersCandidate, 
+				configurationModel.metaheuristicFitnessWieghts,
+				true);
+		wizardPageList.add(metaheuristicParameterConfigurationPageTwo);
+		
 		addSaveAsPage();
-		addPage(newFilePage);
+		wizardPageList.add(newFilePage);
+		
 	}
-  
+	
+	public IWizardPage getNextPage(IWizardPage page){
+		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
+			
+			addSaveAsPage();
+			addPage(newFilePage);
+			
+			if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
+				((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(configurationModel.dropDownListsList.get(1).getValue());
+			} else {
+				((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(Config.METAHEURISTICTYPEHILLCLIMBING_S);
+			}
+			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+					configurationModel.metaheuristicParameters,
+					null,
+					false);
+			addPage(this.metaheuristicParameterConfigurationPageOne);
+			
+			return this.metaheuristicParameterConfigurationPageOne;
+			
+		}
+		else if(page == metaheuristicParameterConfigurationPageOne && (configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S)))	{
+			additionalCostsPage = new AdditionalCostsPage(pageTitle);
+			addPage(additionalCostsPage);
+			return this.additionalCostsPage;
+			
+		}
+		else if(page == metaheuristicParameterConfigurationPageOne && (configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSNO_S)))	{
+			ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
+					configurationModel.configPEPA, 
+					configurationModel.configODE, 
+					(EvaluatorType) configurationModel.dropDownListsList.get(0));
+			addPage(ordinaryDifferentialEquationConfigurationPage);
+			return this.ordinaryDifferentialEquationConfigurationPage;
+			
+		}
+		else if(page == additionalCostsPage)	{
+			ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
+					configurationModel.configPEPA, 
+					configurationModel.configODE, 
+					(EvaluatorType) configurationModel.dropDownListsList.get(0));
+			addPage(ordinaryDifferentialEquationConfigurationPage);
+			return this.ordinaryDifferentialEquationConfigurationPage;
+			
+		}
+		else if(page == ordinaryDifferentialEquationConfigurationPage){
+			
+			((Targets) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
+			
+			((SystemEquation) configurationModel.systemEquationCandidate).update(configurationModel.configPEPA.getSystemEquation(), 
+					configurationModel.configPEPA.getInitialPopulation());
+			systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
+					configurationModel.systemEquationFitnessWeights,
+					configurationModel.performanceTargetsAndWeights,
+					configurationModel.systemEquationCandidate);
+			addPage(this.systemEquationTargetConfigurationPage);
+			return this.systemEquationTargetConfigurationPage;
+		}
+		else if(page == systemEquationTargetConfigurationPage && (configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
+			return newFilePage;
+		}
+		else if(page == systemEquationTargetConfigurationPage && (!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
+			
+			((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
+			metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
+					configurationModel.metaheuristicParametersCandidate, 
+					configurationModel.metaheuristicFitnessWieghts,
+					true);
+			addPage(this.metaheuristicParameterConfigurationPageTwo);
+			
+			return this.metaheuristicParameterConfigurationPageTwo;
+		}
+		else if(page == this.metaheuristicParameterConfigurationPageTwo){
+			return this.newFilePage;
+		}
+		else {
+			return super.getNextPage(null);
+		}
+		
+	}
+	
 	/**
 	 * save page setup
 	 */
 	private void addSaveAsPage() {
 		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
 				ResourceUtilities.changeExtension(
-						CPAParameters.model.getUnderlyingResource(), EXTENSION));
-	
-		newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
+						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), EXTENSION));
+
+		this.newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
 				handle), EXTENSION);
-		newFilePage.setTitle("Save to CSV");
-		newFilePage.setDescription("Save model configurations to");
-		newFilePage.setFileName(handle.getName());
+		this.newFilePage.setTitle("Save to CSV");
+		this.newFilePage.setDescription("Save model configurations to");
 		
+		String fileName = configurationModel.dropDownListsList.get(0).getValue() + 
+		"_" + 
+		configurationModel.dropDownListsList.get(1).getValue() +
+		"_" + 
+		configurationModel.dropDownListsList.get(2).getValue();
+		
+		this.newFilePage.setFileName(fileName + "_" + (System.currentTimeMillis()/1000) + "_" + handle.getName()  );
+
 	}
 
 	@Override
 	public boolean performFinish() {
-		Job metaheuristicJob;
-		CPAParameters.setNewFilePage(newFilePage);
-		try {
-			metaheuristicJob = new MetaHeuristicJob();
-			metaheuristicJob.schedule();
-		} catch (InvocationTargetException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"error",
-					e.toString());
-			
-		} catch (InterruptedException e) {
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					"Cancel Acknowledgement",
-					"The ODE generation process has been cancelled");
-		}
+		
+		MetaHeuristicJob job = new MetaHeuristicJob("Running the search", 
+				configurationModel, 
+				this.newFilePage.createNewFile());
+		
+		job.setUser(true);
+		job.schedule();
 		return true;
 	}
 	
-	/**
-	 * I guess this is not the correct way of doing things, but it works, this forces a 'route' through the pages
-	 * so that the choices made, and the population of the CPAP effect the pages created later. There is dependency between
-	 * the page creation, and the page choice...
-	 */
-	public IWizardPage getNextPage(IWizardPage page){
-		if(page == performanceRequirementSelectionPage){
-			if(CPAParameters.getPerformanceChoice() == 0){
-				
-				this.performanceRequirementChoice = throughputSetupPage;
-			} else {
-				
-				this.performanceRequirementChoice = averageResponseTimeSetupPage;
-			}
-			return (IWizardPage) this.performanceRequirementChoice;
-			
-		} else if (page == performanceRequirementChoice){
-			return this.targetSetupPage;
-			
-		} else if (page == targetSetupPage){
-			if(CPAParameters.getMetaHeuristicChoice() == 0){
-				this.setupOptimiserPage = this.setupHillClimbingPage;
-			} else {
-				this.setupOptimiserPage = this.setupGeneticAlgorithmPage;
-			}
-			return this.setupOptimiserPage;
-			
-		} else if (page == setupOptimiserPage){
-			return this.newFilePage;
+	@Override
+	public boolean canFinish(){
+		
+		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
+			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
+					this.systemEquationTargetConfigurationPage.isPageComplete() && 
+					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
+					this.metaheuristicParameterConfigurationPageTwo.isPageComplete() &&
+					this.newFilePage.isPageComplete());
 		} else {
-			return super.getNextPage(null);
+			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
+					this.systemEquationTargetConfigurationPage.isPageComplete() && 
+					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
+					this.newFilePage.isPageComplete());
+		}
+		
+		
+	}
+	
+	@Override
+	public void addPages() {
+		for (WizardPage wizardPage : this.wizardPageList){
+			addPage(wizardPage);
 		}
 	}
 	
-	public void addFitnessFunctionPage(){
-		this.targetSetupPage = new FitnessFunctionSetupPage();
-		this.addPage(targetSetupPage);
-		this.addPage(newFilePage);
-	}
-	
-	public void addSetupOptimiserPage(){
-		this.setupHillClimbingPage = new HillClimbingSetupPage();
-		this.setupGeneticAlgorithmPage = new GeneticAlgorithmSetupPage();
-		this.addPage(this.setupHillClimbingPage);
-		this.addPage(this.setupGeneticAlgorithmPage);
-	}
-	
-	public boolean canFinish (){
-		if(setupOptimiserPage != null){
-			if(setupOptimiserPage.isPageComplete() 
-					&& performanceRequirementChoice.isPageComplete() 
-					&& performanceRequirementSelectionPage.isPageComplete()
-					&& newFilePage.isPageComplete()){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
 } 

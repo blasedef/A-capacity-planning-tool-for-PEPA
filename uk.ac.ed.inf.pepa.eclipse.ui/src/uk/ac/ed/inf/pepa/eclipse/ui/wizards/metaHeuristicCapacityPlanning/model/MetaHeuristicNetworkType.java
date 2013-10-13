@@ -23,7 +23,7 @@ public class MetaHeuristicNetworkType extends Configuration{
 
 	@Override
 	public String getDescription() {
-		return this.getTitle() + ExperimentConfiguration.NETWORKDESCRIPTION; 
+		return this.getKey() + ExperimentConfiguration.NETWORKDESCRIPTION; 
 	}
 
 }

@@ -1,4 +1,4 @@
-package uk.ac.ed.inf.pepa.eclipse.ui.wizards.metaHeuristicCapacityPlanning.pages.widgets;
+package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 
@@ -10,13 +10,12 @@ public abstract class CapacityPlanningWidget {
 	
 	
 	public CapacityPlanningWidget(String key, String value, IValidationCallback cb) {
-		this.key = key;
 		this.value = value;
+		this.key = key;
 		this.cb = cb;
 	
 	}
 	
 	public abstract boolean isValid();
 
-	public abstract void setValue();
 }

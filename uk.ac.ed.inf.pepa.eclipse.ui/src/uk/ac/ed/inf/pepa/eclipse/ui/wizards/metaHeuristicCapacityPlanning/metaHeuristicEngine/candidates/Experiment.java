@@ -75,12 +75,6 @@ public class Experiment extends Candidate{
 	}
 
 	@Override
-	public Map<String, Double> getPerformanceFitness() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public HashMap<String, Double> getPopulationFitness() {
 		// TODO Auto-generated method stub
 		return null;
@@ -138,6 +132,12 @@ public class Experiment extends Candidate{
 	public int compareTo(Candidate arg0) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public HashMap<String, Double> getPerformanceFitness() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

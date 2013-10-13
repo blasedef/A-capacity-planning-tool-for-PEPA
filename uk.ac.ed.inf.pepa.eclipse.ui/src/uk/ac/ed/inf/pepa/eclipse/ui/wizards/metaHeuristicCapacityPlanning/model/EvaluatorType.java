@@ -12,7 +12,7 @@ public class EvaluatorType extends Configuration{
 
 	@Override
 	public String getDescription() {
-		return this.getTitle() + ExperimentConfiguration.EVALUATORDESCRIPTION; 
+		return this.getKey() + ExperimentConfiguration.EVALUATORDESCRIPTION; 
 	}
 	
 }

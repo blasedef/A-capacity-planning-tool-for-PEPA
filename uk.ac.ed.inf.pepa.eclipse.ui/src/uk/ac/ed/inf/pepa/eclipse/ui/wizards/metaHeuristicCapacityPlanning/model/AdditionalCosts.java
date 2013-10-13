@@ -15,6 +15,6 @@ public class AdditionalCosts extends Configuration{
 
 	@Override
 	public String getDescription() {
-		return this.getTitle() + ExperimentConfiguration.ADDITIONALCOSTDESCRIPTION; 
+		return this.getKey() + ExperimentConfiguration.ADDITIONALCOSTDESCRIPTION; 
 	}
 }

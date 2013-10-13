@@ -30,7 +30,7 @@ public abstract class Configuration {
 		return this.options;
 	}
 	
-	public String getTitle(){
+	public String getKey(){
 		return key;
 	}
 	
