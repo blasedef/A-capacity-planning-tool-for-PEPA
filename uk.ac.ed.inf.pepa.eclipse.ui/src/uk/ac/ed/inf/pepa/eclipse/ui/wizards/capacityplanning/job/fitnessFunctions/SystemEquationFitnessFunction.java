@@ -26,6 +26,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	protected HashMap<String,Double> targetWeights;
 	protected HashMap<String,Double> populationRanges;
 	protected HashMap<String,Double> fitnessMap;
+	protected HashMap<String,Double> populationWeights;
 	protected PEPAConfig configPEPA;
 	protected ODEConfig configODE;
 	protected Recorder recorder;
@@ -36,6 +37,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 			HashMap<String,Double> targetWeights,
 			HashMap<String,Double> populationRanges,
 			HashMap<String,Double> fitnessMap,
+			HashMap<String,Double> populationWeights,
 			IProgressMonitor monitor,
 			Recorder recorder){
 		
@@ -46,6 +48,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		this.targetWeights = targetWeights;
 		this.populationRanges = populationRanges;
 		this.fitnessMap = fitnessMap;
+		this.populationWeights = populationWeights;
 		this.monitor = monitor;
 		this.fitness = 1000000.0;
 		
@@ -81,6 +84,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 				Tool.copyHashMap(targetWeights),
 				Tool.copyHashMap(populationRanges),
 				Tool.copyHashMap(fitnessMap),
+				Tool.copyHashMap(populationWeights),
 				monitor,
 				recorder);
 		
@@ -111,7 +115,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 			String component = entry.getKey();
 			Double value = entry.getValue();
 			Double range = this.populationRanges.get(component);
-			Double weight = ((Integer) this.candidate.size()).doubleValue();
+			Double weight = ((Integer) this.candidate.size()).doubleValue() * this.populationWeights.get(component);
 			this.populationResultsMap.put(component, ((value/range)*100)/weight);
 		}
 		

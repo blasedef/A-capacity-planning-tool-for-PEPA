@@ -23,30 +23,6 @@ public class SingleNetworkGeneticAlgorithmLab extends SingleNetworkLab {
 		super(configurationModel, totalWork, systemEquationPopulationRanges,
 				experiments);
 	}
-
-//	@Override
-//	public IStatus setupLab(IProgressMonitor monitor) {
-//		
-//		//create experiments
-//		for(int i = 0; i < this.experiments; i++){
-//			
-//			HashMap<String,Double> parameters = Tool.copyHashMap(configurationModel.metaheuristicParameters.getLeftMap());
-//			
-//			if(monitor.isCanceled())
-//				return Status.CANCEL_STATUS;
-//			
-//			Recorder temp = new SystemEquationRecorder();
-//			
-//			this.metaheuristics.add((Metaheuristic) new GeneticAlgorithm(parameters, 
-//					getSystemEquationCandidate(temp), 
-//					monitor, 
-//					new SystemEquationRecorder()));
-//		
-//		}
-//		
-//		return Status.OK_STATUS;
-//		
-//	}
 	
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor, HashMap<String,Double> parameters){

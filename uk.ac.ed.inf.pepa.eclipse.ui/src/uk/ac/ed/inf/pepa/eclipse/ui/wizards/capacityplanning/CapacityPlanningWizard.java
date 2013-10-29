@@ -10,7 +10,10 @@
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -28,6 +31,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.dropDownLists.EvaluatorType;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.MetaheuristicParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.PopulationWeights;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.SystemEquation;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.Targets;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
@@ -83,7 +87,8 @@ public class CapacityPlanningWizard extends Wizard {
 		systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
 				configurationModel.systemEquationFitnessWeights,
 				configurationModel.performanceTargetsAndWeights,
-				configurationModel.systemEquationCandidate);
+				configurationModel.systemEquationCandidate,
+				configurationModel.populationWeights);
 		wizardPageList.add(systemEquationTargetConfigurationPage);
 		
 		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
@@ -144,10 +149,14 @@ public class CapacityPlanningWizard extends Wizard {
 			
 			((SystemEquation) configurationModel.systemEquationCandidate).update(configurationModel.configPEPA.getSystemEquation(), 
 					configurationModel.configPEPA.getInitialPopulation());
+			
+			((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
+			
 			systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
 					configurationModel.systemEquationFitnessWeights,
 					configurationModel.performanceTargetsAndWeights,
-					configurationModel.systemEquationCandidate);
+					configurationModel.systemEquationCandidate,
+					configurationModel.populationWeights);
 			addPage(this.systemEquationTargetConfigurationPage);
 			return this.systemEquationTargetConfigurationPage;
 		}
@@ -201,11 +210,19 @@ public class CapacityPlanningWizard extends Wizard {
 		"_" + 
 		configurationModel.dropDownListsList.get(2).getValue() + 
 		"_" + 
-		configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S);
+		configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S) +
+		"_" +
+		this.getDateTime();
 		
-		this.newFilePage.setFileName(fileName + "_" + (System.currentTimeMillis()/1000) + "_" + handle.getName()  );
+		this.newFilePage.setFileName(fileName + "_" + handle.getName()  );
 
 	}
+	
+	private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 
 	@Override
 	public boolean performFinish() {

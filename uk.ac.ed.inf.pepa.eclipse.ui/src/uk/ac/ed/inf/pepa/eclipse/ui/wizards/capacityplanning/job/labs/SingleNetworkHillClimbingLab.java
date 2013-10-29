@@ -23,30 +23,6 @@ public class SingleNetworkHillClimbingLab extends SingleNetworkLab {
 		super(configurationModel, totalWork, systemEquationPopulationRanges,
 				experiments);
 	}
-
-//	@Override
-//	public IStatus setupLab(IProgressMonitor monitor){
-//		
-//		//create experiments
-//		for(int i = 0; i < this.experiments; i++){
-//			
-//			HashMap<String,Double> parameters = Tool.copyHashMap(configurationModel.metaheuristicParameters.getLeftMap());
-//			
-//			if(monitor.isCanceled())
-//				return Status.CANCEL_STATUS;
-//			
-//			Recorder temp = new SystemEquationRecorder();
-//			
-//			this.metaheuristics.add((Metaheuristic) new HillClimbing(parameters, 
-//					getSystemEquationCandidate(temp), 
-//					monitor,
-//					temp));
-//		
-//		}
-//		
-//		return Status.OK_STATUS;
-//		
-//	}
 	
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor, HashMap<String,Double> parameters){

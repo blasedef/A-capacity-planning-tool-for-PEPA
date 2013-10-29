@@ -12,9 +12,13 @@ public class SystemEquationTargetConfigurationPage extends
 	private TextInputs fitness;
 	private TextInputs targets;
 	private TextInputs systemEquation;
+	private TextInputs populationWeights;
 
 	public SystemEquationTargetConfigurationPage(String s,
-			TextInputs fitness, TextInputs targets, TextInputs systemEquation) {
+			TextInputs fitness, 
+			TextInputs targets, 
+			TextInputs systemEquation,
+			TextInputs populationWeights) {
 		
 		//copy title upwards
 		super(s,"Performance target and System Equation population range",
@@ -23,6 +27,7 @@ public class SystemEquationTargetConfigurationPage extends
 		this.fitness = fitness;
 		this.targets = targets;
 		this.systemEquation = systemEquation;
+		this.populationWeights = populationWeights;
 		
 	}
 
@@ -49,6 +54,8 @@ public class SystemEquationTargetConfigurationPage extends
 		widgets.add(new BorderedCompositeWithDoubleTextWidget(this.targets, cb, container));
 		
 		widgets.add(new BorderedCompositeWithDoubleTextWidget(this.systemEquation, cb, container));
+		
+		widgets.add(new BorderedCompositeWithTextWidget(this.populationWeights, parentCallBack, container, false));
 
 	}
 

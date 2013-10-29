@@ -24,29 +24,6 @@ public class SingleNetworkParticleSwarmOptimisationLab extends SingleNetworkLab 
 				experiments);
 		// TODO Auto-generated constructor stub
 	}
-
-//	@Override
-//	public IStatus setupLab(IProgressMonitor monitor) {
-//		
-//		//create experiments
-//		for(int i = 0; i < this.experiments; i++){
-//			
-//			HashMap<String,Double> parameters = Tool.copyHashMap(configurationModel.metaheuristicParameters.getLeftMap());
-//			
-//			if(monitor.isCanceled())
-//				return Status.CANCEL_STATUS;
-//			
-//			Recorder temp = new SystemEquationRecorder();
-//			
-//			this.metaheuristics.add((Metaheuristic) new ParticleSwarmOptimisation(parameters, 
-//					getSystemEquationCandidate(temp), 
-//					monitor, 
-//					temp));
-//		
-//		}
-//		
-//		return Status.OK_STATUS;
-//	}
 	
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor, HashMap<String,Double> parameters){
@@ -76,6 +53,7 @@ public class SingleNetworkParticleSwarmOptimisationLab extends SingleNetworkLab 
 				Tool.copyHashMap(configurationModel.performanceTargetsAndWeights.getRightMap()), 
 				Tool.copyHashMap(this.systemEquationPopulationRanges), 
 				Tool.copyHashMap(configurationModel.systemEquationFitnessWeights.getLeftMap()), 
+				Tool.copyHashMap(configurationModel.populationWeights.getLeftMap()),
 				monitor,
 				recorder);
 		

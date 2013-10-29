@@ -18,6 +18,7 @@ public class ConfigurationModel {
 	public TextInputs metaheuristicParametersCandidate; 
 	
 	public TextInputs systemEquationCandidate;
+	public TextInputs populationWeights;
 	
 	public TextInputs performanceTargetsAndWeights;
 	public TextInputs metaheuristicTargetsAndWeights;
@@ -43,9 +44,12 @@ public class ConfigurationModel {
 		metaheuristicParametersCandidate = new MetaheuristicParameters();
 		
 		systemEquationCandidate = new SystemEquation();
+		populationWeights = new PopulationWeights();
 		
 		performanceTargetsAndWeights = new Targets(10.0);
 		metaheuristicTargetsAndWeights = new Targets(0.0);
+		
+		
 		
 		configODE = new ODEConfig();
 		configPEPA = new PEPAConfig(model);

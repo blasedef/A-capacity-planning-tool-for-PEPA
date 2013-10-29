@@ -20,10 +20,11 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 			HashMap<String,Double> targetWeights,
 			HashMap<String,Double> populationRanges,
 			HashMap<String,Double> fitnessMap,
+			HashMap<String,Double> populationWeights,
 			IProgressMonitor monitor,
 			Recorder recorder){
 		
-		super(configPEPA,configODE,targets,targetWeights,populationRanges,fitnessMap,monitor,recorder);
+		super(configPEPA,configODE,targets,targetWeights,populationRanges,fitnessMap,populationWeights,monitor,recorder);
 		
 	}
 	
@@ -35,6 +36,7 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 				Tool.copyHashMap(targetWeights),
 				Tool.copyHashMap(populationRanges),
 				Tool.copyHashMap(fitnessMap),
+				Tool.copyHashMap(populationWeights),
 				monitor,
 				recorder);
 		
@@ -55,7 +57,7 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 				this.populationResultsMap.put(component, ((value/range)*100)/weight);
 			} else {
 				Double range = this.populationRanges.get(component);
-				Double weight = ((Integer) this.candidate.size()).doubleValue();
+				Double weight = ((Integer) this.candidate.size()).doubleValue() * this.populationWeights.get(component);
 				this.populationResultsMap.put(component, ((value/range)*100)/weight);
 			}
 		}
