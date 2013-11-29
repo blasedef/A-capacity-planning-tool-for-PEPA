@@ -34,27 +34,27 @@ public class MetaHeuristicJob extends Job{
 		
 		setTotalWorkUnits();
 		
-		if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
+		if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
 			if(configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
 				
 				this.lab = new SingleNetworkHillClimbingLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
 				
 			} else if (configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEGENETICALGORITHM_S)) {
 				
 				this.lab = new SingleNetworkGeneticAlgorithmLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
 				
 			} else {
 				
 				this.lab = new SingleNetworkParticleSwarmOptimisationLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
 				
 			}
 			
@@ -63,7 +63,7 @@ public class MetaHeuristicJob extends Job{
 			this.lab = new SingleNetworkHillClimbingLab(this.configurationModel,
 					totalWork,
 					systemEquationPopulationRanges,
-					this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+					this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
 			
 		}
 		
@@ -178,8 +178,8 @@ public class MetaHeuristicJob extends Job{
 		
 		this.totalWork = 1;
 		
-		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
-			totalWork = configurationModel.metaheuristicParametersCandidate.getRightMap().get(Config.EXPERIMENTS_S).intValue();
+		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			totalWork = configurationModel.labParametersCandidate.getRightMap().get(Config.EXPERIMENTS_S).intValue();
 			//worst case scenario, every generation created a new analysis job
 			totalWork *= configurationModel.metaheuristicParametersCandidate.getRightMap().get(Config.GENERATION_S).intValue();
 			//worst case scenario, every candidate produces a new analysis job
@@ -194,7 +194,7 @@ public class MetaHeuristicJob extends Job{
 		
 		
 		//times by experiments
-		totalWork *= configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
+		totalWork *= configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
 		
 		
 		//worst case scenario, every generation created a new analysis job

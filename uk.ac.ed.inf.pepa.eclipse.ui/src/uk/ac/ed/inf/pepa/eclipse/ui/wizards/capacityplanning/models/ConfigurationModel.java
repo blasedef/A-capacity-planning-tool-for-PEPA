@@ -12,7 +12,10 @@ public class ConfigurationModel {
 	public ArrayList<DropDownLists> dropDownListsList;
 	
 	public TextInputs systemEquationFitnessWeights; 
-	public TextInputs metaheuristicFitnessWieghts; 
+	public TextInputs metaheuristicFitnessWeights; 
+	
+	public TextInputs labParameters;
+	public TextInputs labParametersCandidate;
 	
 	public TextInputs metaheuristicParameters;
 	public TextInputs metaheuristicParametersCandidate; 
@@ -37,10 +40,12 @@ public class ConfigurationModel {
 		dropDownListsList.add(new AdditionalCosts());
 		
 		systemEquationFitnessWeights = new Fitness();
-		metaheuristicFitnessWieghts = new Fitness();
+		metaheuristicFitnessWeights = new Fitness();
 		
+		labParameters = new LabParameters();
 		metaheuristicParameters = new MetaheuristicParameters();
 		
+		labParametersCandidate = new LabParameters();
 		metaheuristicParametersCandidate = new MetaheuristicParameters();
 		
 		systemEquationCandidate = new SystemEquation();

@@ -9,17 +9,16 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 public class MetaheuristicParameters extends TextInputs {
 	
 	//metaheuristic attribute lists
-	private String[] hillClimbingParameterList = new String[] {Config.EXPERIMENTS_S, 
-			Config.GENERATIONHC_S};
+	private String[] hillClimbingParameterList = new String[] {Config.GENERATIONHC_S};
 	
-	private String[] particleSwarmOptimisationParameterList = new String[] {Config.EXPERIMENTS_S, 
+	private String[] particleSwarmOptimisationParameterList = new String[] {
 			Config.GENERATION_S,
 			Config.PERSONALBEST,
 			Config.GLOBALBEST,
 			Config.ORIGINALVELO,
 			Config.INITIALCANDIDATEPOPULATION_S};
 	
-	private String[] geneticAlgorithmParameterList = new String[] {Config.EXPERIMENTS_S, 
+	private String[] geneticAlgorithmParameterList = new String[] { 
 			Config.GENERATION_S,
 			Config.MUTATIONPROBABILITY_S,
 			Config.CROSSOVERPROBABILITY_S,
@@ -39,12 +38,11 @@ public class MetaheuristicParameters extends TextInputs {
 	}};
 	
 	/**
-	 * System equation population ranges
+	 * Metaheuristic parameters
 	 */
 	public MetaheuristicParameters (){
-		super("Metaheurisitc parameters setup");
+		super("Metaheuristic parameters setup");
 		
-		this.defaultMapping.put(Config.EXPERIMENTS_S,1.0);
 		this.defaultMapping.put(Config.GENERATION_S,10.0);
 		this.defaultMapping.put(Config.GENERATIONHC_S,100.0);
 		this.defaultMapping.put(Config.MUTATIONPROBABILITY_S,0.02);

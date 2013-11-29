@@ -1,6 +1,5 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions;
 
-import java.util.Formatter;
 import java.util.HashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;

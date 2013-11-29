@@ -7,9 +7,9 @@ public class NetworkType extends DropDownLists {
 	
 	public NetworkType (){
 		
-		this.key = Config.NETWORKTYPE_S;
-		this.value = Config.NETWORKSINGLE_S;
-		this.options = new String[] {Config.NETWORKSINGLE_S, Config.NETWORKDRIVEN_S, Config.NETWORKPIPELINE_S};
+		this.key = Config.CHAINTYPE_S;
+		this.value = Config.CHAINSINGLE_S;
+		this.options = new String[] {Config.CHAINSINGLE_S, Config.CHAINDRIVEN_S, Config.CHAINPIPELINE_S};
 		
 	}
 

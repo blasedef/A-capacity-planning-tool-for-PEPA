@@ -52,7 +52,9 @@ public class CapacityPlanningWizard extends Wizard {
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageOne;
 	public CapacityPlanningWizardPage additionalCostsPage;
 	public CapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
-	public CapacityPlanningWizardPage systemEquationTargetConfigurationPage;
+	public CapacityPlanningWizardPage fitnessFunctionConfigurationPage;
+	public CapacityPlanningWizardPage performanceConfigurationPage;
+	public CapacityPlanningWizardPage populationConfigurationPage;
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageTwo;
 	public CapacityPlanningWizardPage fileSaveAsPage;
 	public CapacityPlanningWizardPage summaryPage;
@@ -71,7 +73,9 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
 				configurationModel.metaheuristicParameters,
+				configurationModel.labParameters,
 				null,
+				false,
 				false);
 		wizardPageList.add(metaheuristicParameterConfigurationPageOne);
 		
@@ -84,16 +88,24 @@ public class CapacityPlanningWizard extends Wizard {
 				(EvaluatorType) configurationModel.dropDownListsList.get(0));
 		wizardPageList.add(ordinaryDifferentialEquationConfigurationPage);
 		
-		systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
-				configurationModel.systemEquationFitnessWeights,
-				configurationModel.performanceTargetsAndWeights,
+		fitnessFunctionConfigurationPage = new FitnessFunctionConfigurationPage(pageTitle,
+				configurationModel.systemEquationFitnessWeights);
+		wizardPageList.add(fitnessFunctionConfigurationPage);
+		
+		performanceConfigurationPage = new PerformanceConfigurationPage(pageTitle,
+				configurationModel.performanceTargetsAndWeights);
+		wizardPageList.add(performanceConfigurationPage);
+		
+		populationConfigurationPage = new PopulationConfigurationPage(pageTitle,
 				configurationModel.systemEquationCandidate,
 				configurationModel.populationWeights);
-		wizardPageList.add(systemEquationTargetConfigurationPage);
+		wizardPageList.add(populationConfigurationPage);
 		
 		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
-				configurationModel.metaheuristicParametersCandidate, 
-				configurationModel.metaheuristicFitnessWieghts,
+				configurationModel.metaheuristicParametersCandidate,
+				configurationModel.labParametersCandidate,
+				configurationModel.metaheuristicFitnessWeights,
+				true,
 				true);
 		wizardPageList.add(metaheuristicParameterConfigurationPageTwo);
 		
@@ -102,88 +114,125 @@ public class CapacityPlanningWizard extends Wizard {
 		
 	}
 	
+	private IWizardPage updateAndGetEvaluatorAndMetaHeristicPage(){
+		if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(configurationModel.dropDownListsList.get(1).getValue());
+		} else {
+			((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(Config.METAHEURISTICTYPEHILLCLIMBING_S);
+		}
+		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+				configurationModel.metaheuristicParameters,
+				configurationModel.labParameters,
+				null,
+				false,
+				false);
+		addPage(this.metaheuristicParameterConfigurationPageOne);
+		
+		return this.metaheuristicParameterConfigurationPageOne;
+	}
+	
+	private IWizardPage updateAndGetAdditionalCostPage(){
+		additionalCostsPage = new AdditionalCostsPage(pageTitle);
+		addPage(additionalCostsPage);
+		return this.additionalCostsPage;
+	}
+	
+	private IWizardPage updateAndGetODEPage(){
+		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
+				configurationModel.configPEPA, 
+				configurationModel.configODE, 
+				(EvaluatorType) configurationModel.dropDownListsList.get(0));
+		addPage(ordinaryDifferentialEquationConfigurationPage);
+		return this.ordinaryDifferentialEquationConfigurationPage;
+	}
+	
+	private IWizardPage updateAndGetFitnessFunctionPage(){
+		fitnessFunctionConfigurationPage = new FitnessFunctionConfigurationPage(pageTitle,
+				configurationModel.systemEquationFitnessWeights);
+		addPage(this.fitnessFunctionConfigurationPage);
+		return this.fitnessFunctionConfigurationPage;
+	}
+	
+	private IWizardPage updateAndGetPerformanceConfigurationPage(){
+		((Targets) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
+		performanceConfigurationPage = new PerformanceConfigurationPage(pageTitle,
+				configurationModel.performanceTargetsAndWeights);
+		addPage(this.performanceConfigurationPage);
+		return this.performanceConfigurationPage;
+	}
+	
+	private IWizardPage updateAndGetPopulationConfigurationPage(){
+		((SystemEquation) configurationModel.systemEquationCandidate).update(configurationModel.configPEPA.getSystemEquation(), 
+				configurationModel.configPEPA.getInitialPopulation());
+		
+		((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
+		
+		populationConfigurationPage = new PopulationConfigurationPage(pageTitle,
+				configurationModel.systemEquationCandidate,
+				configurationModel.populationWeights);
+		addPage(this.populationConfigurationPage);
+		return this.populationConfigurationPage;
+	}
+	
+	private IWizardPage updateAndGetSecondMetaheuristicPage(){
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
+		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
+				configurationModel.metaheuristicParametersCandidate, 
+				configurationModel.labParametersCandidate,
+				configurationModel.metaheuristicFitnessWeights,
+				(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINPIPELINE_S)),
+				true);
+		addPage(this.metaheuristicParameterConfigurationPageTwo);
+		return this.metaheuristicParameterConfigurationPageTwo;
+	}
+	
+	private IWizardPage updateAndGetNewFilePage(){
+		addSaveAsPage();
+		addPage(newFilePage);
+		return newFilePage;
+	}
+	
+	/**
+	 * page ordering
+	 */
 	public IWizardPage getNextPage(IWizardPage page){
+		
+		boolean additionalCosts = configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S);
+		boolean chained = !configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S);
+		
 		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
-			
-			if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
-				((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(configurationModel.dropDownListsList.get(1).getValue());
+			return updateAndGetEvaluatorAndMetaHeristicPage();
+		}
+		else if(page == metaheuristicParameterConfigurationPageOne && additionalCosts)	{
+			return updateAndGetAdditionalCostPage();
+		}
+		else if(page == metaheuristicParameterConfigurationPageOne && !additionalCosts)	{
+			if(!chained){
+				return updateAndGetODEPage();
 			} else {
-				((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(Config.METAHEURISTICTYPEHILLCLIMBING_S);
+				return updateAndGetSecondMetaheuristicPage();
 			}
-			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
-					configurationModel.metaheuristicParameters,
-					null,
-					false);
-			addPage(this.metaheuristicParameterConfigurationPageOne);
-			
-			return this.metaheuristicParameterConfigurationPageOne;
-			
 		}
-		else if(page == metaheuristicParameterConfigurationPageOne && (configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S)))	{
-			additionalCostsPage = new AdditionalCostsPage(pageTitle);
-			addPage(additionalCostsPage);
-			return this.additionalCostsPage;
-			
+		else if(page == additionalCostsPage && !chained){
+			return updateAndGetODEPage();
 		}
-		else if(page == metaheuristicParameterConfigurationPageOne && (configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSNO_S)))	{
-			ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
-					configurationModel.configPEPA, 
-					configurationModel.configODE, 
-					(EvaluatorType) configurationModel.dropDownListsList.get(0));
-			addPage(ordinaryDifferentialEquationConfigurationPage);
-			return this.ordinaryDifferentialEquationConfigurationPage;
-			
+		else if(page == additionalCostsPage && chained){
+			return updateAndGetSecondMetaheuristicPage();
 		}
-		else if(page == additionalCostsPage)	{
-			ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
-					configurationModel.configPEPA, 
-					configurationModel.configODE, 
-					(EvaluatorType) configurationModel.dropDownListsList.get(0));
-			addPage(ordinaryDifferentialEquationConfigurationPage);
-			return this.ordinaryDifferentialEquationConfigurationPage;
-			
+		else if(page == metaheuristicParameterConfigurationPageTwo){
+			return updateAndGetODEPage();
 		}
 		else if(page == ordinaryDifferentialEquationConfigurationPage){
-			
-			((Targets) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
-			
-			((SystemEquation) configurationModel.systemEquationCandidate).update(configurationModel.configPEPA.getSystemEquation(), 
-					configurationModel.configPEPA.getInitialPopulation());
-			
-			((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
-			
-			systemEquationTargetConfigurationPage = new SystemEquationTargetConfigurationPage(pageTitle,
-					configurationModel.systemEquationFitnessWeights,
-					configurationModel.performanceTargetsAndWeights,
-					configurationModel.systemEquationCandidate,
-					configurationModel.populationWeights);
-			addPage(this.systemEquationTargetConfigurationPage);
-			return this.systemEquationTargetConfigurationPage;
+			return updateAndGetFitnessFunctionPage();
 		}
-		else if(page == systemEquationTargetConfigurationPage && (configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
-			
-			addSaveAsPage();
-			addPage(newFilePage);
-			
-			return newFilePage;
+		else if(page == fitnessFunctionConfigurationPage){
+			return updateAndGetPerformanceConfigurationPage();
 		}
-		else if(page == systemEquationTargetConfigurationPage && (!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)))	{
-			
-			((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
-			metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
-					configurationModel.metaheuristicParametersCandidate, 
-					configurationModel.metaheuristicFitnessWieghts,
-					true);
-			addPage(this.metaheuristicParameterConfigurationPageTwo);
-			
-			return this.metaheuristicParameterConfigurationPageTwo;
+		else if(page == performanceConfigurationPage){
+			return updateAndGetPopulationConfigurationPage();
 		}
-		else if(page == this.metaheuristicParameterConfigurationPageTwo){
-			
-			addSaveAsPage();
-			addPage(newFilePage);
-			
-			return this.newFilePage;
+		else if(page == populationConfigurationPage)	{
+			return updateAndGetNewFilePage();
 		}
 		else {
 			return super.getNextPage(null);
@@ -239,15 +288,15 @@ public class CapacityPlanningWizard extends Wizard {
 	@Override
 	public boolean canFinish(){
 		
-		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.NETWORKSINGLE_S)){
+		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
-					this.systemEquationTargetConfigurationPage.isPageComplete() && 
+					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
 					this.metaheuristicParameterConfigurationPageTwo.isPageComplete() &&
 					this.newFilePage.isPageComplete());
 		} else {
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
-					this.systemEquationTargetConfigurationPage.isPageComplete() && 
+					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
 					this.newFilePage.isPageComplete());
 		}

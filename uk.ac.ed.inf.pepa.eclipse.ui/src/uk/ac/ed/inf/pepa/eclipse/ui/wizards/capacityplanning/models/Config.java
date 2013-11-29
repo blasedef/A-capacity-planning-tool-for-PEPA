@@ -47,14 +47,14 @@ public abstract class Config {
 	public static final String ADDITIONALCOSTSYES_S = "Yes";
 	
 	//metaheuristic network
-	public static final String NETWORKSINGLE_S = "Single";
-	public static final String NETWORKDRIVEN_S = "Driven";
-	public static final String NETWORKPIPELINE_S = "Pipe lined";
-	public static final String NETWORKTYPE_S = "Metaheuristic Network Type";
+	public static final String CHAINSINGLE_S = "Single";
+	public static final String CHAINDRIVEN_S = "Driven";
+	public static final String CHAINPIPELINE_S = "Pipe lined";
+	public static final String CHAINTYPE_S = "Metaheuristic Chain Type";
 	
 	public static final String EVALUATORDESCRIPTION = " placeholder"; 
 	public static final String METAHEURISTICDESCRIPTION = " placeholder";
-	public static final String NETWORKDESCRIPTION = " placeholder";
+	public static final String CHAINDESCRIPTION = " placeholder";
 	public static final String ADDITIONALCOSTDESCRIPTION = " placeholder";
 	
 }

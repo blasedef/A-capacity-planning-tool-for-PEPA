@@ -9,21 +9,27 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 public class MetaheuristicParameterConfigurationPage extends CapacityPlanningWizardPage {
 
 	private TextInputs metaheuristicParameters;
+	private TextInputs labParameters;
 	private TextInputs fitness;
-	private boolean asRange;
+	private boolean chained;
+	private boolean pipelined;
 	
 	public MetaheuristicParameterConfigurationPage(String s, 
 			TextInputs metaheuristicParameters,
+			TextInputs labParameters,
 			TextInputs fitness,
-			boolean asRange) {
+			boolean chained,
+			boolean pipelined) {
 		
 		//copy title upwards
-		super(s,"Metaheuristic parameter setup page",
-				"Set the parameters for the first metaheuristic...");
+		super(s,"Lab setup page",
+				"Set the parameters for the lab and metaheuristic algorithm...");
 		
 		this.metaheuristicParameters = metaheuristicParameters;
+		this.labParameters = labParameters;
 		this.fitness = fitness;
-		this.asRange = asRange;
+		this.chained = chained;
+		this.pipelined = pipelined;
 	
 	}
 
@@ -45,24 +51,40 @@ public class MetaheuristicParameterConfigurationPage extends CapacityPlanningWiz
 	@Override
 	protected void constructPage(IValidationCallback cb) {
 		
-		if(asRange){
-			range();
+		if(!chained){
+			notChained();
 		} else {
-			noRange();
+			chained(pipelined);
 		}
 	}
 	
-	protected void noRange(){
+	protected void notChained(){
+		
+		widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
 		
 		widgets.add(new BorderedCompositeWithTextWidget(this.metaheuristicParameters, parentCallBack, container, false));
 		
 	}
 	
-	protected void range(){
+	protected void chained(boolean pipelined){
 		
-		widgets.add(new BorderedCompositeWithTextWidget(this.fitness, parentCallBack, container, true));
+		if(pipelined){
 		
-		widgets.add(new BorderedCompositeWithDoubleTextWidget(this.metaheuristicParameters, parentCallBack, container));
+			widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
+			
+			widgets.add(new BorderedCompositeWithTextWidget(this.fitness, parentCallBack, container, true));
+			
+			widgets.add(new BorderedCompositeWithTextWidget(this.metaheuristicParameters, parentCallBack, container, false));
+			
+		} else {
+			
+			widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
+			
+			widgets.add(new BorderedCompositeWithTextWidget(this.fitness, parentCallBack, container, true));
+			
+			widgets.add(new BorderedCompositeWithDoubleTextWidget(this.metaheuristicParameters, parentCallBack, container));
+			
+		}
 		
 	}
 
