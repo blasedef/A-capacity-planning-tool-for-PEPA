@@ -51,6 +51,7 @@ public class SingleNetworkParticleSwarmOptimisationLab extends SingleNetworkLab 
 				configurationModel.configODE, 
 				Tool.copyHashMap(configurationModel.performanceTargetsAndWeights.getLeftMap()), 
 				Tool.copyHashMap(configurationModel.performanceTargetsAndWeights.getRightMap()), 
+				Tool.copyHashMap(configurationModel.systemEquationCandidate.getLeftMap()),
 				Tool.copyHashMap(this.systemEquationPopulationRanges), 
 				Tool.copyHashMap(configurationModel.systemEquationFitnessWeights.getLeftMap()), 
 				Tool.copyHashMap(configurationModel.populationWeights.getLeftMap()),

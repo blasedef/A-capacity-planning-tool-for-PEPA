@@ -18,13 +18,14 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 			ODEConfig configODE,
 			HashMap<String,Double> targets,
 			HashMap<String,Double> targetWeights,
+			HashMap<String,Double> minPopulation,
 			HashMap<String,Double> populationRanges,
 			HashMap<String,Double> fitnessMap,
 			HashMap<String,Double> populationWeights,
 			IProgressMonitor monitor,
 			Recorder recorder){
 		
-		super(configPEPA,configODE,targets,targetWeights,populationRanges,fitnessMap,populationWeights,monitor,recorder);
+		super(configPEPA,configODE,targets,targetWeights,minPopulation,populationRanges,fitnessMap,populationWeights,monitor,recorder);
 		
 	}
 	
@@ -34,6 +35,7 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 				configODE,
 				Tool.copyHashMap(targets),
 				Tool.copyHashMap(targetWeights),
+				Tool.copyHashMap(minPopulation),
 				Tool.copyHashMap(populationRanges),
 				Tool.copyHashMap(fitnessMap),
 				Tool.copyHashMap(populationWeights),
@@ -49,16 +51,16 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 		
 		for(Entry<String, Double> entry : candidate.entrySet()){
 			String component = entry.getKey();
-			Double value = entry.getValue();
+			Double value = entry.getValue() - minPopulation.get(component);
 			if(value > maxPopulation.get(entry.getKey())){
 				Double range = this.populationRanges.get(component);
-				Double weight = ((Integer) this.candidate.size()).doubleValue();
+				Double weight = this.populationWeights.get(component)/this.weightDenominator;
 				value *= 10;
-				this.populationResultsMap.put(component, ((value/range)*100)/weight);
+				this.populationResultsMap.put(component, ((value/range)*100)*weight);
 			} else {
 				Double range = this.populationRanges.get(component);
-				Double weight = ((Integer) this.candidate.size()).doubleValue() * this.populationWeights.get(component);
-				this.populationResultsMap.put(component, ((value/range)*100)/weight);
+				Double weight = this.populationWeights.get(component)/this.weightDenominator;
+				this.populationResultsMap.put(component, ((value/range)*100)*weight);
 			}
 		}
 		

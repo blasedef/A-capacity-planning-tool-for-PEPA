@@ -43,23 +43,22 @@ public class PopulationWeights extends TextInputs {
 	
 	@Override
 	public String getType(String key){
-		return Config.PERCENT;
+		return Config.DOUBLE;
 	}
 	
 	@Override
 	public boolean isCorrect(boolean single){
 		
 		if(!single){
-			boolean greaterThanOrEqualToZeroLessThanOrEqualToOne = true;
+			boolean greaterThanOrEqualToZero = true;
 			
 			String[] keysLeft = this.getMapKeys(false);
 			
 			for(String key : keysLeft){
-				greaterThanOrEqualToZeroLessThanOrEqualToOne = greaterThanOrEqualToZeroLessThanOrEqualToOne 
-				&& ((this.leftMap.get(key) >= 0.0) && (this.leftMap.get(key) <= 1.0));
+				greaterThanOrEqualToZero = greaterThanOrEqualToZero && (this.leftMap.get(key) >= 0.0);
 			}
 			
-			return greaterThanOrEqualToZeroLessThanOrEqualToOne;
+			return greaterThanOrEqualToZero;
 		} else {
 			return true;
 		}

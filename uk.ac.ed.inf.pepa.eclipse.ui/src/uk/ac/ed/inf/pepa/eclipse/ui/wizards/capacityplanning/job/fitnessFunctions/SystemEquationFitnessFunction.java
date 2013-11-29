@@ -24,17 +24,20 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	protected IProgressMonitor monitor;
 	protected HashMap<String,Double> targets;
 	protected HashMap<String,Double> targetWeights;
+	protected HashMap<String,Double> minPopulation;
 	protected HashMap<String,Double> populationRanges;
 	protected HashMap<String,Double> fitnessMap;
 	protected HashMap<String,Double> populationWeights;
 	protected PEPAConfig configPEPA;
 	protected ODEConfig configODE;
 	protected Recorder recorder;
+	protected Double weightDenominator;
 	
 	public SystemEquationFitnessFunction(PEPAConfig configPEPA, 
 			ODEConfig configODE,
 			HashMap<String,Double> targets,
 			HashMap<String,Double> targetWeights,
+			HashMap<String,Double> minPopulation,
 			HashMap<String,Double> populationRanges,
 			HashMap<String,Double> fitnessMap,
 			HashMap<String,Double> populationWeights,
@@ -46,6 +49,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		this.nodeHandler = new NodeHandler(configPEPA, configODE);
 		this.targets = targets;
 		this.targetWeights = targetWeights;
+		this.minPopulation = minPopulation;
 		this.populationRanges = populationRanges;
 		this.fitnessMap = fitnessMap;
 		this.populationWeights = populationWeights;
@@ -55,7 +59,13 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		this.performanceResultsMap = new HashMap<String,Double>();
 		this.populationResultsMap = new HashMap<String,Double>();
 		this.candidate = getCandidateMap();
-		this.recorder = recorder;		
+		this.recorder = recorder;
+		
+		this.weightDenominator = 0.0;
+		
+		for(Entry<String, Double> entry : this.populationWeights.entrySet()){
+			this.weightDenominator += entry.getValue();
+		}
 	}
 	
 	public int getMaxSearchSpace(){
@@ -82,6 +92,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 				configODE,
 				Tool.copyHashMap(targets),
 				Tool.copyHashMap(targetWeights),
+				Tool.copyHashMap(minPopulation),
 				Tool.copyHashMap(populationRanges),
 				Tool.copyHashMap(fitnessMap),
 				Tool.copyHashMap(populationWeights),
@@ -113,10 +124,10 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		
 		for(Entry<String, Double> entry : candidate.entrySet()){
 			String component = entry.getKey();
-			Double value = entry.getValue();
+			Double value = entry.getValue() - minPopulation.get(component);
 			Double range = this.populationRanges.get(component);
-			Double weight = ((Integer) this.candidate.size()).doubleValue() * this.populationWeights.get(component);
-			this.populationResultsMap.put(component, ((value/range)*100)/weight);
+			Double weight = this.populationWeights.get(component)/this.weightDenominator;
+			this.populationResultsMap.put(component, ((value/range)*100)*weight);
 		}
 		
 		this.populationFitness = 0.0;

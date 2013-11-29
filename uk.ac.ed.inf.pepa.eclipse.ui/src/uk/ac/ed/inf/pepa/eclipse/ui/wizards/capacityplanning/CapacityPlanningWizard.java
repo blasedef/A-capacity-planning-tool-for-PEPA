@@ -259,7 +259,7 @@ public class CapacityPlanningWizard extends Wizard {
 		"_" + 
 		configurationModel.dropDownListsList.get(2).getValue() + 
 		"_" + 
-		configurationModel.metaheuristicParameters.getLeftMap().get(Config.EXPERIMENTS_S) +
+		configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S) +
 		"_" +
 		this.getDateTime();
 		
