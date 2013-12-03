@@ -37,29 +37,21 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 		
 		int maximumSearchSpaceSize = ((SystemEquationFitnessFunction) fitnessFunction).getMaxSearchSpace();
 
-//		if(recorder.getCandidateMapToFitnessHash().size() < maximumSearchSpaceSize){
-//			
-//			for(Entry<String, Double> entry : candidateMap.entrySet()){
-//				if(Tool.rollDice(probability)){
-//					Double min = minimumPopulation.get(entry.getKey()).doubleValue();
-//					Double max = maximumPopulation.get(entry.getKey()).doubleValue();
-//					Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
-//					candidateMap.put(entry.getKey(), d);
-//					this.updateName();
-//				}
-//			}
-//			
-//		}
-	
-		for(Entry<String, Double> entry : candidateMap.entrySet()){
+		if(recorder.getCandidateMapToFitnessHash().size() < maximumSearchSpaceSize){
 			
-			System.out.println(entry.getKey());
+			for(Entry<String, Double> entry : candidateMap.entrySet()){
+				
+				if(Tool.rollDice(probability)){
+					Double min = minimumPopulation.get(entry.getKey()).doubleValue();
+					Double max = maximumPopulation.get(entry.getKey()).doubleValue();
+					Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
+					candidateMap.put(entry.getKey(), d);
+				}
 			
-			if(entry.getKey().equals("Brewery2")){
-				System.out.println(entry.getKey());
-				candidateMap.put(entry.getKey(), 0.0);
 			}
-		}
+		
+		}	
+		this.updateName();
 	}
 
 }

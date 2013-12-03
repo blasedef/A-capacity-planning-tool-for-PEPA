@@ -42,8 +42,8 @@ public class AggregationImpl implements Aggregation {
 		if (process == null || subProcesses.containsKey(process))
 			throw new IllegalStateException(
 					"SubProcess null or already present");
-//		if (copies == 0)
-//			throw new IllegalStateException("Number of copies null");
+		if (copies == 0)
+			throw new IllegalStateException("Number of copies null");
 		subProcesses.put(process, copies);
 		this.copies += copies;
 	}
