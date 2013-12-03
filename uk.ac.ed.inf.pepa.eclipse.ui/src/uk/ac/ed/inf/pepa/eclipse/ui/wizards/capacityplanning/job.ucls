@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.MetaHeuristicJob" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/MetaHeuristicJob.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2463" y="1252" width="315" height="257"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/Recorder.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2869" y="2170" width="312" height="275"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.SystemEquationRecorder" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/SystemEquationRecorder.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="3329" y="2485" width="442" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.ParticleSwarmOptimisation" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/metaheurstics/ParticleSwarmOptimisation.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1903" y="334" width="465" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.Metaheuristic" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/metaheurstics/Metaheuristic.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2410" y="37" width="401" height="185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.HillClimbing" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/metaheurstics/HillClimbing.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="622" y="334" width="389" height="113"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.GeneticAlgorithm" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/metaheurstics/GeneticAlgorithm.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2450" y="334" width="419" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.SingleNetworkParticleSwarmOptimisationLab" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/labs/SingleNetworkParticleSwarmOptimisationLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2307" y="2485" width="494" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.SingleNetworkLab" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/labs/SingleNetworkLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2365" y="2170" width="366" height="95"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.SingleNetworkHillClimbingLab" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/labs/SingleNetworkHillClimbingLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1849" y="2485" width="418" height="113"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.SingleNetworkGeneticAlgorithmLab" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/labs/SingleNetworkGeneticAlgorithmLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2841" y="2485" width="448" height="113"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Lab" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/labs/Lab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2463" y="1585" width="364" height="221"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SystemEquationFitnessFunction" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/SystemEquationFitnessFunction.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1250" y="1585" width="1173" height="545"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SetASTVisitor" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/SetASTVisitor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="649" y="2485" width="326" height="455"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.ParticleSwarmOptimsationSystemEquationFitnessFunction" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/ParticleSwarmOptimsationSystemEquationFitnessFunction.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="42" y="2170" width="1299" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.NodeHandler" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/NodeHandler.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1381" y="2170" width="496" height="185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.GraphHandler" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/GraphHandler.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1381" y="2485" width="428" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.GetASTVisitor" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/GetASTVisitor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1015" y="2485" width="326" height="455"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/FitnessFunction.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1819" y="1252" width="319" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.AnalysisOfFluidSteadyState" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/fitnessFunctions/AnalysisOfFluidSteadyState.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1700" y="2808" width="-1" height="-1"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/candidates/Candidate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2389" y="595" width="420" height="617"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.GeneticAlgorithmSystemEquationCandidate" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/candidates/GeneticAlgorithmSystemEquationCandidate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="631" y="1585" width="579" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.HillClimbingSystemEquationCandidate" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/candidates/HillClimbingSystemEquationCandidate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="42" y="1585" width="549" height="113"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.ParticleSwarmOptimisationSystemEquationCandidate" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/candidates/ParticleSwarmOptimisationSystemEquationCandidate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1051" y="334" width="812" height="221"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.SystemEquationCandidate" 
+    project="uk.ac.ed.inf.pepa.eclipse.ui" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/job/candidates/SystemEquationCandidate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1051" y="1252" width="497" height="293"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="26">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="27" name="personalBest"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="29">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <generalization id="31">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="32">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="33" name="personalBestQueue"/>      
+      <multiplicity id="34" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="35">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="36">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="37" name="globalBestQueue"/>      
+      <multiplicity id="38" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="40" name="recorders"/>      
+      <multiplicity id="41" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="43" name="globalBest"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="46" name="writeAST"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="49" name="grapher"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="52" name="lab"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <bendpoint x="2899" y="334"/>    
+    <bendpoint x="2899" y="595"/>    
+    <bendpoint x="2899" y="1252"/>    
+    <bendpoint x="2899" y="1585"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="55" name="recorder"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="57">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="58">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <association id="59">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="60" name="nodeHandler"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <bendpoint x="2398" y="334"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="63" name="candidatePopulation"/>      
+      <multiplicity id="64" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="65">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <association id="66">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="67" name="readAST"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="69">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="70">    
+    <bendpoint x="2419" y="334"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="71" name="candidate"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="73">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="74" name="fitnessFunction"/>      
+      <multiplicity id="75" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="76">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="77">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="78">    
+    <bendpoint x="2857" y="1252"/>    
+    <bendpoint x="2857" y="1585"/>    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="79" name="recorder"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="81">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="82">    
+    <bendpoint x="2878" y="1585"/>    
+    <bendpoint x="2878" y="1252"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="83" name="queue"/>      
+      <multiplicity id="84" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="85">    
+    <bendpoint x="1060" y="595"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="86">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="87">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="88">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="89" name="recorder"/>      
+      <multiplicity id="90" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="91">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

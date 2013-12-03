@@ -32,8 +32,8 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Configuratio
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.dropDownLists.EvaluatorType;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.MetaheuristicParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.PopulationWeights;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.SystemEquation;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.Targets;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.PopulationMinAndMax;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.TargetsAndWeights;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 
@@ -97,7 +97,7 @@ public class CapacityPlanningWizard extends Wizard {
 		wizardPageList.add(performanceConfigurationPage);
 		
 		populationConfigurationPage = new PopulationConfigurationPage(pageTitle,
-				configurationModel.systemEquationCandidate,
+				configurationModel.systemEquationPopulationRanges,
 				configurationModel.populationWeights);
 		wizardPageList.add(populationConfigurationPage);
 		
@@ -154,7 +154,7 @@ public class CapacityPlanningWizard extends Wizard {
 	}
 	
 	private IWizardPage updateAndGetPerformanceConfigurationPage(){
-		((Targets) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
+		((TargetsAndWeights) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
 		performanceConfigurationPage = new PerformanceConfigurationPage(pageTitle,
 				configurationModel.performanceTargetsAndWeights);
 		addPage(this.performanceConfigurationPage);
@@ -162,13 +162,13 @@ public class CapacityPlanningWizard extends Wizard {
 	}
 	
 	private IWizardPage updateAndGetPopulationConfigurationPage(){
-		((SystemEquation) configurationModel.systemEquationCandidate).update(configurationModel.configPEPA.getSystemEquation(), 
+		((PopulationMinAndMax) configurationModel.systemEquationPopulationRanges).update(configurationModel.configPEPA.getSystemEquation(), 
 				configurationModel.configPEPA.getInitialPopulation());
 		
 		((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
 		
 		populationConfigurationPage = new PopulationConfigurationPage(pageTitle,
-				configurationModel.systemEquationCandidate,
+				configurationModel.systemEquationPopulationRanges,
 				configurationModel.populationWeights);
 		addPage(this.populationConfigurationPage);
 		return this.populationConfigurationPage;

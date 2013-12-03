@@ -76,6 +76,7 @@ public class MetaHeuristicJob extends Job{
 		this.configurationModel.metaheuristicParameters.getLeftMap().put(Config.MUTATIONPROBABILITY_S, 1.0);
 		this.configurationModel.metaheuristicParameters.getLeftMap().put(Config.GENERATION_S,
 				this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.GENERATIONHC_S));
+		this.configurationModel.metaheuristicParameters.getLeftMap().remove(Config.GENERATIONHC_S);
 
 		
 	}
@@ -99,7 +100,7 @@ public class MetaHeuristicJob extends Job{
 		
 		output += configurationModel.dropDownListsList.get(1).getKey() 
 		+ ";" 
-		+ configurationModel.systemEquationCandidate.getLeftMap()
+		+ configurationModel.systemEquationPopulationRanges.getLeftMap()
 		+ ";"
 		+ configurationModel.dropDownListsList.get(1).getValue()
 		+ "\n";
@@ -151,8 +152,8 @@ public class MetaHeuristicJob extends Job{
 		
 		this.systemEquationPopulationRanges = new HashMap<String,Double>();
 		
-		HashMap<String,Double> minPopulationRange = Tool.copyHashMap(configurationModel.systemEquationCandidate.getLeftMap());
-		HashMap<String,Double> maxPopulationRange = Tool.copyHashMap(configurationModel.systemEquationCandidate.getRightMap());
+		HashMap<String,Double> minPopulationRange = Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getLeftMap());
+		HashMap<String,Double> maxPopulationRange = Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getRightMap());
 		
 		for(Entry<String, Double> entry : minPopulationRange.entrySet()){
 			double range = maxPopulationRange.get(entry.getKey()) - minPopulationRange.get(entry.getKey());

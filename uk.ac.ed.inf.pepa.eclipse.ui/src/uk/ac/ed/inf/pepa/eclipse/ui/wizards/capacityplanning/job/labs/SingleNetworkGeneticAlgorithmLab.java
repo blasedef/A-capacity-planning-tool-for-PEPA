@@ -39,8 +39,8 @@ public class SingleNetworkGeneticAlgorithmLab extends SingleNetworkLab {
 	public Candidate getSystemEquationCandidate(Recorder recorder){
 		return (Candidate) new GeneticAlgorithmSystemEquationCandidate(0, 
 				getSystemEquationFitnessFunction(recorder),
-				Tool.copyHashMap(configurationModel.systemEquationCandidate.getLeftMap()),
-				Tool.copyHashMap(configurationModel.systemEquationCandidate.getRightMap()));
+				Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getLeftMap()),
+				Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getRightMap()));
 	}
 
 }

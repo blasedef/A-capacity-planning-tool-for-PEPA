@@ -20,7 +20,7 @@ public class ConfigurationModel {
 	public TextInputs metaheuristicParameters;
 	public TextInputs metaheuristicParametersCandidate; 
 	
-	public TextInputs systemEquationCandidate;
+	public TextInputs systemEquationPopulationRanges;
 	public TextInputs populationWeights;
 	
 	public TextInputs performanceTargetsAndWeights;
@@ -39,8 +39,8 @@ public class ConfigurationModel {
 		dropDownListsList.add(new NetworkType());
 		dropDownListsList.add(new AdditionalCosts());
 		
-		systemEquationFitnessWeights = new Fitness();
-		metaheuristicFitnessWeights = new Fitness();
+		systemEquationFitnessWeights = new FitnessFunctionWeighting();
+		metaheuristicFitnessWeights = new FitnessFunctionWeighting();
 		
 		labParameters = new LabParameters();
 		metaheuristicParameters = new MetaheuristicParameters();
@@ -48,11 +48,11 @@ public class ConfigurationModel {
 		labParametersCandidate = new LabParameters();
 		metaheuristicParametersCandidate = new MetaheuristicParameters();
 		
-		systemEquationCandidate = new SystemEquation();
+		systemEquationPopulationRanges = new PopulationMinAndMax();
 		populationWeights = new PopulationWeights();
 		
-		performanceTargetsAndWeights = new Targets(10.0);
-		metaheuristicTargetsAndWeights = new Targets(0.0);
+		performanceTargetsAndWeights = new TargetsAndWeights(10.0);
+		metaheuristicTargetsAndWeights = new TargetsAndWeights(0.0);
 		
 		
 		

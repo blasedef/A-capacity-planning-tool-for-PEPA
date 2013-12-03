@@ -9,6 +9,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 public class MetaheuristicParameters extends TextInputs {
 	
 	//metaheuristic attribute lists
+	//Hill Climbing has a different default generation from the other algorithms
 	private String[] hillClimbingParameterList = new String[] {Config.GENERATIONHC_S};
 	
 	private String[] particleSwarmOptimisationParameterList = new String[] {

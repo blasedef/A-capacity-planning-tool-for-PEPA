@@ -115,9 +115,10 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.Fitness" 
+  <class id="11" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.FitnessFunctionWeighting" 
     project="uk.ac.ed.inf.pepa.eclipse.ui" 
-    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/Fitness.java" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/FitnessFunctionWeighting.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position x="1090" y="98" width="-1" height="-1"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -151,9 +152,9 @@
     </display>  
   </class>  
   <class id="14" language="java" 
-    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.SystemEquation" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.PopulationMinAndMax" 
     project="uk.ac.ed.inf.pepa.eclipse.ui" 
-    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/SystemEquation.java" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/PopulationMinAndMax.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position x="1092" y="456" width="-1" height="-1"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -162,9 +163,10 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.Targets" 
+  <class id="15" language="java" 
+    name="uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.TargetsAndWeights" 
     project="uk.ac.ed.inf.pepa.eclipse.ui" 
-    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/Targets.java" 
+    file="/uk.ac.ed.inf.pepa.eclipse.ui/src/uk/ac/ed/inf/pepa/eclipse/ui/wizards/capacityplanning/models/textInputs/TargetsAndWeights.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position x="1091" y="264" width="-1" height="-1"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
