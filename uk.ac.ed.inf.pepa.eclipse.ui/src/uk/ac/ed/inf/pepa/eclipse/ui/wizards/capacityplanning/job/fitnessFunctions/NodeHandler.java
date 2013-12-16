@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ODEConfig;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.PEPAConfig;
+import uk.ac.ed.inf.pepa.parsing.ASTSupport;
 import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 public class NodeHandler {
@@ -38,6 +39,7 @@ public class NodeHandler {
 	public void setSystemEquation(HashMap<String, Double> candidate){
 		this.writeAST.setSystemEquation(candidate);
 		this.writeAST();
+		this.node = (ModelNode) ASTSupport.copyAndDropAST(node, candidate);
 	}
 
 	public HashMap<String, Double> getPerformanceResultsMap(HashMap<String, Double> candidate,

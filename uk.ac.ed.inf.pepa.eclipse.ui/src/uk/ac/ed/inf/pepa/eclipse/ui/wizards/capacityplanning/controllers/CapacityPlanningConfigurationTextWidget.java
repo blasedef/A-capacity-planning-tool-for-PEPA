@@ -52,6 +52,13 @@ public class CapacityPlanningConfigurationTextWidget extends CapacityPlanningWid
 
 	@Override
 	public boolean isValid() {
+		if(type.equals(Config.NATURAL)){
+			NaturalParser parser = new NaturalParser(aText.getText());
+			if(parser.isCorrect()){
+				setValue();
+			} 
+			return parser.isCorrect();
+		}
 		if(type.equals(Config.INTEGER)){
 			IntegerParser parser = new IntegerParser(aText.getText());
 			if(parser.isCorrect()){

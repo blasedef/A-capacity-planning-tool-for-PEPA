@@ -32,9 +32,9 @@ public class TextInputs {
 	{
 		private static final long serialVersionUID = -1391658164702351480L;
 
-	{	put(Config.EXPERIMENTS_S,Config.INTEGER);
-		put(Config.GENERATION_S,Config.INTEGER);
-		put(Config.GENERATIONHC_S,Config.INTEGER);
+	{	put(Config.EXPERIMENTS_S,Config.NATURAL);
+		put(Config.GENERATION_S,Config.NATURAL);
+		put(Config.GENERATIONHC_S,Config.NATURAL);
 		put(Config.FITNESS_ALPHA_PERFORMANCE_S,Config.PERCENT);
 		put(Config.FITNESS_BETA_POPULATION_S,Config.PERCENT);
 		put(Config.FITNESS_DELTA_PERFORMANCE_S,Config.PERCENT);
@@ -104,7 +104,7 @@ public class TextInputs {
 			number = defaultMapping.get(key);
 		}
 		
-		if((this.typeMap.get(key).equals(Config.INTEGER)) ||(this.typeMap.get(key).equals(Config.EVEN)) ){
+		if((this.typeMap.get(key).equals(Config.NATURAL)) ||(this.typeMap.get(key).equals(Config.EVEN)) ){
 			return "" + number.intValue();
 		} else { 
 			return "" + number;

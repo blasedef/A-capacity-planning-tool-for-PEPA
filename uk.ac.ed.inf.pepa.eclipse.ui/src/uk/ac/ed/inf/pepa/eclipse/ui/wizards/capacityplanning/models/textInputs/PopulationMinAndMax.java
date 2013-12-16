@@ -57,21 +57,21 @@ public class PopulationMinAndMax extends TextInputs {
 	public boolean isCorrect(boolean single){
 		
 		if(!single){
-			boolean aboveZero = true;
+			boolean notNegative = true;
 			boolean maxGreaterThanOrEqualToMin = true;
 			
 			String[] keysLeft = this.getMapKeys(false);
 			String[] keysRight = this.getMapKeys(true);
 			
 			for(String key : keysLeft){
-				aboveZero = aboveZero && (this.leftMap.get(key) > 0.0);
+				notNegative = notNegative && (this.leftMap.get(key) >= 0.0);
 			}
 			
 			for(String key : keysRight){
 				maxGreaterThanOrEqualToMin = maxGreaterThanOrEqualToMin && (this.rightMap.get(key) >=  this.leftMap.get(key));
 			}
 			
-			return (maxGreaterThanOrEqualToMin && aboveZero);
+			return (maxGreaterThanOrEqualToMin && notNegative);
 		} else {
 			return true;
 		}

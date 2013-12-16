@@ -37,7 +37,7 @@ public class GeneticAlgorithmSystemEquationCandidate extends SystemEquationCandi
 			if(Tool.rollDice(probability)){
 				Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();
-				Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
+				Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 				candidateMap.put(entry.getKey(), d);
 				this.updateName();
 			}
@@ -49,7 +49,7 @@ public class GeneticAlgorithmSystemEquationCandidate extends SystemEquationCandi
 	public void crossOver(Candidate candidate, double probability) {
 		
 		if(Tool.rollDice(probability)){
-			int split = Tool.returnRandomInRange(0.0, ((Integer) candidateMap.size()).doubleValue(), Config.INTEGER).intValue();
+			int split = Tool.returnRandomInRange(0.0, ((Integer) candidateMap.size()).doubleValue(), Config.NATURAL).intValue();
 			
 			HashMap<String,Double> candidateMapA = Tool.copyHashMap(this.getCandidateMap());
 			HashMap<String,Double> candidateMapB = Tool.copyHashMap(candidate.getCandidateMap());

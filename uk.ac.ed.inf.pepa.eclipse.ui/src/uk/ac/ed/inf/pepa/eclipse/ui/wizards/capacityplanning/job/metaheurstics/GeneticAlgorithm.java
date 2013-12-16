@@ -79,11 +79,11 @@ public class GeneticAlgorithm extends Metaheuristic {
 	
 	public Candidate tournamentSelection(){
 
-		int best = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.INTEGER).intValue();
+		int best = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
 		int next = 0;
 
 		for(int i = 0; i <= 2; i++){
-			next = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.INTEGER).intValue();
+			next = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
 			if(candidatePopulation.get(next).compareTo(candidatePopulation.get(best)) < 0){
 				best = next;
 			}

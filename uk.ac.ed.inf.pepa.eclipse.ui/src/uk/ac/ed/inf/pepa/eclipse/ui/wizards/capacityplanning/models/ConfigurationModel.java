@@ -54,10 +54,8 @@ public class ConfigurationModel {
 		performanceTargetsAndWeights = new TargetsAndWeights(10.0);
 		metaheuristicTargetsAndWeights = new TargetsAndWeights(0.0);
 		
-		
-		
-		configODE = new ODEConfig();
 		configPEPA = new PEPAConfig(model);
+		configODE = new ODEConfig(model.getOptionMap());
 		
 		
 	}

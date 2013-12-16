@@ -1,8 +1,8 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers;
 
-public class IntegerParser extends Parser{
+public class NaturalParser extends Parser{
 
-	public IntegerParser(String text) {
+	public NaturalParser(String text) {
 		super(text);
 	}
 
@@ -18,7 +18,7 @@ public class IntegerParser extends Parser{
 		} catch (NumberFormatException e) {
 			return false;
 		}
-		if(i >= 0) {
+		if(i > 0) {
 			return true;
 		}
 		else {

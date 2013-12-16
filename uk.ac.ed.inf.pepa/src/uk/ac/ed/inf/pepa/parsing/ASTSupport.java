@@ -25,7 +25,9 @@ import uk.ac.ed.inf.pepa.parsing.BinaryOperatorRateNode.Operator;
 public class ASTSupport {
 
 	private static ASTCopyVisitor astCV = new ASTCopyVisitor();
-
+	
+	private static ASTCopyAndDropZerosVisitor astCVZ = new ASTCopyAndDropZerosVisitor();
+	
 	private static ASTNamedFormVisitor astNFV = new ASTNamedFormVisitor();
 
 	private static ASTAggregationVisitor astAV = new ASTAggregationVisitor();
@@ -816,4 +818,214 @@ public class ASTSupport {
 	 * 
 	 * } }
 	 */
+	
+	/**
+	 * Uses the {@link uk.ac.ed.inf.pepa.parsing.Visitor Visitor pattern} to
+	 * clone the AST.
+	 * 
+	 * @param abstractSyntaxTreeNode
+	 *            The root node to be cloned.
+	 * @return A deep copy of abstractSyntaxTreeNode and all sub-nodes, ignores any components with a 
+	 * population of 0
+	 */
+	public static ASTNode copyAndDropAST(ASTNode abstractSyntaxTreeNode, HashMap<String, Double> systemEquation) {
+		
+		astCVZ.setSystemEquation(systemEquation);
+		abstractSyntaxTreeNode.accept(astCVZ);
+		return astCVZ.copy;
+		
+		//return new ASTCopyAndDropZerosVisitor();
+	}
+	
+	private static class ASTCopyAndDropZerosVisitor implements ASTVisitor {
+
+		ASTNode copy;
+		HashMap<String, Double> systemEquation;
+		
+		public void setSystemEquation(HashMap<String, Double> systemEquation){
+			this.systemEquation = systemEquation;
+		}
+
+		private void setLocations(ASTNode a) {
+			copy.setLeftLocation(a.getLeftLocation());
+			copy.setRightLocation(a.getRightLocation());
+		}
+
+		public void visitActionTypeNode(ActionTypeNode actionType) {
+			copy = new ActionTypeNode();
+			((ActionTypeNode) copy).setType(actionType.getType());
+			setLocations(actionType);
+		}
+
+		public void visitActivityNode(ActivityNode activity) {
+			ActivityNode an = new ActivityNode();
+			activity.getAction().accept0(this);
+			an.setAction((ActionSuperNode) copy);
+			activity.getRate().accept0(this);
+			an.setRate((RateNode) copy);
+			copy = an;
+			setLocations(activity);
+		}
+
+		public void visitAggregationNode(AggregationNode aggregation) {
+			AggregationNode a = new AggregationNode();
+			// AggregationNode.getCopies now is an AST node!
+			aggregation.getCopies().accept(this);
+			a.setCopies((FiniteRateNode) copy);
+			aggregation.getProcessNode().accept0(this);
+			a.setProcessNode((ProcessNode) copy);
+			copy = a;
+			setLocations(aggregation);
+		}
+
+		public void visitBinaryOperatorRateNode(BinaryOperatorRateNode rate) {
+			BinaryOperatorRateNode bORN = new BinaryOperatorRateNode();
+			bORN.setOperator(rate.getOperator());
+			rate.getLeft().accept0(this);
+			bORN.setLeft((RateNode) copy);
+			rate.getRight().accept0(this);
+			bORN.setRight((RateNode) copy);
+			copy = bORN;
+			setLocations(rate);
+		}
+
+		public void visitChoiceNode(ChoiceNode choice) {
+			ChoiceNode c = new ChoiceNode();
+			choice.getLeft().accept0(this);
+			c.setLeft((ProcessNode) copy);
+			choice.getRight().accept0(this);
+			c.setRight((ProcessNode) copy);
+			copy = c;
+			setLocations(choice);
+		}
+
+		public void visitConstantProcessNode(ConstantProcessNode constant) {
+			copy = new ConstantProcessNode();
+			((ConstantProcessNode) copy).setName(constant.getName());
+			setLocations(constant);
+		}
+
+		public void visitCooperationNode(CooperationNode cooperation) {
+			CooperationNode c = new CooperationNode();
+			Actions a = new Actions();
+			cooperation.getLeft().accept0(this);
+			c.setLeft((ProcessNode) copy);
+			cooperation.getRight().accept0(this);
+			c.setRight((ProcessNode) copy);
+			for (ActionTypeNode aTN : cooperation.getActionSet()) {
+				aTN.accept0(this);
+				a.add((ActionTypeNode) copy);
+			}
+			c.setActionSet(a);
+			copy = c;
+			setLocations(cooperation);
+		}
+
+		public void visitHidingNode(HidingNode hiding) {
+			HidingNode h = new HidingNode();
+			Actions a = new Actions();
+			hiding.getProcess().accept0(this);
+			h.setProcess((ProcessNode) copy);
+			for (ActionTypeNode aTN : hiding.getActionSet()) {
+				aTN.accept0(this);
+				a.add((ActionTypeNode) copy);
+			}
+			h.setActionSet(a);
+			copy = h;
+			setLocations(hiding);
+		}
+
+		public void visitModelNode(ModelNode model) {
+			ModelNode m = new ModelNode();
+			RateDefinitions r = m.rateDefinitions();
+			for (RateDefinitionNode rDN : model.rateDefinitions()) {
+				rDN.accept0(this);
+				r.add((RateDefinitionNode) copy);
+			}
+			ProcessDefinitions p = m.processDefinitions();
+			for (ProcessDefinitionNode pDN : model.processDefinitions()) {
+				pDN.accept0(this);
+				p.add((ProcessDefinitionNode) copy);
+			}
+			if (model.getSystemEquation() != null) {
+				model.getSystemEquation().accept0(this);
+				m.setSystemEquation((ProcessNode) copy);
+			}
+			IProblem[] i = model.getProblems(), newi = new IProblem[i.length];
+			for (int index = 0; index < i.length; index++)
+				newi[index] = ProblemFactory.createProblem(i[index].getId(),
+						i[index].getStartLine(), i[index].getStartColumn(),
+						i[index].getEndLine(), i[index].getEndColumn(),
+						i[index].getChar(), i[index].getLength(), i[index]
+								.getMessage());
+			copy = m;
+			setLocations(model);
+		}
+
+		public void visitPassiveRateNode(PassiveRateNode passive) {
+			copy = new PassiveRateNode();
+			((PassiveRateNode) copy).setMultiplicity(passive.getMultiplicity());
+			setLocations(passive);
+		}
+
+		public void visitPrefixNode(PrefixNode prefix) {
+			PrefixNode p = new PrefixNode();
+			prefix.getActivity().accept0(this);
+			p.setActivity((ActivityNode) copy);
+			prefix.getTarget().accept0(this);
+			p.setTarget((ProcessNode) copy);
+			copy = p;
+			setLocations(prefix);
+		}
+
+		public void visitProcessDefinitionNode(
+				ProcessDefinitionNode processDefinition) {
+			ProcessDefinitionNode p = new ProcessDefinitionNode();
+			processDefinition.getName().accept0(this);
+			p.setName((ConstantProcessNode) copy);
+			processDefinition.getNode().accept0(this);
+			p.setNode((ProcessNode) copy);
+			copy = p;
+			setLocations(processDefinition);
+		}
+
+		public void visitRateDefinitionNode(RateDefinitionNode rateDefinition) {
+			RateDefinitionNode r = new RateDefinitionNode();
+			rateDefinition.getName().accept0(this);
+			r.setName((VariableRateNode) copy);
+			rateDefinition.getRate().accept(this);
+			r.setRate((RateNode) copy);
+			copy = r;
+			setLocations(rateDefinition);
+		}
+
+		public void visitRateDoubleNode(RateDoubleNode doubleRate) {
+			copy = new RateDoubleNode();
+			((RateDoubleNode) copy).setValue(doubleRate.getValue());
+			setLocations(doubleRate);
+		}
+
+		public void visitVariableRateNode(VariableRateNode variableRate) {
+			copy = new VariableRateNode();
+			((VariableRateNode) copy).setName(variableRate.getName());
+			setLocations(variableRate);
+		}
+
+		public void visitUnknownActionTypeNode(
+				UnknownActionTypeNode unknownActionTypeNode) {
+			copy = new UnknownActionTypeNode();
+			setLocations(unknownActionTypeNode);
+		}
+
+		public void visitWildcardCooperationNode(
+				WildcardCooperationNode cooperation) {
+			WildcardCooperationNode c = new WildcardCooperationNode();
+			cooperation.getLeft().accept0(this);
+			c.setLeft((ProcessNode) copy);
+			cooperation.getRight().accept0(this);
+			c.setRight((ProcessNode) copy);
+			copy = c;
+			setLocations(cooperation);
+		}
+	}
 }

@@ -124,7 +124,10 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 		
 		for(Entry<String, Double> entry : candidate.entrySet()){
 			String component = entry.getKey();
-			Double value = entry.getValue() - minPopulation.get(component);
+			Double value = entry.getValue();
+			if(value > 0){
+				value = value - minPopulation.get(component);
+			} 
 			Double range = this.populationRanges.get(component);
 			Double weight = this.populationWeights.get(component)/this.weightDenominator;
 			this.populationResultsMap.put(component, ((value/range)*100)*weight);

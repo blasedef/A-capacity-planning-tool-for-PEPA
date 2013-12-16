@@ -103,7 +103,7 @@ public class SystemEquationCandidate extends Candidate {
 			for(Entry<String, Double> entry : candidateMap.entrySet()){
 				Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();
-				Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
+				Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 				candidateMap.put(entry.getKey(),d);
 			}
 		}

@@ -65,7 +65,7 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 			for(Entry<String, Double> entry : newMap.entrySet()){
 				Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();
-				Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
+				Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 				newMap.put(entry.getKey(),d);
 			}
 		}

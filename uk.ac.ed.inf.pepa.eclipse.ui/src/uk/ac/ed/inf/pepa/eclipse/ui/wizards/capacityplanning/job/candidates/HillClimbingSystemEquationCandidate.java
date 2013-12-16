@@ -44,7 +44,7 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 				if(Tool.rollDice(probability)){
 					Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 					Double max = maximumPopulation.get(entry.getKey()).doubleValue();
-					Double d = Tool.returnRandomInRange(min, max, Config.INTEGER);
+					Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 					candidateMap.put(entry.getKey(), d);
 				}
 			

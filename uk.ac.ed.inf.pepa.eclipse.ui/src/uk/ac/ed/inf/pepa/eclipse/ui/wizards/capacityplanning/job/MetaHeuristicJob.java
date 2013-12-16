@@ -156,7 +156,7 @@ public class MetaHeuristicJob extends Job{
 		HashMap<String,Double> maxPopulationRange = Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getRightMap());
 		
 		for(Entry<String, Double> entry : minPopulationRange.entrySet()){
-			double range = maxPopulationRange.get(entry.getKey()) - minPopulationRange.get(entry.getKey());
+			double range = (maxPopulationRange.get(entry.getKey()) - minPopulationRange.get(entry.getKey())) + 1;
 			this.systemEquationPopulationRanges.put(entry.getKey(), range);
 		}
 	}

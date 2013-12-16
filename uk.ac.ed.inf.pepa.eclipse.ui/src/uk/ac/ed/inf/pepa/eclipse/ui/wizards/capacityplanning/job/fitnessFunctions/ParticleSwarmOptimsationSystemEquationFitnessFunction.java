@@ -51,7 +51,10 @@ public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends Syste
 		
 		for(Entry<String, Double> entry : candidate.entrySet()){
 			String component = entry.getKey();
-			Double value = entry.getValue() - minPopulation.get(component);
+			Double value = entry.getValue();
+			if(value > 0){
+				value = value - minPopulation.get(component);
+			} 
 			if(value > maxPopulation.get(entry.getKey())){
 				Double range = this.populationRanges.get(component);
 				Double weight = this.populationWeights.get(component)/this.weightDenominator;

@@ -10,6 +10,7 @@ public abstract class Config {
 	 */
 	
 	//Input Types
+	public static final String NATURAL = "NATURAL";
 	public static final String INTEGER = "INTEGER";
 	public static final String PERCENT = "PERCENT";
 	public static final String DOUBLE = "DOUBLE";

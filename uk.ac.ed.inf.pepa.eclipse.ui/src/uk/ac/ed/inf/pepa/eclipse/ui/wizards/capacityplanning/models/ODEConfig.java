@@ -16,7 +16,8 @@ public class ODEConfig {
 	private String[] labels;
 	protected OptionMap map;
 
-	public ODEConfig() {
+	public ODEConfig(OptionMap map) {
+		this.map = map;
 	}
 	
 	public void setEstimators(IPointEstimator[] estimators){

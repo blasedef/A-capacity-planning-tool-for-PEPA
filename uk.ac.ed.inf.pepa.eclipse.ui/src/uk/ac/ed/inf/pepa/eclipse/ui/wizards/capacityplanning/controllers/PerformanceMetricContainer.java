@@ -37,7 +37,6 @@ public abstract class PerformanceMetricContainer {
 			PEPAConfig configPEPA) {
 		
 		this.cb = cb;
-		configODE.setOptionMap(configPEPA.getPepaModel().getOptionMap());
 		this.fOptionMap = configODE.getOptionMap();
 		this.fDerivationGraph = configPEPA.getGraph();
 	

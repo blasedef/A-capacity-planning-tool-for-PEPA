@@ -102,7 +102,7 @@ public class MetaheuristicParameters extends TextInputs {
 			String[] keysRight = this.getMapKeys(true);
 			
 			for(String key : keysLeft){
-				if((this.typeMap.get(key) == Config.INTEGER) || (this.typeMap.get(key) == Config.EVEN) ){
+				if((this.typeMap.get(key) == Config.NATURAL) || (this.typeMap.get(key) == Config.EVEN) ){
 					aboveZero = aboveZero && (this.leftMap.get(key) > 0.0);
 				} else {
 					aboveZero = aboveZero && (this.leftMap.get(key) >= 0.0);

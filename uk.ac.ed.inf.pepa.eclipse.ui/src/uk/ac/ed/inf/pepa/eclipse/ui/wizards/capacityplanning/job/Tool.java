@@ -30,7 +30,7 @@ public class Tool {
 		
 		Random generator = new Random();
 		
-		if(type.equals(Config.INTEGER)){
+		if(type.equals(Config.NATURAL)){
 			
 			return generator.nextInt((int)(max - min) + 1) + min; 
 			
