@@ -32,13 +32,13 @@ public class SystemEquationCandidate extends Candidate {
 		
 		
 		return name + 
-		";" + 
+		/* ";" + 
 		this.fitness + 
 		";" + 
 		generation + 
 		";" + 
 		createdAt  + 
-		";" +
+		";" + */
 		temp;
 		
 	}
@@ -99,7 +99,7 @@ public class SystemEquationCandidate extends Candidate {
 	@Override
 	public void scatter() {
 		//'10%' of user system equations make it into the original population
-		if(Tool.rollDice(0.9)){
+		if(true){ //Tool.rollDice(0.9)){
 			for(Entry<String, Double> entry : candidateMap.entrySet()){
 				Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();

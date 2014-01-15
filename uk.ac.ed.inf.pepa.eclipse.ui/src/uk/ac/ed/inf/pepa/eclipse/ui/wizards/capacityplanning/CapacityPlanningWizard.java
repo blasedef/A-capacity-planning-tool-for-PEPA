@@ -14,7 +14,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
@@ -240,6 +242,22 @@ public class CapacityPlanningWizard extends Wizard {
 		
 	}
 	
+	private String getPopulations(){
+		
+		String output;
+		
+		output = "";
+		
+		HashMap<String,Double> map = configurationModel.systemEquationPopulationRanges.getRightMap();
+		
+		for(Map.Entry<String, Double> entry : map.entrySet()){
+			output = output + entry.getKey() + "[" + entry.getValue() + "]"; 
+		}
+		
+		return output;
+		
+	}
+	
 	/**
 	 * save page setup
 	 */
@@ -257,9 +275,7 @@ public class CapacityPlanningWizard extends Wizard {
 		"_" + 
 		configurationModel.dropDownListsList.get(1).getValue() +
 		"_" + 
-		configurationModel.dropDownListsList.get(2).getValue() + 
-		"_" + 
-		configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S) +
+		this.getPopulations() +
 		"_" +
 		this.getDateTime();
 		

@@ -53,13 +53,13 @@ public class SystemEquationRecorder extends Recorder {
 		if(queue.size() < x)
 			x = queue.size();
 		
-		output = "system equation ; fitness ; generation ; time after start created ; performanceMap " ;
+		//output = "system equation ; fitness ; generation ; time after start created ; performanceMap " ;
 		
 		for(int i = 0; i < x; i++){
 			output = output + "\n" + queue.poll().toString();
 		}
 		
-		output += "\n runtime ;" + this.time + "\n";
+		//output += "\n runtime ;" + this.time + "\n";
 		
 		return output;
 	}

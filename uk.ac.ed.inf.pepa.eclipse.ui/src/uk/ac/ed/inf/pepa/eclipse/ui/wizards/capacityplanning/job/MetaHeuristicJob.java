@@ -98,38 +98,38 @@ public class MetaHeuristicJob extends Job{
 	private void writeRecorders(IProgressMonitor monitor) {
 		String output = "\n";
 		
-		output += configurationModel.dropDownListsList.get(1).getKey() 
-		+ ";" 
-		+ configurationModel.systemEquationPopulationRanges.getLeftMap()
-		+ ";"
-		+ configurationModel.dropDownListsList.get(1).getValue()
-		+ "\n";
+//		output += configurationModel.dropDownListsList.get(1).getKey() 
+//		+ ";" 
+//		+ configurationModel.systemEquationPopulationRanges.getLeftMap()
+//		+ ";"
+//		+ configurationModel.dropDownListsList.get(1).getValue()
+//		+ "\n";
+//		
+//		for(Entry<String, Double> entry : configurationModel.metaheuristicParameters.getLeftMap().entrySet()){
+//			output += entry.getKey() + ";" + entry.getValue() + "\n";
+//		}
+//		
+//		output += "\n";
+//
+//		for(int i = 0; i < lab.recorders.size(); i++){
+//			output += "Experiment;" + i + ";\n";
+//			output += lab.recorders.get(i).getTopX(1);
+//			output += ";\n";
+//		}
 		
-		for(Entry<String, Double> entry : configurationModel.metaheuristicParameters.getLeftMap().entrySet()){
-			output += entry.getKey() + ";" + entry.getValue() + "\n";
-		}
 		
-		output += "\n";
-
 		for(int i = 0; i < lab.recorders.size(); i++){
-			output += "Experiment;" + i + ";\n";
-			output += lab.recorders.get(i).getTopX(1);
-			output += ";\n";
-		}
-		
-		
-		for(int i = 0; i < lab.recorders.size(); i++){
-			output += "Experiment;" + i + ";\n";
+			//output += "Experiment;" + i + ";\n";
 			output += lab.recorders.get(i).getTopX(10);
 			output += ";\n";
 		}
 		
-		for(int i = 0; i < lab.recorders.size(); i++){
-			output += "Experiment;" + i + ";\n";
-			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
-				output += lab.recorders.get(i).thisGenerationsMix(j);
-			}
-		}
+//		for(int i = 0; i < lab.recorders.size(); i++){
+//			output += "Experiment;" + i + ";\n";
+//			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
+//				output += lab.recorders.get(i).thisGenerationsMix(j);
+//			}
+//		}
 		
 		byte currentBytes[] = output.getBytes();
 		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(

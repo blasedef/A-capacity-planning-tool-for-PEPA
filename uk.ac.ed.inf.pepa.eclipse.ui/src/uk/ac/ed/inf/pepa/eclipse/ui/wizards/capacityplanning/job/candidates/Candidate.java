@@ -45,7 +45,7 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	
 	@Override
 	public String toString(){
-		return name + "; " + this.fitness + "; " + generation + "; " + createdAt ;
+		return name  + "; " + this.fitness + "; " + generation + "; " + createdAt ;
 		
 	}
 	
@@ -58,7 +58,7 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		this.name = "";
 		
 		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
-			name = name + entry.getKey() + "[" + entry.getValue() + "]"; 
+			name = name + entry.getKey() + ";[" + entry.getValue() + "];"; 
 		}
 		
 	}
