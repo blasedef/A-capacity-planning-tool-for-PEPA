@@ -120,7 +120,7 @@ public class MetaHeuristicJob extends Job{
 		
 		for(int i = 0; i < lab.recorders.size(); i++){
 			//output += "Experiment;" + i + ";\n";
-			output += lab.recorders.get(i).getTopX(10);
+			output += lab.recorders.get(i).getTopX(100);
 			output += ";\n";
 		}
 		
