@@ -32,8 +32,8 @@ public class SystemEquationCandidate extends Candidate {
 		
 		
 		return name + 
-		/* ";" + 
-		this.fitness + 
+		"&" + 
+		/* this.fitness + 
 		";" + 
 		generation + 
 		";" + 

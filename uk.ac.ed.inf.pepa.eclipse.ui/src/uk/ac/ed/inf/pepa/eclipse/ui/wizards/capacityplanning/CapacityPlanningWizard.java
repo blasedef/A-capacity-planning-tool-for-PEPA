@@ -249,7 +249,7 @@ public class CapacityPlanningWizard extends Wizard {
 		output = "";
 		
 		HashMap<String,Double> rightMap = configurationModel.systemEquationPopulationRanges.getRightMap();
-		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getRightMap();
+		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getLeftMap();
 		
 		for(Map.Entry<String, Double> entry : rightMap.entrySet()){
 			output = output + entry.getKey() + "[" + leftMap.get(entry.getKey()) + "_" + entry.getValue() + "]"; 
