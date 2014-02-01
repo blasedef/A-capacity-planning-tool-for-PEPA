@@ -1,11 +1,9 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -30,8 +28,14 @@ public class MetaHeuristicJob extends Job{
 	private ConfigurationModel configurationModel;
 	private HashMap<String,Double> systemEquationPopulationRanges;
 	
+	static Logger log = Logger.getLogger(MetaHeuristicJob.class);
+	
+	
 	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
+		
+		BasicConfigurator.configure();
+		
 		this.configurationModel = configurationModel;
 		
 		if(configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
@@ -218,6 +222,10 @@ public class MetaHeuristicJob extends Job{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			log.error(filename);
+			log.error(output);
+			
 			
 		}
 		
