@@ -2,8 +2,15 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IFile;
@@ -18,15 +25,13 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Configuratio
 
 public class MetaHeuristicJob extends Job{
 
-	private IFile iFile;
 	private Lab lab;
 	private int totalWork;
 	private ConfigurationModel configurationModel;
 	private HashMap<String,Double> systemEquationPopulationRanges;
 	
-	public MetaHeuristicJob(String name, ConfigurationModel configurationModel, IFile iFile) {
+	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
-		this.iFile = iFile;
 		this.configurationModel = configurationModel;
 		
 		if(configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
@@ -90,60 +95,130 @@ public class MetaHeuristicJob extends Job{
 		
 		status = this.lab.startExperiments(monitor);
 		
-		writeRecorders(monitor);
+		writeMHRecorders(monitor);
 		
 		return status;
 	}
 	
-	private void writeRecorders(IProgressMonitor monitor) {
-		String output = "\n";
+	private String getPopulations(){
 		
-//		output += configurationModel.dropDownListsList.get(1).getKey() 
-//		+ ";" 
-//		+ configurationModel.systemEquationPopulationRanges.getLeftMap()
-//		+ ";"
-//		+ configurationModel.dropDownListsList.get(1).getValue()
-//		+ "\n";
-//		
-//		for(Entry<String, Double> entry : configurationModel.metaheuristicParameters.getLeftMap().entrySet()){
-//			output += entry.getKey() + ";" + entry.getValue() + "\n";
-//		}
-//		
-//		output += "\n";
-//
-//		for(int i = 0; i < lab.recorders.size(); i++){
-//			output += "Experiment;" + i + ";\n";
-//			output += lab.recorders.get(i).getTopX(1);
-//			output += ";\n";
-//		}
+		String output;
 		
+		output = "";
 		
-		for(int i = 0; i < lab.recorders.size(); i++){
-			//output += "Experiment;" + i + ";\n";
-			output += lab.recorders.get(i).getTopX(100);
-			output += ";\n";
+		HashMap<String,Double> rightMap = configurationModel.systemEquationPopulationRanges.getRightMap();
+		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getLeftMap();
+		
+		for(Map.Entry<String, Double> entry : rightMap.entrySet()){
+			output = output + entry.getKey() + "[" + leftMap.get(entry.getKey()) + "_" + entry.getValue() + "]"; 
 		}
 		
-//		for(int i = 0; i < lab.recorders.size(); i++){
-//			output += "Experiment;" + i + ";\n";
-//			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
-//				output += lab.recorders.get(i).thisGenerationsMix(j);
-//			}
-//		}
+		return output;
 		
-		byte currentBytes[] = output.getBytes();
-		final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-				currentBytes);
-		try {
-			iFile.setContents(byteArrayInputStream, true, false,
-					monitor);
-		} catch (CoreException e) {
-			try {
-				throw new InvocationTargetException(e);
-			} catch (InvocationTargetException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+	}
+	
+	private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+	
+	private void writeMHRecorders(IProgressMonitor monitor) {
+		
+		for(int i = 0; i < lab.recorders.size(); i++){
+			
+			// {"LAB":
+				// {"MH":
+				//		{"MHParams":
+				//			{<K:V>},
+				//		},
+				//		{"SearchParams":
+				//			{<K:V>},
+				//		},
+				//		{"TopSystemEquations":
+				//			{"SystemEquation":
+				//				{Name:String},
+				//				{Fitness:Float},
+				//				{PerformanceMeasures
+				//					{Name:Float},
+				//				},
+				//				{Population:
+				//					{Name:Int},
+				//				}
+				//		},
+				//		{"GenerationMix":
+				//			{"SystemEquation":
+				//				{Generation:Int},
+				//				{Name:String},
+				//				{Fitness:Float},
+				//				{PerformanceMeasures
+				//					{Name:Float},
+				//				},
+				//				{Population:
+				//					{Name:Int},
+				//				}			
+				//		}
+				// }
+			// }
+			
+			String output = "\n";
+			
+			output += "{\"LAB\":{ \n";
+			
+			output += "{\"METAHEURISTICDETAILS\":{ \n";
+			
+			output += "{" + configurationModel.dropDownListsList.get(1).getKey() 
+			+ ":" 
+			+ configurationModel.dropDownListsList.get(1).getValue()
+			+ "}\n";
+			
+			for(Entry<String, Double> entry : configurationModel.metaheuristicParameters.getLeftMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
 			}
+			
+			for(Entry<String, Double> entry : configurationModel.systemEquationPopulationRanges.getLeftMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
+			}
+			
+			for(Entry<String, Double> entry : configurationModel.systemEquationPopulationRanges.getRightMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
+			}
+			
+			for(Entry<String, Double> entry : configurationModel.performanceTargetsAndWeights.getLeftMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
+			}
+			
+			for(Entry<String, Double> entry : configurationModel.populationWeights.getLeftMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
+			}
+			
+			for(Entry<String, Double> entry : configurationModel.systemEquationFitnessWeights.getLeftMap().entrySet()){
+				output += entry.getKey() + ";" + entry.getValue() + "\n";
+			}
+			output += lab.recorders.get(i).getTopX(100);
+			
+			output += "Experiment;" + i + ";\n";
+			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
+				output += lab.recorders.get(i).thisGenerationsMix(j);
+			}
+			
+			output += "};\n";
+			
+			String filename = "/tmp/" + getDateTime() + "_" + getPopulations() + ".json";
+			
+			PrintWriter writer;
+			try {
+				writer = new PrintWriter(filename,"UTF-8");
+				writer.println(output);
+				writer.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 	}

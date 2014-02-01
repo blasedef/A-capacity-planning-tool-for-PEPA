@@ -4,7 +4,8 @@ Bundle-Name: PEPAto Library
 Bundle-SymbolicName: uk.ac.ed.inf.pepa
 Bundle-Version: 0.0.24
 Bundle-Localization: plugin
-Export-Package: uk.ac.ed.inf.pepa,
+Export-Package: org.apache.log4j,
+ uk.ac.ed.inf.pepa,
  uk.ac.ed.inf.pepa.analysis;uses:="uk.ac.ed.inf.pepa.model,uk.ac.ed.inf.pepa.parsing",
  uk.ac.ed.inf.pepa.ctmc,
  uk.ac.ed.inf.pepa.ctmc.derivation;uses:="uk.ac.ed.inf.pepa",

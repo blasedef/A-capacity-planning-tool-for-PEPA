@@ -10,22 +10,12 @@
  *******************************************************************************/
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.MetaHeuristicJob;
@@ -40,6 +30,8 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 
 public class CapacityPlanningWizard extends Wizard {
+	
+	CapacityPlanningLogger logging = new CapacityPlanningLogger();
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
@@ -58,12 +50,8 @@ public class CapacityPlanningWizard extends Wizard {
 	public CapacityPlanningWizardPage performanceConfigurationPage;
 	public CapacityPlanningWizardPage populationConfigurationPage;
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageTwo;
-	public CapacityPlanningWizardPage fileSaveAsPage;
+	// public CapacityPlanningWizardPage fileSaveAsPage;
 	public CapacityPlanningWizardPage summaryPage;
-	
-	/** Extension for CSV files */
-	private static final String EXTENSION = "csv";
-	private WizardNewFileCreationPage newFilePage;
 	
 	public CapacityPlanningWizard(IPepaModel model){
 		
@@ -111,8 +99,8 @@ public class CapacityPlanningWizard extends Wizard {
 				true);
 		wizardPageList.add(metaheuristicParameterConfigurationPageTwo);
 		
-		addSaveAsPage();
-		wizardPageList.add(newFilePage);
+		//addSaveAsPage();
+		//wizardPageList.add(newFilePage);
 		
 	}
 	
@@ -188,11 +176,11 @@ public class CapacityPlanningWizard extends Wizard {
 		return this.metaheuristicParameterConfigurationPageTwo;
 	}
 	
-	private IWizardPage updateAndGetNewFilePage(){
-		addSaveAsPage();
-		addPage(newFilePage);
-		return newFilePage;
-	}
+//	private IWizardPage updateAndGetNewFilePage(){
+//		addSaveAsPage();
+//		addPage(newFilePage);
+//		return newFilePage;
+//	}
 	
 	/**
 	 * page ordering
@@ -233,69 +221,46 @@ public class CapacityPlanningWizard extends Wizard {
 		else if(page == performanceConfigurationPage){
 			return updateAndGetPopulationConfigurationPage();
 		}
-		else if(page == populationConfigurationPage)	{
-			return updateAndGetNewFilePage();
-		}
+//		else if(page == populationConfigurationPage)	{
+//			return updateAndGetNewFilePage();
+//		}
 		else {
 			return super.getNextPage(null);
 		}
 		
 	}
 	
-	private String getPopulations(){
-		
-		String output;
-		
-		output = "";
-		
-		HashMap<String,Double> rightMap = configurationModel.systemEquationPopulationRanges.getRightMap();
-		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getLeftMap();
-		
-		for(Map.Entry<String, Double> entry : rightMap.entrySet()){
-			output = output + entry.getKey() + "[" + leftMap.get(entry.getKey()) + "_" + entry.getValue() + "]"; 
-		}
-		
-		return output;
-		
-	}
-	
-	/**
-	 * save page setup
-	 */
-	private void addSaveAsPage() {
-		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
-				ResourceUtilities.changeExtension(
-						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), EXTENSION));
+//	/**
+//	 * save page setup
+//	 */
+//	private void addSaveAsPage() {
+//		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+//				ResourceUtilities.changeExtension(
+//						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), EXTENSION));
+//
+//		this.newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
+//				handle), EXTENSION);
+//		this.newFilePage.setTitle("Save to CSV");
+//		this.newFilePage.setDescription("Save model configurations to");
+//		
+//		String fileName = configurationModel.dropDownListsList.get(0).getValue() + 
+//		"_" + 
+//		configurationModel.dropDownListsList.get(1).getValue() +
+//		"_" + 
+//		this.getPopulations() +
+//		"_" +
+//		this.getDateTime();
+//		
+//		this.newFilePage.setFileName(fileName + "_" + handle.getName()  );
+//
+//	}
 
-		this.newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
-				handle), EXTENSION);
-		this.newFilePage.setTitle("Save to CSV");
-		this.newFilePage.setDescription("Save model configurations to");
-		
-		String fileName = configurationModel.dropDownListsList.get(0).getValue() + 
-		"_" + 
-		configurationModel.dropDownListsList.get(1).getValue() +
-		"_" + 
-		this.getPopulations() +
-		"_" +
-		this.getDateTime();
-		
-		this.newFilePage.setFileName(fileName + "_" + handle.getName()  );
-
-	}
-	
-	private String getDateTime() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
 
 	@Override
 	public boolean performFinish() {
 		
 		MetaHeuristicJob job = new MetaHeuristicJob("Running the search", 
-				configurationModel, 
-				this.newFilePage.createNewFile());
+				configurationModel);
 		
 		job.setUser(true);
 		job.schedule();
@@ -309,13 +274,11 @@ public class CapacityPlanningWizard extends Wizard {
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
 					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
-					this.metaheuristicParameterConfigurationPageTwo.isPageComplete() &&
-					this.newFilePage.isPageComplete());
+					this.metaheuristicParameterConfigurationPageTwo.isPageComplete());
 		} else {
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
 					this.fitnessFunctionConfigurationPage.isPageComplete() && 
-					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
-					this.newFilePage.isPageComplete());
+					this.metaheuristicParameterConfigurationPageOne.isPageComplete());
 		}
 		
 		
