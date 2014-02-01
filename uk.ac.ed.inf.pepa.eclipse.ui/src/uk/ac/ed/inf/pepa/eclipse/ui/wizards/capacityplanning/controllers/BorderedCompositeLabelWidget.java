@@ -16,7 +16,7 @@ public class BorderedCompositeLabelWidget extends CapacityPlanningWidget{
 			  Composite container, int span) {
 		super(key, value, cb);
 		
-		composite = new Composite(container,SWT.NONE | SWT.BORDER);
+		composite = new Composite(container, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);

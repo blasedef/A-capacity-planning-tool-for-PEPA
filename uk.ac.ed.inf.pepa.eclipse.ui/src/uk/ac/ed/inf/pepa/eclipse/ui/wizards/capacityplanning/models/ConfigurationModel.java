@@ -37,7 +37,7 @@ public class ConfigurationModel {
 		dropDownListsList.add(new EvaluatorType());
 		dropDownListsList.add(new MetaheuristicType());
 		dropDownListsList.add(new NetworkType());
-		dropDownListsList.add(new AdditionalCosts());
+		//dropDownListsList.add(new AdditionalCosts());
 		
 		systemEquationFitnessWeights = new FitnessFunctionWeighting();
 		metaheuristicFitnessWeights = new FitnessFunctionWeighting();

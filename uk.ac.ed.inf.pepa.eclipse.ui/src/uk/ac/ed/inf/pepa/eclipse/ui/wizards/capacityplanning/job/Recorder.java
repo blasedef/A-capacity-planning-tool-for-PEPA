@@ -6,14 +6,16 @@ import java.util.PriorityQueue;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
 
-public class Recorder {
+public abstract class Recorder {
 	
 	protected ArrayList<ArrayList<Candidate>> generation;
 	protected PriorityQueue<Candidate> queue;
-	protected HashMap<String,Double> candidateNameToFitnessHash;
 	protected double time;
+	protected int queueSize;
 	
 	public Recorder(){
+		
+		this.queueSize = 100;
 		
 		this.queue = new PriorityQueue<Candidate>() {
 
@@ -46,34 +48,9 @@ public class Recorder {
 		
 		this.generation = new ArrayList<ArrayList<Candidate>>();
 		
-		this.candidateNameToFitnessHash = new HashMap<String, Double>();
-		
 	}
 	
-	public void addNewCandidate(Candidate c, int generation){
-		
-		Candidate d = (Candidate) c.copySelf();
-		d.setCandidateMap(Tool.copyHashMap(c.getCandidateMap()));
-		d.setFitness(c.getFitness());
-		d.setGeneration(generation);
-		d.nullOut();
-		this.queue.add(d);
-		
-		
-		if(this.generation.size() <= generation){
-			ArrayList<Candidate> candidateList = new ArrayList<Candidate>();
-			candidateList.add(d);
-			this.generation.add(candidateList);
-		} else {
-			this.generation.get(((Integer) generation)).add(d);
-		}
-		
-		String s = c.getName();
-		Double e = c.getFitness();
-		
-		this.candidateNameToFitnessHash.put(s, e);
-		
-	}
+	public abstract void addNewCandidate(Candidate c, int generation);
 	
 	public ArrayList<ArrayList<Candidate>> getGeneration(){
 		return generation;
@@ -81,10 +58,6 @@ public class Recorder {
 	
 	public PriorityQueue<Candidate> getQueue(){
 		return queue;
-	}
-	
-	public HashMap<String,Double> getCandidateMapToFitnessHash(){
-		return candidateNameToFitnessHash;
 	}
 
 	public String thisGenerationsMix(int i){

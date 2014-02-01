@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.SystemEquationRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SystemEquationFitnessFunction;
@@ -37,7 +38,7 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 		
 		int maximumSearchSpaceSize = ((SystemEquationFitnessFunction) fitnessFunction).getMaxSearchSpace();
 
-		if(recorder.getCandidateMapToFitnessHash().size() < maximumSearchSpaceSize){
+		if(((SystemEquationRecorder) recorder).getCandidateMapToFitnessHash().size() < maximumSearchSpaceSize){
 			
 			for(Entry<String, Double> entry : candidateMap.entrySet()){
 				

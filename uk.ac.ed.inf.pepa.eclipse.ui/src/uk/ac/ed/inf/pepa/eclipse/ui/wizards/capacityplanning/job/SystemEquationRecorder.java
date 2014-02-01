@@ -8,10 +8,12 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Syst
 
 public class SystemEquationRecorder extends Recorder {
 	
+	protected HashMap<String,Double> candidateNameToFitnessHash;
 	private HashMap<String,HashMap<String,Double>> nameToPerformanceResultsMapHash;
 	
 	public SystemEquationRecorder(){
 		nameToPerformanceResultsMapHash = new HashMap<String,HashMap<String,Double>>();
+		this.candidateNameToFitnessHash = new HashMap<String, Double>();
 	}
 	
 	@Override
@@ -23,6 +25,9 @@ public class SystemEquationRecorder extends Recorder {
 		d.setGeneration(generation);
 		d.nullOut();
 	
+		if(this.queue.size() > this.queueSize){
+			this.queue.poll();
+		}
 		this.queue.add(d);
 		
 		
@@ -62,6 +67,10 @@ public class SystemEquationRecorder extends Recorder {
 		//output += "\n runtime ;" + this.time + "\n";
 		
 		return output;
+	}
+	
+	public HashMap<String,Double> getCandidateMapToFitnessHash(){
+		return candidateNameToFitnessHash;
 	}
 	
 	public HashMap<String, HashMap<String, Double>> getNameToPerformanceResultsMapHash() {

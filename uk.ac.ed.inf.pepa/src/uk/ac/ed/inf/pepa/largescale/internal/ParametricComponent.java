@@ -33,7 +33,7 @@ public class ParametricComponent extends ParametricStructuralElement implements 
 			int offset, int length) {
 		if (name == null)
 			throw new NullPointerException();
-		if (initialPopulationLevel < 0)
+		if (initialPopulationLevel <= 0)
 			throw new IllegalArgumentException(
 					"Population level must be positive");
 		this.name = name;

@@ -154,8 +154,8 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	}
 	
 	private void setFitness(){
-		if(recorder.getCandidateMapToFitnessHash().containsKey(getName(candidate))){
-			this.fitness = recorder.getCandidateMapToFitnessHash().get(getName(candidate));
+		if(((SystemEquationRecorder) recorder).getCandidateMapToFitnessHash().containsKey(getName(candidate))){
+			this.fitness = ((SystemEquationRecorder) recorder).getCandidateMapToFitnessHash().get(getName(candidate));
 			this.performanceResultsMap = Tool.copyHashMap(((SystemEquationRecorder) recorder).getNameToPerformanceResultsMapHash().get(getName(candidate)));
 			monitor.worked(1);
 		} else {

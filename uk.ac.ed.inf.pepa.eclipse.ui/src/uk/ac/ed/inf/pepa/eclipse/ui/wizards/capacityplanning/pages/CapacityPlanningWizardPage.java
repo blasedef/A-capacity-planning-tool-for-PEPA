@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -43,17 +44,22 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		//minimum required for a wizard page 1/2
-		this.container = new Composite(parent, SWT.NONE);
+		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+		sc.setSize(sc.computeSize(SWT.DEFAULT,SWT.DEFAULT));
+		this.container = new Composite(sc, SWT.NONE);
+		sc.setContent(container);
+		//this.container = new Composite(parent, SWT.NONE);
 		this.container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridLayout layout = new GridLayout();
 		layout.marginWidth = 10;
 		layout.numColumns = 2;
 		container.setLayout(layout);
-		
 		constructPage(this.parentCallBack);
+
+		sc.setExpandHorizontal(true);
 		
-		//minimum required for a wizard page 2/2
-		setControl(container);
+				setControl(sc);
+		this.container.setSize(this.container.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 		
 	}
 	

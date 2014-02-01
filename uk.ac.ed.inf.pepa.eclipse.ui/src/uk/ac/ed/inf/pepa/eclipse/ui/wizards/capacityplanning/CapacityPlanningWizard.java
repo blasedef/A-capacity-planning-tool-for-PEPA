@@ -52,7 +52,7 @@ public class CapacityPlanningWizard extends Wizard {
 	//wizard pages
 	public CapacityPlanningWizardPage evaluatorAndMetaHeuristicSelectionPage;
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageOne;
-	public CapacityPlanningWizardPage additionalCostsPage;
+	//public CapacityPlanningWizardPage additionalCostsPage;
 	public CapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
 	public CapacityPlanningWizardPage fitnessFunctionConfigurationPage;
 	public CapacityPlanningWizardPage performanceConfigurationPage;
@@ -81,8 +81,8 @@ public class CapacityPlanningWizard extends Wizard {
 				false);
 		wizardPageList.add(metaheuristicParameterConfigurationPageOne);
 		
-		additionalCostsPage = new AdditionalCostsPage(pageTitle);
-		wizardPageList.add(additionalCostsPage);
+//		additionalCostsPage = new AdditionalCostsPage(pageTitle);
+//		wizardPageList.add(additionalCostsPage);
 		
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
 				configurationModel.configPEPA, 
@@ -133,11 +133,11 @@ public class CapacityPlanningWizard extends Wizard {
 		return this.metaheuristicParameterConfigurationPageOne;
 	}
 	
-	private IWizardPage updateAndGetAdditionalCostPage(){
-		additionalCostsPage = new AdditionalCostsPage(pageTitle);
-		addPage(additionalCostsPage);
-		return this.additionalCostsPage;
-	}
+//	private IWizardPage updateAndGetAdditionalCostPage(){
+//		additionalCostsPage = new AdditionalCostsPage(pageTitle);
+//		addPage(additionalCostsPage);
+//		return this.additionalCostsPage;
+//	}
 	
 	private IWizardPage updateAndGetODEPage(){
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
@@ -199,28 +199,28 @@ public class CapacityPlanningWizard extends Wizard {
 	 */
 	public IWizardPage getNextPage(IWizardPage page){
 		
-		boolean additionalCosts = configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S);
+//		boolean additionalCosts = configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S);
 		boolean chained = !configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S);
 		
 		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
 			return updateAndGetEvaluatorAndMetaHeristicPage();
 		}
-		else if(page == metaheuristicParameterConfigurationPageOne && additionalCosts)	{
-			return updateAndGetAdditionalCostPage();
-		}
-		else if(page == metaheuristicParameterConfigurationPageOne && !additionalCosts)	{
+//		else if(page == metaheuristicParameterConfigurationPageOne && additionalCosts)	{
+//			return updateAndGetAdditionalCostPage();
+//		}
+		else if(page == metaheuristicParameterConfigurationPageOne) { // && !additionalCosts)	{
 			if(!chained){
 				return updateAndGetODEPage();
 			} else {
 				return updateAndGetSecondMetaheuristicPage();
 			}
 		}
-		else if(page == additionalCostsPage && !chained){
-			return updateAndGetODEPage();
-		}
-		else if(page == additionalCostsPage && chained){
-			return updateAndGetSecondMetaheuristicPage();
-		}
+//		else if(page == additionalCostsPage && !chained){
+//			return updateAndGetODEPage();
+//		}
+//		else if(page == additionalCostsPage && chained){
+//			return updateAndGetSecondMetaheuristicPage();
+//		}
 		else if(page == metaheuristicParameterConfigurationPageTwo){
 			return updateAndGetODEPage();
 		}

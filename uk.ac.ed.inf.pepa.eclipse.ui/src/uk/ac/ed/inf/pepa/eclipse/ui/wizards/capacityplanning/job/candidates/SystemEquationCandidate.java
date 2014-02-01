@@ -119,4 +119,43 @@ public class SystemEquationCandidate extends Candidate {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public int compare(Candidate arg0, Candidate arg1) {
+		
+		if(arg0.getFitness() > arg1.getFitness()){
+			return -1;
+		}
+		if(arg0.getFitness() < arg1.getFitness()){
+			return 1;
+		}
+		return 0;
+	}
+	
+	@Override
+	public int compareTo(Candidate arg0) {
+		
+		if(this.fitness > arg0.getFitness()){
+			return -1;
+		}
+		if(this.fitness < arg0.getFitness()){
+			return 1;
+		}
+		return 0;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if(obj instanceof Candidate){
+			Candidate candidate = (Candidate) obj;
+			if(this.name.equals(candidate.getName())){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
 }
