@@ -90,7 +90,6 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);
 		temp.updateCreatedTime();
-		temp.updateName();
 		return temp;
 	}
 	

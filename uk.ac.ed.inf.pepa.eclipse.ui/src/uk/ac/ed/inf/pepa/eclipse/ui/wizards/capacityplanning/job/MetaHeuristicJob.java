@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -13,13 +14,17 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
+import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.*;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
+
 
 public class MetaHeuristicJob extends Job{
 
@@ -35,6 +40,7 @@ public class MetaHeuristicJob extends Job{
 		super(name);
 		
 		BasicConfigurator.configure();
+		
 		
 		this.configurationModel = configurationModel;
 		
@@ -131,89 +137,47 @@ public class MetaHeuristicJob extends Job{
 		
 		for(int i = 0; i < lab.recorders.size(); i++){
 			
-			// {"LAB":
-				// {"MH":
-				//		{"MHParams":
-				//			{<K:V>},
-				//		},
-				//		{"SearchParams":
-				//			{<K:V>},
-				//		},
-				//		{"TopSystemEquations":
-				//			{"SystemEquation":
-				//				{Name:String},
-				//				{Fitness:Float},
-				//				{PerformanceMeasures
-				//					{Name:Float},
-				//				},
-				//				{Population:
-				//					{Name:Int},
-				//				}
-				//		},
-				//		{"GenerationMix":
-				//			{"SystemEquation":
-				//				{Generation:Int},
-				//				{Name:String},
-				//				{Fitness:Float},
-				//				{PerformanceMeasures
-				//					{Name:Float},
-				//				},
-				//				{Population:
-				//					{Name:Int},
-				//				}			
-				//		}
-				// }
-			// }
+			JSONObject json = new JSONObject(configurationModel.dropDownListsList.get(1).getValue());
 			
-			String output = "\n";
+			IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+					ResourceUtilities.changeExtension(
+							configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
 			
-			output += "{\"LAB\":{ \n";
+			json.put("\"Filename\":", "\"" + handle.getName() + "\",\n");
 			
-			output += "{\"METAHEURISTICDETAILS\":{ \n";
+			json.put("MHParams", configurationModel.metaheuristicParameters.getLeftMap());
 			
-			output += "{" + configurationModel.dropDownListsList.get(1).getKey() 
-			+ ":" 
-			+ configurationModel.dropDownListsList.get(1).getValue()
-			+ "}\n";
+			json.put("MinPop",configurationModel.systemEquationPopulationRanges.getLeftMap());
+					
+			json.put("MaxPop", configurationModel.systemEquationPopulationRanges.getRightMap());
+						
+			json.put("PMTargets",configurationModel.performanceTargetsAndWeights.getLeftMap());
+					
+			json.put("PMWeights",configurationModel.performanceTargetsAndWeights.getRightMap());
+					
+			json.put("PopWeights",configurationModel.populationWeights.getLeftMap());
+					
+			json.put("SysEqWeights",configurationModel.systemEquationFitnessWeights.getLeftMap());
 			
-			for(Entry<String, Double> entry : configurationModel.metaheuristicParameters.getLeftMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			
-			for(Entry<String, Double> entry : configurationModel.systemEquationPopulationRanges.getLeftMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			
-			for(Entry<String, Double> entry : configurationModel.systemEquationPopulationRanges.getRightMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			
-			for(Entry<String, Double> entry : configurationModel.performanceTargetsAndWeights.getLeftMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			
-			for(Entry<String, Double> entry : configurationModel.populationWeights.getLeftMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			
-			for(Entry<String, Double> entry : configurationModel.systemEquationFitnessWeights.getLeftMap().entrySet()){
-				output += entry.getKey() + ";" + entry.getValue() + "\n";
-			}
-			output += lab.recorders.get(i).getTopX(100);
-			
-			output += "Experiment;" + i + ";\n";
+			json.put("\"T100\":","\n\t{\n" + lab.recorders.get(i).getTopX(100) + "\t},\n");
+
 			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
-				output += lab.recorders.get(i).thisGenerationsMix(j);
+				json.put("\"Mix\":\n",lab.recorders.get(i).thisGenerationsMix(j));
 			}
 			
-			output += "};\n";
+			boolean success;
 			
-			String filename = "/tmp/" + getDateTime() + "_" + getPopulations() + ".json";
+			success = (new File("/tmp/results")).mkdirs();
+			if (!success) {
+			    // Directory creation failed
+			}
+			
+			String filename = "/tmp/results/" + getDateTime() + "_" + i + "_" + getPopulations() + ".json";
 			
 			PrintWriter writer;
 			try {
 				writer = new PrintWriter(filename,"UTF-8");
-				writer.println(output);
+				writer.println(json.output());
 				writer.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -222,9 +186,6 @@ public class MetaHeuristicJob extends Job{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			log.error(filename);
-			log.error(output);
 			
 			
 		}

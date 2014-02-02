@@ -28,7 +28,6 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);
 		temp.updateCreatedTime();
-		temp.updateName();
 		return temp;
 	}
 	
@@ -52,7 +51,6 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 			}
 		
 		}	
-		this.updateName();
 	}
 
 }

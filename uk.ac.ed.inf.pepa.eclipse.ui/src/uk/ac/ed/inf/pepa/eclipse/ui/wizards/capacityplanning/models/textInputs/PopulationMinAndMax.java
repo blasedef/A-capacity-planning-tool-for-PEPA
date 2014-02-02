@@ -18,6 +18,8 @@ public class PopulationMinAndMax extends TextInputs {
 		this.defaultMapping.put("max", 100.0);
 		
 		this.leftMap.put("min", 1.0);
+		this.leftMap.put("max", 1.0);
+		this.rightMap.put("min", 100.0);
 		this.rightMap.put("max", 100.0);
 		
 		this.leftHeading = "Minimum population";

@@ -11,7 +11,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunction
 public abstract class Candidate implements Comparator<Candidate>, Comparable<Candidate> {
 	
 	protected double fitness;
-	protected String name;
+	private int hashCode;
 	protected double createdAt;
 	protected int generation;
 	protected HashMap<String,Double> candidateMap;
@@ -27,8 +27,7 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		this.fitnessFunction = fitnessFunction;
 		this.candidateMap = new HashMap<String, Double>();
 		updateCandidateMapFromAST();
-		this.updateName();
-		
+		this.updateHashCode();
 		this.createdAt = System.currentTimeMillis() - Tool.startTime;
 		this.generation = i;
 		this.fitness = 100000000.0;
@@ -44,22 +43,21 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	}
 	
 	@Override
-	public String toString(){
-		return name  + "; " + this.fitness + "; " + generation + "; " + createdAt ;
-		
-	}
+	public abstract String toString();
 	
 	public void updateCreatedTime(){
 		this.createdAt = System.currentTimeMillis() - Tool.startTime;
 	}
 	
-	protected void updateName(){
+	private void updateHashCode(){
 		
-		this.name = "";
+		String name = "";
 		
 		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
-			name = name + entry.getKey() + ";[" + entry.getValue() + "];"; 
+			name += entry.getKey() + ":" + entry.getValue() + ","; 
 		}
+		
+		this.hashCode = name.hashCode();
 		
 	}
 	
@@ -84,8 +82,9 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	@Override
 	public abstract boolean equals(Object obj);
 	
-	public String getName(){
-		return this.name;
+	public int getHashCode(){
+		this.updateHashCode();
+		return this.hashCode;
 	}
 	
 	public double getFitness(){
@@ -133,5 +132,17 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	
 	public void setFitness(Double fitness){
 		this.fitness = fitness;
+	}
+
+	public String getName() {
+		
+		String name = "";
+		
+		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
+			name += "\"" + entry.getKey() + "\":" + entry.getValue() + ","; 
+		}
+		
+		return name;
+		
 	}
 }

@@ -27,18 +27,16 @@ public class SystemEquationCandidate extends Candidate {
 		String temp = "";
 		
 		for(Entry<String, Double> entry : performanceResultsMap.entrySet()){
-			temp += entry.getKey() + ";" + entry.getValue() + ";";
+			temp += "\""+ entry.getKey() + "$\":" + entry.getValue() + ",";
 		}
 		
-		
-		return name + 
-		"&" + 
-		/* this.fitness + 
-		";" + 
-		generation + 
-		";" + 
-		createdAt  + 
-		";" + */
+		return super.getName()  + 
+		"\"fitness@\" : " + this.fitness + 
+		"," + 
+		"\"generation@\" : " + generation + 
+		"," + 
+		"\"created@\" : " + createdAt  + 
+		"," + 
 		temp;
 		
 	}
@@ -73,21 +71,18 @@ public class SystemEquationCandidate extends Candidate {
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);
 		temp.updateCreatedTime();
-		temp.updateName();
 		return temp;
 	}
 	
 	@Override
 	public void setCandidateMap(HashMap<String, Double> candidateMap) {
 		this.candidateMap = candidateMap;
-		this.updateName();
 		
 	}
 
 	@Override
 	public void updateCandidateMapFromAST() {
 		candidateMap = ((SystemEquationFitnessFunction) this.fitnessFunction).getCandidate();
-		updateName();
 	}
 
 	@Override
@@ -101,14 +96,15 @@ public class SystemEquationCandidate extends Candidate {
 		//'10%' of user system equations make it into the original population
 		if(true){ //Tool.rollDice(0.9)){
 			for(Entry<String, Double> entry : candidateMap.entrySet()){
+				
 				Double min = minimumPopulation.get(entry.getKey()).doubleValue();
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();
+				
 				Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 				candidateMap.put(entry.getKey(),d);
 			}
 		}
 		
-		updateName();
 		
 	}
 
@@ -149,7 +145,7 @@ public class SystemEquationCandidate extends Candidate {
 		
 		if(obj instanceof Candidate){
 			Candidate candidate = (Candidate) obj;
-			if(this.name.equals(candidate.getName())){
+			if(super.getHashCode() == candidate.getHashCode()){
 				return true;
 			} else {
 				return false;

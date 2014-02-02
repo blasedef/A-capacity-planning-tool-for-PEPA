@@ -2,7 +2,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models;
 
 import java.util.HashMap;
 
-public class TextInputs {
+public abstract class TextInputs {
 	
 	/*
 	 * Maps for storing user input
@@ -145,5 +145,6 @@ public class TextInputs {
 	public boolean isCorrect(boolean single){
 		return true;
 	}
+	
 
 }

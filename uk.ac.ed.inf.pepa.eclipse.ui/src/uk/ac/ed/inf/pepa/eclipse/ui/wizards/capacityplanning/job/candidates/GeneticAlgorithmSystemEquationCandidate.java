@@ -26,7 +26,6 @@ public class GeneticAlgorithmSystemEquationCandidate extends SystemEquationCandi
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);
 		temp.updateCreatedTime();
-		temp.updateName();
 		return temp;
 	}
 	
@@ -39,7 +38,6 @@ public class GeneticAlgorithmSystemEquationCandidate extends SystemEquationCandi
 				Double max = maximumPopulation.get(entry.getKey()).doubleValue();
 				Double d = Tool.returnRandomInRange(min, max, Config.NATURAL);
 				candidateMap.put(entry.getKey(), d);
-				this.updateName();
 			}
 		}
 			

@@ -61,7 +61,7 @@ public class SystemEquationRecorder extends Recorder {
 		//output = "system equation ; fitness ; generation ; time after start created ; performanceMap " ;
 		
 		for(int i = 0; i < x; i++){
-			output = output + "\n" + queue.poll().toString();
+			output += queue.poll().toString() + "\n";
 		}
 		
 		//output += "\n runtime ;" + this.time + "\n";

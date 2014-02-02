@@ -77,33 +77,18 @@ public abstract class Recorder {
 		
 		int generationSize = thisGeneration.size();
 
-		output = "Generation;System Equation;percentage of current population;\n";
+		output = "{\n";
 		
 		for(String s : names.keySet().toArray(new String[0])){
-			output += i + ";" + s + ";" + ((names.get(s)/generationSize) * 100) + "% \n"; 
+			output += "\"Generation\":" + i + "," + "\"SystemEquation\":{" + s + "}," + "\"percentage of current population\":" + ((names.get(s)/generationSize) * 100) + ",\n"; 
 		}
+		
+		output += "},\n";
 		
 		return output;
 	}
 	
-	public String getTopX(int x){
-		String output;
-		
-		output = "";
-		
-		if(queue.size() < x)
-			x = queue.size();
-		
-		output = "system equation ; fitness ; generation ; time after start created " ;
-		
-		for(int i = 0; i < x; i++){
-			output = output + "\n" + queue.poll().toString();
-		}
-		
-		output += "\n runtime ;" + this.time + "\n";
-		
-		return output;
-	}
+	public abstract String getTopX(int x);
 
 	public void stopTimer() {
 		this.time = (System.currentTimeMillis() - this.time);

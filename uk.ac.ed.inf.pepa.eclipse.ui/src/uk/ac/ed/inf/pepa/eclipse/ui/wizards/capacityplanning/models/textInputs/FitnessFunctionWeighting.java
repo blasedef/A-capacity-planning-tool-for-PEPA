@@ -47,4 +47,5 @@ public class FitnessFunctionWeighting extends TextInputs {
 			return true;
 		}
 	}
+
 }

@@ -13,6 +13,8 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -31,6 +33,9 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 public class CapacityPlanningWizard extends Wizard {
 	
+	static Logger log = Logger.getLogger(CapacityPlanningWizard.class);
+	
+	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
 	
@@ -42,16 +47,16 @@ public class CapacityPlanningWizard extends Wizard {
 	//wizard pages
 	public CapacityPlanningWizardPage evaluatorAndMetaHeuristicSelectionPage;
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageOne;
-	//public CapacityPlanningWizardPage additionalCostsPage;
 	public CapacityPlanningWizardPage ordinaryDifferentialEquationConfigurationPage;
 	public CapacityPlanningWizardPage fitnessFunctionConfigurationPage;
 	public CapacityPlanningWizardPage performanceConfigurationPage;
 	public CapacityPlanningWizardPage populationConfigurationPage;
 	public CapacityPlanningWizardPage metaheuristicParameterConfigurationPageTwo;
-	// public CapacityPlanningWizardPage fileSaveAsPage;
 	public CapacityPlanningWizardPage summaryPage;
 	
 	public CapacityPlanningWizard(IPepaModel model){
+		
+		BasicConfigurator.configure();
 		
 		this.configurationModel = new ConfigurationModel(model);
 		
@@ -66,9 +71,6 @@ public class CapacityPlanningWizard extends Wizard {
 				false,
 				false);
 		wizardPageList.add(metaheuristicParameterConfigurationPageOne);
-		
-//		additionalCostsPage = new AdditionalCostsPage(pageTitle);
-//		wizardPageList.add(additionalCostsPage);
 		
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
 				configurationModel.configPEPA, 
@@ -97,9 +99,6 @@ public class CapacityPlanningWizard extends Wizard {
 				true);
 		wizardPageList.add(metaheuristicParameterConfigurationPageTwo);
 		
-		//addSaveAsPage();
-		//wizardPageList.add(newFilePage);
-		
 	}
 	
 	private IWizardPage updateAndGetEvaluatorAndMetaHeristicPage(){
@@ -118,12 +117,6 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		return this.metaheuristicParameterConfigurationPageOne;
 	}
-	
-//	private IWizardPage updateAndGetAdditionalCostPage(){
-//		additionalCostsPage = new AdditionalCostsPage(pageTitle);
-//		addPage(additionalCostsPage);
-//		return this.additionalCostsPage;
-//	}
 	
 	private IWizardPage updateAndGetODEPage(){
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
@@ -174,26 +167,29 @@ public class CapacityPlanningWizard extends Wizard {
 		return this.metaheuristicParameterConfigurationPageTwo;
 	}
 	
-//	private IWizardPage updateAndGetNewFilePage(){
-//		addSaveAsPage();
-//		addPage(newFilePage);
-//		return newFilePage;
-//	}
+	/*
+	 * In the case the wizard is completed early, populate everything else with default values.
+	 */
+	private void updateAllModels(){
+		((TargetsAndWeights) configurationModel.performanceTargetsAndWeights).update(configurationModel.configODE.getLabels());
+		((PopulationMinAndMax) configurationModel.systemEquationPopulationRanges).update(configurationModel.configPEPA.getSystemEquation(), 
+				configurationModel.configPEPA.getInitialPopulation());
+		((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
+
+	}
+	
 	
 	/**
 	 * page ordering
 	 */
 	public IWizardPage getNextPage(IWizardPage page){
 		
-//		boolean additionalCosts = configurationModel.dropDownListsList.get(3).getValue().equals(Config.ADDITIONALCOSTSYES_S);
 		boolean chained = !configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S);
 		
 		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
 			return updateAndGetEvaluatorAndMetaHeristicPage();
 		}
-//		else if(page == metaheuristicParameterConfigurationPageOne && additionalCosts)	{
-//			return updateAndGetAdditionalCostPage();
-//		}
 		else if(page == metaheuristicParameterConfigurationPageOne) { // && !additionalCosts)	{
 			if(!chained){
 				return updateAndGetODEPage();
@@ -201,12 +197,6 @@ public class CapacityPlanningWizard extends Wizard {
 				return updateAndGetSecondMetaheuristicPage();
 			}
 		}
-//		else if(page == additionalCostsPage && !chained){
-//			return updateAndGetODEPage();
-//		}
-//		else if(page == additionalCostsPage && chained){
-//			return updateAndGetSecondMetaheuristicPage();
-//		}
 		else if(page == metaheuristicParameterConfigurationPageTwo){
 			return updateAndGetODEPage();
 		}
@@ -219,46 +209,23 @@ public class CapacityPlanningWizard extends Wizard {
 		else if(page == performanceConfigurationPage){
 			return updateAndGetPopulationConfigurationPage();
 		}
-//		else if(page == populationConfigurationPage)	{
-//			return updateAndGetNewFilePage();
-//		}
 		else {
 			return super.getNextPage(null);
 		}
 		
 	}
-	
-//	/**
-//	 * save page setup
-//	 */
-//	private void addSaveAsPage() {
-//		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
-//				ResourceUtilities.changeExtension(
-//						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), EXTENSION));
-//
-//		this.newFilePage = new CapacityPlanningSaveAsPage("newFilePage", new StructuredSelection(
-//				handle), EXTENSION);
-//		this.newFilePage.setTitle("Save to CSV");
-//		this.newFilePage.setDescription("Save model configurations to");
-//		
-//		String fileName = configurationModel.dropDownListsList.get(0).getValue() + 
-//		"_" + 
-//		configurationModel.dropDownListsList.get(1).getValue() +
-//		"_" + 
-//		this.getPopulations() +
-//		"_" +
-//		this.getDateTime();
-//		
-//		this.newFilePage.setFileName(fileName + "_" + handle.getName()  );
-//
-//	}
 
 
 	@Override
 	public boolean performFinish() {
 		
+		
+		//set all defaults if required...
+		this.updateAllModels();
+		
 		MetaHeuristicJob job = new MetaHeuristicJob("Running the search", 
 				configurationModel);
+		
 		
 		job.setUser(true);
 		job.schedule();
@@ -269,11 +236,15 @@ public class CapacityPlanningWizard extends Wizard {
 	public boolean canFinish(){
 		
 		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			
+			
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
 					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
 					this.metaheuristicParameterConfigurationPageTwo.isPageComplete());
 		} else {
+			
+			
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
 					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete());
