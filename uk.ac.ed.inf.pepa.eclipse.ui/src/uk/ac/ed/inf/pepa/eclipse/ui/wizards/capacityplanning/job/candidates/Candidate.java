@@ -11,7 +11,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunction
 public abstract class Candidate implements Comparator<Candidate>, Comparable<Candidate> {
 	
 	protected double fitness;
-	private int hashCode;
+	protected int hashCode;
 	protected double createdAt;
 	protected int generation;
 	protected HashMap<String,Double> candidateMap;
@@ -20,20 +20,20 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	protected HashMap<String,Double> minimumPopulation;
 	protected HashMap<String,Double> maximumPopulation;
 	
-	public Candidate(int i, FitnessFunction fitnessFunction, 
-			HashMap<String,Double> minimumPopulation, 
-			HashMap<String,Double> maximumPopulation){
+	public Candidate(){
 		
-		this.fitnessFunction = fitnessFunction;
-		this.candidateMap = new HashMap<String, Double>();
-		updateCandidateMapFromAST();
-		this.updateHashCode();
+
+		
+	}
+	
+	public abstract void updateHashCode();
+
+	public void setCreatedAt(double time){
+		this.createdAt = time;
+	}
+	
+	public void resetCreatedAt(){
 		this.createdAt = System.currentTimeMillis() - Tool.startTime;
-		this.generation = i;
-		this.fitness = 100000000.0;
-		this.minimumPopulation = minimumPopulation;
-		this.maximumPopulation = maximumPopulation;
-		
 	}
 	
 	public void nullOut(){
@@ -49,18 +49,6 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		this.createdAt = System.currentTimeMillis() - Tool.startTime;
 	}
 	
-	private void updateHashCode(){
-		
-		String name = "";
-		
-		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
-			name += entry.getKey() + ":" + entry.getValue() + ","; 
-		}
-		
-		this.hashCode = name.hashCode();
-		
-	}
-	
 	public int getGeneration(){
 		return this.generation;
 	}
@@ -69,7 +57,7 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		this.generation = i;
 	}
 	
-	public double getCreatedTime(){
+	public double getCreatedAt(){
 		return createdAt;
 	}
 	
@@ -141,6 +129,8 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
 			name += "\"" + entry.getKey() + "\":" + entry.getValue() + ","; 
 		}
+		
+		name += "\"junk\":0";
 		
 		return name;
 		

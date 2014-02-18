@@ -12,9 +12,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEquationCandidate {
 
-	protected PriorityQueue<Candidate> personalBestQueue;
 	protected Candidate personalBest;
-	protected HashMap<String,Double> personalBestMap;
 	protected HashMap<String,Double> velocityVector;
 	
 	public ParticleSwarmOptimisationSystemEquationCandidate(int i,
@@ -23,37 +21,13 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 			HashMap<String,Double> maximumPopulation){
 		super(i, fitnessFunction, minimumPopulation, maximumPopulation);
 		
-		this.personalBestQueue = new PriorityQueue<Candidate>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean offer(Candidate e) {
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-
-			@Override
-			public boolean add(Candidate e) {
-				
-				
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-			
-		};
-		
 		this.velocityVector = createVelocityVector();
+		this.personalBest = new ParticleSwarmOptimisationSystemEquationCandidate();
 		
+	}
+	
+	public ParticleSwarmOptimisationSystemEquationCandidate(){
+		super();
 	}
 	
 	public  HashMap<String,Double> createVelocityVector() {
@@ -97,11 +71,9 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 	public void updateFitness(){
 		this.fitness = ((ParticleSwarmOptimsationSystemEquationFitnessFunction) fitnessFunction).getFitness(candidateMap,this.maximumPopulation);
 		this.performanceResultsMap = ((SystemEquationFitnessFunction) this.fitnessFunction).getPerformanceResultsMap();
-		this.personalBestQueue.add(this.copySelf());
-		this.personalBestMap = Tool.copyHashMap(this.personalBestQueue.peek().getCandidateMap());
-		this.personalBest = this.personalBestQueue.poll();
-		this.personalBestQueue.clear();
-		this.personalBestQueue.add(this.personalBest);
+		if(this.fitness < this.personalBest.getFitness())
+			this.personalBest.setFitness(this.fitness);
+			this.personalBest.candidateMap = Tool.copyHashMap(this.candidateMap);
 	}
 	
 	@Override
@@ -110,7 +82,7 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 			double personalBestVelocityWeight,
 			double globalBestVelocityWeight) {
 		
-		HashMap<String,Double> personalBestCandidateMap = this.personalBestMap;
+		HashMap<String,Double> personalBestCandidateMap = Tool.copyHashMap(this.personalBest.getCandidateMap());
 		HashMap<String,Double> globalBestCandidateMap = Tool.copyHashMap(globalBest.getCandidateMap());
 		HashMap<String,Double> originalVelocityMap = Tool.copyHashMap(this.velocityVector);
 		
@@ -160,13 +132,42 @@ public class ParticleSwarmOptimisationSystemEquationCandidate extends SystemEqua
 	public void updateVelocity(HashMap<String,Double> velocityVector){
 		
 		for(Entry<String, Double> entry : candidateMap.entrySet()){
-			Double temp = (candidateMap.get(entry.getKey()) + velocityVector.get(entry.getKey()));
-			if(temp > 0){
-				candidateMap.put(entry.getKey(), temp);
-			} else {
-				candidateMap.put(entry.getKey(), 1.0);
+			Double step = Tool.returnRandomInRange(1.0, 1.0, Config.NATURAL)*velocityVector.get(entry.getKey());
+			Double temp = (candidateMap.get(entry.getKey()) + step);
+			
+			while(temp > this.maximumPopulation.get(entry.getKey()) || temp < this.minimumPopulation.get(entry.getKey())){
+				temp = this.wrapping(temp, this.minimumPopulation.get(entry.getKey()), this.maximumPopulation.get(entry.getKey()) );
 			}
+			
+			if(temp == 0){
+				candidateMap.put(entry.getKey(), 1.0);
+			} else if (temp < this.minimumPopulation.get(entry.getKey())){
+				
+				temp = this.minimumPopulation.get(entry.getKey()) + Math.abs(temp);
+				
+				candidateMap.put(entry.getKey(),temp);
+			} else if (temp > this.maximumPopulation.get(entry.getKey())){
+				
+				temp = this.maximumPopulation.get(entry.getKey()) - temp;
+				
+				candidateMap.put(entry.getKey(),temp);
+			} else {
+				
+			}
+			candidateMap.put(entry.getKey(),temp);
 		}
+	}
+	
+	private double wrapping(double x, double bottom, double top){
+			if(x == 0.0){
+				return 1.0;
+			} else if ( x <= bottom){
+				return bottom + Math.abs(x) + 1;
+			} else if ( x >= top){
+				return top - x + 1;
+			} else {
+				return x;
+			}
 	}
 
 }

@@ -14,7 +14,6 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 public class ParticleSwarmOptimisation extends Metaheuristic {
 	
-	protected PriorityQueue<Candidate> globalBestQueue;
 	protected Candidate globalBest;
 	protected double originalVelocityWeight;
 	protected double personalBestVelocityWeight;
@@ -23,34 +22,6 @@ public class ParticleSwarmOptimisation extends Metaheuristic {
 	public ParticleSwarmOptimisation(HashMap<String, Double> parameters, Candidate candidate, IProgressMonitor monitor, Recorder recorder) {
 		super(parameters, candidate, monitor, recorder);
 		
-		this.globalBestQueue = new PriorityQueue<Candidate>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean offer(Candidate e) {
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-
-			@Override
-			public boolean add(Candidate e) {
-				
-				
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-			
-		};
 		
 		this.originalVelocityWeight = parameters.get(Config.ORIGINALVELO); 
 		this.personalBestVelocityWeight = parameters.get(Config.PERSONALBEST); 
@@ -61,17 +32,17 @@ public class ParticleSwarmOptimisation extends Metaheuristic {
 	@Override
 	public IStatus search() {
 		
-		recorder.startTimer();
+		this.globalBest = new ParticleSwarmOptimisationSystemEquationCandidate();
+		this.globalBest.setFitness(100000.0);
 		
 		for(Candidate c : candidatePopulation){
 			c.updateFitness();
 			recorder.addNewCandidate(c, 0);
-			this.globalBestQueue.add(c.copySelf());
+			if(c.getFitness() < this.globalBest.getFitness())
+				this.globalBest = c.copySelf();
 			
 		}
 		
-		this.globalBest = ((ParticleSwarmOptimisationSystemEquationCandidate) this.globalBestQueue.poll()).copySelf();
-		this.globalBestQueue.clear();
 		
 		for(int i = 1; i < generationSize; i++){
 			for(Candidate c : candidatePopulation){
@@ -81,15 +52,16 @@ public class ParticleSwarmOptimisation extends Metaheuristic {
 				
 				c.setVelocity(this.globalBest, this.originalVelocityWeight, this.personalBestVelocityWeight, globalBestVelocityWeight);
 				c.updateFitness();
-				this.globalBestQueue.add(c.copySelf());
+				if(c.getFitness() < this.globalBest.getFitness())
+					this.globalBest = c.copySelf();
 				recorder.addNewCandidate(c, i);
 			}
 			
-			this.globalBest = ((ParticleSwarmOptimisationSystemEquationCandidate) this.globalBestQueue.poll()).copySelf();
-			this.globalBestQueue.clear();
 		}
 		
-		recorder.stopTimer();
+		
+		
+		//recorder.stopTimer();
 		
 		return Status.OK_STATUS;
 	}

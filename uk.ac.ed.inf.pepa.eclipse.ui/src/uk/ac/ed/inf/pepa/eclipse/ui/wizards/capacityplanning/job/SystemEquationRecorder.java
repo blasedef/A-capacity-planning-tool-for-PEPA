@@ -21,9 +21,10 @@ public class SystemEquationRecorder extends Recorder {
 		
 		Candidate d = (Candidate) c.copySelf();
 		d.setCandidateMap(Tool.copyHashMap(c.getCandidateMap()));
+		d.nullOut();
 		d.setFitness(c.getFitness());
 		d.setGeneration(generation);
-		d.nullOut();
+		d.resetCreatedAt();
 	
 		if(this.queue.size() > this.queueSize){
 			this.queue.poll();
@@ -61,8 +62,10 @@ public class SystemEquationRecorder extends Recorder {
 		//output = "system equation ; fitness ; generation ; time after start created ; performanceMap " ;
 		
 		for(int i = 0; i < x; i++){
-			output += queue.poll().toString() + "\n";
+			output += "\"rank_" + (x - i) + "\":{" + queue.poll().toString() + "\"junk\":0},\n";
 		}
+		
+		output += "\"junk\":0";
 		
 		//output += "\n runtime ;" + this.time + "\n";
 		

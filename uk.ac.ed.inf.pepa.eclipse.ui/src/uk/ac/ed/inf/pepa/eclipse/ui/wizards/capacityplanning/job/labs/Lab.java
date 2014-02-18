@@ -74,6 +74,8 @@ public abstract class Lab {
 			
 			Metaheuristic temp = setupLab(monitor, parameters);
 			
+			Tool.setStartTime();
+			
 			status = temp.search();
 			
 			recorders.add(temp.recorder);

@@ -41,7 +41,7 @@ public abstract class TextInputs {
 		put(Config.FITNESS_EPSILON_TIME_S,Config.PERCENT);
 		put(Config.MUTATIONPROBABILITY_S,Config.PERCENT);
 		put(Config.CROSSOVERPROBABILITY_S,Config.PERCENT);
-		put(Config.INITIALCANDIDATEPOPULATION_S,Config.EVEN);
+		put(Config.INITIALCANDIDATEPOPULATION_S,Config.NATURAL);
 		put(Config.PERSONALBEST,Config.PERCENT);
 		put(Config.GLOBALBEST,Config.PERCENT);
 		put(Config.ORIGINALVELO,Config.PERCENT);

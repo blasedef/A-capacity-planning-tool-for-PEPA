@@ -64,14 +64,20 @@ public abstract class Recorder {
 		String output;
 		
 		HashMap<String,Double> names = new HashMap<String,Double>();
+		HashMap<String,Double> fitnesses =  new HashMap<String,Double>();
+		HashMap<String,Double> times =  new HashMap<String,Double>();
 		
 		ArrayList<Candidate> thisGeneration = this.generation.get(i);
 		
 		for(Candidate c : thisGeneration){
 			if(names.containsKey(c.getName())){
 				names.put(c.getName(), names.get(c.getName()) + 1);
+				fitnesses.put(c.getName(), c.getFitness());
+				times.put(c.getName(), c.getCreatedAt());
 			} else {
 				names.put(c.getName(), 1.0);
+				fitnesses.put(c.getName(), c.getFitness());
+				times.put(c.getName(), c.getCreatedAt());
 			}
 		}
 		
@@ -79,9 +85,19 @@ public abstract class Recorder {
 
 		output = "{\n";
 		
+		int y = 0;
+		
 		for(String s : names.keySet().toArray(new String[0])){
-			output += "\"Generation\":" + i + "," + "\"SystemEquation\":{" + s + "}," + "\"percentage of current population\":" + ((names.get(s)/generationSize) * 100) + ",\n"; 
+			output += "\"SystemEquation_" + y 
+			+ "\":{" + s + ",\"percentage of current population\":" 
+			+ ((names.get(s)/generationSize) * 100) 
+			+ ",\"fitness\":" + fitnesses.get(s)
+			+ ",\"created\":" + times.get(s)
+			+ "}" + ",\n";
+			y++;
 		}
+		
+		output += "\"junk\":0";
 		
 		output += "},\n";
 		
@@ -90,14 +106,14 @@ public abstract class Recorder {
 	
 	public abstract String getTopX(int x);
 
-	public void stopTimer() {
-		this.time = (System.currentTimeMillis() - this.time);
-		
-	}
-
-	public void startTimer() {
-		this.time = System.currentTimeMillis();
-		
-	}
+//	public void stopTimer() {
+//		this.time = (System.currentTimeMillis() - this.time);
+//		
+//	}
+//
+//	public void startTimer() {
+//		this.time = System.currentTimeMillis();
+//		
+//	}
 	
 }

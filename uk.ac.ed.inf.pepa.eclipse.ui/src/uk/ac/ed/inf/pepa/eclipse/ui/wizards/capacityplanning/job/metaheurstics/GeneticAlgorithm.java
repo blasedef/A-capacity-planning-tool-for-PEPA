@@ -29,7 +29,7 @@ public class GeneticAlgorithm extends Metaheuristic {
 	@Override
 	public IStatus search() {
 		
-		recorder.startTimer();
+		//recorder.startTimer();
 		
 		for(Candidate c : candidatePopulation){
 			c.updateFitness();
@@ -71,7 +71,7 @@ public class GeneticAlgorithm extends Metaheuristic {
 			
 		}
 		
-		recorder.stopTimer();
+		//recorder.stopTimer();
 		
 		return Status.OK_STATUS;
 		
@@ -81,10 +81,12 @@ public class GeneticAlgorithm extends Metaheuristic {
 
 		int best = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
 		int next = 0;
+		
+		int search = (int) Math.rint(candidatePopulation.size() * 0.05);
 
-		for(int i = 0; i <= 2; i++){
+		for(int i = 0; i <= 5; i++){
 			next = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
-			if(candidatePopulation.get(next).compareTo(candidatePopulation.get(best)) < 0){
+			if(candidatePopulation.get(next).compareTo(candidatePopulation.get(best)) > 0){
 				best = next;
 			}
 		}

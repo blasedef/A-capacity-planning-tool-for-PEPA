@@ -25,7 +25,7 @@ public class JSONObject {
 				output += "\t\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",\n";
 			}
 			
-			output += "\t},\n";
+			output += "\"junk\":0\t},\n";
 			
 		}
 		

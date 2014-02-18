@@ -23,7 +23,7 @@ public class HillClimbing extends Metaheuristic {
 	@Override
 	public IStatus search() {
 		
-		recorder.startTimer();
+		//recorder.startTimer();
 		
 		for(Candidate c : candidatePopulation){
 			c.updateFitness();
@@ -46,7 +46,7 @@ public class HillClimbing extends Metaheuristic {
 		
 		}
 		
-		recorder.stopTimer();
+		//recorder.stopTimer();
 		
 		
 		return Status.OK_STATUS;

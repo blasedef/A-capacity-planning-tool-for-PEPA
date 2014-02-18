@@ -15,8 +15,8 @@ public class FitnessFunctionWeighting extends TextInputs {
 		
 		this.leftMap.put(Config.FITNESS_ALPHA_PERFORMANCE_S,0.5);
 		this.leftMap.put(Config.FITNESS_BETA_POPULATION_S,0.5);
-		this.rightMap.put(Config.FITNESS_DELTA_PERFORMANCE_S,0.5);
-		this.rightMap.put(Config.FITNESS_EPSILON_TIME_S,0.5);
+		this.rightMap.put(Config.FITNESS_DELTA_PERFORMANCE_S,1.0);
+		this.rightMap.put(Config.FITNESS_EPSILON_TIME_S,0.0);
 	}
 	
 	@Override

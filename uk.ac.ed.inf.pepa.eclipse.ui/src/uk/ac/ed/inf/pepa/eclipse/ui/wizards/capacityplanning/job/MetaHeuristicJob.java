@@ -72,6 +72,8 @@ public class MetaHeuristicJob extends Job{
 						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
 				
 			}
+		} else if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINPIPELINE_S)){
+			
 			
 		} else {
 			
@@ -160,10 +162,13 @@ public class MetaHeuristicJob extends Job{
 			json.put("SysEqWeights",configurationModel.systemEquationFitnessWeights.getLeftMap());
 			
 			json.put("\"T100\":","\n\t{\n" + lab.recorders.get(i).getTopX(100) + "\t},\n");
+			
 
 			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
-				json.put("\"Mix\":\n",lab.recorders.get(i).thisGenerationsMix(j));
+				json.put("\"Gen_" + j + "\":\n",lab.recorders.get(i).thisGenerationsMix(j));
 			}
+			
+			json.put("\"junk\"",":0");
 			
 			boolean success;
 			

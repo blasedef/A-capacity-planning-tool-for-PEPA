@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
@@ -16,9 +17,34 @@ public class SystemEquationCandidate extends Candidate {
 			FitnessFunction fitnessFunction,
 			HashMap<String,Double> minimumPopulation, 
 			HashMap<String,Double> maximumPopulation){
-		super(i, fitnessFunction, minimumPopulation, maximumPopulation);
+		super();
 		
 		this.performanceResultsMap = new HashMap<String,Double>();
+		this.fitnessFunction = fitnessFunction;
+		this.candidateMap = new HashMap<String, Double>();
+		updateCandidateMapFromAST();
+		this.updateHashCode();
+		this.createdAt = System.currentTimeMillis() - Tool.startTime;
+		this.generation = i;
+		this.fitness = 100000000.0;
+		this.minimumPopulation = minimumPopulation;
+		this.maximumPopulation = maximumPopulation;
+	}
+	
+	public SystemEquationCandidate(){
+		super();
+	}
+	
+	public void updateHashCode(){
+		
+		String name = "";
+		
+		for(Map.Entry<String, Double> entry : candidateMap.entrySet()){
+			name += entry.getKey() + ":" + entry.getValue() + ","; 
+		}
+		
+		this.hashCode = name.hashCode();
+		
 	}
 	
 	@Override
@@ -30,8 +56,9 @@ public class SystemEquationCandidate extends Candidate {
 			temp += "\""+ entry.getKey() + "$\":" + entry.getValue() + ",";
 		}
 		
+		
 		return super.getName()  + 
-		"\"fitness@\" : " + this.fitness + 
+		",\"fitness@\" : " + this.fitness + 
 		"," + 
 		"\"generation@\" : " + generation + 
 		"," + 
