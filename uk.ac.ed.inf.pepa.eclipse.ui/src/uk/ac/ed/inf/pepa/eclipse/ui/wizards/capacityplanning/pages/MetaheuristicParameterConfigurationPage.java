@@ -1,23 +1,27 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages;
 
+import java.util.ArrayList;
+
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers.BorderedCompositeWithDoubleTextWidget;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers.BorderedCompositeLabelWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers.BorderedCompositeWithTextWidget;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers.CapacityPlanningComboWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.controllers.CapacityPlanningWidget;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.DropDownLists;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 
 public class MetaheuristicParameterConfigurationPage extends CapacityPlanningWizardPage {
 
 	private TextInputs metaheuristicParameters;
 	private TextInputs labParameters;
-	private TextInputs fitness;
+	private ArrayList<DropDownLists> dropDownListsList;
 	private boolean chained;
-	private boolean pipelined;
+	//private boolean pipelined;
 	
 	public MetaheuristicParameterConfigurationPage(String s, 
 			TextInputs metaheuristicParameters,
 			TextInputs labParameters,
-			TextInputs fitness,
+			ArrayList<DropDownLists> dropDownListsList,
 			boolean chained,
 			boolean pipelined) {
 		
@@ -27,9 +31,9 @@ public class MetaheuristicParameterConfigurationPage extends CapacityPlanningWiz
 		
 		this.metaheuristicParameters = metaheuristicParameters;
 		this.labParameters = labParameters;
-		this.fitness = fitness;
+		this.dropDownListsList = dropDownListsList;
 		this.chained = chained;
-		this.pipelined = pipelined;
+		//this.pipelined = pipelined;
 	
 	}
 
@@ -51,41 +55,56 @@ public class MetaheuristicParameterConfigurationPage extends CapacityPlanningWiz
 	@Override
 	protected void constructPage(IValidationCallback cb) {
 		
-		if(!chained){
-			notChained();
-		} else {
-			chained(pipelined);
-		}
-	}
-	
-	protected void notChained(){
+//		if(!chained){
+//			notChained();
+//		} else {
+//			chained(pipelined);
+//		}
 		
 		widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
 		
 		widgets.add(new BorderedCompositeWithTextWidget(this.metaheuristicParameters, parentCallBack, container, false));
 		
+		if(chained){
+		
+			for(DropDownLists d : dropDownListsList){
+				new BorderedCompositeLabelWidget(d.getDescription(), null, null, parentCallBack, container, 2);
+				super.widgets.add(new CapacityPlanningComboWidget(container, d, parentCallBack));
+			}
+		}
 	}
 	
-	protected void chained(boolean pipelined){
-		
-		if(pipelined){
-		
-			widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
-			
-			widgets.add(new BorderedCompositeWithTextWidget(this.fitness, parentCallBack, container, true));
-			
-			widgets.add(new BorderedCompositeWithTextWidget(this.metaheuristicParameters, parentCallBack, container, false));
-			
-		} else {
-			
-			widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
-			
-			widgets.add(new BorderedCompositeWithTextWidget(this.fitness, parentCallBack, container, true));
-			
-			widgets.add(new BorderedCompositeWithDoubleTextWidget(this.metaheuristicParameters, parentCallBack, container));
-			
-		}
-		
-	}
+	//keeping this just incase I need to go backwards
+	
+//	protected void notChained(){
+//		
+//		widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
+//		
+//		widgets.add(new BorderedCompositeWithTextWidget(this.metaheuristicParameters, parentCallBack, container, false));
+//		
+//	}
+//	
+//	protected void chained(boolean pipelined){
+//		
+//		widgets.add(new BorderedCompositeWithTextWidget(this.labParameters, parentCallBack, container, false));
+//		
+//		widgets.add(new BorderedCompositeWithDoubleTextWidget(this.metaheuristicParameters, parentCallBack, container));
+//		
+//		if(pipelined){
+//			
+//			
+//		} else {
+//			
+//			
+//		}
+//		
+//		System.out.println(dropDownListsList.size());
+//		
+//		for(DropDownLists d : dropDownListsList){
+//			new BorderedCompositeLabelWidget(d.getDescription(), null, null, parentCallBack, container, 2);
+//			super.widgets.add(new CapacityPlanningComboWidget(container, d, parentCallBack));
+//		}
+//		
+//	}
 
 }

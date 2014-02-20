@@ -61,12 +61,12 @@ public class CapacityPlanningWizard extends Wizard {
 		this.configurationModel = new ConfigurationModel(model);
 		
 		evaluatorAndMetaHeuristicSelectionPage = new EvaluatorAndMetaheuristicSelectionPage(pageTitle, 
-				configurationModel.dropDownListsList);
+				configurationModel.dropDownListList);
 		wizardPageList.add(evaluatorAndMetaHeuristicSelectionPage);
 		
 		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
-				configurationModel.metaheuristicParameters,
-				configurationModel.labParameters,
+				configurationModel.metaheuristicParametersRoot,
+				configurationModel.labParametersRoot,
 				null,
 				false,
 				false);
@@ -75,7 +75,7 @@ public class CapacityPlanningWizard extends Wizard {
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
 				configurationModel.configPEPA, 
 				configurationModel.configODE, 
-				(EvaluatorType) configurationModel.dropDownListsList.get(0));
+				(EvaluatorType) configurationModel.dropDownListList.get(0));
 		wizardPageList.add(ordinaryDifferentialEquationConfigurationPage);
 		
 		fitnessFunctionConfigurationPage = new FitnessFunctionConfigurationPage(pageTitle,
@@ -92,37 +92,60 @@ public class CapacityPlanningWizard extends Wizard {
 		wizardPageList.add(populationConfigurationPage);
 		
 		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
-				configurationModel.metaheuristicParametersCandidate,
-				configurationModel.labParametersCandidate,
-				configurationModel.metaheuristicFitnessWeights,
+				configurationModel.metaheuristicParametersCandidateLeaf,
+				configurationModel.labParametersCandidateLeaf,
+				configurationModel.secondDropDownListList,
 				true,
 				true);
 		wizardPageList.add(metaheuristicParameterConfigurationPageTwo);
 		
 	}
 	
-	private IWizardPage updateAndGetEvaluatorAndMetaHeristicPage(){
-		if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(configurationModel.dropDownListsList.get(1).getValue());
-		} else {
-			((MetaheuristicParameters) configurationModel.metaheuristicParameters).update(Config.METAHEURISTICTYPEHILLCLIMBING_S);
-		}
-		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
-				configurationModel.metaheuristicParameters,
-				configurationModel.labParameters,
-				null,
-				false,
-				false);
-		addPage(this.metaheuristicParameterConfigurationPageOne);
+	private IWizardPage updateAndGetMetaHeristicConfigurationPage(){
 		
-		return this.metaheuristicParameterConfigurationPageOne;
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersRoot).update(configurationModel.dropDownListList.get(1).getValue());
+
+		boolean chained = !configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S);
+		boolean pipeline = configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINPIPELINE_S);
+		
+		if(!chained){
+			
+			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+					configurationModel.metaheuristicParametersRoot,
+					configurationModel.labParametersRoot,
+					null,
+					false,
+					false);
+			addPage(this.metaheuristicParameterConfigurationPageOne);
+			
+			return this.metaheuristicParameterConfigurationPageOne;
+			
+		} else {
+			
+			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+					configurationModel.metaheuristicParametersRoot,
+					configurationModel.labParametersRoot,
+					configurationModel.secondDropDownListList,
+					chained,
+					pipeline);
+			addPage(this.metaheuristicParameterConfigurationPageOne);
+			
+			return this.metaheuristicParameterConfigurationPageOne;
+
+		}
+		
 	}
 	
+	
 	private IWizardPage updateAndGetODEPage(){
+		
+		//ensure leaf candidate has some values, this really needs to be in a better place 
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).update(configurationModel.secondDropDownListList.get(0).getValue());
+		
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
 				configurationModel.configPEPA, 
 				configurationModel.configODE, 
-				(EvaluatorType) configurationModel.dropDownListsList.get(0));
+				(EvaluatorType) configurationModel.dropDownListList.get(0));
 		addPage(ordinaryDifferentialEquationConfigurationPage);
 		return this.ordinaryDifferentialEquationConfigurationPage;
 	}
@@ -155,18 +178,6 @@ public class CapacityPlanningWizard extends Wizard {
 		return this.populationConfigurationPage;
 	}
 	
-	private IWizardPage updateAndGetSecondMetaheuristicPage(){
-		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
-		metaheuristicParameterConfigurationPageTwo = new MetaheuristicParameterConfigurationPage(pageTitle, 
-				configurationModel.metaheuristicParametersCandidate, 
-				configurationModel.labParametersCandidate,
-				configurationModel.metaheuristicFitnessWeights,
-				(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINPIPELINE_S)),
-				true);
-		addPage(this.metaheuristicParameterConfigurationPageTwo);
-		return this.metaheuristicParameterConfigurationPageTwo;
-	}
-	
 	/*
 	 * In the case the wizard is completed early, populate everything else with default values.
 	 */
@@ -175,7 +186,7 @@ public class CapacityPlanningWizard extends Wizard {
 		((PopulationMinAndMax) configurationModel.systemEquationPopulationRanges).update(configurationModel.configPEPA.getSystemEquation(), 
 				configurationModel.configPEPA.getInitialPopulation());
 		((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
-		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidate).update(configurationModel.dropDownListsList.get(1).getValue());
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).update(configurationModel.dropDownListList.get(1).getValue());
 
 	}
 	
@@ -185,19 +196,10 @@ public class CapacityPlanningWizard extends Wizard {
 	 */
 	public IWizardPage getNextPage(IWizardPage page){
 		
-		boolean chained = !configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S);
-		
 		if(page == evaluatorAndMetaHeuristicSelectionPage)	{
-			return updateAndGetEvaluatorAndMetaHeristicPage();
+			return updateAndGetMetaHeristicConfigurationPage();
 		}
-		else if(page == metaheuristicParameterConfigurationPageOne) { // && !additionalCosts)	{
-			if(!chained){
-				return updateAndGetODEPage();
-			} else {
-				return updateAndGetSecondMetaheuristicPage();
-			}
-		}
-		else if(page == metaheuristicParameterConfigurationPageTwo){
+		else if(page == metaheuristicParameterConfigurationPageOne)	{
 			return updateAndGetODEPage();
 		}
 		else if(page == ordinaryDifferentialEquationConfigurationPage){
@@ -235,7 +237,7 @@ public class CapacityPlanningWizard extends Wizard {
 	@Override
 	public boolean canFinish(){
 		
-		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
 			
 			
 			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 

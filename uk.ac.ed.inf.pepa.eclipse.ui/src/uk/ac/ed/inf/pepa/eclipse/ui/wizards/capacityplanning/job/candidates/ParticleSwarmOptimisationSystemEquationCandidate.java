@@ -1,7 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates;
 
 import java.util.HashMap;
-import java.util.PriorityQueue;
 import java.util.Map.Entry;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;

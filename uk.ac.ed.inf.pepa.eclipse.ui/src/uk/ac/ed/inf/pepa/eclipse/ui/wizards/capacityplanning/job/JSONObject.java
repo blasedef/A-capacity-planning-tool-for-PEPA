@@ -21,11 +21,15 @@ public class JSONObject {
 			HashMap<String,Double> map;
 			map = (HashMap<String,Double>) obj2;
 			
+			String temp = "";
+			
 			for(Entry<String, Double> entry : map.entrySet()){
-				output += "\t\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",\n";
+				temp += "\t\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",\n";
 			}
 			
-			output += "\"junk\":0\t},\n";
+			temp = temp.substring(0,temp.length() - 2); 
+			
+			output += temp + "},\n";
 			
 		}
 		
@@ -40,6 +44,7 @@ public class JSONObject {
 	}
 
 	public char[] output() {
+		output = output.substring(0,output.length() - 1);
 		output += "\n}";
 		return this.output.toCharArray();
 	}

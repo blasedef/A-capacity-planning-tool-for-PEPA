@@ -7,9 +7,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 
@@ -82,8 +82,6 @@ public class GeneticAlgorithm extends Metaheuristic {
 		int best = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
 		int next = 0;
 		
-		int search = (int) Math.rint(candidatePopulation.size() * 0.05);
-
 		for(int i = 0; i <= 5; i++){
 			next = Tool.returnRandomInRange(0.0, ((Integer) candidatePopulation.size()).doubleValue() - 1, Config.NATURAL).intValue();
 			if(candidatePopulation.get(next).compareTo(candidatePopulation.get(best)) > 0){

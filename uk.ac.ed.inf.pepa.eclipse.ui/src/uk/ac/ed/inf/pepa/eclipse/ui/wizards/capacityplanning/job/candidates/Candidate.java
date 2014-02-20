@@ -4,9 +4,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 
 public abstract class Candidate implements Comparator<Candidate>, Comparable<Candidate> {
 	
@@ -130,7 +130,7 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 			name += "\"" + entry.getKey() + "\":" + entry.getValue() + ","; 
 		}
 		
-		name += "\"junk\":0";
+		name += name.substring(0,name.length() - 1);
 		
 		return name;
 		

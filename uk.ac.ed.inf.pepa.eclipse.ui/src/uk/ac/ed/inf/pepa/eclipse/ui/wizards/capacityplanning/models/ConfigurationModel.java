@@ -9,16 +9,17 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.*
 public class ConfigurationModel {
 	
 	//configuration models
-	public ArrayList<DropDownLists> dropDownListsList;
+	public ArrayList<DropDownLists> dropDownListList;
+	public ArrayList<DropDownLists> secondDropDownListList;
 	
 	public TextInputs systemEquationFitnessWeights; 
 	public TextInputs metaheuristicFitnessWeights; 
 	
-	public TextInputs labParameters;
-	public TextInputs labParametersCandidate;
+	public TextInputs labParametersRoot;
+	public TextInputs labParametersCandidateLeaf;
 	
-	public TextInputs metaheuristicParameters;
-	public TextInputs metaheuristicParametersCandidate; 
+	public TextInputs metaheuristicParametersRoot;
+	public TextInputs metaheuristicParametersCandidateLeaf; 
 	
 	public TextInputs systemEquationPopulationRanges;
 	public TextInputs populationWeights;
@@ -32,21 +33,26 @@ public class ConfigurationModel {
 	
 	public ConfigurationModel(IPepaModel model){
 		
-		dropDownListsList = new ArrayList<DropDownLists>();
+		dropDownListList = new ArrayList<DropDownLists>();
 		
-		dropDownListsList.add(new EvaluatorType());
-		dropDownListsList.add(new MetaheuristicType());
-		dropDownListsList.add(new NetworkType());
+		dropDownListList.add(new EvaluatorType());
+		dropDownListList.add(new MetaheuristicType());
+		dropDownListList.add(new NetworkType());
 		//dropDownListsList.add(new AdditionalCosts());
 		
 		systemEquationFitnessWeights = new FitnessFunctionWeighting();
 		metaheuristicFitnessWeights = new FitnessFunctionWeighting();
 		
-		labParameters = new LabParameters();
-		metaheuristicParameters = new MetaheuristicParameters();
+		//root settings
+		labParametersRoot = new LabParameters();
+		metaheuristicParametersRoot = new MetaheuristicParameters();
 		
-		labParametersCandidate = new LabParameters();
-		metaheuristicParametersCandidate = new MetaheuristicParameters();
+		//chained settings
+		labParametersCandidateLeaf = new LabParameters();
+		metaheuristicParametersCandidateLeaf = new MetaheuristicParameters();
+		
+		secondDropDownListList = new ArrayList<DropDownLists>();
+		secondDropDownListList.add(new MetaheuristicType());
 		
 		systemEquationPopulationRanges = new PopulationMinAndMax();
 		populationWeights = new PopulationWeights();

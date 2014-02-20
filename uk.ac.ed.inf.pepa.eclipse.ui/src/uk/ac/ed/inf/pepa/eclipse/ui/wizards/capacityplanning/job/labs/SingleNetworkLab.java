@@ -2,10 +2,12 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs;
 
 import java.util.HashMap;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Recorder;
+import org.eclipse.core.runtime.Path;
+
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SystemEquationFitnessFunction;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
 
 public abstract class SingleNetworkLab extends Lab {
@@ -13,9 +15,10 @@ public abstract class SingleNetworkLab extends Lab {
 	public SingleNetworkLab(ConfigurationModel configurationModel,
 			int totalWork,
 			HashMap<String, Double> systemEquationPopulationRanges,
-			int experiments) {
+			int experiments,
+			Path resultsFolder) {
 		super(configurationModel, totalWork, systemEquationPopulationRanges,
-				experiments);
+				experiments, resultsFolder);
 	}
 	
 	public FitnessFunction getSystemEquationFitnessFunction(Recorder recorder){

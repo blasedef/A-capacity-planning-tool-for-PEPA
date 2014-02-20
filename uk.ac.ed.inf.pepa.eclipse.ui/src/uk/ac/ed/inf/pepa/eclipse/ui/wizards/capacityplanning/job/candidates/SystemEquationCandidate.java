@@ -56,6 +56,7 @@ public class SystemEquationCandidate extends Candidate {
 			temp += "\""+ entry.getKey() + "$\":" + entry.getValue() + ",";
 		}
 		
+		temp = temp.substring(0,temp.length() - 1);
 		
 		return super.getName()  + 
 		",\"fitness@\" : " + this.fitness + 

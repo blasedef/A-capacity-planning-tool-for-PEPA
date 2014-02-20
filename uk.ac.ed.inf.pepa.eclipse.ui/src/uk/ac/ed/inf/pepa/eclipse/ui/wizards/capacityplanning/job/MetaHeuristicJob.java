@@ -1,15 +1,7 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.BasicConfigurator;
@@ -18,6 +10,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
@@ -32,6 +25,7 @@ public class MetaHeuristicJob extends Job{
 	private int totalWork;
 	private ConfigurationModel configurationModel;
 	private HashMap<String,Double> systemEquationPopulationRanges;
+	public Path resultsFolder;
 	
 	static Logger log = Logger.getLogger(MetaHeuristicJob.class);
 	
@@ -39,40 +33,56 @@ public class MetaHeuristicJob extends Job{
 	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
 		
+		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
+		
+		//regardless of how this is run, everyone saves to the same folder
+		resultsFolder = new Path( ResourcesPlugin.getWorkspace().getRoot().getLocation().addTrailingSeparator().toOSString() 
+				+ "results_" 
+				+ handle.getName()
+				+ "_"
+				+ configurationModel.dropDownListList.get(1).getValue()
+				+ "_"
+				+ Tool.getDateTime());
+		
 		BasicConfigurator.configure();
 		
 		
 		this.configurationModel = configurationModel;
 		
-		if(configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
+		if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
 			postProcessHillClimbing();
 		
 		setTotalWorkUnits();
 		
-		if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			if(configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
+		if(configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
 				
 				this.lab = new SingleNetworkHillClimbingLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParametersRoot.getLeftMap().get(Config.EXPERIMENTS_S).intValue(),
+						resultsFolder);
 				
-			} else if (configurationModel.dropDownListsList.get(1).getValue().equals(Config.METAHEURISTICTYPEGENETICALGORITHM_S)) {
+			} else if (configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEGENETICALGORITHM_S)) {
 				
 				this.lab = new SingleNetworkGeneticAlgorithmLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParametersRoot.getLeftMap().get(Config.EXPERIMENTS_S).intValue(),
+						resultsFolder);
 				
 			} else {
 				
 				this.lab = new SingleNetworkParticleSwarmOptimisationLab(this.configurationModel,
 						totalWork,
 						systemEquationPopulationRanges,
-						this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+						this.configurationModel.labParametersRoot.getLeftMap().get(Config.EXPERIMENTS_S).intValue(),
+						resultsFolder);
 				
 			}
-		} else if(configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINPIPELINE_S)){
+		} else if(configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINDRIVEN_S)){
 			
 			
 		} else {
@@ -80,7 +90,8 @@ public class MetaHeuristicJob extends Job{
 			this.lab = new SingleNetworkHillClimbingLab(this.configurationModel,
 					totalWork,
 					systemEquationPopulationRanges,
-					this.configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue());
+					this.configurationModel.labParametersRoot.getLeftMap().get(Config.EXPERIMENTS_S).intValue(),
+					resultsFolder);
 			
 		}
 		
@@ -89,11 +100,11 @@ public class MetaHeuristicJob extends Job{
 	}
 
 	private void postProcessHillClimbing() {
-		this.configurationModel.metaheuristicParameters.getLeftMap().put(Config.INITIALCANDIDATEPOPULATION_S, 1.0);
-		this.configurationModel.metaheuristicParameters.getLeftMap().put(Config.MUTATIONPROBABILITY_S, 1.0);
-		this.configurationModel.metaheuristicParameters.getLeftMap().put(Config.GENERATION_S,
-				this.configurationModel.metaheuristicParameters.getLeftMap().get(Config.GENERATIONHC_S));
-		this.configurationModel.metaheuristicParameters.getLeftMap().remove(Config.GENERATIONHC_S);
+		this.configurationModel.metaheuristicParametersRoot.getLeftMap().put(Config.INITIALCANDIDATEPOPULATION_S, 1.0);
+		this.configurationModel.metaheuristicParametersRoot.getLeftMap().put(Config.MUTATIONPROBABILITY_S, 1.0);
+		this.configurationModel.metaheuristicParametersRoot.getLeftMap().put(Config.GENERATION_S,
+				this.configurationModel.metaheuristicParametersRoot.getLeftMap().get(Config.GENERATIONHC_S));
+		this.configurationModel.metaheuristicParametersRoot.getLeftMap().remove(Config.GENERATIONHC_S);
 
 		
 	}
@@ -107,95 +118,14 @@ public class MetaHeuristicJob extends Job{
 		
 		status = this.lab.startExperiments(monitor);
 		
-		writeMHRecorders(monitor);
+		this.lab.complete();
 		
 		return status;
 	}
 	
-	private String getPopulations(){
-		
-		String output;
-		
-		output = "";
-		
-		HashMap<String,Double> rightMap = configurationModel.systemEquationPopulationRanges.getRightMap();
-		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getLeftMap();
-		
-		for(Map.Entry<String, Double> entry : rightMap.entrySet()){
-			output = output + entry.getKey() + "[" + leftMap.get(entry.getKey()) + "_" + entry.getValue() + "]"; 
-		}
-		
-		return output;
-		
-	}
-	
-	private String getDateTime() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
-	
-	private void writeMHRecorders(IProgressMonitor monitor) {
-		
-		for(int i = 0; i < lab.recorders.size(); i++){
-			
-			JSONObject json = new JSONObject(configurationModel.dropDownListsList.get(1).getValue());
-			
-			IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
-					ResourceUtilities.changeExtension(
-							configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
-			
-			json.put("\"Filename\":", "\"" + handle.getName() + "\",\n");
-			
-			json.put("MHParams", configurationModel.metaheuristicParameters.getLeftMap());
-			
-			json.put("MinPop",configurationModel.systemEquationPopulationRanges.getLeftMap());
-					
-			json.put("MaxPop", configurationModel.systemEquationPopulationRanges.getRightMap());
-						
-			json.put("PMTargets",configurationModel.performanceTargetsAndWeights.getLeftMap());
-					
-			json.put("PMWeights",configurationModel.performanceTargetsAndWeights.getRightMap());
-					
-			json.put("PopWeights",configurationModel.populationWeights.getLeftMap());
-					
-			json.put("SysEqWeights",configurationModel.systemEquationFitnessWeights.getLeftMap());
-			
-			json.put("\"T100\":","\n\t{\n" + lab.recorders.get(i).getTopX(100) + "\t},\n");
-			
 
-			for(int j = 0; j < lab.recorders.get(i).getGeneration().size(); j++){
-				json.put("\"Gen_" + j + "\":\n",lab.recorders.get(i).thisGenerationsMix(j));
-			}
-			
-			json.put("\"junk\"",":0");
-			
-			boolean success;
-			
-			success = (new File("/tmp/results")).mkdirs();
-			if (!success) {
-			    // Directory creation failed
-			}
-			
-			String filename = "/tmp/results/" + getDateTime() + "_" + i + "_" + getPopulations() + ".json";
-			
-			PrintWriter writer;
-			try {
-				writer = new PrintWriter(filename,"UTF-8");
-				writer.println(json.output());
-				writer.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-		}
-		
-	}
+	
+
 
 	public void setPopulationRanges(){
 		
@@ -228,12 +158,12 @@ public class MetaHeuristicJob extends Job{
 		
 		this.totalWork = 1;
 		
-		if(!configurationModel.dropDownListsList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			totalWork = configurationModel.labParametersCandidate.getRightMap().get(Config.EXPERIMENTS_S).intValue();
+		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			totalWork = configurationModel.labParametersCandidateLeaf.getRightMap().get(Config.EXPERIMENTS_S).intValue();
 			//worst case scenario, every generation created a new analysis job
-			totalWork *= configurationModel.metaheuristicParametersCandidate.getRightMap().get(Config.GENERATION_S).intValue();
+			totalWork *= configurationModel.metaheuristicParametersCandidateLeaf.getRightMap().get(Config.GENERATION_S).intValue();
 			//worst case scenario, every candidate produces a new analysis job
-			totalWork *= configurationModel.metaheuristicParametersCandidate.getRightMap().get(Config.INITIALCANDIDATEPOPULATION_S).intValue();
+			totalWork *= configurationModel.metaheuristicParametersCandidateLeaf.getRightMap().get(Config.INITIALCANDIDATEPOPULATION_S).intValue();
 		}
 		
 		
@@ -244,15 +174,15 @@ public class MetaHeuristicJob extends Job{
 		
 		
 		//times by experiments
-		totalWork *= configurationModel.labParameters.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
+		totalWork *= configurationModel.labParametersRoot.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
 		
 		
 		//worst case scenario, every generation created a new analysis job
-		totalWork *= configurationModel.metaheuristicParameters.getLeftMap().get(Config.GENERATION_S).intValue();
+		totalWork *= configurationModel.metaheuristicParametersRoot.getLeftMap().get(Config.GENERATION_S).intValue();
 		
 		
 		//worst case scenario, every candidate produces a new analysis job
-		totalWork *= configurationModel.metaheuristicParameters.getLeftMap().get(Config.INITIALCANDIDATEPOPULATION_S).intValue();
+		totalWork *= configurationModel.metaheuristicParametersRoot.getLeftMap().get(Config.INITIALCANDIDATEPOPULATION_S).intValue();
 		
 	}
 	

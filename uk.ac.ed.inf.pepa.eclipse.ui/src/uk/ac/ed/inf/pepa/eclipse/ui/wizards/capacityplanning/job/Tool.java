@@ -1,5 +1,8 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Map.Entry;
@@ -59,5 +62,11 @@ public class Tool {
 	public static boolean rollDice(Double p){
 		return (returnRandom() < p);
 	}
+	
+	public static String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 
 }
