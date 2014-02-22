@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.FitnessFunctionParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.SystemEquationFitnessFunctionParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.SystemEquationRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
@@ -32,27 +34,23 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	protected ODEConfig configODE;
 	protected Recorder recorder;
 	protected Double weightDenominator;
+	protected SystemEquationFitnessFunctionParameters fitnessFunctionParameters;
 	
-	public SystemEquationFitnessFunction(PEPAConfig configPEPA, 
-			ODEConfig configODE,
-			HashMap<String,Double> targets,
-			HashMap<String,Double> targetWeights,
-			HashMap<String,Double> minPopulation,
-			HashMap<String,Double> populationRanges,
-			HashMap<String,Double> fitnessMap,
-			HashMap<String,Double> populationWeights,
+	public SystemEquationFitnessFunction(FitnessFunctionParameters fitnessFunctionParameters,
 			IProgressMonitor monitor,
 			Recorder recorder){
 		
-		this.configPEPA = configPEPA;
-		this.configODE = configODE;
+		this.fitnessFunctionParameters = (SystemEquationFitnessFunctionParameters) fitnessFunctionParameters;
+		
+		this.configPEPA = this.fitnessFunctionParameters.getConfigPEPA();
+		this.configODE = this.fitnessFunctionParameters.getConfigODE();
 		this.nodeHandler = new NodeHandler(configPEPA, configODE);
-		this.targets = targets;
-		this.targetWeights = targetWeights;
-		this.minPopulation = minPopulation;
-		this.populationRanges = populationRanges;
-		this.fitnessMap = fitnessMap;
-		this.populationWeights = populationWeights;
+		this.targets = this.fitnessFunctionParameters.getTargets();
+		this.targetWeights = this.fitnessFunctionParameters.getTargetWeights();
+		this.minPopulation = this.fitnessFunctionParameters.getMinPopulation();
+		this.populationRanges = this.fitnessFunctionParameters.getPopulationRanges();
+		this.fitnessMap = this.fitnessFunctionParameters.getFitnessMap();
+		this.populationWeights = this.fitnessFunctionParameters.getPopulationWeights();
 		this.monitor = monitor;
 		this.fitness = 1000000.0;
 		
@@ -88,14 +86,7 @@ public class SystemEquationFitnessFunction extends FitnessFunction{
 	}
 	
 	public FitnessFunction copySelf(){
-		FitnessFunction fitnessFunction = (FitnessFunction) new SystemEquationFitnessFunction(configPEPA, 
-				configODE,
-				Tool.copyHashMap(targets),
-				Tool.copyHashMap(targetWeights),
-				Tool.copyHashMap(minPopulation),
-				Tool.copyHashMap(populationRanges),
-				Tool.copyHashMap(fitnessMap),
-				Tool.copyHashMap(populationWeights),
+		FitnessFunction fitnessFunction = (FitnessFunction) new SystemEquationFitnessFunction(this.fitnessFunctionParameters,
 				monitor,
 				recorder);
 		

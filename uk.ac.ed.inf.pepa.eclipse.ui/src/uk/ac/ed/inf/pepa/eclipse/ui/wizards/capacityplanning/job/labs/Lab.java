@@ -1,6 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -9,68 +9,81 @@ import org.eclipse.core.runtime.Status;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.RecordManager;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.CandidateParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.FitnessFunctionParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.LabParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.MetaHeuristicParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.Metaheuristic;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
 
 public abstract class Lab {
 	
-	public int experiments;
 	protected RecordManager recordManager;
-	protected int totalWork;
-	protected ConfigurationModel configurationModel;
-	protected HashMap<String,Double> systemEquationPopulationRanges;
+	protected LabParameters labParameters;
+	protected FitnessFunctionParameters fitnessFunctionParameters;
+	protected RecordParameters recordParameters;
+	protected CandidateParameters candidateParameters;
 	protected IProgressMonitor monitor;
 	protected Path resultsFolder;
+	protected MetaHeuristicParameters metaheuristicParameters;
 	
-	public Lab(ConfigurationModel configurationModel,
-			int totalWork, 
-			HashMap<String,Double> systemEquationPopulationRanges,
-			int experiments,
-			Path resultsFolder) {
+	public Lab(LabParameters labParameters,
+			RecordParameters recordParameters,
+			MetaHeuristicParameters metaheuristicParameters,
+			FitnessFunctionParameters fitnessFunctionParameters,
+			CandidateParameters candidateParameters) {
 		
-		this.experiments = experiments;
-		this.configurationModel = configurationModel;
-		this.totalWork = totalWork;
-		this.systemEquationPopulationRanges = systemEquationPopulationRanges;
-		this.recordManager = new RecordManager(configurationModel, resultsFolder);
+		this.labParameters = labParameters;
+		this.recordManager = new RecordManager(recordParameters);
+		this.metaheuristicParameters = metaheuristicParameters;
+		this.fitnessFunctionParameters = fitnessFunctionParameters;
+		this.candidateParameters = candidateParameters;
+		this.recordParameters = recordParameters;
+		
 		
 		
 	}
 
-	public IStatus startExperiments(IProgressMonitor monitor) {
+	public IStatus startExperiments(IProgressMonitor monitor, boolean root) {
 		
 		IStatus status;
 		this.monitor = monitor;
 
 		try {
 			
-			monitor.beginTask("Experiment(s) started", this.totalWork);
+			if(root){
+				monitor.beginTask("Experiment(s) started", this.labParameters.getTotalWork());
 			
-			status = search();
+				status = search();
+			} else {
+				status = search();
+			}
 			
 			
 		} finally {
-			monitor.done();
+			if(root){
+				monitor.done();
+			}
 		}	
 		
 		
 		return status;
 	}
 	
-	public abstract Metaheuristic setupLab(IProgressMonitor monitor, HashMap<String,Double> parameters);
+	public abstract Metaheuristic setupLab(IProgressMonitor monitor);
 	
 	public IStatus search(){
 		
 		IStatus status = Status.OK_STATUS;
 		
-		HashMap<String,Double> parameters = Tool.copyHashMap(configurationModel.metaheuristicParametersRoot.getLeftMap());
 		
-		for(int i = 0; i < this.experiments; i++){
+		for(int i = 0; i < this.labParameters.getExperiments(); i++){
 			
 			if(monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 			
-			Metaheuristic temp = setupLab(monitor, parameters);
+			Metaheuristic temp = setupLab(monitor);
 			
 			Tool.setStartTime();
 			
@@ -91,11 +104,23 @@ public abstract class Lab {
 		//evaluate recorders
 		this.recordManager.evaluateAll();
 		
-		//temporary output of results
-		this.recordManager.outputResults();
-		
 		//for evaluation, leave alone
 		this.recordManager.writeRecordersToDisk();
+		
+		this.recordManager.outputResults();
+		
+	}
+	
+	public Double[] getResults(){
+		return this.recordManager.getResults();
+	}
+	
+	public ArrayList<Candidate> getTop(){
+		return this.recordManager.getTop();
+	}
+
+	public MetaHeuristicParameters getMetaheuristicParameters() {
+		return this.metaheuristicParameters;
 		
 	}
 }

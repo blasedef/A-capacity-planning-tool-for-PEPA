@@ -3,10 +3,8 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import org.eclipse.core.runtime.Path;
-
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 
 public abstract class Recorder {
 	
@@ -14,11 +12,11 @@ public abstract class Recorder {
 	protected PriorityQueue<Candidate> queue;
 	protected double time;
 	protected int queueSize;
-	protected ConfigurationModel configurationModel;
+	protected RecordParameters recordParameters;
 	
-	public Recorder(ConfigurationModel configurationModel){
+	public Recorder(RecordParameters recordParameters){
 		
-		this.configurationModel = configurationModel;
+		this.recordParameters = recordParameters;
 		
 		this.queueSize = 100;
 		
@@ -69,7 +67,7 @@ public abstract class Recorder {
 	
 	public abstract void finalise();
 	
-	public abstract void writeToDisk(Path resultsFolder, int generation);
+	public abstract void writeToDisk(int generation);
 
 	public abstract Candidate getTop();
 	

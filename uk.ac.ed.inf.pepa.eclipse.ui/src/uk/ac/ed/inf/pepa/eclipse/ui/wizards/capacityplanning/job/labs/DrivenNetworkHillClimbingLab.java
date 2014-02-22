@@ -1,11 +1,11 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs;
 
-
 import org.eclipse.core.runtime.IProgressMonitor;
 //import org.eclipse.core.runtime.IStatus;
 //import org.eclipse.core.runtime.Status;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.*;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.HillClimbingLabCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.CandidateParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.FitnessFunctionParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.LabParameters;
@@ -13,39 +13,46 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.HillClimbing;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.Metaheuristic;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.LabRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.SystemEquationRecorder;
 
-public class SingleNetworkHillClimbingLab extends SingleNetworkLab {
+public class DrivenNetworkHillClimbingLab extends DrivenNetworkLab {
 
-	public SingleNetworkHillClimbingLab(LabParameters labParameters,
+	public DrivenNetworkHillClimbingLab(LabParameters primaryLabParameters,
+			LabParameters secondarylabParameters,
 			RecordParameters recordParameters,
-			MetaHeuristicParameters metaheuristicParameters,
+			MetaHeuristicParameters primaryMetaheuristicParameters,
+			MetaHeuristicParameters secondaryMetaheuristicParameters,
 			FitnessFunctionParameters fitnessFunctionParameters,
 			CandidateParameters candidateParameters) {
-		super(labParameters,
-				recordParameters,
-				metaheuristicParameters,
-				fitnessFunctionParameters,
+		super(primaryLabParameters, 
+				secondarylabParameters, 
+				recordParameters, 
+				primaryMetaheuristicParameters, 
+				secondaryMetaheuristicParameters,
+				fitnessFunctionParameters, 
 				candidateParameters);
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor){
 		
-		Recorder temp = new SystemEquationRecorder(recordParameters);
+		Recorder temp = new LabRecorder(recordParameters);
 		
 		return ((Metaheuristic) new HillClimbing(metaheuristicParameters, 
-				getSystemEquationCandidate(temp), 
+				getLabCandidate(temp), 
 				monitor,
 				temp));
 		
 	}
-	
-	public Candidate getSystemEquationCandidate(Recorder recorder){
-		return (Candidate) new HillClimbingSystemEquationCandidate(0, 
-				getSystemEquationFitnessFunction(recorder),
+
+	public Candidate getLabCandidate(Recorder recorder){
+		return (Candidate) new HillClimbingLabCandidate(0, 
+				getLabFitnessFunction(recorder),
 				candidateParameters);
 	}
+
+
 
 }

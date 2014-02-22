@@ -1,11 +1,11 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SystemEquationFitnessFunction;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.CandidateParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.SystemEquationRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
@@ -13,17 +13,15 @@ public class HillClimbingSystemEquationCandidate extends SystemEquationCandidate
 
 	public HillClimbingSystemEquationCandidate(int i,
 			FitnessFunction fitnessFunction,
-			HashMap<String,Double> minimumPopulation, 
-			HashMap<String,Double> maximumPopulation){
-		super(i, fitnessFunction, minimumPopulation, maximumPopulation);
+			CandidateParameters candidateParameters){
+		super(i, fitnessFunction, candidateParameters);
 	}
 	
 	@Override
 	public Candidate copySelf() {
 		Candidate temp = (Candidate) new HillClimbingSystemEquationCandidate(this.generation,
 				this.fitnessFunction.copySelf(),
-				Tool.copyHashMap(minimumPopulation),
-				Tool.copyHashMap(maximumPopulation));
+				candidateParameters);
 		temp.setCandidateMap(Tool.copyHashMap(this.candidateMap));
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);

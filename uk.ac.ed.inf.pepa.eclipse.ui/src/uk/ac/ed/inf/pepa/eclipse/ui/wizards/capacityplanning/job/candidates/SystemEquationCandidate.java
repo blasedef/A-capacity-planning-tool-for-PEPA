@@ -7,18 +7,21 @@ import java.util.Map.Entry;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.SystemEquationFitnessFunction;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.CandidateParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.SystemEquationCandidateParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 public class SystemEquationCandidate extends Candidate {
 
 	HashMap<String,Double> performanceResultsMap;
+	CandidateParameters candidateParameters;
 	
 	public SystemEquationCandidate(int i,
 			FitnessFunction fitnessFunction,
-			HashMap<String,Double> minimumPopulation, 
-			HashMap<String,Double> maximumPopulation){
+			CandidateParameters candidateParameters){
 		super();
 		
+		this.candidateParameters = candidateParameters;
 		this.performanceResultsMap = new HashMap<String,Double>();
 		this.fitnessFunction = fitnessFunction;
 		this.candidateMap = new HashMap<String, Double>();
@@ -27,8 +30,8 @@ public class SystemEquationCandidate extends Candidate {
 		this.createdAt = System.currentTimeMillis() - Tool.startTime;
 		this.generation = i;
 		this.fitness = 100000000.0;
-		this.minimumPopulation = minimumPopulation;
-		this.maximumPopulation = maximumPopulation;
+		this.minimumPopulation = ((SystemEquationCandidateParameters) this.candidateParameters).getMinimumPopulation();
+		this.maximumPopulation = ((SystemEquationCandidateParameters) this.candidateParameters).getMaximumPopulation();
 	}
 	
 	public SystemEquationCandidate(){
@@ -93,8 +96,7 @@ public class SystemEquationCandidate extends Candidate {
 	public Candidate copySelf() {
 		Candidate temp = (Candidate) new SystemEquationCandidate(this.generation,
 				this.fitnessFunction.copySelf(),
-				Tool.copyHashMap(minimumPopulation),
-				Tool.copyHashMap(maximumPopulation));
+				this.candidateParameters);
 		temp.setCandidateMap(Tool.copyHashMap(this.candidateMap));
 		temp.setFitness(this.fitness);
 		((SystemEquationCandidate) temp).setPerformanceResultMap(performanceResultsMap);

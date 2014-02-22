@@ -6,39 +6,26 @@ import java.util.Map.Entry;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.FitnessFunctionParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.SystemEquationRecorder;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ODEConfig;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.PEPAConfig;
 
 public class ParticleSwarmOptimsationSystemEquationFitnessFunction extends SystemEquationFitnessFunction {
 	
-	public ParticleSwarmOptimsationSystemEquationFitnessFunction(PEPAConfig configPEPA, 
-			ODEConfig configODE,
-			HashMap<String,Double> targets,
-			HashMap<String,Double> targetWeights,
-			HashMap<String,Double> minPopulation,
-			HashMap<String,Double> populationRanges,
-			HashMap<String,Double> fitnessMap,
-			HashMap<String,Double> populationWeights,
+	public ParticleSwarmOptimsationSystemEquationFitnessFunction(FitnessFunctionParameters fitnessFunctionParameters,
 			IProgressMonitor monitor,
 			Recorder recorder){
 		
-		super(configPEPA,configODE,targets,targetWeights,minPopulation,populationRanges,fitnessMap,populationWeights,monitor,recorder);
+		super(fitnessFunctionParameters,
+				monitor,
+				recorder);
 		
 	}
 	
 	@Override
 	public FitnessFunction copySelf(){
-		FitnessFunction fitnessFunction = (FitnessFunction) new ParticleSwarmOptimsationSystemEquationFitnessFunction(configPEPA, 
-				configODE,
-				Tool.copyHashMap(targets),
-				Tool.copyHashMap(targetWeights),
-				Tool.copyHashMap(minPopulation),
-				Tool.copyHashMap(populationRanges),
-				Tool.copyHashMap(fitnessMap),
-				Tool.copyHashMap(populationWeights),
+		FitnessFunction fitnessFunction = (FitnessFunction) new ParticleSwarmOptimsationSystemEquationFitnessFunction(fitnessFunctionParameters,
 				monitor,
 				recorder);
 		

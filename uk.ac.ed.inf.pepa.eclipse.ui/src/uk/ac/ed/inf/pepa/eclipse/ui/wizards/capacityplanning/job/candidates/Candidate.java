@@ -22,8 +22,6 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	
 	public Candidate(){
 		
-
-		
 	}
 	
 	public abstract void updateHashCode();
@@ -130,9 +128,10 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 			name += "\"" + entry.getKey() + "\":" + entry.getValue() + ","; 
 		}
 		
-		name += name.substring(0,name.length() - 1);
+		name = name.substring(0,name.length() - 1);
 		
 		return name;
 		
 	}
+	
 }

@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.SystemEquationCandidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
 
 import org.eclipse.core.runtime.Path;
 
 public class RecordManager {
 	
 	public ArrayList<Recorder> recorders;
-	protected ConfigurationModel configurationModel;
 	protected Path resultsFolder;
 	private Double mean;
 	private Double variance;
 	private Double standardDeviation;
 	private Double bestFitness;
+	private String bestName;
 	private Double totalMeanTimeTaken;
+	private RecordParameters recordManagerParameters;
 	protected PriorityQueue<Candidate> queue;
 	protected int queueSize;
 	private ArrayList<Candidate> finals;
 	
-	public RecordManager(ConfigurationModel configurationModel, Path resultsFolder){
+	public RecordManager(RecordParameters recordManagerParameters){
 		
 		this.recorders = new ArrayList<Recorder>();
-		this.configurationModel = configurationModel;
-		this.resultsFolder = resultsFolder;
+		this.setRecordManagerParameters(recordManagerParameters);
+		this.resultsFolder = recordManagerParameters.getResultsFolder();
 		this.queueSize = 10;
 		this.queue = new PriorityQueue<Candidate>() {
 
@@ -58,6 +58,7 @@ public class RecordManager {
 			}
 			
 		};
+		
 		this.finals = new ArrayList<Candidate>();
 		
 	}
@@ -65,7 +66,7 @@ public class RecordManager {
 	public void writeRecordersToDisk() {
 		
 		for(int i = 0; i < this.recorders.size(); i++){
-			this.recorders.get(i).writeToDisk(resultsFolder, i);
+			this.recorders.get(i).writeToDisk(i);
 			
 		}
 		
@@ -77,22 +78,43 @@ public class RecordManager {
 	}
 
 	public void finaliseAll() {
+		
+		System.out.println("queue size @ finalise all: " + this.recorders.size());
+		
 		for(int i = 0; i < this.recorders.size(); i++){
 			this.recorders.get(i).finalise();
 		}
 		
 	}
 	
+	/*
+	 * create an arraylist of the top ten results from previous experiment
+	 * why? so we can then evaluate higher up the success of this lab
+	 */
 	public void finalise(){
 		
 		int x = queue.size();
 		
+		this.finals = new ArrayList<Candidate>();
+		
 		for(int i = 0; i < x; i++){
-			this.finals.add((SystemEquationCandidate) queue.poll());
+			this.finals.add(queue.poll());
 		} 
+		
+		System.out.println("---v---");
+		
+		for(int i = 0; i < this.finals.size(); i++){
+			System.out.println(finals.get(i).getName() + " " + finals.get(i).getFitness());
+		}
+		
+		System.out.println("---v---");
 		
 	}
 
+	/* get top result from experiments
+	 * evaluate mean and standard dev
+	 * creates a top ten queue of best results from experiments
+	 */
 	public void evaluateAll() {
 		
 		Candidate tempCandidate;
@@ -113,6 +135,7 @@ public class RecordManager {
 			tempDiff[i] = tempFitness;
 			if(tempFitness < this.bestFitness){
 				this.bestFitness = tempFitness;
+				this.bestName = tempCandidate.getName();
 			}
 		}
 		
@@ -133,7 +156,13 @@ public class RecordManager {
 		
 		this.standardDeviation = Math.pow(this.variance,0.5);
 		
+		System.out.println("queue size @ evaluate all: " + queue.size());
+		
 		this.finalise();
+		
+	}
+	
+	public void evaluateSystemEquationAll(){
 		
 	}
 
@@ -141,14 +170,38 @@ public class RecordManager {
 	 * aka fitness
 	 */
 	public void outputResults() {
-		for(int i = 0; i < this.finals.size(); i++){
-			System.out.println(this.finals.get(i).getName() + "@" + this.finals.get(i).getFitness());
-		}
+//		for(int i = 0; i < this.finals.size(); i++){
+//			System.out.println(this.finals.get(i).getName() + "@" + this.finals.get(i).getFitness());
+//		}
+		System.out.println("------");
+		System.out.println("top:");
+		System.out.println(this.bestFitness);
+		System.out.println(this.bestName);
+		System.out.println("------");
+		System.out.println("mean/standard dev:");
 		System.out.println(this.mean);
 		System.out.println(this.standardDeviation);
+		System.out.println("response time:");
 		System.out.println(this.totalMeanTimeTaken);
+		System.out.println("------");
 		
-		
+	}
+	
+	public Double[] getResults(){
+		Double[] temp = {this.mean,this.standardDeviation,this.totalMeanTimeTaken};
+		return temp;
+	}
+	
+	public ArrayList<Candidate> getTop(){
+		return this.finals;
+	}
+
+	public void setRecordManagerParameters(RecordParameters recordManagerParameters) {
+		this.recordManagerParameters = recordManagerParameters;
+	}
+
+	public RecordParameters getRecordManagerParameters() {
+		return recordManagerParameters;
 	}
 
 }

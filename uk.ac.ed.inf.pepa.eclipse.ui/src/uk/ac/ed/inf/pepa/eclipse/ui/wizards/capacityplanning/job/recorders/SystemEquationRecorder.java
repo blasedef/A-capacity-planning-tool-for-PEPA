@@ -8,16 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
-
-import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.JSONObject;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.SystemEquationCandidate;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 
 public class SystemEquationRecorder extends Recorder {
 	
@@ -27,8 +22,8 @@ public class SystemEquationRecorder extends Recorder {
 	private ArrayList<SystemEquationCandidate> finals;
 	private double lastFinished;
 	
-	public SystemEquationRecorder(ConfigurationModel configurationModel){
-		super(configurationModel);
+	public SystemEquationRecorder(RecordParameters recordParameters){
+		super(recordParameters);
 		nameToPerformanceResultsMapHash = new HashMap<String,HashMap<String,Double>>();
 		this.candidateNameToFitnessHash = new HashMap<String, Double>();
 		this.json = new JSONObject("temp");
@@ -156,27 +151,23 @@ public class SystemEquationRecorder extends Recorder {
 	
 	public void createJSON(){
 		
-		this.json = new JSONObject(configurationModel.dropDownListList.get(1).getValue());
+		this.json = new JSONObject(recordParameters.getMetaheuristicType());
 		
-		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
-				ResourceUtilities.changeExtension(
-						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
+		this.json.put("\"Filename\":", "\"" + recordParameters.getIFile().getName() + "\",\n");
 		
-		this.json.put("\"Filename\":", "\"" + handle.getName() + "\",\n");
+		this.json.put("MHParams",recordParameters.getMhParams());
 		
-		this.json.put("MHParams",configurationModel.metaheuristicParametersRoot.getLeftMap());
-		
-		this.json.put("MinPop",configurationModel.systemEquationPopulationRanges.getLeftMap());
+		this.json.put("MinPop",recordParameters.getMinPop());
 				
-		this.json.put("MaxPop",configurationModel.systemEquationPopulationRanges.getRightMap());
+		this.json.put("MaxPop",recordParameters.getMaxPop());
 					
-		this.json.put("PMTargets",configurationModel.performanceTargetsAndWeights.getLeftMap());
+		this.json.put("PMTargets",recordParameters.getPmTargets());
 				
-		this.json.put("PMWeights",configurationModel.performanceTargetsAndWeights.getRightMap());
+		this.json.put("PMWeights",recordParameters.getPmWeights());
 				
-		this.json.put("PopWeights",configurationModel.populationWeights.getLeftMap());
+		this.json.put("PopWeights",recordParameters.getPopWeights());
 
-		this.json.put("SysEqWeights",configurationModel.systemEquationFitnessWeights.getLeftMap());
+		this.json.put("SysEqWeights",recordParameters.getSysEqWeights());
 		
 		this.json.put("\"T100\":","\n\t{\n" + getTopAsString() + "},\n");
 		
@@ -187,18 +178,24 @@ public class SystemEquationRecorder extends Recorder {
 		
 	}
 	
-	public void writeToDisk(Path resultsFolder, int generation){
+	public void writeToDisk(int generation){
 		
 		this.createJSON();
 		
 		boolean success;
 		
-		success = (new File(resultsFolder.addTrailingSeparator().toOSString())).mkdirs();
+		success = (new File(recordParameters.getResultsFolder().addTrailingSeparator().toOSString())).mkdirs();
 		if (!success) {
 		    // Directory creation failed
 		}
 		
-		String filename = resultsFolder.addTrailingSeparator().toOSString() + Tool.getDateTime() + "_" + generation + "_" + getPopulations() + ".json";
+		String filename = recordParameters.getResultsFolder().addTrailingSeparator().toOSString() 
+		+ Tool.getDateTime() 
+		+ "_" 
+		+ generation 
+		+ "_" 
+		+ getPopulations() 
+		+ ".json";
 		
 		PrintWriter writer;
 		try {
@@ -221,8 +218,8 @@ public class SystemEquationRecorder extends Recorder {
 		
 		output = "";
 		
-		HashMap<String,Double> rightMap = configurationModel.systemEquationPopulationRanges.getRightMap();
-		HashMap<String,Double> leftMap = configurationModel.systemEquationPopulationRanges.getLeftMap();
+		HashMap<String,Double> rightMap = recordParameters.getMaxPop();
+		HashMap<String,Double> leftMap = recordParameters.getMinPop();
 		
 		for(Map.Entry<String, Double> entry : rightMap.entrySet()){
 			output = output + entry.getKey() + "[" + leftMap.get(entry.getKey()) + "_" + entry.getValue() + "]"; 
