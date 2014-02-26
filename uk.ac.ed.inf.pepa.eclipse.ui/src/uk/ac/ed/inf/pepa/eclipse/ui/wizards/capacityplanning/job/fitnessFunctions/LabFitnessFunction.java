@@ -97,6 +97,7 @@ public class LabFitnessFunction extends FitnessFunction{
 		this.lab.startExperiments(monitor, false);
 		this.lab.complete();
 		this.top = this.lab.getTop();
+		System.out.println("inside labfitnessfunction:");
 		System.out.println(this.top.get(top.size() - 1).getName());
 		System.out.println(this.top.get(top.size() - 1).getFitness());
 		for(Entry<String, Double> entry : candidate.entrySet()){

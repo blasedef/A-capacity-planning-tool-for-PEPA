@@ -35,10 +35,8 @@ public class LabParameters extends Parameters {
 		
 		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
 			totalWork = configurationModel.labParametersCandidateLeaf.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
-			//worst case scenario, every generation created a new analysis job
 			totalWork *= configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().get(Config.GENERATION_S).intValue();
-			//worst case scenario, every candidate produces a new analysis job
-			totalWork *= configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().get(Config.INITIALCANDIDATEPOPULATION_S).intValue();
+			totalWork *= 50;
 		}
 		
 		

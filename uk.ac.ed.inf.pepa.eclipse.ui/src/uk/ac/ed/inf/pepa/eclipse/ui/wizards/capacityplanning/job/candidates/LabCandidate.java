@@ -7,18 +7,22 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctions.LabFitnessFunction;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.CandidateParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.LabParameters;
 
 public class LabCandidate extends Candidate {
 	
 	protected CandidateParameters candidateParameters;
 	protected String name;
+	protected LabParameters labParameters;
 	
 	public LabCandidate(int i,
+			LabParameters labParameters,
 			FitnessFunction fitnessFunction,
 			CandidateParameters candidateParameters){
 		super();
 		
 		this.candidateParameters = candidateParameters;
+		this.labParameters = labParameters;
 		this.fitnessFunction = (LabFitnessFunction) fitnessFunction;
 		this.setCandidateMap(((LabFitnessFunction) fitnessFunction).getCandidateMap());
 		this.name = "";
@@ -51,6 +55,7 @@ public class LabCandidate extends Candidate {
 	@Override
 	public Candidate copySelf() {
 		Candidate temp = (Candidate) new LabCandidate(this.generation,
+				this.labParameters,
 				this.fitnessFunction.copySelf(),
 				this.candidateParameters);
 		temp.setCandidateMap(Tool.copyHashMap(this.candidateMap));
@@ -119,7 +124,7 @@ public class LabCandidate extends Candidate {
 
 	@Override
 	public void updateHashCode() {
-		// TODO Auto-generated method stub
+		this.hashCode = this.name.hashCode();
 		
 	}
 	
@@ -144,7 +149,6 @@ public class LabCandidate extends Candidate {
 		                         + temp.get(temp.size() - 1).getFitness() 
 		                         + ","
 		                         + super.getName());
-		
 	}
 	
 }

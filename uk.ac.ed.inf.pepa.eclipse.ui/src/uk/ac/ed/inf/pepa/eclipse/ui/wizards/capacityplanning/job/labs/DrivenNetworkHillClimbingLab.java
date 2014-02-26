@@ -49,6 +49,7 @@ public class DrivenNetworkHillClimbingLab extends DrivenNetworkLab {
 
 	public Candidate getLabCandidate(Recorder recorder){
 		return (Candidate) new HillClimbingLabCandidate(0, 
+				secondaryLabParameters,
 				getLabFitnessFunction(recorder),
 				candidateParameters);
 	}

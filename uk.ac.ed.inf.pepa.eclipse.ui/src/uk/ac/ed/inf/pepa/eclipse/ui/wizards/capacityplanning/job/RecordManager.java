@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.RecorderCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
 
@@ -79,8 +80,6 @@ public class RecordManager {
 
 	public void finaliseAll() {
 		
-		System.out.println("queue size @ finalise all: " + this.recorders.size());
-		
 		for(int i = 0; i < this.recorders.size(); i++){
 			this.recorders.get(i).finalise();
 		}
@@ -93,6 +92,12 @@ public class RecordManager {
 	 */
 	public void finalise(){
 		
+		for(int i = 0; i < finals.size(); i++){
+			this.queue.add((Candidate) new RecorderCandidate(finals.get(i).getFitness(),
+					finals.get(i).getName(),
+					((Candidate) finals.get(i)).getCreatedAt()));
+		}
+		
 		int x = queue.size();
 		
 		this.finals = new ArrayList<Candidate>();
@@ -100,14 +105,6 @@ public class RecordManager {
 		for(int i = 0; i < x; i++){
 			this.finals.add(queue.poll());
 		} 
-		
-		System.out.println("---v---");
-		
-		for(int i = 0; i < this.finals.size(); i++){
-			System.out.println(finals.get(i).getName() + " " + finals.get(i).getFitness());
-		}
-		
-		System.out.println("---v---");
 		
 	}
 
@@ -117,26 +114,30 @@ public class RecordManager {
 	 */
 	public void evaluateAll() {
 		
-		Candidate tempCandidate;
 		double[] tempDiff = new double[this.recorders.size()];
 		this.mean = 0.0;
 		this.totalMeanTimeTaken = 0.0;
 		this.bestFitness = 10000000.0;
 		
+		
 		for(int i = 0; i < this.recorders.size(); i++){
-			tempCandidate = this.recorders.get(i).getTop();
-			this.queue.add(tempCandidate);
-			if(this.queue.size() > this.queueSize){
-				this.queue.poll();
-			}
-			double tempFitness = tempCandidate.getFitness();
+			double tempFitness = this.recorders.get(i).getTop().getFitness();
 			this.mean += tempFitness;
 			this.totalMeanTimeTaken += this.recorders.get(i).getLastFinished();
 			tempDiff[i] = tempFitness;
 			if(tempFitness < this.bestFitness){
 				this.bestFitness = tempFitness;
-				this.bestName = tempCandidate.getName();
+				this.bestName = this.recorders.get(i).getTop().getName();
 			}
+			
+			this.queue.add((Candidate) new RecorderCandidate(this.recorders.get(i).getTop().getFitness(),
+					this.recorders.get(i).getTop().getName(),
+					((Candidate) this.recorders.get(i).getTop()).getCreatedAt()));
+			
+			if(this.queue.size() > this.queueSize){
+				this.queue.poll();
+			}
+			
 		}
 		
 		this.mean = this.mean/this.recorders.size();
@@ -155,8 +156,6 @@ public class RecordManager {
 		this.variance = this.variance/this.recorders.size();
 		
 		this.standardDeviation = Math.pow(this.variance,0.5);
-		
-		System.out.println("queue size @ evaluate all: " + queue.size());
 		
 		this.finalise();
 		

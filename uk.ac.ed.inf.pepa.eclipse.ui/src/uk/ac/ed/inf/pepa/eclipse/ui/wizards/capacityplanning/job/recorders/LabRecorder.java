@@ -3,32 +3,30 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders;
 
 import java.util.ArrayList;
 
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.LabCandidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.RecorderCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 
 public class LabRecorder extends Recorder {
 	
-	private ArrayList<LabCandidate> finals;
+	private ArrayList<RecorderCandidate> finals;
 
 	public LabRecorder(RecordParameters recordParameters) {
 		super(recordParameters);
-		this.finals = new ArrayList<LabCandidate>();
+		this.finals = new ArrayList<RecorderCandidate>();
 	
 	}
 
 	@Override
 	public void addNewCandidate(Candidate c, int generation) {
 		
-		Candidate d = (Candidate) c.copySelf();
-		d.setCandidateMap(Tool.copyHashMap(c.getCandidateMap()));
-		d.nullOut();
-		d.setFitness(c.getFitness());
+		Candidate d = (Candidate) new RecorderCandidate(c.getFitness(),
+				c.getName(),
+				c.getCreatedAt());
+		d.setCandidateMap(c.getCandidateMap());
 		d.setGeneration(generation);
-		((LabCandidate) d).setName(c.getName());
 	
-		this.queue.add(d);
+		this.queue.add((Candidate) d);
 		if(this.queue.size() > this.queueSize){
 			this.queue.poll();
 		}
@@ -50,7 +48,7 @@ public class LabRecorder extends Recorder {
 		int x = queue.size();
 		
 		for(int i = 0; i < x; i++){
-			this.finals.add((LabCandidate) queue.poll());
+			this.finals.add((RecorderCandidate) queue.poll());
 		} 
 		
 	}

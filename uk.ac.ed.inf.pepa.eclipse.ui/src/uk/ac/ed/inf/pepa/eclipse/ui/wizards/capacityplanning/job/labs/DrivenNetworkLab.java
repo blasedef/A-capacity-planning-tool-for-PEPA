@@ -12,8 +12,8 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recor
 
 public abstract class DrivenNetworkLab extends Lab {
 	
-	private LabParameters secondarylabParameters;
-	private MetaHeuristicParameters secondaryMetaheuristicParameters;
+	protected LabParameters secondaryLabParameters;
+	protected MetaHeuristicParameters secondaryMetaheuristicParameters;
 
 	public DrivenNetworkLab(LabParameters primaryLabParameters,
 			LabParameters secondarylabParameters,
@@ -26,7 +26,7 @@ public abstract class DrivenNetworkLab extends Lab {
 		super(primaryLabParameters, recordParameters, primaryMetaheuristicParameters,
 				fitnessFunctionParameters, candidateParameters);
 		
-		this.secondarylabParameters = secondarylabParameters;
+		this.secondaryLabParameters = secondarylabParameters;
 		this.secondaryMetaheuristicParameters = secondaryMetaheuristicParameters;
 		
 		
@@ -36,7 +36,7 @@ public abstract class DrivenNetworkLab extends Lab {
 	public FitnessFunction getLabFitnessFunction(Recorder recorder){
 		
 		FitnessFunction fitnessFunction = new LabFitnessFunction(recorder,
-				secondarylabParameters,
+				secondaryLabParameters,
 				recordParameters,
 				secondaryMetaheuristicParameters,
 				fitnessFunctionParameters,

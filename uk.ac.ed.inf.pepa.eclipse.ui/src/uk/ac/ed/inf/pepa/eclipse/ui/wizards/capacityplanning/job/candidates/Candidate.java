@@ -60,13 +60,42 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 	}
 	
 	@Override
-	public abstract int compare(Candidate arg0, Candidate arg1);
+	public int compare(Candidate arg0, Candidate arg1) {
+		
+		if(arg0.getFitness() > arg1.getFitness()){
+			return -1;
+		}
+		if(arg0.getFitness() < arg1.getFitness()){
+			return 1;
+		}
+		return 0;
+	}
 	
 	@Override
-	public abstract int compareTo(Candidate arg0);
+	public int compareTo(Candidate arg0) {
+		
+		if(this.fitness > arg0.getFitness()){
+			return -1;
+		}
+		if(this.fitness < arg0.getFitness()){
+			return 1;
+		}
+		return 0;
+	}
 	
 	@Override
-	public abstract boolean equals(Object obj);
+	public boolean equals(Object obj) {
+		
+		if(obj instanceof Candidate){
+			Candidate candidate = (Candidate) obj;
+			if(getHashCode() == candidate.getHashCode()){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
 	
 	public int getHashCode(){
 		this.updateHashCode();

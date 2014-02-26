@@ -11,6 +11,7 @@ import java.util.Map;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.JSONObject;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.RecorderCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.SystemEquationCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 
@@ -19,7 +20,7 @@ public class SystemEquationRecorder extends Recorder {
 	protected HashMap<String,Double> candidateNameToFitnessHash;
 	private HashMap<String,HashMap<String,Double>> nameToPerformanceResultsMapHash;
 	private JSONObject json;
-	private ArrayList<SystemEquationCandidate> finals;
+	private ArrayList<RecorderCandidate> finals;
 	private double lastFinished;
 	
 	public SystemEquationRecorder(RecordParameters recordParameters){
@@ -27,23 +28,22 @@ public class SystemEquationRecorder extends Recorder {
 		nameToPerformanceResultsMapHash = new HashMap<String,HashMap<String,Double>>();
 		this.candidateNameToFitnessHash = new HashMap<String, Double>();
 		this.json = new JSONObject("temp");
-		this.finals = new ArrayList<SystemEquationCandidate>();
+		this.finals = new ArrayList<RecorderCandidate>();
 		this.lastFinished = -1.0;
 	}
 	
 	@Override
 	public void addNewCandidate(Candidate c, int generation){
 		
-		Candidate d = (Candidate) c.copySelf();
-		d.setCandidateMap(Tool.copyHashMap(c.getCandidateMap()));
-		d.nullOut();
-		d.setFitness(c.getFitness());
+		Candidate d = (Candidate) new RecorderCandidate(c.getFitness(),
+				c.getName(),
+				c.getCreatedAt());
+		d.setCandidateMap(c.getCandidateMap());
 		d.setGeneration(generation);
-		d.resetCreatedAt();
 		if(d.getCreatedAt() > this.lastFinished)
 			this.lastFinished= d.getCreatedAt();
 	
-		this.queue.add(d);
+		this.queue.add((Candidate) d);
 		if(this.queue.size() > this.queueSize){
 			this.queue.poll();
 		}
@@ -71,7 +71,7 @@ public class SystemEquationRecorder extends Recorder {
 		int x = queue.size();
 		
 		for(int i = 0; i < x; i++){
-			this.finals.add((SystemEquationCandidate) queue.poll());
+			this.finals.add((RecorderCandidate) queue.poll());
 		} 
 		
 	}
