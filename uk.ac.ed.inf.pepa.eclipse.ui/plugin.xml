@@ -48,6 +48,12 @@
       </view>
       <view
             category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.capacityplanningview.CapacityPlanningView"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.CapacityPlanningView"
+            name="Capacity Planning">
+      </view>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
             class="uk.ac.ed.inf.pepa.eclipse.ui.largescale.DifferentialExplorer"
             icon="icons/ode.png"
             id="uk.ac.ed.inf.pepa.eclipse.ui.odeView"
@@ -186,7 +192,8 @@
             class="uk.ac.ed.inf.pepa.eclipse.ui.PerspectiveFactory"
             icon="icons/pepa16.png"
             id="uk.ac.ed.inf.pepa.eclipse.ui.PepaPerspective"
-            name="PEPA"/>
+            name="PEPA">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

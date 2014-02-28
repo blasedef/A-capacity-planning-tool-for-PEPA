@@ -1,6 +1,8 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
+import java.util.ArrayList;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -16,8 +18,9 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Configuratio
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 
 
-public class MetaHeuristicJob extends Job{
 
+public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
+	
 	private Lab lab;
 	@SuppressWarnings("unused")
 	private ConfigurationModel configurationModel;
@@ -26,6 +29,7 @@ public class MetaHeuristicJob extends Job{
 	private MetaHeuristicParameters primaryMetaheuristicParameters;
 	private SystemEquationFitnessFunctionParameters systemEquationFitnessFunctionParameters;
 	private SystemEquationCandidateParameters systemEquationCandidateParameters;
+	private ArrayList<String> results = new ArrayList<String>();
 	
 	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
@@ -142,7 +146,17 @@ public class MetaHeuristicJob extends Job{
 		
 		this.lab.complete();
 		
+		this.notifyObservers();
+		
 		return status;
+	}
+
+	@Override
+	public void notifyObservers() {
+		this.results.add("whatever");
+		CapacityListenerManager.results = this.results;
+		CapacityListenerManager.listener.capacityPlanningJobCompleted();
+		
 	}
 
 }

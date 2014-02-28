@@ -154,4 +154,5 @@ public interface IPepaModel extends IProcessAlgebraModel {
 	 * @return
 	 */
 	public PEPAForm[] isSBAParseable();
+	
 }

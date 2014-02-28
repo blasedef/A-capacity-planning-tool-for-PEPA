@@ -13,8 +13,6 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -31,10 +29,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.T
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 
-public class CapacityPlanningWizard extends Wizard {
-	
-	static Logger log = Logger.getLogger(CapacityPlanningWizard.class);
-	
+public class CapacityPlanningWizard extends Wizard  {
 	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
@@ -55,8 +50,6 @@ public class CapacityPlanningWizard extends Wizard {
 	public CapacityPlanningWizardPage summaryPage;
 	
 	public CapacityPlanningWizard(IPepaModel model){
-		
-		BasicConfigurator.configure();
 		
 		this.configurationModel = new ConfigurationModel(model);
 		
@@ -227,7 +220,6 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		MetaHeuristicJob job = new MetaHeuristicJob("Running the search", 
 				configurationModel);
-		
 		
 		job.setUser(true);
 		job.schedule();

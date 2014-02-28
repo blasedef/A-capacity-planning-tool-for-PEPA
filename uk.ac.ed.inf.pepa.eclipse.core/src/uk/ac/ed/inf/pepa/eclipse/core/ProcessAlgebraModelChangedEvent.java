@@ -41,7 +41,7 @@ public class ProcessAlgebraModelChangedEvent {
 	public static final int MODEL_CHECKED = 6;
 	
 	public static final int MODEL_CHECKING_INFO = 7;
-
+	
 	private int fType;
 
 	private Exception fException;
