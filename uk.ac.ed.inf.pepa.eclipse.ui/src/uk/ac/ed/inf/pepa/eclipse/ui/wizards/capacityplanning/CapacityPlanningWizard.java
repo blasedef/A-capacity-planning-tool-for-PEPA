@@ -115,6 +115,7 @@ public class CapacityPlanningWizard extends Wizard  {
 			
 		} else {
 			
+			
 			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
 					configurationModel.metaheuristicParametersRoot,
 					configurationModel.labParametersRoot,

@@ -34,6 +34,14 @@ public class HillClimbingLabCandidate extends LabCandidate {
 		Double minI = 1.0;
 		Double maxI = 100.0;
 		
+		if(labParameters.getSecondaryMetaheuristicType().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
+			
+			if(Tool.rollDice(probability)){
+				Double d = Tool.returnRandomInRange(minP, maxP, Config.PERCENT);
+				this.getCandidateMap().put(Config.MUTATIONPROBABILITY_S, d);
+			}
+		} 
+		
 		if(labParameters.getSecondaryMetaheuristicType().equals(Config.METAHEURISTICTYPEGENETICALGORITHM_S)){
 			
 			if(Tool.rollDice(probability)){
@@ -76,9 +84,10 @@ public class HillClimbingLabCandidate extends LabCandidate {
 			}			
 		}
 		
-
-		Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
-		this.getCandidateMap().put(Config.GENERATION_S, d);
+		if(Tool.rollDice(probability)){
+			Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
+			this.getCandidateMap().put(Config.GENERATION_S, d);
+		}
 		
 	}
 	

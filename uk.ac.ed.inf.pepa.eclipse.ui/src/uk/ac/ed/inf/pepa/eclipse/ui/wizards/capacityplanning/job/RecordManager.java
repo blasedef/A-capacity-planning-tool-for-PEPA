@@ -1,12 +1,16 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.RecorderCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Recorder;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Results;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 
 import org.eclipse.core.runtime.Path;
 
@@ -20,6 +24,7 @@ public class RecordManager {
 	private Double bestFitness;
 	private String bestName;
 	private Double totalMeanTimeTaken;
+	private HashMap<String,Double> bestPerformanceMap;
 	private RecordParameters recordManagerParameters;
 	protected PriorityQueue<Candidate> queue;
 	protected int queueSize;
@@ -28,6 +33,7 @@ public class RecordManager {
 	public RecordManager(RecordParameters recordManagerParameters){
 		
 		this.recorders = new ArrayList<Recorder>();
+		this.bestPerformanceMap = new HashMap<String,Double>();
 		this.setRecordManagerParameters(recordManagerParameters);
 		this.resultsFolder = recordManagerParameters.getResultsFolder();
 		this.queueSize = 10;
@@ -128,6 +134,8 @@ public class RecordManager {
 			if(tempFitness < this.bestFitness){
 				this.bestFitness = tempFitness;
 				this.bestName = this.recorders.get(i).getTop().getName();
+				if(((RecorderCandidate) this.recorders.get(i).getTop()).getPerformanceResultMap() != null)
+						this.bestPerformanceMap = Tool.copyHashMap(((RecorderCandidate) this.recorders.get(i).getTop()).getPerformanceResultMap());
 			}
 			
 			this.queue.add((Candidate) new RecorderCandidate(this.recorders.get(i).getTop().getFitness(),
@@ -160,29 +168,51 @@ public class RecordManager {
 		this.finalise();
 		
 	}
-	
-	public void evaluateSystemEquationAll(){
-		
-	}
 
 	/**
-	 * aka fitness
+	 * System.out version
 	 */
 	public void outputResults() {
-//		for(int i = 0; i < this.finals.size(); i++){
-//			System.out.println(this.finals.get(i).getName() + "@" + this.finals.get(i).getFitness());
-//		}
+		for(int i = 0; i < this.finals.size(); i++){
+			System.out.println(this.finals.get(i).getName() + "@" + this.finals.get(i).getFitness());
+		}
 		System.out.println("------");
 		System.out.println("top:");
 		System.out.println(this.bestFitness);
 		System.out.println(this.bestName);
 		System.out.println("------");
-		System.out.println("mean/standard dev:");
+		System.out.println("mean: ");
 		System.out.println(this.mean);
+		System.out.println("Standard deviation: ");
 		System.out.println(this.standardDeviation);
 		System.out.println("response time:");
 		System.out.println(this.totalMeanTimeTaken);
 		System.out.println("------");
+		
+	}
+	
+	/**
+	 * viewPart version
+	 */
+	public ArrayList<Results> outputResultsForView() {
+
+		ArrayList<Results> temp = new ArrayList<Results>();
+		
+		temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()));
+		temp.add(new Results(Config.VOVERALLFITTEST,this.bestName.toString()));
+		String tempString = "";
+		for(Map.Entry<String, Double> entry : bestPerformanceMap.entrySet()){
+			tempString += "\""+entry.getKey() + "\":" + entry.getValue(); 
+		}
+		temp.add(new Results(Config.VLABBESTPERFORMANCE, tempString));
+		temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
+		temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
+		temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
+		for(int i = 0; i < this.finals.size(); i++){
+			temp.add(new Results("Top " + (this.finals.size() - i)+"",this.finals.get(i).getName() + ",fitness:" + this.finals.get(i).getFitness()));
+		}
+		
+		return temp;
 		
 	}
 	

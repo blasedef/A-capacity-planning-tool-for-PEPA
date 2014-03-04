@@ -10,7 +10,8 @@ public class MetaheuristicParameters extends TextInputs {
 	
 	//metaheuristic attribute lists
 	//Hill Climbing has a different default generation from the other algorithms
-	private String[] hillClimbingParameterList = new String[] {Config.GENERATIONHC_S};
+	private String[] hillClimbingParameterList = new String[] {Config.GENERATIONHC_S,
+			Config.MUTATIONPROBABILITY_S};
 	
 	private String[] particleSwarmOptimisationParameterList = new String[] {
 			Config.GENERATION_S,

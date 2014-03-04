@@ -151,4 +151,8 @@ public class LabCandidate extends Candidate {
 		                         + super.getName());
 	}
 	
+	public ArrayList<Candidate> getTop(){
+		return ((LabFitnessFunction) fitnessFunction).getTop();
+	}
+	
 }

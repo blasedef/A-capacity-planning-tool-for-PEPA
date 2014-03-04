@@ -1,8 +1,6 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
-import java.util.ArrayList;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -29,7 +27,6 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 	private MetaHeuristicParameters primaryMetaheuristicParameters;
 	private SystemEquationFitnessFunctionParameters systemEquationFitnessFunctionParameters;
 	private SystemEquationCandidateParameters systemEquationCandidateParameters;
-	private ArrayList<String> results = new ArrayList<String>();
 	
 	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
@@ -127,7 +124,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 
 	private void postProcessHillClimbing(TextInputs metaheuristicParameters) {
 		metaheuristicParameters.getLeftMap().put(Config.INITIALCANDIDATEPOPULATION_S, 1.0);
-		metaheuristicParameters.getLeftMap().put(Config.MUTATIONPROBABILITY_S, 1.0);
+		//metaheuristicParameters.getLeftMap().put(Config.MUTATIONPROBABILITY_S, 1.0);
 		metaheuristicParameters.getLeftMap().put(Config.GENERATION_S,
 		metaheuristicParameters.getLeftMap().get(Config.GENERATIONHC_S));
 		metaheuristicParameters.getLeftMap().remove(Config.GENERATIONHC_S);
@@ -153,8 +150,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 
 	@Override
 	public void notifyObservers() {
-		this.results.add("whatever");
-		CapacityListenerManager.results = this.results;
+		CapacityListenerManager.results = lab.results;
 		CapacityListenerManager.listener.capacityPlanningJobCompleted();
 		
 	}

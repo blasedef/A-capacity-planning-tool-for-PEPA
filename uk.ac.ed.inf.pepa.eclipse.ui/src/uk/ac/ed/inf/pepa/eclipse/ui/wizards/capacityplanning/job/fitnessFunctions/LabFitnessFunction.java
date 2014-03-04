@@ -2,7 +2,6 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.fitnessFunctio
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -97,12 +96,6 @@ public class LabFitnessFunction extends FitnessFunction{
 		this.lab.startExperiments(monitor, false);
 		this.lab.complete();
 		this.top = this.lab.getTop();
-		System.out.println("inside labfitnessfunction:");
-		System.out.println(this.top.get(top.size() - 1).getName());
-		System.out.println(this.top.get(top.size() - 1).getFitness());
-		for(Entry<String, Double> entry : candidate.entrySet()){
-			System.out.println(entry.getKey() + " " + entry.getValue());
-		}
 		this.fitnessArray = this.lab.getResults();
 		return (this.fitnessArray[0] * .8) + (this.fitnessArray[1] * .1) + (this.fitnessArray[2] * .1);
 	}

@@ -1,18 +1,21 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 
 public class RecorderCandidate extends Candidate {
 	
 	public String name;
+	public HashMap<String,Double> performanceMap;
 	
 	public RecorderCandidate(double fitness, String name, double createdAt){
 		
 		this.fitness = fitness;
 		this.name = name;
 		this.createdAt = createdAt;
+		this.performanceMap = null;
 		updateHashCode();
 		
 	}
@@ -57,6 +60,29 @@ public class RecorderCandidate extends Candidate {
 	public String toString() {
 		return this.name;
 	}
+	
+	public String toStringWithPerformance() {
+		
+		String temp = ",\"fitness\":" + this.fitness;
+		
+		for(Map.Entry<String, Double> entry : performanceMap.entrySet()){
+			temp += ",\""+entry.getKey() + "\":" + entry.getValue(); 
+		}
+		
+		if(performanceMap == null){
+			return this.name;
+		} else {
+			return this.name + temp;
+		}
+	}
+	
+	public void setMyPerformanceMap(HashMap<String,Double> performanceMap){
+		if(performanceMap != null){
+			this.performanceMap = Tool.copyHashMap(performanceMap);
+		} else {
+			this.performanceMap = null;
+		}
+	}
 
 	@Override
 	public void updateCandidateMapFromAST() {
@@ -79,7 +105,7 @@ public class RecorderCandidate extends Candidate {
 	}
 
 	public HashMap<String, Double> getPerformanceResultMap() {
-		return this.candidateMap;
+		return this.performanceMap;
 	}
 	
 

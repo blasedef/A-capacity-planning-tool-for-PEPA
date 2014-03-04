@@ -40,6 +40,7 @@ public class SystemEquationRecorder extends Recorder {
 				c.getCreatedAt());
 		d.setCandidateMap(c.getCandidateMap());
 		d.setGeneration(generation);
+		((RecorderCandidate) d).setMyPerformanceMap(((SystemEquationCandidate) c).getPerformanceResultMap());
 		if(d.getCreatedAt() > this.lastFinished)
 			this.lastFinished= d.getCreatedAt();
 	
@@ -87,10 +88,10 @@ public class SystemEquationRecorder extends Recorder {
 		int x = finals.size();
 		
 		for(int i = 0; i < x; i++){
-			output += "\"rank_" + (x - i) + "\":{" + this.finals.get(i) + "},\n";
+			output += "\"rank_" + (x - i) + "\":{" + this.finals.get(i).toStringWithPerformance() + "},\n";
 		}
 		
-		output += output.substring(0,output.length() - 2);
+		output = output.substring(0,output.length() - 2);
 		
 		return output;
 	}

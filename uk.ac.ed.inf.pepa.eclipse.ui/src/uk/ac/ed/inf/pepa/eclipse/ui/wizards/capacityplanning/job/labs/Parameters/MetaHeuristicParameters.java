@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameter
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.textInputs.MetaheuristicParameters;
 
 import java.util.HashMap;
 
@@ -15,12 +16,14 @@ public class MetaHeuristicParameters extends Parameters {
 			if(configurationModel.metaheuristicParametersRoot.getLeftMap().containsKey(Config.PERSONALBEST)){
 				configurationModel.metaheuristicParametersRoot.getLeftMap().remove(Config.MUTATIONPROBABILITY_S);
 			}
-			this.setParameters(Tool.copyHashMap(configurationModel.metaheuristicParametersRoot.getLeftMap()));
+			this.setParameters(configurationModel.metaheuristicParametersRoot.getLeftMap());
 		} else {
+			if(!configurationModel.secondDropDownListList.get(0).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
+				((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).update(configurationModel.secondDropDownListList.get(0).getValue());
 			if(configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().containsKey(Config.PERSONALBEST)){
 				configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().remove(Config.MUTATIONPROBABILITY_S);
 			}
-			this.setParameters(Tool.copyHashMap(configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap()));
+			this.setParameters(configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap());
 		}
 	}
 	
@@ -35,5 +38,7 @@ public class MetaHeuristicParameters extends Parameters {
 	public HashMap<String,Double> getParameters() {
 		return parameters;
 	}
+	
+	
 
 }

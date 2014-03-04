@@ -16,6 +16,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.MetaHeuristicParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.metaheurstics.Metaheuristic;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Results;
 
 public abstract class Lab {
 	
@@ -27,6 +28,7 @@ public abstract class Lab {
 	protected IProgressMonitor monitor;
 	protected Path resultsFolder;
 	protected MetaHeuristicParameters metaheuristicParameters;
+	public ArrayList<Results> results;
 	
 	public Lab(LabParameters labParameters,
 			RecordParameters recordParameters,
@@ -107,7 +109,8 @@ public abstract class Lab {
 		//for evaluation, leave alone
 		this.recordManager.writeRecordersToDisk();
 		
-		this.recordManager.outputResults();
+		//this.recordManager.outputResults();
+		this.results = this.recordManager.outputResultsForView();
 		
 	}
 	

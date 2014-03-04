@@ -43,8 +43,14 @@ public class HillClimbing extends Metaheuristic {
 			
 			for(Candidate c : candidatePopulation){
 				
+				Candidate d;
+				d = c.copySelf();
 				c.mutate(this.mutationProbability);
 				c.updateFitness();
+				
+				if(c.getFitness() >= d.getFitness()){
+					c = d;
+				}
 				recorder.addNewCandidate(c, i);
 			}
 			
