@@ -65,7 +65,7 @@ public class CapacityPlanningView extends ViewPart{
 		table.setLinesVisible(true);
 		
 		String[] columnNames = new String[] {"Result Type","Result"};
-		int[] columnWidths = new int[] {250,100};
+		int[] columnWidths = new int[] {300,100};
 //		int[] columnAlignments = new int[] {SWT.LEFT,SWT.LEFT};
 //		
 //		for(int i = 0; i < columnNames.length; i++){

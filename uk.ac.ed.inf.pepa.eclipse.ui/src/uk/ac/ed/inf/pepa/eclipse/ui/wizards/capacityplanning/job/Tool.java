@@ -21,8 +21,13 @@ public class Tool {
 		
 		HashMap<String, Double> newMap = new HashMap<String,Double>();
 		
-		for(Entry<String, Double> entry : map.entrySet()){
-			newMap.put(entry.getKey(), entry.getValue());
+		if(map != null){
+			
+			for(Entry<String, Double> entry : map.entrySet()){
+				newMap.put(entry.getKey(), entry.getValue());
+			}
+		} else {
+			System.out.println("TOOL: map is null");
 		}
 		
 		return newMap;
@@ -68,5 +73,13 @@ public class Tool {
         Date date = new Date();
         return dateFormat.format(date);
     }
+	
+	public static void printMap(HashMap<String,Double> map){
+		
+		for(Entry<String, Double> entry : map.entrySet()){
+			System.out.println(entry.getKey() + " " + entry.getValue());
+		}
+		
+	}
 
 }

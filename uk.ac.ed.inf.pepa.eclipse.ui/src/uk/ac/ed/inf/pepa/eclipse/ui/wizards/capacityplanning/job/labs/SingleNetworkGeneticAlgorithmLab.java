@@ -31,7 +31,7 @@ public class SingleNetworkGeneticAlgorithmLab extends SingleNetworkLab {
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor){
 		
-		Recorder temp = new SystemEquationRecorder(recordParameters);
+		Recorder temp = new SystemEquationRecorder(recordParameters, metaheuristicParameters.copySelf());
 		
 		return ((Metaheuristic) new GeneticAlgorithm(metaheuristicParameters, 
 				getSystemEquationCandidate(temp), 

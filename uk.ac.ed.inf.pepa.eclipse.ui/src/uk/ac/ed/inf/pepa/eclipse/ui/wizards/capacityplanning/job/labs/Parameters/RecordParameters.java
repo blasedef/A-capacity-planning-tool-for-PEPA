@@ -18,23 +18,26 @@ public class RecordParameters extends Parameters{
 	private HashMap<String,Double> minPop;
 	private HashMap<String,Double> maxPop;
 	private IFile handle;
-	private HashMap<String,Double> mhParams;
+	private HashMap<String,Double> mhParamsRoot;
+	private HashMap<String,Double> mhParamsCan;
 	private HashMap<String,Double> pmTargets;
 	private HashMap<String,Double> pmWeights;
 	private HashMap<String,Double> popWeights;
 	private HashMap<String,Double> sysEqWeights;
+	private boolean hasSecondary;
 	
 	public RecordParameters(ConfigurationModel configurationModel){
 		this.setMetaheuristicType(configurationModel.dropDownListList.get(1).getValue());
-		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S))
-			this.setSecondaryMetaheuristicType(configurationModel.secondDropDownListList.get(0).getValue());
+		setHasSecondary(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S));
+			//this.setSecondaryMetaheuristicType(configurationModel.secondDropDownListList.get(0).getValue());
 		this.setMinPop(Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getLeftMap()));
 		this.setMaxPop(Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getRightMap()));
 		this.handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
 				ResourceUtilities.changeExtension(
 						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
 		setFileOutputPath(configurationModel);
-		this.setMhParams(Tool.copyHashMap(configurationModel.metaheuristicParametersRoot.getLeftMap()));
+		this.setMhParamsRoot(Tool.copyHashMap(configurationModel.metaheuristicParametersRoot.getLeftMap()));
+		this.setMhParamsCan(Tool.copyHashMap(configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap()));
 		this.setPmTargets(Tool.copyHashMap(configurationModel.performanceTargetsAndWeights.getLeftMap()));
 		this.setPmWeights(Tool.copyHashMap(configurationModel.performanceTargetsAndWeights.getRightMap()));
 		this.setPopWeights(Tool.copyHashMap(configurationModel.populationWeights.getLeftMap()));
@@ -89,12 +92,20 @@ public class RecordParameters extends Parameters{
 		return this.handle;
 	}
 
-	public void setMhParams(HashMap<String,Double> mhParams) {
-		this.mhParams = mhParams;
+	public void setMhParamsRoot(HashMap<String,Double> mhParams) {
+		this.mhParamsRoot = mhParams;
+	}
+	
+	public void setMhParamsCan(HashMap<String,Double> mhParams) {
+		this.mhParamsCan = mhParams;
 	}
 
-	public HashMap<String,Double> getMhParams() {
-		return mhParams;
+	public HashMap<String,Double> getMhParamsRoot() {
+		return mhParamsRoot;
+	}
+	
+	public HashMap<String,Double> getMhParamsCan() {
+		return mhParamsCan;
 	}
 
 	public void setPmTargets(HashMap<String,Double> pmTargets) {
@@ -135,6 +146,14 @@ public class RecordParameters extends Parameters{
 
 	public String getSecondaryMetaheuristicType() {
 		return secondaryMetaheuristicType;
+	}
+
+	public void setHasSecondary(boolean hasSecondary) {
+		this.hasSecondary = hasSecondary;
+	}
+
+	public boolean isHasSecondary() {
+		return hasSecondary;
 	}
 
 }

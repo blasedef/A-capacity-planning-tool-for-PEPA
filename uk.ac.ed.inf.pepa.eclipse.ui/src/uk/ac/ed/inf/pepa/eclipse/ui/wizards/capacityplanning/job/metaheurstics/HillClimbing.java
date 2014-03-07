@@ -51,6 +51,10 @@ public class HillClimbing extends Metaheuristic {
 				if(c.getFitness() >= d.getFitness()){
 					c = d;
 				}
+				/*
+				 * here chris
+				 */
+				//Tool.printMap(c.getPerformanceResultMap());
 				recorder.addNewCandidate(c, i);
 			}
 			

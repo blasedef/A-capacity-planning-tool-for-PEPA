@@ -101,7 +101,8 @@ public class RecordManager {
 		for(int i = 0; i < finals.size(); i++){
 			this.queue.add((Candidate) new RecorderCandidate(finals.get(i).getFitness(),
 					finals.get(i).getName(),
-					((Candidate) finals.get(i)).getCreatedAt()));
+					((Candidate) finals.get(i)).getCreatedAt(),
+					((Candidate) this.recorders.get(i).getTop()).getPerformanceResultMap()));
 		}
 		
 		int x = queue.size();
@@ -134,13 +135,13 @@ public class RecordManager {
 			if(tempFitness < this.bestFitness){
 				this.bestFitness = tempFitness;
 				this.bestName = this.recorders.get(i).getTop().getName();
-				if(((RecorderCandidate) this.recorders.get(i).getTop()).getPerformanceResultMap() != null)
-						this.bestPerformanceMap = Tool.copyHashMap(((RecorderCandidate) this.recorders.get(i).getTop()).getPerformanceResultMap());
+				this.bestPerformanceMap = Tool.copyHashMap(((RecorderCandidate) this.recorders.get(i).getTop()).getPerformanceResultMap());
 			}
 			
 			this.queue.add((Candidate) new RecorderCandidate(this.recorders.get(i).getTop().getFitness(),
 					this.recorders.get(i).getTop().getName(),
-					((Candidate) this.recorders.get(i).getTop()).getCreatedAt()));
+					((Candidate) this.recorders.get(i).getTop()).getCreatedAt(),
+					((Candidate) this.recorders.get(i).getTop()).getPerformanceResultMap()));
 			
 			if(this.queue.size() > this.queueSize){
 				this.queue.poll();
@@ -199,17 +200,58 @@ public class RecordManager {
 		ArrayList<Results> temp = new ArrayList<Results>();
 		
 		temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()));
-		temp.add(new Results(Config.VOVERALLFITTEST,this.bestName.toString()));
+		if(this.bestName.contains("@")){
+			String[] tempStringArray = this.bestName.toString().split("@");
+			temp.add(new Results(Config.VOVERALLFITTEST,tempStringArray[1]));
+			temp.add(new Results(Config.VOVERALLFITTESTL,tempStringArray[0]));
+		} else {
+			temp.add(new Results(Config.VOVERALLFITTEST,this.bestName.toString()));
+		}
+		
 		String tempString = "";
 		for(Map.Entry<String, Double> entry : bestPerformanceMap.entrySet()){
-			tempString += "\""+entry.getKey() + "\":" + entry.getValue(); 
+			tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
 		}
+		
+		tempString = tempString.substring(0,tempString.length() - 1);
+		
 		temp.add(new Results(Config.VLABBESTPERFORMANCE, tempString));
-		temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
-		temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
-		temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
-		for(int i = 0; i < this.finals.size(); i++){
-			temp.add(new Results("Top " + (this.finals.size() - i)+"",this.finals.get(i).getName() + ",fitness:" + this.finals.get(i).getFitness()));
+		if(!this.totalMeanTimeTaken.toString().equals("0.0")){
+			temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
+			temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
+			temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
+		}
+		
+		temp.add(new Results("Top ten results",""));
+		
+		for(int i = this.finals.size() - 1; i >= 0 ; i--){
+			if(i == this.finals.size() - 1){
+				temp.add(new Results("1st best experiment:","---"));
+			} else if ( i == this.finals.size() - 2){
+				temp.add(new Results("2nd best experiment:","---"));
+			} else if ( i == this.finals.size() - 3){
+				temp.add(new Results("3rd best experiment:","---"));
+			} else {
+				temp.add(new Results(this.finals.size() - i+"th best experiment:","---"));
+			}
+			if(this.finals.get(i).getName().contains("@")){
+				String[] tempStringArray = this.finals.get(i).getName().split("@");
+				temp.add(new Results("system equation:",tempStringArray[1]));
+				temp.add(new Results("lab candidate:",tempStringArray[0]));
+			} else {
+				temp.add(new Results("system equation:",this.finals.get(i).getName()));
+			}
+			
+			temp.add(new Results("fitness:" , "" + this.finals.get(i).getFitness()));
+			
+			tempString = "";
+			for(Map.Entry<String, Double> entry : this.finals.get(i).getPerformanceResultMap().entrySet()){
+				tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
+			}
+			
+			tempString = tempString.substring(0,tempString.length() - 1);
+			
+			temp.add(new Results("performance:" , "" + tempString));
 		}
 		
 		return temp;

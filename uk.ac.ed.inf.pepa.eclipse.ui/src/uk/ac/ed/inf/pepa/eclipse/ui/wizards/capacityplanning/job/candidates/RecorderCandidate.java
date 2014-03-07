@@ -10,19 +10,19 @@ public class RecorderCandidate extends Candidate {
 	public String name;
 	public HashMap<String,Double> performanceMap;
 	
-	public RecorderCandidate(double fitness, String name, double createdAt){
+	public RecorderCandidate(double fitness, String name, double createdAt, HashMap<String,Double> performanceMap){
 		
 		this.fitness = fitness;
 		this.name = name;
 		this.createdAt = createdAt;
-		this.performanceMap = null;
+		this.performanceMap = Tool.copyHashMap(performanceMap);
 		updateHashCode();
 		
 	}
 
 	@Override
 	public Candidate copySelf() {
-		return new RecorderCandidate(fitness,name,createdAt);
+		return new RecorderCandidate(fitness,name,createdAt, performanceMap);
 	}
 
 	@Override
@@ -106,6 +106,12 @@ public class RecorderCandidate extends Candidate {
 
 	public HashMap<String, Double> getPerformanceResultMap() {
 		return this.performanceMap;
+	}
+
+	@Override
+	public void setPerformanceResultMap(HashMap<String, Double> map) {
+		this.performanceMap = Tool.copyHashMap(map);
+		
 	}
 	
 

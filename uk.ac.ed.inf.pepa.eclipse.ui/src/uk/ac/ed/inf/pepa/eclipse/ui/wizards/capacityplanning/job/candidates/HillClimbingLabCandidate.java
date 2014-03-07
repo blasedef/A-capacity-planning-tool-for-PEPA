@@ -20,9 +20,11 @@ public class HillClimbingLabCandidate extends LabCandidate {
 		Candidate temp = (Candidate) new HillClimbingLabCandidate(this.generation,
 				this.labParameters,
 				this.fitnessFunction.copySelf(),
-				candidateParameters);
+				this.candidateParameters);
 		temp.setCandidateMap(Tool.copyHashMap(this.candidateMap));
+		temp.setPerformanceResultMap(this.bestPerformanceResultsMap);
 		temp.setFitness(this.fitness);
+		((LabCandidate) temp).setName(this.name);
 		return temp;
 	}
 	
@@ -40,9 +42,20 @@ public class HillClimbingLabCandidate extends LabCandidate {
 				Double d = Tool.returnRandomInRange(minP, maxP, Config.PERCENT);
 				this.getCandidateMap().put(Config.MUTATIONPROBABILITY_S, d);
 			}
+			
+			minI = 10.0;
+			
+			if(Tool.rollDice(probability)){
+				Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
+				this.getCandidateMap().put(Config.GENERATION_S, d);
+			}
+			
 		} 
 		
 		if(labParameters.getSecondaryMetaheuristicType().equals(Config.METAHEURISTICTYPEGENETICALGORITHM_S)){
+			
+			minI = 2.0;
+			maxI = 20.0;
 			
 			if(Tool.rollDice(probability)){
 				Double d = Tool.returnRandomInRange(minP, maxP, Config.PERCENT);
@@ -58,9 +71,19 @@ public class HillClimbingLabCandidate extends LabCandidate {
 				Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
 				this.getCandidateMap().put(Config.INITIALCANDIDATEPOPULATION_S, d);
 			}
+			
+			minI = 8.0;
+			
+			if(Tool.rollDice(probability)){
+				Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
+				this.getCandidateMap().put(Config.GENERATION_S, d);
+			}
 		} 
 		
 		if(labParameters.getSecondaryMetaheuristicType().equals(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S)){
+			
+			minI = 2.0;
+			maxI = 20.0;
 			
 			Double d = Tool.returnRandomInRange(minP, maxP, Config.PERCENT);
 			Double e = Tool.returnRandomInRange(0.0, maxP-d, Config.PERCENT);
@@ -81,13 +104,16 @@ public class HillClimbingLabCandidate extends LabCandidate {
 			
 			if(Tool.rollDice(probability)){
 				this.getCandidateMap().put(Config.INITIALCANDIDATEPOPULATION_S, g);
-			}			
+			}
+			
+			minI = 8.0;
+			
+			if(Tool.rollDice(probability)){
+				d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
+				this.getCandidateMap().put(Config.GENERATION_S, d);
+			}
 		}
 		
-		if(Tool.rollDice(probability)){
-			Double d = Tool.returnRandomInRange(minI, maxI, Config.NATURAL);
-			this.getCandidateMap().put(Config.GENERATION_S, d);
-		}
 		
 	}
 	

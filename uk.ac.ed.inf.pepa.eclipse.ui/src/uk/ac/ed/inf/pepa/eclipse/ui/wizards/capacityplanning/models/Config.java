@@ -60,7 +60,8 @@ public abstract class Config {
 	
 	//output to view
 	public static final String VTOPFITNESS = "Top fitness:";
-	public static final String VOVERALLFITTEST = "Overall fittest candidate:";
+	public static final String VOVERALLFITTEST = "Overall fittest system equation candidate:";
+	public static final String VOVERALLFITTESTL = "Overall fittest lab candidate:";
 	public static final String VLABMEANFITNESS = "Lab mean fitness:";
 	public static final String VSTANDARDDEV = "Standard deviation:";
 	public static final String VLABMEANRESPONSETIME = "Mean lab response time:";

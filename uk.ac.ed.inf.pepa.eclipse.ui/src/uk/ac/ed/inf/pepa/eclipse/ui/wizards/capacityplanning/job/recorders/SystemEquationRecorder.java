@@ -13,6 +13,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.RecorderCandidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.SystemEquationCandidate;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.MetaHeuristicParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 
 public class SystemEquationRecorder extends Recorder {
@@ -22,14 +23,16 @@ public class SystemEquationRecorder extends Recorder {
 	private JSONObject json;
 	private ArrayList<RecorderCandidate> finals;
 	private double lastFinished;
+	private MetaHeuristicParameters metaheuristicParameters;
 	
-	public SystemEquationRecorder(RecordParameters recordParameters){
+	public SystemEquationRecorder(RecordParameters recordParameters, MetaHeuristicParameters metaheuristicParameters){
 		super(recordParameters);
 		nameToPerformanceResultsMapHash = new HashMap<String,HashMap<String,Double>>();
 		this.candidateNameToFitnessHash = new HashMap<String, Double>();
 		this.json = new JSONObject("temp");
 		this.finals = new ArrayList<RecorderCandidate>();
 		this.lastFinished = -1.0;
+		this.metaheuristicParameters = metaheuristicParameters;
 	}
 	
 	@Override
@@ -37,10 +40,10 @@ public class SystemEquationRecorder extends Recorder {
 		
 		Candidate d = (Candidate) new RecorderCandidate(c.getFitness(),
 				c.getName(),
-				c.getCreatedAt());
+				c.getCreatedAt(),
+				((SystemEquationCandidate) c).getPerformanceResultMap());
 		d.setCandidateMap(c.getCandidateMap());
 		d.setGeneration(generation);
-		((RecorderCandidate) d).setMyPerformanceMap(((SystemEquationCandidate) c).getPerformanceResultMap());
 		if(d.getCreatedAt() > this.lastFinished)
 			this.lastFinished= d.getCreatedAt();
 	
@@ -156,7 +159,12 @@ public class SystemEquationRecorder extends Recorder {
 		
 		this.json.put("\"Filename\":", "\"" + recordParameters.getIFile().getName() + "\",\n");
 		
-		this.json.put("MHParams",recordParameters.getMhParams());
+		if(!recordParameters.isHasSecondary()){
+			this.json.put("MHParams",recordParameters.getMhParamsRoot());
+		} else {
+			this.json.put("MHParams Root",recordParameters.getMhParamsRoot());
+			this.json.put("MHParams Candidate",metaheuristicParameters.getParameters());
+		}
 		
 		this.json.put("MinPop",recordParameters.getMinPop());
 				

@@ -27,6 +27,10 @@ public class MetaHeuristicParameters extends Parameters {
 		}
 	}
 	
+	public MetaHeuristicParameters copySelf(){
+		return new MetaHeuristicParameters(this.parameters);
+	}
+	
 	public MetaHeuristicParameters(HashMap<String,Double> parameters){
 		this.setParameters(Tool.copyHashMap(parameters));
 	}

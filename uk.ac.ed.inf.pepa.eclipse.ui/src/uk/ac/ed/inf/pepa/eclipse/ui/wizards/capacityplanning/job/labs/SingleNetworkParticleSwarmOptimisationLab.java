@@ -33,7 +33,9 @@ public class SingleNetworkParticleSwarmOptimisationLab extends SingleNetworkLab 
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor){
 		
-		Recorder temp = new SystemEquationRecorder(recordParameters);
+		Recorder temp = new SystemEquationRecorder(recordParameters, metaheuristicParameters.copySelf());
+		
+		
 		
 		return ((Metaheuristic) new ParticleSwarmOptimisation(metaheuristicParameters, 
 				getSystemEquationCandidate(temp), 

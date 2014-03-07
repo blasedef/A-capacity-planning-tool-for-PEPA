@@ -38,10 +38,12 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 			postProcessHillClimbing(configurationModel.metaheuristicParametersCandidateLeaf);
 		
 		primaryLabParameters = new LabParameters(configurationModel, true);
-		recordParameters = new RecordParameters(configurationModel);
+		
 		primaryMetaheuristicParameters = new MetaHeuristicParameters(configurationModel, true);
 		systemEquationCandidateParameters = new SystemEquationCandidateParameters(configurationModel);
 		systemEquationFitnessFunctionParameters = new SystemEquationFitnessFunctionParameters(configurationModel);
+		
+		recordParameters = new RecordParameters(configurationModel);
 		
 		//select network type, then primary metaheuristic
 		if(configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){

@@ -14,6 +14,10 @@ public class LabCandidate extends Candidate {
 	protected CandidateParameters candidateParameters;
 	protected String name;
 	protected LabParameters labParameters;
+	protected String bestName;
+	protected Double bestSystemEquationFitness;
+	protected HashMap<String,Double> bestPerformanceResultsMap;
+	protected CandidateParameters bestSystemEquationCandidateParameters;
 	
 	public LabCandidate(int i,
 			LabParameters labParameters,
@@ -26,6 +30,7 @@ public class LabCandidate extends Candidate {
 		this.fitnessFunction = (LabFitnessFunction) fitnessFunction;
 		this.setCandidateMap(((LabFitnessFunction) fitnessFunction).getCandidateMap());
 		this.name = "";
+		this.bestPerformanceResultsMap = new HashMap<String,Double>();
 	}
 
 	@Override
@@ -59,6 +64,7 @@ public class LabCandidate extends Candidate {
 				this.fitnessFunction.copySelf(),
 				this.candidateParameters);
 		temp.setCandidateMap(Tool.copyHashMap(this.candidateMap));
+		temp.setPerformanceResultMap(this.bestPerformanceResultsMap);
 		temp.setFitness(this.fitness);
 		((LabCandidate) temp).setName(this.name);
 		return temp;
@@ -144,15 +150,24 @@ public class LabCandidate extends Candidate {
 		this.fitness = fitnessFunction.getFitness(candidateMap);
 		ArrayList<Candidate> temp = ((LabFitnessFunction) fitnessFunction).getTop();
 		
-		this.setName(temp.get(temp.size() - 1).getName() 
-		                         + ",fitness:" 
-		                         + temp.get(temp.size() - 1).getFitness() 
-		                         + ","
-		                         + super.getName());
+		this.bestSystemEquationFitness = temp.get(temp.size() - 1).getFitness();
+		this.bestPerformanceResultsMap = Tool.copyHashMap((temp.get(temp.size() - 1)).getPerformanceResultMap());
+		this.bestName = temp.get(temp.size() - 1).getName();
+		
+		this.setName(super.getName() + "@" + this.bestName);
 	}
 	
 	public ArrayList<Candidate> getTop(){
 		return ((LabFitnessFunction) fitnessFunction).getTop();
+	}
+
+	@Override
+	public HashMap<String, Double> getPerformanceResultMap() {
+		return this.bestPerformanceResultsMap;
+	}
+	
+	public void setPerformanceResultMap(HashMap<String,Double> performanceResultsMap){
+		this.bestPerformanceResultsMap = Tool.copyHashMap(performanceResultsMap);
 	}
 	
 }

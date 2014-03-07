@@ -163,4 +163,8 @@ public abstract class Candidate implements Comparator<Candidate>, Comparable<Can
 		
 	}
 	
+	public abstract HashMap<String,Double> getPerformanceResultMap();
+	
+	public abstract void setPerformanceResultMap(HashMap<String,Double> map);
+	
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.Tool;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.candidates.Candidate;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Lab;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.SingleNetworkGeneticAlgorithmLab;
@@ -49,7 +50,7 @@ public class LabFitnessFunction extends FitnessFunction{
 		this.top = new ArrayList<Candidate>();
 		this.fitnessArray = new Double[3];
 		
-		this.metaheuristicParameters = new MetaHeuristicParameters(metaheuristicParameters.getParameters());
+		this.metaheuristicParameters = new MetaHeuristicParameters(Tool.copyHashMap(metaheuristicParameters.getParameters()));
 		
 		if(labParameters.getSecondaryMetaheuristicType().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
 			

@@ -86,5 +86,17 @@ public class ParticleSwarmOptimisationCandidate extends Candidate {
 		
 	}
 
+	@Override
+	public HashMap<String, Double> getPerformanceResultMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPerformanceResultMap(HashMap<String, Double> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

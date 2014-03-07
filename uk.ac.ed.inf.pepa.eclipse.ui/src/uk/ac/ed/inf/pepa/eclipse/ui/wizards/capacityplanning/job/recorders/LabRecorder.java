@@ -22,7 +22,8 @@ public class LabRecorder extends Recorder {
 		
 		Candidate d = (Candidate) new RecorderCandidate(c.getFitness(),
 				c.getName(),
-				c.getCreatedAt());
+				c.getCreatedAt(),
+				c.getPerformanceResultMap());
 		d.setCandidateMap(c.getCandidateMap());
 		d.setGeneration(generation);
 	

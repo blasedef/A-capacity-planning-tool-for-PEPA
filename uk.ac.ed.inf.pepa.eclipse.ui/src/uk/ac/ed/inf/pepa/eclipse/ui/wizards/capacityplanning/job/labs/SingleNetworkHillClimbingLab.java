@@ -33,7 +33,8 @@ public class SingleNetworkHillClimbingLab extends SingleNetworkLab {
 	@Override
 	public Metaheuristic setupLab(IProgressMonitor monitor){
 		
-		Recorder temp = new SystemEquationRecorder(recordParameters);
+		Recorder temp = new SystemEquationRecorder(recordParameters, metaheuristicParameters.copySelf());
+		
 		
 		return ((Metaheuristic) new HillClimbing(metaheuristicParameters, 
 				getSystemEquationCandidate(temp), 
