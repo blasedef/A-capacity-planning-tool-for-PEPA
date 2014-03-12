@@ -96,45 +96,26 @@ public class CapacityPlanningWizard extends Wizard  {
 	
 	private IWizardPage updateAndGetMetaHeristicConfigurationPage(){
 		
-		((MetaheuristicParameters) configurationModel.metaheuristicParametersRoot).update(configurationModel.dropDownListList.get(1).getValue());
-
-		boolean chained = !configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S);
-		boolean pipeline = configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINPIPELINE_S);
-		
-		if(!chained){
-			
-			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
-					configurationModel.metaheuristicParametersRoot,
-					configurationModel.labParametersRoot,
-					null,
-					false,
-					false);
-			addPage(this.metaheuristicParameterConfigurationPageOne);
-			
-			return this.metaheuristicParameterConfigurationPageOne;
-			
+		if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S)){
+			((MetaheuristicParameters) configurationModel.metaheuristicParametersRoot).update(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S);
 		} else {
-			
-			
-			metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
-					configurationModel.metaheuristicParametersRoot,
-					configurationModel.labParametersRoot,
-					configurationModel.secondDropDownListList,
-					chained,
-					pipeline);
-			addPage(this.metaheuristicParameterConfigurationPageOne);
-			
-			return this.metaheuristicParameterConfigurationPageOne;
-
+			((MetaheuristicParameters) configurationModel.metaheuristicParametersRoot).update(Config.METAHEURISTICTYPEHILLCLIMBING_S);
 		}
+
+		metaheuristicParameterConfigurationPageOne = new MetaheuristicParameterConfigurationPage(pageTitle, 
+				configurationModel.metaheuristicParametersRoot,
+				configurationModel.labParametersRoot,
+				null,
+				false,
+				false);
+		addPage(this.metaheuristicParameterConfigurationPageOne);
+		
+		return this.metaheuristicParameterConfigurationPageOne;
 		
 	}
 	
 	
 	private IWizardPage updateAndGetODEPage(){
-		
-		//ensure leaf candidate has some values, this really needs to be in a better place 
-		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).update(configurationModel.secondDropDownListList.get(0).getValue());
 		
 		ordinaryDifferentialEquationConfigurationPage = new OrdinaryDifferentialEquationConfigurationPage(pageTitle, 
 				configurationModel.configPEPA, 
@@ -180,8 +161,7 @@ public class CapacityPlanningWizard extends Wizard  {
 		((PopulationMinAndMax) configurationModel.systemEquationPopulationRanges).update(configurationModel.configPEPA.getSystemEquation(), 
 				configurationModel.configPEPA.getInitialPopulation());
 		((PopulationWeights) configurationModel.populationWeights).update(configurationModel.configPEPA.getSystemEquation(), false);
-		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).update(configurationModel.dropDownListList.get(1).getValue());
-
+		((MetaheuristicParameters) configurationModel.metaheuristicParametersCandidateLeaf).getLeftMap().remove(Config.MUTATIONPROBABILITY_S); 
 	}
 	
 	
@@ -230,20 +210,9 @@ public class CapacityPlanningWizard extends Wizard  {
 	@Override
 	public boolean canFinish(){
 		
-		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			
-			
-			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
-					this.fitnessFunctionConfigurationPage.isPageComplete() && 
-					this.metaheuristicParameterConfigurationPageOne.isPageComplete() &&
-					this.metaheuristicParameterConfigurationPageTwo.isPageComplete());
-		} else {
-			
-			
-			return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
+		return (this.ordinaryDifferentialEquationConfigurationPage.isPageComplete() && 
 					this.fitnessFunctionConfigurationPage.isPageComplete() && 
 					this.metaheuristicParameterConfigurationPageOne.isPageComplete());
-		}
 		
 		
 	}

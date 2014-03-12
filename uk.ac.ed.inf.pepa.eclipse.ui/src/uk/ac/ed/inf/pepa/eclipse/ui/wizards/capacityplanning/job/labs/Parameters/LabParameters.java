@@ -33,7 +33,7 @@ public class LabParameters extends Parameters {
 		
 		this.totalWork = 1;
 		
-		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+		if(!configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S)){
 			totalWork = configurationModel.labParametersCandidateLeaf.getLeftMap().get(Config.EXPERIMENTS_S).intValue();
 			totalWork *= configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().get(Config.GENERATION_S).intValue();
 			totalWork *= 50;

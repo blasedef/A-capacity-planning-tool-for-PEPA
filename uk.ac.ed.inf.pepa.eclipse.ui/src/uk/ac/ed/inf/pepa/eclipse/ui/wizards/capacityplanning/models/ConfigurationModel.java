@@ -36,9 +36,7 @@ public class ConfigurationModel {
 		dropDownListList = new ArrayList<DropDownLists>();
 		
 		dropDownListList.add(new EvaluatorType());
-		dropDownListList.add(new MetaheuristicType());
-		dropDownListList.add(new NetworkType());
-		//dropDownListsList.add(new AdditionalCosts());
+		dropDownListList.add(new SearchType());
 		
 		systemEquationFitnessWeights = new FitnessFunctionWeighting();
 		metaheuristicFitnessWeights = new FitnessFunctionWeighting();
@@ -50,6 +48,7 @@ public class ConfigurationModel {
 		//chained settings
 		labParametersCandidateLeaf = new LabParameters();
 		metaheuristicParametersCandidateLeaf = new MetaheuristicParameters();
+		((MetaheuristicParameters) metaheuristicParametersCandidateLeaf).update(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S);
 		
 		secondDropDownListList = new ArrayList<DropDownLists>();
 		secondDropDownListList.add(new MetaheuristicType());

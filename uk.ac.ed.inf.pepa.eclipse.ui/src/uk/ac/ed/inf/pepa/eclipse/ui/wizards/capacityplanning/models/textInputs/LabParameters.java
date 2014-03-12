@@ -13,7 +13,7 @@ public class LabParameters extends TextInputs {
 	public LabParameters (){
 		super("Lab parameters setup");
 		
-		this.defaultMapping.put(Config.EXPERIMENTS_S,10.0);
+		this.defaultMapping.put(Config.EXPERIMENTS_S,1.0);
 		
 		this.leftMap.put(Config.EXPERIMENTS_S, this.defaultMapping.get(Config.EXPERIMENTS_S));
 		

@@ -45,9 +45,10 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		
 		this.configurationModel = configurationModel;
 		
-		if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S))
+		if(configurationModel.dropDownListList.get(1).getValue().equals(Config.SEARCHDRIVEN_S))
 			postProcessHillClimbing(configurationModel.metaheuristicParametersRoot);
-			postProcessHillClimbing(configurationModel.metaheuristicParametersCandidateLeaf);
+			configurationModel.metaheuristicParametersCandidateLeaf.getLeftMap().remove(Config.MUTATIONPROBABILITY_S);
+			//postProcessHillClimbing(configurationModel.metaheuristicParametersCandidateLeaf);
 		
 		primaryLabParameters = new LabParameters(configurationModel, true);
 		
@@ -58,7 +59,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		recordParameters = new RecordParameters(configurationModel);
 		
 		//select network type, then primary metaheuristic
-		if(configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+		if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S)){
 			
 			
 			
@@ -88,7 +89,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 				
 			}
 			//driven
-		} else if(configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINDRIVEN_S)){
+		} else if(configurationModel.dropDownListList.get(1).getValue().equals(Config.SEARCHDRIVEN_S)){
 			
 			//setup secondary lab
 			LabParameters secondaryLabParameters = new LabParameters(configurationModel, false);
@@ -96,7 +97,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 			MetaHeuristicParameters secondaryMetaheuristicParameters = new MetaHeuristicParameters(configurationModel, false);
 			
 			//hill climbing
-			if(configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEHILLCLIMBING_S)){
+			if(configurationModel.dropDownListList.get(1).getValue().equals(Config.SEARCHDRIVEN_S)){
 				
 				this.lab = new DrivenNetworkHillClimbingLab(primaryLabParameters,
 						secondaryLabParameters,
@@ -180,13 +181,9 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 	 */
 	public void createJSON(){
 		
-		String networkType = configurationModel.dropDownListList.get(2).getValue() + "_";
-		String metas = "$"+configurationModel.dropDownListList.get(1).getValue();
-		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			metas += "_$" + configurationModel.secondDropDownListList.get(0).getValue();
-		}
+		String networkType = configurationModel.dropDownListList.get(1).getValue();
 		
-		this.json = new JSONObject(networkType+"_"+metas);
+		this.json = new JSONObject(networkType);
 		
 		for(Results r : CapacityListenerManager.results){
 			this.json.put(r.key,r.value);
@@ -209,11 +206,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		    // Directory creation failed
 		}
 		
-		String networkType = configurationModel.dropDownListList.get(2).getValue() + "_";
-		String metas = configurationModel.dropDownListList.get(1).getValue();
-		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
-			metas += "_" + configurationModel.secondDropDownListList.get(0).getValue();
-		}
+		String networkType = configurationModel.dropDownListList.get(1).getValue();
 		
 		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
 				ResourceUtilities.changeExtension(
@@ -225,8 +218,6 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		+ handle.getName()
 		+ "_"
 		+ networkType
-		+ "_" 
-		+ metas
 		+ ".json";
 		
 		PrintWriter writer;

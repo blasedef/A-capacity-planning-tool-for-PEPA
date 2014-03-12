@@ -199,51 +199,51 @@ public class RecordManager {
 
 		ArrayList<Results> temp = new ArrayList<Results>();
 		
-		temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()+",\n"));
+		temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()));
 		if(this.bestName.contains("@")){
 			String[] tempStringArray = this.bestName.toString().split("@");
-			temp.add(new Results(Config.VOVERALLFITTEST + "{",tempStringArray[1] + "},\n"));
-			temp.add(new Results(Config.VOVERALLFITTESTL+ "{",tempStringArray[0] + "},\n"));
-			temp.add(new Results("\"Best system equation fitness\":" + "{",tempStringArray[2] + "},\n"));
+			temp.add(new Results(Config.VOVERALLFITTEST,tempStringArray[1]));
+			temp.add(new Results(Config.VOVERALLFITTESTL,tempStringArray[0]));
+			temp.add(new Results("Best system equation fitness:", tempStringArray[2].split(":")[1]));
 		} else {
-			temp.add(new Results(Config.VOVERALLFITTEST + "{",this.bestName.toString()+ "},\n"));
+			temp.add(new Results(Config.VOVERALLFITTEST,this.bestName.toString()));
 		}
 		
 		String tempString = "";
 		for(Map.Entry<String, Double> entry : bestPerformanceMap.entrySet()){
-			tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
+			tempString += ""+entry.getKey() + ":" + entry.getValue() + ","; 
 		}
 		
 		tempString = tempString.substring(0,tempString.length() - 1);
 		
-		temp.add(new Results(Config.VLABBESTPERFORMANCE + "{", tempString + "},\n"));
+		temp.add(new Results(Config.VLABBESTPERFORMANCE, tempString));
 		if(!this.totalMeanTimeTaken.toString().equals("0.0")){
-			temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString() + ",\n"));
-			temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString() + ",\n"));
-			temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString() + ",\n"));
+			temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
+			temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
+			temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
 		}
 		
-		temp.add(new Results("\"Top ten results\":{\n",""));
+		temp.add(new Results("Top ten results","----"));
 		
-		for(int i = this.finals.size() - 1; i >= 1 ; i--){
+		for(int i = this.finals.size() - 1; i >= 0 ; i--){
 			if(i == this.finals.size() - 1){
-				temp.add(new Results("\"1st best experiment\":","{"));
+				temp.add(new Results("\"1st best experiment\":",""));
 			} else if ( i == this.finals.size() - 2){
-				temp.add(new Results("\"2nd best experiment\":","{"));
+				temp.add(new Results("\"2nd best experiment\":",""));
 			} else if ( i == this.finals.size() - 3){
-				temp.add(new Results("\"3rd best experiment\":","{"));
+				temp.add(new Results("\"3rd best experiment\":",""));
 			} else {
-				temp.add(new Results("\"" + (this.finals.size() - i) +"th best experiment\":","{"));
+				temp.add(new Results("" + (this.finals.size() - i) +"th best experiment:",""));
 			}
 			if(this.finals.get(i).getName().contains("@")){
 				String[] tempStringArray = this.finals.get(i).getName().split("@");
-				temp.add(new Results("\"system equation\":{",tempStringArray[1] + "},\n"));
-				temp.add(new Results("\"lab candidate\":{",tempStringArray[0] + "},\n"));
+				temp.add(new Results("system equation:",tempStringArray[1]));
+				temp.add(new Results("lab candidate:",tempStringArray[0]));
 			} else {
-				temp.add(new Results("\"system equation\":{",this.finals.get(i).getName() + "},\n"));
+				temp.add(new Results("system equation:",this.finals.get(i).getName()));
 			}
 			
-			temp.add(new Results("\"fitness\":" , "" + this.finals.get(i).getFitness() + ",\n"));
+			temp.add(new Results("fitness:" , "" + this.finals.get(i).getFitness()));
 			
 			tempString = "";
 			for(Map.Entry<String, Double> entry : this.finals.get(i).getPerformanceResultMap().entrySet()){
@@ -252,37 +252,11 @@ public class RecordManager {
 			
 			tempString = tempString.substring(0,tempString.length() - 1);
 			
-			temp.add(new Results("\"performance\":{" , "" + tempString + "}"));
+			temp.add(new Results("performance:" , "" + tempString));
 			
-			temp.add(new Results("","},\n"));
 		}
 		
-		temp.add(new Results("\"" + (this.finals.size()) +"th best experiment\":","{"));
-		
-		if(this.finals.get(0).getName().contains("@")){
-			String[] tempStringArray = this.finals.get(0).getName().split("@");
-			temp.add(new Results("\"system equation\":{",tempStringArray[1] + "},\n"));
-			temp.add(new Results("\"lab candidate\":{",tempStringArray[0] + "},\n"));
-		} else {
-			temp.add(new Results("\"system equation\":{",this.finals.get(0).getName() + "},\n"));
-		}
-		
-		temp.add(new Results("\"fitness\":" , "" + this.finals.get(0).getFitness() + ",\n"));
-		
-		tempString = "";
-		for(Map.Entry<String, Double> entry : this.finals.get(0).getPerformanceResultMap().entrySet()){
-			tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
-		}
-		
-		tempString = tempString.substring(0,tempString.length() - 1);
-		
-		temp.add(new Results("\"performance\":{" , "" + tempString + "}"));
-		
-		temp.add(new Results("","}\n"));
-		
-		temp.add(new Results("","}"));
-		
-		temp.add(new Results("","}"));
+		temp.add(new Results("----","----"));
 		
 		return temp;
 		

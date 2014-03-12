@@ -10,7 +10,7 @@ public class EvaluatorType extends DropDownLists {
 		this.key = Config.EVALUATORTYPE_S;
 		this.value = Config.EVALUATORTHROUGHPUT_S;
 		this.options = new String[] {Config.EVALUATORTHROUGHPUT_S, Config.EVALUATORAVERAGERESPONSETIME_S};
-		
+		this.description = "Choose the performance evaluation type:";
 	}
 
 }

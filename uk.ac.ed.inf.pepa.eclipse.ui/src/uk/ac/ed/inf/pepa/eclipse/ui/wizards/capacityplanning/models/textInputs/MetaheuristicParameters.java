@@ -47,7 +47,7 @@ public class MetaheuristicParameters extends TextInputs {
 		
 		this.defaultMapping.put(Config.GENERATION_S,10.0);
 		this.defaultMapping.put(Config.GENERATIONHC_S,100.0);
-		this.defaultMapping.put(Config.MUTATIONPROBABILITY_S,0.02);
+		this.defaultMapping.put(Config.MUTATIONPROBABILITY_S,0.5);
 		this.defaultMapping.put(Config.CROSSOVERPROBABILITY_S,0.2);
 		this.defaultMapping.put(Config.INITIALCANDIDATEPOPULATION_S,10.0);
 		this.defaultMapping.put(Config.PERSONALBEST,0.33);

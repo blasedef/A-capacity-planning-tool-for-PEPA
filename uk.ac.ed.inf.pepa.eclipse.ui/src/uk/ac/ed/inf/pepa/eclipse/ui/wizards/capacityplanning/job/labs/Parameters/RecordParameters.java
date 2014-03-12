@@ -28,7 +28,7 @@ public class RecordParameters extends Parameters{
 	
 	public RecordParameters(ConfigurationModel configurationModel){
 		this.setMetaheuristicType(configurationModel.dropDownListList.get(1).getValue());
-		setHasSecondary(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S));
+		setHasSecondary(!configurationModel.dropDownListList.get(1).getValue().equals(Config.METAHEURISTICTYPEPARTICLESWARMOPTIMISATION_S));
 			//this.setSecondaryMetaheuristicType(configurationModel.secondDropDownListList.get(0).getValue());
 		this.setMinPop(Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getLeftMap()));
 		this.setMaxPop(Tool.copyHashMap(configurationModel.systemEquationPopulationRanges.getRightMap()));

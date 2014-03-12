@@ -33,6 +33,7 @@ public class MetaHeuristicParameters extends Parameters {
 	
 	public MetaHeuristicParameters(HashMap<String,Double> parameters){
 		this.setParameters(Tool.copyHashMap(parameters));
+		
 	}
 
 	public void setParameters(HashMap<String,Double> parameters) {
