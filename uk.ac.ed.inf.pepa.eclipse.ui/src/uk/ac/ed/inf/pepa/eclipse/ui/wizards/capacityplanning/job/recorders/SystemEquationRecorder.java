@@ -189,34 +189,36 @@ public class SystemEquationRecorder extends Recorder {
 	
 	public void writeToDisk(int generation){
 		
-		this.createJSON();
-		
-		boolean success;
-		
-		success = (new File(recordParameters.getResultsFolder().addTrailingSeparator().toOSString())).mkdirs();
-		if (!success) {
-		    // Directory creation failed
-		}
-		
-		String filename = recordParameters.getResultsFolder().addTrailingSeparator().toOSString() 
-		+ Tool.getDateTime() 
-		+ "_" 
-		+ generation 
-		+ "_" 
-		+ getPopulations() 
-		+ ".json";
-		
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter(filename,"UTF-8");
-			writer.println(json.output());
-			writer.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!recordParameters.isHasSecondary()){
+			this.createJSON();
+			
+			boolean success;
+			
+			success = (new File(recordParameters.getResultsFolder().addTrailingSeparator().toOSString())).mkdirs();
+			if (!success) {
+			    // Directory creation failed
+			}
+			
+			String filename = recordParameters.getResultsFolder().addTrailingSeparator().toOSString() 
+			+ Tool.getDateTime() 
+			+ "_" 
+			+ generation 
+			+ "_" 
+			+ getPopulations() 
+			+ ".json";
+			
+			PrintWriter writer;
+			try {
+				writer = new PrintWriter(filename,"UTF-8");
+				writer.println(json.output());
+				writer.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

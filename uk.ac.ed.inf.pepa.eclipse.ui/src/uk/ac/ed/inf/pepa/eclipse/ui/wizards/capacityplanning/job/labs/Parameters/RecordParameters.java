@@ -47,8 +47,8 @@ public class RecordParameters extends Parameters{
 	public void setFileOutputPath(ConfigurationModel configurationModel){
 		
 		//regardless of how this is run, everyone saves to the same folder
-		setResultsFolder(new Path( ResourcesPlugin.getWorkspace().getRoot().getLocation().addTrailingSeparator().toOSString() 
-				+ "results_" 
+		setResultsFolder(new Path( ResourcesPlugin.getWorkspace().getRoot().getLocation().addTrailingSeparator().toOSString()
+				+ "/run/"
 				+ handle.getName()
 				+ "_"
 				+ configurationModel.dropDownListList.get(1).getValue()

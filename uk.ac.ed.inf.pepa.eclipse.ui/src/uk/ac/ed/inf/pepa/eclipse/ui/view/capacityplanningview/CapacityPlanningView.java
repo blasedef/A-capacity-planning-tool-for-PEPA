@@ -66,14 +66,6 @@ public class CapacityPlanningView extends ViewPart{
 		
 		String[] columnNames = new String[] {"Result Type","Result"};
 		int[] columnWidths = new int[] {300,100};
-//		int[] columnAlignments = new int[] {SWT.LEFT,SWT.LEFT};
-//		
-//		for(int i = 0; i < columnNames.length; i++){
-//			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
-//			tableColumn.setText(columnNames[i]);
-//			tableColumn.setWidth(columnWidths[i]);
-//		}
-		
 		TableViewerColumn resultKey = createTableViewerColumn(columnNames[0], columnWidths[0], 0);
 		resultKey.setLabelProvider(new ColumnLabelProvider() {
 			@Override

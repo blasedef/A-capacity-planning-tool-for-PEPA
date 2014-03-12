@@ -44,7 +44,7 @@ public class JSONObject {
 	}
 
 	public char[] output() {
-		output = output.substring(0,output.length() - 1);
+		output = output.substring(0,output.length() - 2);
 		output += "\n}";
 		return this.output.toCharArray();
 	}

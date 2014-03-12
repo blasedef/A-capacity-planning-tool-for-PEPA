@@ -98,7 +98,7 @@ public class LabFitnessFunction extends FitnessFunction{
 		this.lab.complete();
 		this.top = this.lab.getTop();
 		this.fitnessArray = this.lab.getResults();
-		return (this.fitnessArray[0] * .8) + (this.fitnessArray[1] * .1) + (this.fitnessArray[2] * .1);
+		return (this.fitnessArray[0] * .2) + (this.fitnessArray[1] * .1) + (this.fitnessArray[2] * .1) + (this.fitnessArray[3] * .6);
 	}
 	
 	public ArrayList<Candidate> getTop(){

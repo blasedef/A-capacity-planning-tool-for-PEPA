@@ -16,6 +16,7 @@ public class LabCandidate extends Candidate {
 	protected LabParameters labParameters;
 	protected String bestName;
 	protected Double bestSystemEquationFitness;
+	protected Double bestFitness;
 	protected HashMap<String,Double> bestPerformanceResultsMap;
 	protected CandidateParameters bestSystemEquationCandidateParameters;
 	
@@ -153,8 +154,10 @@ public class LabCandidate extends Candidate {
 		this.bestSystemEquationFitness = temp.get(temp.size() - 1).getFitness();
 		this.bestPerformanceResultsMap = Tool.copyHashMap((temp.get(temp.size() - 1)).getPerformanceResultMap());
 		this.bestName = temp.get(temp.size() - 1).getName();
+		this.bestFitness = temp.get(temp.size() - 1).getFitness();
 		
-		this.setName(super.getName() + "@" + this.bestName);
+		
+		this.setName(super.getName() + "@" + this.bestName + " @ \"fitness\":" + this.bestFitness);
 	}
 	
 	public ArrayList<Candidate> getTop(){

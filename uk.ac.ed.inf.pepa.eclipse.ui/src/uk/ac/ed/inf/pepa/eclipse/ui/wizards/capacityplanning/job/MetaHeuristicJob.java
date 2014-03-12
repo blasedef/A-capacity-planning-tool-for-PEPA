@@ -1,16 +1,26 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 
+import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.*;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.LabParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.MetaHeuristicParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.RecordParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.SystemEquationCandidateParameters;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.labs.Parameters.SystemEquationFitnessFunctionParameters;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.job.recorders.Results;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.ConfigurationModel;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
@@ -20,13 +30,15 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.models.TextInputs;
 public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 	
 	private Lab lab;
-	@SuppressWarnings("unused")
 	private ConfigurationModel configurationModel;
 	private LabParameters primaryLabParameters;
 	private RecordParameters recordParameters;
 	private MetaHeuristicParameters primaryMetaheuristicParameters;
 	private SystemEquationFitnessFunctionParameters systemEquationFitnessFunctionParameters;
 	private SystemEquationCandidateParameters systemEquationCandidateParameters;
+	
+	//temp
+	private JSONObject json;
 	
 	public MetaHeuristicJob(String name, ConfigurationModel configurationModel) {
 		super(name);
@@ -155,6 +167,87 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		CapacityListenerManager.results = lab.results;
 		CapacityListenerManager.listener.capacityPlanningJobCompleted();
 		
+		/**
+		 * temp inclusion of json output
+		 */
+		writeToDisk();
+		
+		
+	}
+	
+	/**
+	 * temp inclusion
+	 */
+	public void createJSON(){
+		
+		String networkType = configurationModel.dropDownListList.get(2).getValue() + "_";
+		String metas = "$"+configurationModel.dropDownListList.get(1).getValue();
+		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			metas += "_$" + configurationModel.secondDropDownListList.get(0).getValue();
+		}
+		
+		this.json = new JSONObject(networkType+"_"+metas);
+		
+		for(Results r : CapacityListenerManager.results){
+			this.json.put(r.key,r.value);
+		}
+		
+	}
+	
+	/**
+	 * temp inclusion
+	 * @param generation
+	 */
+	public void writeToDisk(){
+		
+		this.createJSON();
+		
+		boolean success;
+		
+		success = (new File(this.setFileOutputPath().toOSString())).mkdirs();
+		if (!success) {
+		    // Directory creation failed
+		}
+		
+		String networkType = configurationModel.dropDownListList.get(2).getValue() + "_";
+		String metas = configurationModel.dropDownListList.get(1).getValue();
+		if(!configurationModel.dropDownListList.get(2).getValue().equals(Config.CHAINSINGLE_S)){
+			metas += "_" + configurationModel.secondDropDownListList.get(0).getValue();
+		}
+		
+		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+						configurationModel.configPEPA.getPepaModel().getUnderlyingResource(), ""));
+		
+		String filename = this.setFileOutputPath().addTrailingSeparator().toOSString() 
+		+ Tool.getDateTime() 
+		+ "_"
+		+ handle.getName()
+		+ "_"
+		+ networkType
+		+ "_" 
+		+ metas
+		+ ".json";
+		
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(filename,"UTF-8");
+			writer.println(json.output());
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Path setFileOutputPath(){
+		
+		//regardless of how this is run, everyone saves to the same folder
+		return new Path( ResourcesPlugin.getWorkspace().getRoot().getLocation().addTrailingSeparator().toOSString() 
+				+ "results_summary");
 	}
 
 }

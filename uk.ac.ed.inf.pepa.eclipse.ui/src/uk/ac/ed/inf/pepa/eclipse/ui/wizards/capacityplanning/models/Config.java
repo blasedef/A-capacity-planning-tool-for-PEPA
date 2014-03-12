@@ -59,12 +59,12 @@ public abstract class Config {
 	public static final String ADDITIONALCOSTDESCRIPTION = " placeholder";
 	
 	//output to view
-	public static final String VTOPFITNESS = "Top fitness:";
-	public static final String VOVERALLFITTEST = "Overall fittest system equation candidate:";
-	public static final String VOVERALLFITTESTL = "Overall fittest lab candidate:";
-	public static final String VLABMEANFITNESS = "Lab mean fitness:";
-	public static final String VSTANDARDDEV = "Standard deviation:";
-	public static final String VLABMEANRESPONSETIME = "Mean lab response time:";
+	public static final String VTOPFITNESS = "\"Top fitness\":";
+	public static final String VOVERALLFITTEST = "\"Overall fittest system equation candidate\":";
+	public static final String VOVERALLFITTESTL = "\"Overall fittest lab candidate\":";
+	public static final String VLABMEANFITNESS = "\"Lab mean fitness\":";
+	public static final String VSTANDARDDEV = "\"Standard deviation\":";
+	public static final String VLABMEANRESPONSETIME = "\"Mean lab response time\":";
 	public static final String VLABTOP10 = "0";
 	public static final String VLABTOP9 = "1";
 	public static final String VLABTOP8 = "2";
@@ -75,6 +75,6 @@ public abstract class Config {
 	public static final String VLABTOP3 = "7";
 	public static final String VLABTOP2 = "8";
 	public static final String VLABTOP1 = "9";
-	public static final String VLABBESTPERFORMANCE = "Best performance:";
+	public static final String VLABBESTPERFORMANCE = "\"Best performance\":";
 	
 }
