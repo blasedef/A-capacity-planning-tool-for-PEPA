@@ -171,7 +171,7 @@ public class MetaHeuristicJob extends Job implements CapacityPlanningSubject {
 		/**
 		 * temp inclusion of json output
 		 */
-		writeToDisk();
+		//writeToDisk();
 		
 		
 	}

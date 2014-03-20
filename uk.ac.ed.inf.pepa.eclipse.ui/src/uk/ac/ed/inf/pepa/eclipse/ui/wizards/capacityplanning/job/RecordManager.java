@@ -72,10 +72,10 @@ public class RecordManager {
 	
 	public void writeRecordersToDisk() {
 		
-		for(int i = 0; i < this.recorders.size(); i++){
-			this.recorders.get(i).writeToDisk(i);
-			
-		}
+//		for(int i = 0; i < this.recorders.size(); i++){
+//			this.recorders.get(i).writeToDisk(i);
+//			
+//		}
 		
 	}
 
@@ -199,7 +199,7 @@ public class RecordManager {
 
 		ArrayList<Results> temp = new ArrayList<Results>();
 		
-		temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()));
+		//temp.add(new Results(Config.VTOPFITNESS,this.bestFitness.toString()));
 		if(this.bestName.contains("@")){
 			String[] tempStringArray = this.bestName.toString().split("@");
 			temp.add(new Results(Config.VOVERALLFITTEST,tempStringArray[1]));
@@ -209,19 +209,19 @@ public class RecordManager {
 			temp.add(new Results(Config.VOVERALLFITTEST,this.bestName.toString()));
 		}
 		
-		String tempString = "";
-		for(Map.Entry<String, Double> entry : bestPerformanceMap.entrySet()){
-			tempString += ""+entry.getKey() + ":" + entry.getValue() + ","; 
-		}
+//		String tempString = "";
+//		for(Map.Entry<String, Double> entry : bestPerformanceMap.entrySet()){
+//			tempString += ""+entry.getKey() + ":" + entry.getValue() + ","; 
+//		}
 		
-		tempString = tempString.substring(0,tempString.length() - 1);
-		
-		temp.add(new Results(Config.VLABBESTPERFORMANCE, tempString));
-		if(!this.totalMeanTimeTaken.toString().equals("0.0")){
-			temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
-			temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
-			temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
-		}
+//		tempString = tempString.substring(0,tempString.length() - 1);
+//		
+//		temp.add(new Results(Config.VLABBESTPERFORMANCE, tempString));
+//		if(!this.totalMeanTimeTaken.toString().equals("0.0")){
+//			temp.add(new Results(Config.VLABMEANFITNESS, this.mean.toString()));
+//			temp.add(new Results(Config.VSTANDARDDEV, this.standardDeviation.toString()));
+//			temp.add(new Results(Config.VLABMEANRESPONSETIME,this.totalMeanTimeTaken.toString()));
+//		}
 		
 		temp.add(new Results("Top ten results","----"));
 		
@@ -243,16 +243,16 @@ public class RecordManager {
 				temp.add(new Results("system equation:",this.finals.get(i).getName()));
 			}
 			
-			temp.add(new Results("fitness:" , "" + this.finals.get(i).getFitness()));
+//			temp.add(new Results("fitness:" , "" + this.finals.get(i).getFitness()));
 			
-			tempString = "";
-			for(Map.Entry<String, Double> entry : this.finals.get(i).getPerformanceResultMap().entrySet()){
-				tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
-			}
-			
-			tempString = tempString.substring(0,tempString.length() - 1);
-			
-			temp.add(new Results("performance:" , "" + tempString));
+//			tempString = "";
+//			for(Map.Entry<String, Double> entry : this.finals.get(i).getPerformanceResultMap().entrySet()){
+//				tempString += "\""+entry.getKey() + "\":" + entry.getValue() + ","; 
+//			}
+//			
+//			tempString = tempString.substring(0,tempString.length() - 1);
+//			
+//			temp.add(new Results("performance:" , "" + tempString));
 			
 		}
 		
