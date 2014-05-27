@@ -31,6 +31,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.capacityplanning.pages.*;
 
 public class CapacityPlanningWizard extends Wizard  {
 	
+	
 	//Page name
 	String pageTitle = "Metaheuristic Capacity Planning";
 	
