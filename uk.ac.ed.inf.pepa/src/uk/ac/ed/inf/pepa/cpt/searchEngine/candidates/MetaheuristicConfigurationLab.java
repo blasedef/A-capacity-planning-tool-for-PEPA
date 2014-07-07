@@ -2,7 +2,6 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.candidates;
 
 import java.util.HashMap;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import uk.ac.ed.inf.pepa.IProgressMonitor;
