@@ -113,8 +113,8 @@ public class CPT {
 			parameters.put(Config.LABGEN,
 					Double.parseDouble(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
 			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "10");
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "10");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "1");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "1");
 		}
 		
 		parameters.put(Config.LABPOP, 1.0);

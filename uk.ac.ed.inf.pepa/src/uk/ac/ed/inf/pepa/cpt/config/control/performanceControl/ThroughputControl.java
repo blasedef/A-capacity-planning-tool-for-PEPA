@@ -65,4 +65,9 @@ public class ThroughputControl extends PerformanceControl {
 		return collector;
 	}
 
+	@Override
+	public boolean setSelected(String name, boolean selected) {
+		return ((ActionList) this.myOptions).setSelectedHandler(name, selected);
+	}
+
 }

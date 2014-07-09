@@ -21,6 +21,7 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	private Double performanceResult;
 	private Double populationResult;
 	private String familyUID;
+	private boolean evaluatedSuccessFully;
 
 	public ModelConfigurationCandidateNode(String name,
 			HashMap<String, Double> parameters, 
@@ -38,6 +39,7 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		this.velocity = velocity;
 		this.fitnessFunction = new ModelConfigurationFitnessFunction();
 		this.familyUID = this.getName().split("-")[1];
+		this.evaluatedSuccessFully = true;
 	}
 	
 	public Double getTotalComponents(){
@@ -160,7 +162,7 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	}
 	
 	/**
-	 * reads from local maps, uses fitnessfunction object, returns results... 
+	 * reads from local maps, uses fitness function object, returns results... 
 	 */
 	public void updateFitness(){
 		this.fitness = this.fitnessFunction.assessFitness(this.myMap, this.performanceMap);
@@ -234,6 +236,11 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		}
 		
 		return (t < 3);
+		
+	}
+
+	public void switchFlag() {
+		this.evaluatedSuccessFully = !this.evaluatedSuccessFully;
 		
 	}
 

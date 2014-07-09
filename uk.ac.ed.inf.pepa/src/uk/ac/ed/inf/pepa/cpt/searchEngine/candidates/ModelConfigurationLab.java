@@ -29,7 +29,12 @@ public class ModelConfigurationLab extends Lab {
 		startExperiment(parameters);
 		
 	}
-	
+
+	public ModelConfigurationLab(CandidateNode node, IProgressMonitor myMonitor) {
+		this.myNode = node;
+		this.myMonitor = myMonitor;
+	}
+
 	public void startExperiment(HashMap<String,Double> parameters){
 		
 		for(int i = 0; i < myNode.getMyMap().get(Config.LABEXP); i++){
@@ -61,8 +66,18 @@ public class ModelConfigurationLab extends Lab {
 		
 		resultNode.registerChild(this.myNode);
 		
+		this.myNode = newNode;
+		
 		startExperiment(parameters);
 		
+	}
+
+	public CandidateNode getNode() {
+		return myNode;
+	}
+
+	public void setNode(CandidateNode node) {
+		this.myNode = node;
 	}
 
 }

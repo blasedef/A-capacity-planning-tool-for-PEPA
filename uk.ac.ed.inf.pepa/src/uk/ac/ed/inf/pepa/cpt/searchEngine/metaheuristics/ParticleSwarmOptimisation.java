@@ -163,7 +163,7 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		newPosition;
 		
 		originalVelocity = Utils.copyHashMap(modelConfiguration.getNode().getVelocity());
-		globalBestPosition = Utils.copyHashMap(this.myNode.getFittestNode().getMyMap());
+		globalBestPosition = this.myNode.getFittestNode().getMyMap();
 		localBestPosition = Utils.copyHashMap(modelConfiguration.getLocalBest().getMyMap());
 		newVelocity = new HashMap<String, Double>();
 		newPosition = new HashMap<String, Double>();
@@ -219,10 +219,12 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 			
 			np = p+v;
 			
+			//reflection
 			if(np < 0){
-				np = 0.0;
+				np = -np;
 			}
 			
+			//sticky
 			if(np > Double.parseDouble(CPTAPI.getPopulationControls().getValue(keys[i], Config.LABMAX))){
 				np = Double.parseDouble(CPTAPI.getPopulationControls().getValue(keys[i], Config.LABMAX));
 			}
@@ -238,10 +240,10 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		}
 		
 		if(!totalNotZero){
-			for(int i = 0; i < keys.length; i++){
-				newPosition.put(keys[i], 1.0);
-				newVelocity.put(keys[i], 0.0);
-			}
+			newPosition = modelConfiguration.getNode().getMyMap();
+//			for(int i = 0; i < keys.length; i++){
+//				newVelocity.put(keys[i], 0.0);
+//			}
 		}
 		
 		modelConfiguration.setParameters(Utils.copyHashMap(newPosition),

@@ -100,20 +100,33 @@ public class FluidSteadyState implements Runnable {
 			}
 			routine.obtainSteadyState(this.monitor);
 		} catch (DifferentialAnalysisException e) {
-			//System.err.println(e);
+			differentialAnalysisExeceptionHandling();
 		} catch (InterruptedException e) {
-			//System.err.println(e);
+			interupted();
 		}
 		
 		try{
 			computeResults(routine.getTimePoint(), routine.getSolution());
 		} catch (DifferentialAnalysisException e) {
-			//System.err.println(e);
+			differentialAnalysisExeceptionHandling();
 		}
 		
 		this.node.setODEResults(labels, results);
 		
 		cb.increment();
+		
+	}
+	
+	private void differentialAnalysisExeceptionHandling() {
+		this.node.switchFlag();
+		
+	}
+
+	public void interupted(){
+		
+		for(int i = 0; i < results.length; i++){
+			results[i] = 100000.0;
+		}
 		
 	}
 

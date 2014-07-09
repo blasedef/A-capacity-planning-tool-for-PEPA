@@ -17,6 +17,8 @@ public abstract class PerformanceControl implements Control {
 	
 	public abstract boolean setSelected(short processId, boolean selected);
 	
+	public abstract boolean setSelected(String name, boolean selected);
+	
 	public abstract ArrayList<HashMap<String,Short>> getOptions();
 	
 	public abstract IStatisticsCollector[] getCollectors(IPointEstimator[] estimators);

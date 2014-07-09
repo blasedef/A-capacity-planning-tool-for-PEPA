@@ -76,4 +76,9 @@ public class PopulationLevelControl extends PerformanceControl {
 		return collector;
 	}
 
+	@Override
+	public boolean setSelected(String name, boolean selected) {
+		return ((ProcessList) this.myOptions).setSelectedHandler(name, selected);
+	}
+
 }

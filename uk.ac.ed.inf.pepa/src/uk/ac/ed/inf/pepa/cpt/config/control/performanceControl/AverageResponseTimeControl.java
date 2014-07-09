@@ -103,4 +103,9 @@ public class AverageResponseTimeControl extends PerformanceControl {
 		return collector;
 	}
 
+	@Override
+	public boolean setSelected(String name, boolean selected) {
+		return ((ProcessList) this.myOptions).setSelectedART(name, selected);
+	}
+
 }

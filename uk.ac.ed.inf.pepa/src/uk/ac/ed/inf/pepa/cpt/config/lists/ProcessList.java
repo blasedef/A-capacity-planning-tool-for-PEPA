@@ -104,6 +104,10 @@ public class ProcessList implements IOptionList {
 		}
 	}
 	
+	public boolean setSelectedHandler(String name, boolean selected) {
+		return this.setSelectedHandler(this.getProcessId(name), selected);
+	}
+	
 	/**
 	 * given a processId (unique) set the underlying option
 	 * @param processId
@@ -201,6 +205,10 @@ public class ProcessList implements IOptionList {
 		}
 		
 	}
+	
+	public boolean setSelectedART(String name, boolean selected) {
+		return this.setSelectedART(this.getProcessId(name), selected);
+	}
 
 	public ArrayList<HashMap<String, Short>> getAllProcessIds() {
 		ArrayList<HashMap<String,Short>> allProcessIds = new ArrayList<HashMap<String,Short>>();
@@ -219,6 +227,11 @@ public class ProcessList implements IOptionList {
 		Integer i = myProcessIDToIndexMap.get(processId);
 		return this.myComponentToProcessOptionsMap.get(seq)[i].getLabel();
 	}
+	
+	public Short getProcessId(String name) {
+		return this.myLabelToProcessIDMap.get(name);
+	}
+
 	
 }
 

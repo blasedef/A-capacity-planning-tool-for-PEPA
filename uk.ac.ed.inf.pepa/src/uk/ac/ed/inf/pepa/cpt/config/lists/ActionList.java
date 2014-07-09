@@ -18,17 +18,20 @@ public class ActionList implements IOptionList {
 	
 	private HashMap<String,ActionOptions> myActionList;
 	private HashMap<Short,String> myActionIDToLabelMap;
+	private HashMap<String,Short> myLabelToActionIDMap;
 	
 	public ActionList(IParametricDerivationGraph graph){
 		
 		this.myActionList = new HashMap<String,ActionOptions>();
 		this.myActionIDToLabelMap = new HashMap<Short,String>();
+		this.myLabelToActionIDMap = new HashMap<String,Short>();
 		
 		HashMap<Short,String> idLabelMap = Utils.getActionIds(graph);
 		
 		for(Entry<Short, String> entry : idLabelMap.entrySet()){
 			this.myActionList.put(entry.getValue(), new ActionOptions(entry.getValue(),entry.getKey()));
 			this.myActionIDToLabelMap.put(entry.getKey(), entry.getValue());
+			this.myLabelToActionIDMap.put(entry.getValue(),entry.getKey());
 		}
 		
 	}
@@ -68,6 +71,10 @@ public class ActionList implements IOptionList {
 			return false;
 		}
 	}
+	
+	public boolean setSelectedHandler(String name, boolean selected) {
+		return setSelectedHandler(this.getActionID(name), selected);
+	}
 
 	private void setSelected(short actionId, boolean selected) {
 		String key = this.myActionIDToLabelMap.get(actionId);
@@ -89,6 +96,10 @@ public class ActionList implements IOptionList {
 
 	public String getLabel(Short short1) {
 		return this.myActionIDToLabelMap.get(short1);
+	}
+	
+	public Short getActionID(String name) {
+		return this.myLabelToActionIDMap.get(name);
 	}
 
 }

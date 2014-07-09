@@ -41,29 +41,20 @@ public class HillClimbing implements MetaHeuristics {
 				this.myMonitor, 
 				this.myNode);
 		
+		this.possibleCandidate = new ModelConfigurationLab(this.candidate.getNode(), this.myMonitor);
+		
 		int generations = this.myNode.getMyMap().get(Config.LABGEN).intValue();
-
-		this.possibleCandidate = new ModelConfigurationLab(possibleParameters,
-				this.myMonitor, 
-				this.myNode);
 		
 		for(int i = 1; i < generations; i++){
 			
-			System.out.println(parameters);
-			System.out.println(candidate.getFitness());
-			System.out.println(candidate.getFitnessNode().getMyMap());
-			System.out.println(candidate.getFitnessNode().getFitness());
+			this.possibleCandidate.setParameters(possibleParameters, this.myMonitor, this.myNode);
 			
 			if(possibleCandidate.getFitness() < candidate.getFitness()){
-				parameters = possibleParameters;
-				possibleParameters = mutateModelConfigurationLabParameters(parameters);
-				candidate = possibleCandidate;
-			} else {
-				possibleParameters = mutateModelConfigurationLabParameters(parameters);
-				possibleCandidate = new ModelConfigurationLab(possibleParameters,
-						this.myMonitor, 
-						this.myNode);
-			}
+				parameters = Utils.copyHashMap(possibleParameters);
+				candidate.setNode(possibleCandidate.getNode());
+			} 
+			
+			possibleParameters = mutateModelConfigurationLabParameters(parameters);
 			
 		}
 		
