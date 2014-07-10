@@ -128,5 +128,12 @@ public class CPTAPI {
 		};
 		
 	}
+
+	public static void printQueue() {
+		if(cpt != null){
+			cpt.printQueue();
+		};
+		
+	}
 	
 }

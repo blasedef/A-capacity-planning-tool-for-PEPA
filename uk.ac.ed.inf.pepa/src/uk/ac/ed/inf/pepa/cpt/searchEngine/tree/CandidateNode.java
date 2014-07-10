@@ -1,7 +1,9 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
@@ -201,5 +203,23 @@ public class CandidateNode implements Node {
 			return false;
 		}
 	}
+
+	public void fillQueue(PriorityQueue<ResultNode> resultsQueue) {
+		
+		for(int i = 0; i < this.children.size(); i++){
+			this.children.get(i).fillQueue(resultsQueue);
+		}
+		
+	}
+
+	public void fillQueue(double runTime, PriorityQueue<ResultNode> resultsQueue) {
+		
+		for(int i = 0; i < this.children.size(); i++){
+			this.children.get(i).fillQueue(this, runTime, resultsQueue);
+		}
+		
+	}
+
+
 	
 }

@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine.candidates;
 
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 import org.json.simple.JSONObject;
 
@@ -10,6 +11,7 @@ import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.HillClimbing;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.CandidateNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
 
 public class MetaheuristicConfigurationLab extends Lab {
 
@@ -40,6 +42,12 @@ public class MetaheuristicConfigurationLab extends Lab {
 	public void jsonUp(JSONObject obj){
 		
 		this.myNode.json(obj);
+	}
+
+	public void fillQueue(PriorityQueue<ResultNode> resultsQueue) {
+		
+		this.myNode.fillQueue(resultsQueue);
+		
 	}
 	
 

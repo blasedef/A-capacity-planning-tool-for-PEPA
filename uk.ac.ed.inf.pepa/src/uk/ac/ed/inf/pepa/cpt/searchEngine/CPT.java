@@ -1,22 +1,25 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.PriorityQueue;
+
+import org.json.simple.JSONObject;
 
 import uk.ac.ed.inf.pepa.IProgressMonitor;
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.MetaheuristicConfigurationLab;
-import java.io.FileWriter;
-import java.io.IOException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
 
 public class CPT {
 	
 	private MetaheuristicConfigurationLab root;
 	private IProgressMonitor monitor;
 	private JSONObject obj = new JSONObject();
+	private PriorityQueue<ResultNode> resultsQueue;
 	
 	public CPT (IProgressMonitor monitor){
 		
@@ -28,8 +31,6 @@ public class CPT {
 		
 		this.root = new MetaheuristicConfigurationLab(Utils.copyHashMap(getParameters()), 
 				this.monitor);
-		
-		
 		
 	}
 	
@@ -49,9 +50,6 @@ public class CPT {
 			e.printStackTrace();
 		}
 	 
-		//System.out.print(obj);
-		
-		
 		
 	}
 	
@@ -113,13 +111,122 @@ public class CPT {
 			parameters.put(Config.LABGEN,
 					Double.parseDouble(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
 			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "1");
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "1");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "2");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "2");
 		}
 		
 		parameters.put(Config.LABPOP, 1.0);
 		
 		return parameters;
+		
+	}
+	
+	public void createResultsQueue(){
+		
+		//remove duplicates
+		this.resultsQueue = new PriorityQueue<ResultNode>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean offer(ResultNode e){
+				if(this.contains(e)){
+					return false;
+				} else {
+					return super.offer(e);
+				}
+			}
+			
+			@Override
+			public boolean add(ResultNode e){
+				if(this.contains(e)){
+					return false;
+				} else {
+					return super.offer(e);
+				}
+			}
+			
+		};
+		
+		fillQueue();
+		
+		
+	}
+	
+	private void fillQueue(){
+		
+		this.root.fillQueue(this.resultsQueue);
+		
+		this.processQueue(10);
+		
+	}
+	
+	
+	private void processQueue(int count){
+		
+		//remove duplicates
+		PriorityQueue<ResultNode> tempQueue = new PriorityQueue<ResultNode>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean offer(ResultNode e){
+				if(this.contains(e)){
+					return false;
+				} else {
+					return super.offer(e);
+				}
+			}
+			
+			@Override
+			public boolean add(ResultNode e){
+				if(this.contains(e)){
+					return false;
+				} else {
+					return super.offer(e);
+				}
+			}
+			
+		};
+		
+		while(tempQueue.size() <= count){
+			
+			tempQueue.add(this.resultsQueue.poll());
+			
+		}
+		
+		this.resultsQueue = tempQueue;
+		
+	}
+
+	public void printQueue() {
+		
+		createResultsQueue();
+		
+		fillQueue();
+		
+		JSONObject obj2 = new JSONObject();
+		
+		while(this.resultsQueue.size() > 1){
+			resultsQueue.poll().print(obj2);
+		}
+		
+		try {
+			 
+			FileWriter file = new FileWriter("/home/twig/ordered.json");
+			file.write(obj2.toJSONString());
+			file.flush();
+			file.close();
+	 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

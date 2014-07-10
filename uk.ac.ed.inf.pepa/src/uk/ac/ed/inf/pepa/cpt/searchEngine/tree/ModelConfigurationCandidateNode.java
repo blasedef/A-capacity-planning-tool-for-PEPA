@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
@@ -241,6 +242,18 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 
 	public void switchFlag() {
 		this.evaluatedSuccessFully = !this.evaluatedSuccessFully;
+		
+	}
+	
+	public HashMap<String,Double> getPerformanceMap(){
+		return this.performanceMap;
+	}
+	
+	public void fillQueue(MetaHeuristicNode metaHeuristicNode,
+			CandidateNode candidateNode, double runTime,
+			PriorityQueue<ResultNode> resultsQueue) {
+		
+		resultsQueue.add(new ResultNode(runTime,candidateNode,metaHeuristicNode,this));
 		
 	}
 

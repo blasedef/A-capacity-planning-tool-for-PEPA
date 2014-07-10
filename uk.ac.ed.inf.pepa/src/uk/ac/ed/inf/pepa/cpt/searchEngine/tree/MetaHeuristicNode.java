@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
@@ -111,6 +112,23 @@ public class MetaHeuristicNode implements Node {
 
 	public void setFittestNode(ModelConfigurationCandidateNode node) {
 		this.fittestNode = node;
+		
+	}
+
+	public void fillQueue(PriorityQueue<ResultNode> resultsQueue) {
+		
+		for(int i = 0; i < this.children.size(); i++){
+			this.children.get(i).fillQueue((double) this.getRunTime(),resultsQueue);
+		}
+		
+	}
+
+	public void fillQueue(CandidateNode candidateNode, double runTime,
+			PriorityQueue<ResultNode> resultsQueue) {
+		
+		for(int i = 0; i < this.children.size(); i++){
+			((ModelConfigurationCandidateNode) this.children.get(i)).fillQueue(this, candidateNode, runTime,resultsQueue);
+		}
 		
 	}
 

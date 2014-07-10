@@ -30,6 +30,8 @@ public class HillClimbing implements MetaHeuristics {
 		
 		startAlgorithm();
 		
+		this.myNode.updateFinishTime();
+		
 	}
 	
 	public void startAlgorithm(){
@@ -57,11 +59,6 @@ public class HillClimbing implements MetaHeuristics {
 			possibleParameters = mutateModelConfigurationLabParameters(parameters);
 			
 		}
-		
-		System.out.println(parameters);
-		System.out.println(candidate.getFitness());
-		System.out.println(candidate.getFitnessNode().getMyMap());
-		System.out.println(candidate.getFitnessNode().getFitness());
 		
 	}
 	
