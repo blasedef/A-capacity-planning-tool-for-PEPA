@@ -166,7 +166,11 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	 * reads from local maps, uses fitness function object, returns results... 
 	 */
 	public void updateFitness(){
-		this.fitness = this.fitnessFunction.assessFitness(this.myMap, this.performanceMap);
+		if(this.evaluatedSuccessFully){
+			this.fitness = this.fitnessFunction.assessFitness(this.myMap, this.performanceMap);
+		} else {
+			this.fitness = 100000.0;
+		}
 		this.timeFinished = System.currentTimeMillis();
 		this.performanceResult = ((ModelConfigurationFitnessFunction)this.fitnessFunction).performance;
 		this.populationResult = ((ModelConfigurationFitnessFunction)this.fitnessFunction).population;
@@ -243,6 +247,10 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	public void switchFlag() {
 		this.evaluatedSuccessFully = !this.evaluatedSuccessFully;
 		
+	}
+	
+	public boolean hasConverged(){
+		return this.evaluatedSuccessFully;
 	}
 	
 	public HashMap<String,Double> getPerformanceMap(){

@@ -160,7 +160,7 @@ public class CPT {
 		
 		this.root.fillQueue(this.resultsQueue);
 		
-		this.processQueue(10);
+		//this.processQueue(10);
 		
 	}
 	

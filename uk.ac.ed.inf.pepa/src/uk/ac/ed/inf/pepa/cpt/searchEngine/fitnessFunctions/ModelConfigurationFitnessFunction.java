@@ -73,7 +73,7 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 					actual = 0.0;
 					workingMap.put(keys[i], actual);
 				} else {
-					actual = (target - actual);
+					actual = (actual - target);
 					workingMap.put(keys[i], actual);
 				}
 			}

@@ -93,14 +93,15 @@ public class AverageResponseTimeControl extends PerformanceControl {
 	@Override
 	public String[] getLabels() {
 		
-		Integer[] processIds = ((ProcessList) this.myOptions).getSelectedProcessIds();
-		String[] collector = new String[processIds.length];
-		
-		for(int i = 0; i < processIds.length; i++){
-			collector[i] = ((ProcessList) this.myOptions).getLabel(processIds[i].shortValue());
-		}
-		
-		return collector;
+//		Integer[] processIds = ((ProcessList) this.myOptions).getSelectedProcessIds();
+//		String[] collector = new String[processIds.length];
+//		
+//		for(int i = 0; i < processIds.length; i++){
+//			collector[i] = ((ProcessList) this.myOptions).getLabel(processIds[i].shortValue());
+//		}
+//		
+//		return collector;
+		return new String[] { "Average response time" };
 	}
 
 	@Override

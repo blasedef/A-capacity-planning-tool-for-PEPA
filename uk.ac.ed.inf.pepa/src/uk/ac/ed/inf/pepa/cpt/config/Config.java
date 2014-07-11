@@ -189,7 +189,7 @@ public class Config implements ConfigCallBack{
 		this.map = new OptionMap();
 		OptionMap.getDefaultValue(OptionMap.ODE_START_TIME);
 		OptionMap.getDefaultValue(OptionMap.ODE_STOP_TIME);
-		map.put(OptionMap.ODE_STOP_TIME,10.0);
+		map.put(OptionMap.ODE_STOP_TIME,1000.0);
 		OptionMap.getDefaultValue(OptionMap.ODE_STEP);
 		OptionMap.getDefaultValue(OptionMap.ODE_ATOL);
 		OptionMap.getDefaultValue(OptionMap.ODE_RTOL);

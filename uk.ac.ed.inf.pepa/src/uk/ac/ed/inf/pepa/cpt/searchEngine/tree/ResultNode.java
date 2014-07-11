@@ -103,6 +103,7 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		obj2.put("modelConfigurationRuntime",this.modelConfiguration.getRunTime());
 		obj2.put("psoRunTime",this.psoConfiguration.getRunTime());
 		obj2.put("labRunTime",this.hRunTime);
+		obj2.put("hasConverged",this.modelConfiguration.hasConverged());
 		
 		list.add(obj2);
 		
