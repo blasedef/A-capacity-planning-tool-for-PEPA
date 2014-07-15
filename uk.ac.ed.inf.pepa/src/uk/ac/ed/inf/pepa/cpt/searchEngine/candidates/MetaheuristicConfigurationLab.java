@@ -37,6 +37,8 @@ public class MetaheuristicConfigurationLab extends Lab {
 			new HillClimbing(Utils.copyHashMap(parameters), myNode, monitor);
 		}
 		
+		this.myNode.updateFinishTime();
+		
 	}
 	
 	public void jsonUp(JSONObject obj){

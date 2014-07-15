@@ -171,7 +171,7 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		} else {
 			this.fitness = 100000.0;
 		}
-		this.timeFinished = System.currentTimeMillis();
+		this.updateFinishTime();
 		this.performanceResult = ((ModelConfigurationFitnessFunction)this.fitnessFunction).performance;
 		this.populationResult = ((ModelConfigurationFitnessFunction)this.fitnessFunction).population;
 	}

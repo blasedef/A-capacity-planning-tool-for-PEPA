@@ -219,6 +219,10 @@ public class CandidateNode implements Node {
 		}
 		
 	}
+	
+	public void updateFinishTime(){
+		this.timeFinished = System.currentTimeMillis();
+	}
 
 
 	

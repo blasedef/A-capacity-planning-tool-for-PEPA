@@ -51,7 +51,7 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 		
 		HashMap<String,Double> workingMap = new HashMap<String, Double>();
 		Double totalWeight = 0.0;
-		Double actual, target, wei, result;
+		Double actual, target, wei, result, maxi;
 		String[] keys = performanceMap.keySet().toArray(new String[workingMap.keySet().size()]);
 		
 		
@@ -61,23 +61,16 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 			target = Double.parseDouble(CPTAPI.getTargetControl().getValue(keys[i], Config.LABTAR));
 			actual = performanceMap.get(keys[i]);
 			if(higherIsGood){
-				if(actual >= target){
-					actual = 0.0;
-					workingMap.put(keys[i], actual);
-				} else {
-					actual = (target - actual);
-					workingMap.put(keys[i], actual);
-				}
+				maxi = Math.max(0, target - actual);
+				actual = maxi*100.0;
+				
 			} else {
-				if(actual <= target){
-					actual = 0.0;
-					workingMap.put(keys[i], actual);
-				} else {
-					actual = (actual - target);
-					workingMap.put(keys[i], actual);
-				}
+				maxi = Math.max(0, actual - target);
+				System.out.println(maxi);
+				actual = maxi*100.0;
+				
 			}
-			
+			workingMap.put(keys[i], actual);
 		}
 		
 		result = 0.0;

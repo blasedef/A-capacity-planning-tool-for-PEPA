@@ -111,8 +111,8 @@ public class CPT {
 			parameters.put(Config.LABGEN,
 					Double.parseDouble(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
 			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "2");
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "2");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "10");
+			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "10");
 		}
 		
 		parameters.put(Config.LABPOP, 1.0);
@@ -219,7 +219,7 @@ public class CPT {
 		
 		try {
 			 
-			FileWriter file = new FileWriter("/home/twig/ordered.json");
+			FileWriter file = new FileWriter("/home/twig/Workspace/python/jsonToCSV/ordered.json");
 			file.write(obj2.toJSONString());
 			file.flush();
 			file.close();
