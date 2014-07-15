@@ -178,7 +178,6 @@ public class CandidateNode implements Node {
 		this.fitness = (0.25 * top) + (0.25 * mean) + (0.25 * std) + (0.25 * art); 
 		
 		
-		
 	}
 
 	public ModelConfigurationCandidateNode getFittestNode() {
