@@ -264,5 +264,13 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		resultsQueue.add(new ResultNode(runTime,candidateNode,metaHeuristicNode,this));
 		
 	}
+	
+	public Double getPerformanceResult() {
+		return performanceResult;
+	}
+
+	public Double getPopulationResult() {
+		return populationResult;
+	}
 
 }
