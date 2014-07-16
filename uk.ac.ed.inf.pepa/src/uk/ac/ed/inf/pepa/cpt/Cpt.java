@@ -97,49 +97,6 @@ public class Cpt {
 		System.out.println(ASTSupport.toString(node));
 	}
 	
-	public static void setupForSingleBRU(){
-		
-		CPTAPI.getEvaluationControls().setValue(Config.EVALARPT);
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMIN, "600"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMAX, "600"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMIN, "120"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMAX, "140"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMIN, "60"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMAX, "80"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMIN, "20"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMAX, "40"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMIN, "100"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMAX, "120"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMIN, "110"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMAX, "130"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMIN, "60"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMAX, "80"));
-		
-		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMIN, "40"));
-		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMAX, "60"));
-		
-		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdBrowseTag",true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected((short) 18,true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdSelectTag",true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected((short) 20,true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdConfirmTag",true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected((short) 22,true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdRegisterTag",true));
-		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdRegisterWaitTag",true));
-		
-		
-		CPTAPI.updateTargetControl();
-		
-		System.out.println(CPTAPI.getTargetControl().setValue("Average response time", Config.LABTAR, "15.0"));
-		
-	}
 	
 	public static void setupForSingleART(){
 		
@@ -154,30 +111,30 @@ public class Cpt {
 		System.out.println(CPTAPI.getExperimentControls().setValue(Config.LABEXP, "1"));
 		
 		System.out.println(CPTAPI.getGenerationControls().setValue(Config.LABGEN, "10"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMIN, "600"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMAX, "600"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMAX, "160"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMAX, "160"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMAX, "160"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMAX, "160"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMAX, "160"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMAX, "80"));
-//		
-//		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMIN, "1"));
-//		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMAX, "80"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMIN, "600"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("StdThinkTag", Config.LABMAX, "600"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("Portal", Config.LABMAX, "160"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("ValUni", Config.LABMAX, "160"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("ValCur", Config.LABMAX, "160"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("Database", Config.LABMAX, "160"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("Logger", Config.LABMAX, "160"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("PS_1", Config.LABMAX, "80"));
+		
+		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMIN, "1"));
+		System.out.println(CPTAPI.getPopulationControls().setValue("TTPD_1", Config.LABMAX, "80"));
 		
 		System.out.println(CPTAPI.getPerformanceControls().setSelected("StdBrowseTag",true));
 		System.out.println(CPTAPI.getPerformanceControls().setSelected((short) 18,true));
