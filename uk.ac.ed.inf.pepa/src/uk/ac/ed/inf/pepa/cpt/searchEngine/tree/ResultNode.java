@@ -97,6 +97,8 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		list.add(getMapAsList(this.psoConfiguration.getMyMap()));
 		
 		obj2.put("modelconfigurationfitness",this.modelConfiguration.getFitness());
+		obj2.put("performanceCost",this.modelConfiguration.getPerformanceResult());
+		obj2.put("populationCost",this.modelConfiguration.getPopulationResult());
 		obj2.put("performanceMap",this.modelConfiguration.getPerformanceMap());
 		obj2.put("totalPopulation", this.modelConfiguration.getTotalComponents());
 		obj2.put("labfitness",this.labConfiguration.getFitness());

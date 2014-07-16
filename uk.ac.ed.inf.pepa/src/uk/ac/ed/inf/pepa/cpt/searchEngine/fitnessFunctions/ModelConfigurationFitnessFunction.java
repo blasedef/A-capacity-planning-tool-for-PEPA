@@ -54,7 +54,7 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 		Double actual, target, wei, result, maxi, cost;
 		String[] keys = performanceMap.keySet().toArray(new String[workingMap.keySet().size()]);
 		//TODO
-		Double penalty = 100.0;
+		Double penalty = 2.0;
 		
 		for(int i = 0; i < keys.length;i++){
 			
@@ -63,11 +63,11 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 			actual = performanceMap.get(keys[i]);
 			if(higherIsGood){
 				maxi = Math.max(0, target - actual);
-				cost = (penalty*maxi) - actual;
+				cost = (penalty*maxi) - (target/actual);
 				
 			} else {
 				maxi = Math.max(0, actual - target);
-				cost = (penalty*maxi) + actual;
+				cost = (penalty*maxi) + (actual/target);
 				
 			}
 			workingMap.put(keys[i], cost);
