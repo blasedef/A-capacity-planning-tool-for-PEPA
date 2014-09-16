@@ -209,8 +209,6 @@ public class CPT {
 		
 		createResultsQueue();
 		
-		fillQueue();
-		
 		JSONObject obj2 = new JSONObject();
 		
 		while(this.resultsQueue.size() > 1){
