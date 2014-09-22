@@ -34,8 +34,10 @@ public class CPT {
 		
 	}
 	
+	
+	
 	public void jsonNodes(){
-		
+	//TODO remove this	
 		
 		this.root.jsonUp(obj);
 		
@@ -166,6 +168,7 @@ public class CPT {
 	
 	
 	private void processQueue(int count){
+		//TODO is this required then?
 		
 		//remove duplicates
 		PriorityQueue<ResultNode> tempQueue = new PriorityQueue<ResultNode>() {
@@ -206,7 +209,7 @@ public class CPT {
 	}
 
 	public void printQueue() {
-		
+		//TODO remove this?
 		createResultsQueue();
 		
 		JSONObject obj2 = new JSONObject();

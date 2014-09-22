@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.CPT" project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/CPT.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1709" y="37" width="228" height="239"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="2" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.MetaHeuristics" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/MetaHeuristics.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="303" y="1316" width="222" height="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.HillClimbing" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/HillClimbing.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="561" y="37" width="476" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" 
+    name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.ParticleSwarmOptimisation.SynchronizedCounter" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/ParticleSwarmOptimisation.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="41" y="1316" width="222" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.ParticleSwarmOptimisation" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/ParticleSwarmOptimisation.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="82" y="595" width="443" height="239"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.Candidate" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/candidates/Candidate.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="586" y="1775" width="206" height="59"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.Lab" project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/candidates/Lab.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="1077" y="37" width="206" height="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.MetaheuristicConfigurationLab" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/candidates/MetaheuristicConfigurationLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1497" y="316" width="385" height="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ModelConfiguration" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/candidates/ModelConfiguration.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="586" y="1316" width="547" height="203"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ModelConfigurationLab" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/candidates/ModelConfigurationLab.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1016" y="316" width="441" height="221"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="11" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.FitnessFunction" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/fitnessFunctions/FitnessFunction.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="797" y="2514" width="386" height="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="12" language="java" 
+    name="uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.ModelConfigurationFitnessFunction" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/fitnessFunctions/ModelConfigurationFitnessFunction.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="160" y="1775" width="386" height="185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.BruteForce" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/BruteForce.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="586" y="595" width="369" height="257"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.metaheuristics.BruteForce.SynchronizedCounter" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/metaheuristics/BruteForce.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="1173" y="1316" width="222" height="131"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.population.Population" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/population/Population.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="180" y="37" width="203" height="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.tree.CandidateNode" 
+    project="uk.ac.ed.inf.pepa" file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/tree/CandidateNode.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1539" y="595" width="352" height="671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.tree.MetaHeuristicNode" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/tree/MetaHeuristicNode.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="1435" y="1316" width="352" height="419"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ModelConfigurationCandidateNode" 
+    project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/tree/ModelConfigurationCandidateNode.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position x="1435" y="1775" width="568" height="689"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="19" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.tree.Node" project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/tree/Node.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position x="2053" y="1775" width="207" height="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="20" language="java" name="uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode" project="uk.ac.ed.inf.pepa" 
+    file="/uk.ac.ed.inf.pepa/src/uk/ac/ed/inf/pepa/cpt/searchEngine/tree/ResultNode.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position x="1922" y="316" width="459" height="239"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="21">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="22" name="children"/>      
+      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="24">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="25" name="root"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="27">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="28" name="population"/>      
+      <multiplicity id="29" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="31">    
+    <bendpoint x="1508" y="595"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="32" name="psoConfiguration"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="34">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </realization>  
+  <association id="35">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="36" name="myNode"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="38">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="39">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="40" name="myLocalbest"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="43" name="myNode"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="45">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <association id="46">    
+    <bendpoint x="1838" y="1316"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="47" name="fittestNode"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="49">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="50" name="possibleCandidate"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <generalization id="53">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <realization id="54">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <association id="55">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="56" name="myNode"/>      
+      <multiplicity id="57" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="58">    
+    <bendpoint x="555" y="316"/>    
+    <bendpoint x="555" y="595"/>    
+    <bendpoint x="555" y="1316"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <association id="59">    
+    <bendpoint x="985" y="316"/>    
+    <bendpoint x="985" y="595"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="60" name="myNode"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="62">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="63">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="64" name="parent"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="67" name="parent"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="70" name="population"/>      
+      <multiplicity id="71" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="72">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="73" name="resultsQueue"/>      
+      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="75">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="76" name="sister"/>      
+      <multiplicity id="77" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="78">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="79" name="candidate"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="81">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="19"/>  
+  </realization>  
+  <realization id="82">    
+    <bendpoint x="1859" y="1316"/>    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="19"/>  
+  </realization>  
+  <realization id="83">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="84">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="85" name="myNode"/>      
+      <multiplicity id="86" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="87">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="88" name="sister"/>      
+      <multiplicity id="89" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="90">    
+    <bendpoint x="1931" y="595"/>    
+    <bendpoint x="1931" y="1316"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="91" name="modelConfiguration"/>      
+      <multiplicity id="92" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="93">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <nesting id="94">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <association id="95">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="96" name="children"/>      
+      <multiplicity id="97" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="98">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <association id="99">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="100" name="labConfiguration"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="102">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="103" name="fitnessFunction"/>      
+      <multiplicity id="104" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="105">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="106" name="myNode"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="108">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="109" name="fittestNode"/>      
+      <multiplicity id="110" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="111">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="112" name="counter"/>      
+      <multiplicity id="113" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="114">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <generalization id="115">    
+    <bendpoint x="1817" y="1316"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="16"/>  
+  </generalization>  
+  <association id="116">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="117" name="counter"/>      
+      <multiplicity id="118" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="119">    
+    <bendpoint x="51" y="316"/>    
+    <bendpoint x="51" y="595"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
