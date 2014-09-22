@@ -29,6 +29,7 @@ import uk.ac.ed.inf.pepa.eclipse.core.PepaLog;
 import uk.ac.ed.inf.pepa.eclipse.core.PepatoProgressMonitorAdapter;
 import uk.ac.ed.inf.pepa.eclipse.ui.largescale.RunnableGraphProvider;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.PassageTimeWizard;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.CapacityPlanningWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.ctmcsolver.resourceless.SolverWizard;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ConcretePerformanceMetricFactory;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.experimentation.ExperimentationWizard;
@@ -99,6 +100,14 @@ public class ActionCommands {
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(400, 400);
+		dialog.open();
+	}
+	
+	public static void capacityPlanning(IPepaModel model) {
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
+		WizardDialog dialog = new WizardDialog(Display.getDefault()
+				.getActiveShell(), wizard);
+		dialog.setPageSize(500, 500);
 		dialog.open();
 	}
 
