@@ -1,17 +1,24 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt;
 
-import org.eclipse.jface.wizard.Wizard;
+import java.util.ArrayList;
+import java.util.List;
 
-import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
+
+
+import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages.*;
 
 public class CapacityPlanningWizard extends Wizard {
-
-	private IPepaModel model;
-	private boolean isDriven;
 	
-	public CapacityPlanningWizard(IPepaModel model, boolean driven){
-		this.model = model;
-		this.isDriven = driven;
+	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
+	
+	public CapacityPlanningWizard(){
+		
+		wizardPageList.add(new CapacityPlanningWizardPageOne(CPTAPI.getSearchControls().getValue()));
+		addPage(wizardPageList.get(0));
+		
 	}
 	
 	@Override

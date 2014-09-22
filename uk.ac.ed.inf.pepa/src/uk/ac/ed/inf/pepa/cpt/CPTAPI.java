@@ -43,13 +43,21 @@ public class CPTAPI {
 		return CPTAPI.configuration.generationController;
 	}
 	
-	public static ParameterControl getHCParameterControls(){
-		return CPTAPI.configuration.hillController;
+	public static ParameterControl getMHParameterControls(){
+		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE)){
+			return CPTAPI.configuration.psoController;
+		} else {
+			return CPTAPI.configuration.hillController;
+		}
 	}
 	
-	public static ParameterControl getPSOParameterControls(){
-		return CPTAPI.configuration.psoController;
-	}
+//	public static ParameterControl getHCParameterControls(){
+//		return CPTAPI.configuration.hillController;
+//	}
+//	
+//	public static ParameterControl getPSOParameterControls(){
+//		return CPTAPI.configuration.psoController;
+//	}
 	
 	public static PSOControl getPSORangeParameterControls(){
 		return CPTAPI.configuration.psoRangeController;

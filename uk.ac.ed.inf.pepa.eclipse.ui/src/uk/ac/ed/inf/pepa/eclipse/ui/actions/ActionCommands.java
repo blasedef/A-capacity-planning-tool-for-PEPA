@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
+import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.ctmc.derivation.DerivationException;
 import uk.ac.ed.inf.pepa.ctmc.derivation.common.State;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
@@ -103,11 +105,14 @@ public class ActionCommands {
 		dialog.open();
 	}
 	
-	public static void capacityPlanning(IPepaModel model, boolean driven) {
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model, driven);
+	public static void capacityPlanning(IPepaModel model, String search, String evaluation) {
+		CPTAPI.setModel(model.getAST());
+		CPTAPI.getSearchControls().setValue(search);
+		CPTAPI.getEvaluationControls().setValue(evaluation);
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard();
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
-		dialog.setPageSize(500, 500);
+		dialog.setPageSize(400, 400);
 		dialog.open();
 	}
 

@@ -70,7 +70,7 @@ public class Config implements ConfigCallBack{
 	public static String DOMBOT = "Search on both";
 	
 	//Search type related hard coded strings
-	public static String SEARCHSINGLE = "Single Particle Swarm Optimisation";
+	public static String SEARCHSINGLE = "Particle Swarm Optimisation";
 	public static String SEARCHDRIVEN = "Driven Particle Swarm Optimisation";
 	
 	//lab parameter related hard coded strings
@@ -186,6 +186,7 @@ public class Config implements ConfigCallBack{
 	public Config(ModelNode node){
 		this.node = node;
 		this.graph = Utils.getDevGraphFromAST(node);
+		
 		this.map = new OptionMap();
 		OptionMap.getDefaultValue(OptionMap.ODE_START_TIME);
 		OptionMap.getDefaultValue(OptionMap.ODE_STOP_TIME);
@@ -195,6 +196,7 @@ public class Config implements ConfigCallBack{
 		OptionMap.getDefaultValue(OptionMap.ODE_RTOL);
 		OptionMap.getDefaultValue(OptionMap.ODE_STEADY_STATE_NORM);
 		map.put(OptionMap.ODE_INTERPOLATION,OptionMap.ODE_INTERPOLATION_OFF);
+		
 		this.evaluatorChoiceList = new EvaluatorChoiceList();
 		this.searchChoiceList = new SearchChoiceList();
 		this.domainChoiceList = new DomainChoiceList();

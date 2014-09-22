@@ -108,7 +108,7 @@ public class CPT {
 					Double.parseDouble(CPTAPI.getExperimentControls().getValue(Config.LABEXP)));
 			
 			parameters.put(Config.LABMUT,
-					Double.parseDouble(CPTAPI.getHCParameterControls().getValue(Config.LABMUT)));
+					Double.parseDouble(CPTAPI.getMHParameterControls().getValue(Config.LABMUT)));
 			
 			parameters.put(Config.LABGEN,
 					Double.parseDouble(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));

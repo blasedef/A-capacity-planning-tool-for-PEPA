@@ -178,18 +178,88 @@
                   name="separator">
             </separator>
          </menu>
+         <menu
+               id="uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu"
+               label="Particle Swarm Optimisation (PSO)..."
+               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/content">
+            <groupMarker
+                  name="content">
+            </groupMarker>
+            <groupMarker
+                  name="additions">
+            </groupMarker>
+            <separator
+                  name="separator">
+            </separator>
+         </menu>
+         <menu
+               id="uk.ac.ed.inf.pepa.eclipse.ui.cp.dpso.menu"
+               label="Driven Particle Swarm Optimisation (dPSO)..."
+               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/content">
+            <groupMarker
+                  name="content">
+            </groupMarker>
+            <groupMarker
+                  name="additions">
+            </groupMarker>
+            <separator
+                  name="separator">
+            </separator>
+         </menu>
          <action
-               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.CapacityPlanningActionDelegate"
-               id="uk.ac.ed.inf.pepa.eclipse.ui.pso"
-               label="Particle Swarm Optimistion (PSO)..."
-               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/content"
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.CapacityPlanningARTActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.pso.art"
+               label="Average Reponse Time..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu/content"
                style="push">
          </action>
          <action
-               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.DrivenCapacityPlanningActionDelegate"
-               id="uk.ac.ed.inf.pepa.eclipse.ui.dpso"
-               label="Driven Particle Swarm Optimistion (PSO)..."
-               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/content"
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.CapacityPlanningTHRActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.pso.thr"
+               label="Throughput..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.CapacityPlanningPOPActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.pso.pop"
+               label="Population Level..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.CapacityPlanningCAPActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.pso.cap"
+               label="Capacity Utilisation..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.DrivenCapacityPlanningARTActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.dpso.art"
+               label="Average Response Time..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.dpso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.DrivenCapacityPlanningTHRActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.dpso.thr"
+               label="Throughput..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.dpso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.DrivenCapacityPlanningPOPActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.dpso.pop"
+               label="Population Level..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.dpso.menu/content"
+               style="push">
+         </action>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.capacityPlanning.DrivenCapacityPlanningCAPActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.dpso.cap"
+               label="Capacity Utilisation..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/uk.ac.ed.inf.pepa.eclipse.ui.cp.menu/uk.ac.ed.inf.pepa.eclipse.ui.cp.dpso.menu/content"
                style="push">
          </action>
          <!--<action
