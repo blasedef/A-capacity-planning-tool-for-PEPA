@@ -103,8 +103,8 @@ public class ActionCommands {
 		dialog.open();
 	}
 	
-	public static void capacityPlanning(IPepaModel model) {
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
+	public static void capacityPlanning(IPepaModel model, boolean driven) {
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model, driven);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(500, 500);

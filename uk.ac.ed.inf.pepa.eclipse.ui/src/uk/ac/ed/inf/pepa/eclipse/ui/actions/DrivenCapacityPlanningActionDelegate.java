@@ -22,7 +22,7 @@ public class DrivenCapacityPlanningActionDelegate extends BasicProcessAlgebraMod
 
 	@Override
 	public void run(IAction action) {
-		ActionCommands.capacityPlanning((IPepaModel) model);
+		ActionCommands.capacityPlanning((IPepaModel) model, true);
 	}
 
 }

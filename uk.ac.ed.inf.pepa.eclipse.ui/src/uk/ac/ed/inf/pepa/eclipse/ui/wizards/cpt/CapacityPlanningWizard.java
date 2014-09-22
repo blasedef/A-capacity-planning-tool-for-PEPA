@@ -7,9 +7,11 @@ import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 public class CapacityPlanningWizard extends Wizard {
 
 	private IPepaModel model;
+	private boolean isDriven;
 	
-	public CapacityPlanningWizard(IPepaModel model){
+	public CapacityPlanningWizard(IPepaModel model, boolean driven){
 		this.model = model;
+		this.isDriven = driven;
 	}
 	
 	@Override
