@@ -70,4 +70,34 @@ public class ThroughputControl extends PerformanceControl {
 		return ((ActionList) this.myOptions).setSelectedHandler(name, selected);
 	}
 
+	@Override
+	public String[] getKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getType(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getValue(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean setValue(String key, String value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setValue(String component, String key, String value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

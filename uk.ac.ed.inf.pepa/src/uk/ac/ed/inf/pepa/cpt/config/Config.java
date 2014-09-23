@@ -3,7 +3,6 @@ package uk.ac.ed.inf.pepa.cpt.config;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.control.EListControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.ListControl;
-import uk.ac.ed.inf.pepa.cpt.config.control.PSOParameterControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.ParameterControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.PerformanceControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.PopulationControl;
@@ -25,11 +24,9 @@ import uk.ac.ed.inf.pepa.cpt.config.lists.DomainChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.RateList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.SearchChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.TargetList;
-import uk.ac.ed.inf.pepa.cpt.config.parameters.ExperimentParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.FitnessFunctionWeightParameters;
-import uk.ac.ed.inf.pepa.cpt.config.parameters.GenerationParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.HillClimbingParameters;
-import uk.ac.ed.inf.pepa.cpt.config.parameters.ParticleSwarmOptimisationParameters;
+import uk.ac.ed.inf.pepa.cpt.config.parameters.OptionMapParameters;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
@@ -93,20 +90,9 @@ public class Config implements ConfigCallBack{
 	public static String LABTAR ="Target";
 	
 	//fitnessfunction population vs performance vs .... (maybe ODE fitness later?)
-	public static String FITRES = "Resource count";
-	public static String FITPER = "Performance distance";
-	
-	//component parameters
-	//public static String LABMIN = "Minimum count";
-	//public static String LABMAX = "Maximum count";
-	//public static String LABRAN = "Range";
-	//public static String LABWEI = "Component weighting";
-	
-	//rate parameters
-	//public static String LABMIN = "Minimum rate";
-	//public static String LABMAX = "Maximum count";
-	//public static String LABRAN = "Range";
-	//public static String LABWEI = "Component weighting";
+	public static String FITRES = "Population weight";
+	public static String FITPER = "Performance weight";
+	public static String FITPEN = "Performance penalty";
 	
 	//models
 	private ModelNode node = null;
@@ -123,14 +109,8 @@ public class Config implements ConfigCallBack{
 	private SearchChoiceList searchChoiceList;
 	//choose search domain
 	private DomainChoiceList domainChoiceList;
-	//choose number of experiments
-	private ExperimentParameters experimentParameters;
-	//choose number of generations
-	private GenerationParameters generationParameters;
 	//set up HillClimbing parameters
 	private HillClimbingParameters hillClimbingParameters;
-	//set up PSO parameters
-	private ParticleSwarmOptimisationParameters particleSwarmOptimisationParameters;
 	//set up fitness balance
 	private FitnessFunctionWeightParameters fitnessFunctionWeightParameters;
 	//set up pso range list
@@ -149,7 +129,7 @@ public class Config implements ConfigCallBack{
 	//for ODE solutions
 	private IPointEstimator[] estimators;
 	private IStatisticsCollector[] collectors;
-	private OptionMap map;
+	private OptionMapParameters optionMapParameters;
 	
 	/*
 	 * Controllers
@@ -161,10 +141,7 @@ public class Config implements ConfigCallBack{
 	public ListControl domainController;
 	
 	//parameters
-	public ParameterControl experimentsController;
-	public ParameterControl generationController;
 	public ParameterControl hillController;
-	public ParameterControl psoController;
 	public ParameterControl fitnessFunctionWeightController;
 	
 	//pso range related
@@ -179,6 +156,9 @@ public class Config implements ConfigCallBack{
 	//performance related
 	public PerformanceControl actionAndProcessSelectionController;
 	
+	//option map related
+	public ParameterControl optionMapController;
+	
 	/**
 	 * Configuration object, required for a cpt run.
 	 * @param node
@@ -187,30 +167,18 @@ public class Config implements ConfigCallBack{
 		this.node = node;
 		this.graph = Utils.getDevGraphFromAST(node);
 		
-		this.map = new OptionMap();
-		OptionMap.getDefaultValue(OptionMap.ODE_START_TIME);
-		OptionMap.getDefaultValue(OptionMap.ODE_STOP_TIME);
-		map.put(OptionMap.ODE_STOP_TIME,500.0);
-		OptionMap.getDefaultValue(OptionMap.ODE_STEP);
-		OptionMap.getDefaultValue(OptionMap.ODE_ATOL);
-		OptionMap.getDefaultValue(OptionMap.ODE_RTOL);
-		OptionMap.getDefaultValue(OptionMap.ODE_STEADY_STATE_NORM);
-		map.put(OptionMap.ODE_INTERPOLATION,OptionMap.ODE_INTERPOLATION_OFF);
-		
 		this.evaluatorChoiceList = new EvaluatorChoiceList();
 		this.searchChoiceList = new SearchChoiceList();
 		this.domainChoiceList = new DomainChoiceList();
-		this.experimentParameters = new ExperimentParameters();
-		this.generationParameters = new GenerationParameters();
 		this.hillClimbingParameters = new HillClimbingParameters();
-		this.particleSwarmOptimisationParameters = new ParticleSwarmOptimisationParameters();
-		this.fitnessFunctionWeightParameters = new FitnessFunctionWeightParameters();
 		this.psoList = new PSOList();
+		this.fitnessFunctionWeightParameters = new FitnessFunctionWeightParameters();
 		this.componentList = new ComponentList(this.graph);
 		this.rateList = new RateList(this.node);
 		this.actionList = new ActionList(this.graph);
 		this.processList = new ProcessList(this.graph);
 		this.targetList = new TargetList();
+		this.optionMapParameters = new OptionMapParameters();
 		
 		/*
 		 * set up controllers - so only use controllers to change underlying data
@@ -222,11 +190,9 @@ public class Config implements ConfigCallBack{
 		
 		this.domainController = new RListControl(this.domainChoiceList, this);
 		
-		this.experimentsController = new ParameterControl(this.experimentParameters);
-		this.generationController = new ParameterControl(this.generationParameters);
-		
 		this.hillController = new ParameterControl(this.hillClimbingParameters);
-		this.psoController = new PSOParameterControl(this.particleSwarmOptimisationParameters,this);
+		
+		this.optionMapController = new ParameterControl(this.optionMapParameters);
 		
 		this.fitnessFunctionWeightController = new ParameterControl(this.fitnessFunctionWeightParameters);
 		
@@ -247,10 +213,9 @@ public class Config implements ConfigCallBack{
 		
 		this.fitnessFunctionWeightParameters.toPrint();
 		
-		this.experimentParameters.toPrint();
-		this.generationParameters.toPrint();
+		//this.experimentParameters.toPrint();
+		//this.generationParameters.toPrint();
 		this.hillClimbingParameters.toPrint();
-		this.particleSwarmOptimisationParameters.toPrint();
 		
 		this.psoList.toPrint();
 		
@@ -265,11 +230,11 @@ public class Config implements ConfigCallBack{
 	}
 
 	public void setOptionMap(OptionMap optionMap) {
-		this.map = optionMap;
+		this.optionMapParameters.setOptionMap(optionMap);
 	}
 
 	public OptionMap getOptionMap() {
-		return new OptionMap(map);
+		return this.optionMapParameters.getOptionMap();
 	}
 
 	public ModelNode getNode() {
@@ -302,31 +267,6 @@ public class Config implements ConfigCallBack{
 			
 			this.actionAndProcessSelectionController = new PopulationLevelControl(processList);
 		}
-	}
-	
-	public boolean setPSOvalues(){
-		
-		boolean isValid = true;
-		
-		String[] components = this.psoController.getKeys();
-		
-		for(int i = 0; i < components.length; i++){
-			
-			isValid = isValid && this.psoRangeController.setValue(components[i], 
-					Config.LABMIN, 
-					this.psoController.getValue(components[i]));
-			
-			isValid = isValid && this.psoRangeController.setValue(components[i], 
-					Config.LABMAX, 
-					this.psoController.getValue(components[i]));
-			
-			isValid = isValid && this.psoRangeController.setValue(components[i], 
-					Config.LABRAN, 
-					"1");
-		}
-		
-		return isValid;
-		
 	}
 
 	@Override

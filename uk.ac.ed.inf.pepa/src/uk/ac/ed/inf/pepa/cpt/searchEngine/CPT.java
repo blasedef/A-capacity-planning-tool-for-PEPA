@@ -34,90 +34,24 @@ public class CPT {
 		
 	}
 	
-	
-	
-	public void jsonNodes(){
-	//TODO remove this	
-		
-		this.root.jsonUp(obj);
-		
-		try {
-			 
-			FileWriter file = new FileWriter("/home/twig/test.json");
-			file.write(obj.toJSONString());
-			file.flush();
-			file.close();
-	 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	 
-		
-	}
-	
-	/**
-	 * Fill out all PSO parameters, use MetaheuristicSearchParameters for the PSO metaheuristic, and a
-	 * hashmap for the HillClimbing algorithm.
-	 */
 	public HashMap<String,Double> getParameters(){
 		
 		HashMap<String,Double>  parameters = new HashMap<String,Double>();
-		
+		parameters.put("MetaheuristicConfigurationLab", 1.0);
 		boolean isSingleSearch = (CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE));
 		
-		parameters.put("MetaheuristicConfigurationLab", 1.0);
+		String[] keys = CPTAPI.getHCControls().getKeys();
 		
 		if(isSingleSearch){
-			
-			CPTAPI.setPSOValues();
-			
 			parameters.put(Config.SEARCH, 1.0);
-			parameters.put(Config.LABGEN, 1.0);
-			parameters.put(Config.LABEXP, 1.0);
-			parameters.put(Config.LABMUT, 0.0);
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, 
-					Config.LABMIN, 
-					"" + Integer.parseInt(CPTAPI.getExperimentControls().getValue(Config.LABEXP)));
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, 
-					Config.LABMAX, 
-					"" + Integer.parseInt(CPTAPI.getExperimentControls().getValue(Config.LABEXP)));
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, 
-					Config.LABRAN, 
-					"1");
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABGEN, 
-					Config.LABMIN, 
-					"" + Integer.parseInt(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABGEN, 
-					Config.LABMAX, 
-					"" + Integer.parseInt(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABGEN, 
-					Config.LABRAN, 
-					"1");
-			
-			
 		} else {
 			parameters.put(Config.SEARCH, 0.0);
-			
-			parameters.put(Config.LABEXP,
-					Double.parseDouble(CPTAPI.getExperimentControls().getValue(Config.LABEXP)));
-			
-			parameters.put(Config.LABMUT,
-					Double.parseDouble(CPTAPI.getMHParameterControls().getValue(Config.LABMUT)));
-			
-			parameters.put(Config.LABGEN,
-					Double.parseDouble(CPTAPI.getGenerationControls().getValue(Config.LABGEN)));
-			
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMIN, "2");
-			CPTAPI.getPSORangeParameterControls().setValue(Config.LABEXP, Config.LABMAX, "2");
 		}
 		
-		parameters.put(Config.LABPOP, 1.0);
+		for(int i = 0; i < keys.length; i++){
+			parameters.put(keys[i], Double.parseDouble(CPTAPI.getHCControls().getValue(keys[i])));
+			
+		}
 		
 		return parameters;
 		
@@ -162,52 +96,8 @@ public class CPT {
 		
 		this.root.fillQueue(this.resultsQueue);
 		
-		//this.processQueue(10);
-		
 	}
 	
-	
-	private void processQueue(int count){
-		//TODO is this required then?
-		
-		//remove duplicates
-		PriorityQueue<ResultNode> tempQueue = new PriorityQueue<ResultNode>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public boolean offer(ResultNode e){
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-			
-			@Override
-			public boolean add(ResultNode e){
-				if(this.contains(e)){
-					return false;
-				} else {
-					return super.offer(e);
-				}
-			}
-			
-		};
-		
-		while(tempQueue.size() <= count){
-			
-			tempQueue.add(this.resultsQueue.poll());
-			
-		}
-		
-		this.resultsQueue = tempQueue;
-		
-	}
-
 	public void printQueue() {
 		//TODO remove this?
 		createResultsQueue();

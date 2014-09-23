@@ -6,6 +6,6 @@ public interface ConfigCallBack {
 	
 	public void initialiseAndUpdateComponentsAndRates();
 	
-	public boolean setPSOvalues();
+//	public boolean setPSOvalues();
 	
 }

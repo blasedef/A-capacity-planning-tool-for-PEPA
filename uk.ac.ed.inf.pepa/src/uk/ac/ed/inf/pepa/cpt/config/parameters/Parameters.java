@@ -22,7 +22,7 @@ public abstract class Parameters {
 			Double d = Parser.parse(this.keyTypeMap.get(key),value);
 			if(d >= 0){
 				this.keyValueMap.put(key, d);
-				return true;
+				return valid();
 			} else {
 				return false;
 			}

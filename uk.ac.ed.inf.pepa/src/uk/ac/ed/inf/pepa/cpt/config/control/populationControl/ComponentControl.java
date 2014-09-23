@@ -36,5 +36,23 @@ public class ComponentControl extends PopulationControl {
 		return this.myComponentList.getType(key, attribute);
 	}
 
+	@Override
+	public String getType(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getValue(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean setValue(String key, String value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 }

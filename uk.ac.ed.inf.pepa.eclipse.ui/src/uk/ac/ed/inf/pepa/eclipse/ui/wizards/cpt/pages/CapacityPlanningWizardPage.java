@@ -1,18 +1,18 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.CapacityPlanningWidget;
 
 public abstract class CapacityPlanningWizardPage extends WizardPage {
 	
-	
-	protected Composite container;
+	protected ArrayList<CapacityPlanningWidget> widgets;
 	
 	protected final IValidationCallback parentCallBack = new IValidationCallback() {
 
@@ -24,31 +24,21 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 	public CapacityPlanningWizardPage(String pageName) {
 		super(pageName);
 		
+		this.widgets = new ArrayList<CapacityPlanningWidget>();
+		
 		setTitle(pageName);
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		//minimum required for a wizard page 1/2
-		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-		sc.setSize(sc.computeSize(SWT.DEFAULT,SWT.DEFAULT));
-		this.container = new Composite(sc, SWT.NONE);
-		sc.setContent(container);
-		this.container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 10;
-		layout.numColumns = 2;
+		GridLayout layout = new GridLayout(4,false);
+		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(layout);
-		constructPage(this.parentCallBack);
-
-		sc.setExpandHorizontal(true);
-		
-				setControl(sc);
-		this.container.setSize(this.container.computeSize(SWT.DEFAULT,SWT.DEFAULT));
-		
+		constructPage(this.parentCallBack,container);
+		setControl(container);
 	}
 	
-	protected abstract void constructPage(IValidationCallback cb);
+	protected abstract void constructPage(IValidationCallback cb, Composite container);
 	
 	public abstract void completePage();
 

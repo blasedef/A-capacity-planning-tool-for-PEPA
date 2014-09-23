@@ -32,4 +32,10 @@ public class ParameterControl implements Control {
 		return this.myParameters.valid();
 	}
 
+	@Override
+	public boolean setValue(String component, String key, String value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

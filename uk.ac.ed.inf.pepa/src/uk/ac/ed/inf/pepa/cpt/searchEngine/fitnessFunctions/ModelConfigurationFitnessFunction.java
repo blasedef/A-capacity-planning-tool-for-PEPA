@@ -53,8 +53,7 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 		Double totalWeight = 0.0;
 		Double measured, target, wei, result, maxi, cost, d;
 		String[] keys = performanceMap.keySet().toArray(new String[workingMap.keySet().size()]);
-		//TODO
-		Double penalty = 2.0;
+		Double penalty = Double.parseDouble(CPTAPI.getFitnessWeightControls().getValue(Config.FITPEN));
 		
 		for(int i = 0; i < keys.length;i++){
 			

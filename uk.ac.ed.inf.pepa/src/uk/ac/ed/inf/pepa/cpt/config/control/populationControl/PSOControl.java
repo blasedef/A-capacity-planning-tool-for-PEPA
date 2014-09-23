@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.cpt.config.control.populationControl;
 
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.config.control.PopulationControl;
 import uk.ac.ed.inf.pepa.cpt.config.lists.PSOList;
 
@@ -34,5 +35,22 @@ public class PSOControl extends PopulationControl {
 	public boolean validate(){
 		return this.myPSOList.valid();
 	}
+
+	@Override
+	public String getType(String key) {
+		return this.myPSOList.getType(key, Config.LABMIN);
+	}
+
+	@Override
+	public String getValue(String key) {
+		return this.myPSOList.getValue(key, Config.LABMIN);
+	}
+
+	@Override
+	public boolean setValue(String key, String value) {
+		return this.myPSOList.setValue(key, Config.LABMIN, value) 
+		&& this.myPSOList.setValue(key, Config.LABMAX, value);
+	}
+	
 
 }

@@ -9,6 +9,7 @@ Export-Package: uk.ac.ed.inf.pepa,
  uk.ac.ed.inf.pepa.cpt,
  uk.ac.ed.inf.pepa.cpt.config,
  uk.ac.ed.inf.pepa.cpt.config.control,
+ uk.ac.ed.inf.pepa.cpt.config.control.populationControl,
  uk.ac.ed.inf.pepa.ctmc,
  uk.ac.ed.inf.pepa.ctmc.derivation;uses:="uk.ac.ed.inf.pepa",
  uk.ac.ed.inf.pepa.ctmc.derivation.common;

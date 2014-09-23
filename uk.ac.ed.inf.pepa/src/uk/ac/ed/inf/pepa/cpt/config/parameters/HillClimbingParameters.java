@@ -12,9 +12,13 @@ public class HillClimbingParameters extends Parameters {
 		
 		//default mutation rate
 		this.keyValueMap.put(Config.LABMUT, 0.5);
+		this.keyValueMap.put(Config.LABEXP, 1.0);
+		this.keyValueMap.put(Config.LABGEN, 1.0);
 		
 		//type map
 		this.keyTypeMap.put(Config.LABMUT, Config.PERCENT);
+		this.keyTypeMap.put(Config.LABEXP, Config.NATURAL);
+		this.keyTypeMap.put(Config.LABGEN, Config.NATURAL);
 	}
 
 	@Override

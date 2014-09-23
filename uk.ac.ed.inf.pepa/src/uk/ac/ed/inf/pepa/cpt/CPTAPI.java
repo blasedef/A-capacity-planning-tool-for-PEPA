@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.pepa.cpt;
 
 import uk.ac.ed.inf.pepa.cpt.config.Config;
+import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.cpt.config.control.ListControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.ParameterControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.PerformanceControl;
@@ -19,10 +20,6 @@ public class CPTAPI {
 	private static Config configuration = null;
 	private static CPT cpt = null; 
 	
-	public static void setPSOValues(){
-		CPTAPI.configuration.setPSOvalues();
-	}
-	
 	public static void setModel(ModelNode node){
 		CPTAPI.configuration = new Config(node);
 	}
@@ -35,29 +32,21 @@ public class CPTAPI {
 		return CPTAPI.configuration.searchController;
 	}
 	
-	public static ParameterControl getExperimentControls(){
-		return CPTAPI.configuration.experimentsController;
-	}
-	
-	public static ParameterControl getGenerationControls(){
-		return CPTAPI.configuration.generationController;
-	}
-	
-	public static ParameterControl getMHParameterControls(){
+	public static Control getMHParameterControls(){
 		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE)){
-			return CPTAPI.configuration.psoController;
+			return CPTAPI.configuration.psoRangeController;
 		} else {
 			return CPTAPI.configuration.hillController;
 		}
 	}
 	
-//	public static ParameterControl getHCParameterControls(){
-//		return CPTAPI.configuration.hillController;
-//	}
-//	
-//	public static ParameterControl getPSOParameterControls(){
-//		return CPTAPI.configuration.psoController;
-//	}
+	public static ParameterControl getOptionMapControls(){
+		return CPTAPI.configuration.optionMapController;
+	}
+	
+	public static ParameterControl getHCControls(){
+		return CPTAPI.configuration.hillController;
+	}
 	
 	public static PSOControl getPSORangeParameterControls(){
 		return CPTAPI.configuration.psoRangeController;
@@ -128,13 +117,6 @@ public class CPTAPI {
 		if(cpt != null){
 			cpt.start();
 		};
-	}
-
-	public static void toJSON() {
-		if(cpt != null){
-			cpt.jsonNodes();
-		};
-		
 	}
 
 	public static void printQueue() {
