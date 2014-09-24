@@ -27,19 +27,19 @@ public class KeyDoubleValueWidgetForMinAndMax extends CapacityPlanningWidget {
 		this.value2 = value2;
 			
 		//pad
-		Label label = new Label(container, 0);
+		Label label = new Label(container, SWT.FILL);
 		label.setText("");
-		GridData data = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		label.setLayoutData(data);
 		
 		label = new Label(container, SWT.SINGLE | SWT.LEFT);
 		label.setText(this.key);
-		data = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		label.setLayoutData(data);
 		
 		text1 = new Text(container, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
 		text1.setText("" + this.value1);
-		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		text1.setLayoutData(data);
 		
 		text1.addListener(SWT.Modify, new Listener() {
@@ -54,7 +54,7 @@ public class KeyDoubleValueWidgetForMinAndMax extends CapacityPlanningWidget {
 		
 		text2 = new Text(container, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
 		text2.setText("" + this.value2);
-		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		text2.setLayoutData(data);
 		
 		text2.addListener(SWT.Modify, new Listener() {
@@ -66,6 +66,11 @@ public class KeyDoubleValueWidgetForMinAndMax extends CapacityPlanningWidget {
 			}
 			
 		});
+		
+		label = new Label(container, SWT.FILL);
+		label.setText("");
+		data = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
+		label.setLayoutData(data);
 		
 	}
 

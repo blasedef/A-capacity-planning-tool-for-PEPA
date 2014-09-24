@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -29,13 +31,14 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 		
 		setTitle(CPTAPI.getSearchControls().getValue());
 	}
-
+	
 	@Override
 	public void createControl(Composite parent) {
-		GridLayout layout = new GridLayout(4,false);
 		
 		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(16,true);
 		container.setLayout(layout);
+		container.setSize(400,400);
 		constructPage(this.parentCallBack,container);
 		setControl(container);
 	}

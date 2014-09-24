@@ -24,19 +24,19 @@ public class KeySingleValueWidget extends CapacityPlanningWidget {
 		this.value = value;
 			
 		//pad
-		Label label = new Label(container, 0);
+		Label label = new Label(container, SWT.SINGLE | SWT.FILL);
 		label.setText("");
-		GridData data = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		label.setLayoutData(data);
 		
-		label = new Label(container, SWT.SINGLE | SWT.LEFT);
+		label = new Label(container, SWT.SINGLE | SWT.FILL);
 		label.setText(this.key);
-		data = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		label.setLayoutData(data);
 		
 		text = new Text(container, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
 		text.setText("" + this.value);
-		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		text.setLayoutData(data);
 		
 		text.addListener(SWT.Modify, new Listener() {
@@ -50,9 +50,9 @@ public class KeySingleValueWidget extends CapacityPlanningWidget {
 		});
 		
 		//pad
-		label = new Label(container, 0);
+		label = new Label(container, SWT.SINGLE | SWT.FILL);
 		label.setText("");
-		data = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 7, 1);
 		label.setLayoutData(data);
 		
 	}

@@ -6,6 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -21,9 +22,15 @@ public class ThroughputTreeWidget extends CapacityPlanningWidget {
 			Control control) {
 		super(cb, container, control);
 	
+		//pad
+		Label label = new Label(container, SWT.FILL);
+		label.setText("");
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		label.setLayoutData(data);
+		
 		String[] keys = control.getKeys();
 		
-		tree = new Tree(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		tree = new Tree(container, SWT.CHECK | SWT.BORDER );
 		for (int i = 0; i < keys.length; i++) {
 			TreeItem item = new TreeItem(tree, SWT.NONE);
 			item.setText(keys[i]);
@@ -36,8 +43,14 @@ public class ThroughputTreeWidget extends CapacityPlanningWidget {
 			}
 		}); 
 		
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 4);
+		data = new GridData(SWT.FILL, SWT.FILL, true, true, 14, 1);
 		tree.setLayoutData(data);
+		
+		//pad
+		label = new Label(container, SWT.FILL);
+		label.setText("");
+		data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		label.setLayoutData(data);
 
 		
 	}
