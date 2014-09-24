@@ -79,7 +79,7 @@ public class AverageResponseTimeControl extends PerformanceControl {
 		}
 		
 	}
-
+	
 	@Override
 	public ArrayList<HashMap<String, Short>> getOptions() {
 		return ((ProcessList) this.myOptions).getProcessesUnderSequentialComponents();
@@ -92,15 +92,6 @@ public class AverageResponseTimeControl extends PerformanceControl {
 
 	@Override
 	public String[] getLabels() {
-		
-//		Integer[] processIds = ((ProcessList) this.myOptions).getSelectedProcessIds();
-//		String[] collector = new String[processIds.length];
-//		
-//		for(int i = 0; i < processIds.length; i++){
-//			collector[i] = ((ProcessList) this.myOptions).getLabel(processIds[i].shortValue());
-//		}
-//		
-//		return collector;
 		return new String[] { "Average response time" };
 	}
 
@@ -111,8 +102,36 @@ public class AverageResponseTimeControl extends PerformanceControl {
 
 	@Override
 	public String[] getKeys() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<HashMap<String, Short>> processIds = 
+			((ProcessList) this.myOptions).getProcessIDOfSequentialComponents();
+		
+		ArrayList<String> output = new ArrayList<String>();
+		
+		for(HashMap<String,Short> h : processIds){
+			for(String s : h.keySet()){
+				output.add(s);
+			}
+		}
+		
+		return output.toArray(new String[output.size()]);
+	}
+	
+	@Override
+	public String[] getKeys(String s) {
+		ArrayList<HashMap<String, Short>> options = getOptions();
+		ArrayList<String> output = new ArrayList<String>();
+		
+		for(HashMap<String,Short> h : options){
+			for(String s1 : h.keySet()){
+				Short test = h.get(s1);
+				if(((ProcessList) this.myOptions).getRootComponent(test).equals(s)){
+					output.add(s1);
+				}
+			}
+		}
+		
+		return output.toArray(new String[output.size()]);
 	}
 
 	@Override
@@ -123,14 +142,21 @@ public class AverageResponseTimeControl extends PerformanceControl {
 
 	@Override
 	public String getValue(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		if(((ProcessList) this.myOptions).getSelectionState(key)){
+			return "True";
+		} else {
+			return "False";
+		}
 	}
 
 	@Override
 	public boolean setValue(String key, String value) {
-		// TODO Auto-generated method stub
-		return false;
+		if(value.equals("True")){
+			return this.setSelected(key, true);
+		} else {
+			return this.setSelected(key, false);
+		}
+		
 	}
 
 	@Override
@@ -138,5 +164,13 @@ public class AverageResponseTimeControl extends PerformanceControl {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public String getValue(String component, String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

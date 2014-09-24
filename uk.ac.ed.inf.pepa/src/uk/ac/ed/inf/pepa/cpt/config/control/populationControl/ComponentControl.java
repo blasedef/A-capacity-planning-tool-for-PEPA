@@ -54,5 +54,11 @@ public class ComponentControl extends PopulationControl {
 		return false;
 	}
 
+	@Override
+	public String[] getKeys(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

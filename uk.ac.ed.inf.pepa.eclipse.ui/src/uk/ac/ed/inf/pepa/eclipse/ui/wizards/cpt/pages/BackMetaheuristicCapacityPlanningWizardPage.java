@@ -6,24 +6,35 @@ import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.CapacityPlanningWidget;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.KeyDoubleValueWidget;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.KeyDoubleValueWidgetForMinAndMax;
 
 public class BackMetaheuristicCapacityPlanningWizardPage extends CapacityPlanningWizardPage {
 
 	public BackMetaheuristicCapacityPlanningWizardPage(String pageName) {
-		super(pageName);
-		// TODO Auto-generated constructor stub
+		super();
+		this.setDescription(pageName);
 	}
 
 	@Override
 	public void completePage() {
 		
+		String inputError = "";
+		
 		boolean bool = true;
 		for (CapacityPlanningWidget w : widgets){
-			bool = bool & w.isValid();
+			bool = bool & w.isValid().valid;
+			String temp = w.isValid().complaint;
+			if(temp.length() > 0)
+				inputError = temp;
 		}
+		
+		if(inputError.length() > 0){
+			setErrorMessage(inputError);
+		} else {
+			setErrorMessage(null);
+		}
+		
 		setPageComplete(bool);
-		System.out.println("gives: " + bool);
 	}
 
 	@Override
@@ -34,7 +45,7 @@ public class BackMetaheuristicCapacityPlanningWizardPage extends CapacityPlannin
 		for(int i = 0; i < keys.length; i++){
 			String value1 = CPTAPI.getPSORangeParameterControls().getValue(keys[i], Config.LABMIN);
 			String value2 = CPTAPI.getPSORangeParameterControls().getValue(keys[i], Config.LABMAX);
-			widgets.add(new KeyDoubleValueWidget(cb, container, keys[i],
+			widgets.add(new KeyDoubleValueWidgetForMinAndMax(cb, container, keys[i],
 					value1,
 					value2,
 					CPTAPI.getPSORangeParameterControls()));

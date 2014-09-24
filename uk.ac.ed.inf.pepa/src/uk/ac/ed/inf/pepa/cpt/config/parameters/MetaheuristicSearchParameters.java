@@ -29,7 +29,7 @@ public class MetaheuristicSearchParameters extends Parameters {
 		boolean isValid = true;
 		min = this.keyValueMap.get(Config.LABMIN);
 		max = this.keyValueMap.get(Config.LABMAX);
-		ran = (max - min) + 1;
+		ran = (max - min);
 		
 		//remove extra range
 		if(min == 0){

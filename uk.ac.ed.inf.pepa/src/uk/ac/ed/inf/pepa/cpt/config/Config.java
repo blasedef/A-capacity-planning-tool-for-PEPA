@@ -24,7 +24,7 @@ import uk.ac.ed.inf.pepa.cpt.config.lists.DomainChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.RateList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.SearchChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.TargetList;
-import uk.ac.ed.inf.pepa.cpt.config.parameters.FitnessFunctionWeightParameters;
+import uk.ac.ed.inf.pepa.cpt.config.parameters.CostFunctionParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.HillClimbingParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.OptionMapParameters;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
@@ -112,7 +112,7 @@ public class Config implements ConfigCallBack{
 	//set up HillClimbing parameters
 	private HillClimbingParameters hillClimbingParameters;
 	//set up fitness balance
-	private FitnessFunctionWeightParameters fitnessFunctionWeightParameters;
+	private CostFunctionParameters costFunctionParameters;
 	//set up pso range list
 	private PSOList psoList;
 	//set up component population ranges
@@ -142,7 +142,7 @@ public class Config implements ConfigCallBack{
 	
 	//parameters
 	public ParameterControl hillController;
-	public ParameterControl fitnessFunctionWeightController;
+	public ParameterControl costFunctionController;
 	
 	//pso range related
 	public PSOControl psoRangeController;
@@ -172,7 +172,7 @@ public class Config implements ConfigCallBack{
 		this.domainChoiceList = new DomainChoiceList();
 		this.hillClimbingParameters = new HillClimbingParameters();
 		this.psoList = new PSOList();
-		this.fitnessFunctionWeightParameters = new FitnessFunctionWeightParameters();
+		this.costFunctionParameters = new CostFunctionParameters();
 		this.componentList = new ComponentList(this.graph);
 		this.rateList = new RateList(this.node);
 		this.actionList = new ActionList(this.graph);
@@ -194,7 +194,7 @@ public class Config implements ConfigCallBack{
 		
 		this.optionMapController = new ParameterControl(this.optionMapParameters);
 		
-		this.fitnessFunctionWeightController = new ParameterControl(this.fitnessFunctionWeightParameters);
+		this.costFunctionController = new ParameterControl(this.costFunctionParameters);
 		
 		this.psoRangeController = new PSOControl(psoList);
 		
@@ -211,7 +211,7 @@ public class Config implements ConfigCallBack{
 		this.searchChoiceList.printList();
 		this.domainChoiceList.printList();
 		
-		this.fitnessFunctionWeightParameters.toPrint();
+		this.costFunctionParameters.toPrint();
 		
 		//this.experimentParameters.toPrint();
 		//this.generationParameters.toPrint();

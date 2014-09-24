@@ -9,13 +9,15 @@ public abstract class CapacityPlanningWidget {
 	
 	protected IValidationCallback cb;
 	protected Composite container;
+	protected Control control;
 	
-	public CapacityPlanningWidget(IValidationCallback cb, Composite container) {
+	public CapacityPlanningWidget(IValidationCallback cb, Composite container, Control control) {
 		this.cb = cb;
 		this.container = container;
+		this.control = control;
 	
 	}
 	
-	public abstract boolean isValid();
+	public abstract Response isValid();
 
 }

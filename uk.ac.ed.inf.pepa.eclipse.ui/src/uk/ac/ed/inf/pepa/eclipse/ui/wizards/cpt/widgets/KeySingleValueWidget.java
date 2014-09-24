@@ -14,16 +14,14 @@ import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 public class KeySingleValueWidget extends CapacityPlanningWidget {
 	
 	private String key, value;
-	private Control control;
 	private final Text text;
 
 	public KeySingleValueWidget(final IValidationCallback cb, Composite container, String key, String value, Control control) {
-		super(cb, container);
+		super(cb, container, control);
 	
 		
 		this.key = key;
 		this.value = value;
-		this.control = control;
 			
 		//pad
 		Label label = new Label(container, 0);
@@ -60,9 +58,15 @@ public class KeySingleValueWidget extends CapacityPlanningWidget {
 	}
 
 	@Override
-	public boolean isValid() {
+	public Response isValid() {
 			
-		return control.setValue(this.key, text.getText());
+		Response response = new Response(control.setValue(this.key, text.getText()));
+		
+		if(!response.valid){
+			response.setComplaint("Invalid entry: " + this.key + " " + text.getText());
+		}
+		
+		return response;
 		
 	}
 

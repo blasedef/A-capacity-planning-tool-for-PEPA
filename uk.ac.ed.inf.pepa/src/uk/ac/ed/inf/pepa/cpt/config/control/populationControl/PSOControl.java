@@ -51,6 +51,12 @@ public class PSOControl extends PopulationControl {
 		return this.myPSOList.setValue(key, Config.LABMIN, value) 
 		&& this.myPSOList.setValue(key, Config.LABMAX, value);
 	}
+
+	@Override
+	public String[] getKeys(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }

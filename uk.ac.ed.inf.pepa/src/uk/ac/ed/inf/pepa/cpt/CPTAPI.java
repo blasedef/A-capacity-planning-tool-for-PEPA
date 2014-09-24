@@ -52,8 +52,8 @@ public class CPTAPI {
 		return CPTAPI.configuration.psoRangeController;
 	}
 	
-	public static ParameterControl getFitnessWeightControls(){
-		return CPTAPI.configuration.fitnessFunctionWeightController;
+	public static ParameterControl getCostFunctionControls(){
+		return CPTAPI.configuration.costFunctionController;
 	}
 	
 	public static PerformanceControl getPerformanceControls(){

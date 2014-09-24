@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.CapacityPlanningWidget;
 
@@ -21,17 +22,18 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 		}
 	};
 
-	public CapacityPlanningWizardPage(String pageName) {
-		super(pageName);
+	public CapacityPlanningWizardPage() {
+		super(CPTAPI.getSearchControls().getValue());
 		
 		this.widgets = new ArrayList<CapacityPlanningWidget>();
 		
-		setTitle(pageName);
+		setTitle(CPTAPI.getSearchControls().getValue());
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 		GridLayout layout = new GridLayout(4,false);
+		
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(layout);
 		constructPage(this.parentCallBack,container);

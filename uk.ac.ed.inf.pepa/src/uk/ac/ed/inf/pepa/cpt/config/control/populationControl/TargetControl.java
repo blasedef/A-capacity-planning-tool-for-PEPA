@@ -72,5 +72,10 @@ public class TargetControl extends PopulationControl {
 		return false;
 	}
 
+	@Override
+	public String[] getKeys(String s) {
+		return this.myTargetList.getXKeys(s);
+	}
+
 
 }

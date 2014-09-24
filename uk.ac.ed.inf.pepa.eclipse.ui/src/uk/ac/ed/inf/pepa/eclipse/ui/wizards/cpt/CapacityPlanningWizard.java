@@ -23,55 +23,105 @@ public class CapacityPlanningWizard extends Wizard {
 	private WizardPage performanceTargetCapacityPlanningWizardPage;
 	private WizardPage odeOptionCapacityPlanningWizardPage;
 	private WizardPage populationCapacityPlanningWizardPage;
-	private WizardPage saveAsPageCapacityPlanningWizardPage;
+	private WizardPage saveAsCapacityPlanningWizardPage;
 	
 	public CapacityPlanningWizard(){
 		
 		wizardPageList = new ArrayList<WizardPage>();
 		
 		frontMetaheuristicCapacityPlanningWizardPage = 
-			new FrontMetaheuristicCapacityPlanningWizardPage(CPTAPI.getSearchControls().getValue());
-		
-		wizardPageList.add(frontMetaheuristicCapacityPlanningWizardPage);
-		addPage(frontMetaheuristicCapacityPlanningWizardPage);
+			new FrontMetaheuristicCapacityPlanningWizardPage("Meta heuristic configuration");
 		
 		backMetaheuristicCapacityPlanningWizardPage = 
-			new BackMetaheuristicCapacityPlanningWizardPage(CPTAPI.getSearchControls().getValue());
+			new BackMetaheuristicCapacityPlanningWizardPage("Driven Meta heuristic configuration");
 		
+		costFunctionCapacityPlanningWizardPage =
+			new CostFunctionCapacityPlanningWizardPage("Cost function configuration...");
+		
+		performanceSelectionCapacityPlanningWizardPage =
+			new PerformanceSelectionCapacityPlanningWizardPage("Performance cost: State/Action selection...");
+		
+		performanceTargetCapacityPlanningWizardPage =
+			new PerformanceTargetCapacityPlanningWizardPage("Performance cost: Target/Threshold values...");
+		
+		odeOptionCapacityPlanningWizardPage = 
+			new ODEOptionCapacityPlanningWizardPage("Performance cost: ODE configuration...");
+		
+		populationCapacityPlanningWizardPage =
+			new PopulationCapacityPlanningWizardPage("Population cost: range and weight configuration...");
+		
+		saveAsCapacityPlanningWizardPage =
+			new SaveAsCapacityPlanningWizardPage("Save results as...");
+		
+		wizardPageList.add(frontMetaheuristicCapacityPlanningWizardPage);
 		wizardPageList.add(backMetaheuristicCapacityPlanningWizardPage);
+		wizardPageList.add(costFunctionCapacityPlanningWizardPage);
+		wizardPageList.add(performanceSelectionCapacityPlanningWizardPage);
+		wizardPageList.add(performanceTargetCapacityPlanningWizardPage);
+		wizardPageList.add(odeOptionCapacityPlanningWizardPage);
+		wizardPageList.add(populationCapacityPlanningWizardPage);
+		wizardPageList.add(saveAsCapacityPlanningWizardPage);
+		
+		addPage(frontMetaheuristicCapacityPlanningWizardPage);
 		addPage(backMetaheuristicCapacityPlanningWizardPage);
+		addPage(costFunctionCapacityPlanningWizardPage);
+		addPage(performanceSelectionCapacityPlanningWizardPage);
+		addPage(performanceTargetCapacityPlanningWizardPage);
+		addPage(odeOptionCapacityPlanningWizardPage);
+		addPage(populationCapacityPlanningWizardPage);
+		addPage(saveAsCapacityPlanningWizardPage);
+	}
+	
+	/**
+	 * page ordering
+	 */
+	public IWizardPage getNextPage(IWizardPage page){
+		
+		
+		if(page == frontMetaheuristicCapacityPlanningWizardPage){
+			if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHDRIVEN)){
+				return backMetaheuristicCapacityPlanningWizardPage;
+			} else {
+				return costFunctionCapacityPlanningWizardPage;
+			}
+		}
+		
+		if(page == backMetaheuristicCapacityPlanningWizardPage){
+			return costFunctionCapacityPlanningWizardPage;
+		}
+		
+		if(page == costFunctionCapacityPlanningWizardPage){
+			return performanceSelectionCapacityPlanningWizardPage;
+		}
+		
+		if(page == performanceSelectionCapacityPlanningWizardPage){
+			
+			performanceTargetCapacityPlanningWizardPage =
+				new PerformanceTargetCapacityPlanningWizardPage("Performance cost: Target/Threshold values...");
+			
+			addPage(performanceTargetCapacityPlanningWizardPage);
+			
+			return performanceTargetCapacityPlanningWizardPage;
+		}
+		
+		if(page == performanceTargetCapacityPlanningWizardPage){
+			return odeOptionCapacityPlanningWizardPage;
+		}
+		
+		if(page == odeOptionCapacityPlanningWizardPage){
+			return populationCapacityPlanningWizardPage;
+		}
+		
+		if(page == populationCapacityPlanningWizardPage){
+			return saveAsCapacityPlanningWizardPage;
+		}
+		
+		return super.getNextPage(null);
 		
 	}
 	
-//	/**
-//	 * page ordering
-//	 */
-//	public IWizardPage getNextPage(IWizardPage page){
-//		
-//		
-//		if(page == frontMetaheuristicCapacityPlanningWizardPage){
-//			return driven();
-//		}
-//		
-//		return super.getNextPage(null);
-//		
-//	}
 	
-	
-//	public IWizardPage driven(){
-//		
-//		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHDRIVEN)){
-//			
-//			backMetaheuristicCapacityPlanningWizardPage = 
-//				new FrontMetaheuristicCapacityPlanningWizardPage(CPTAPI.getSearchControls().getValue());
-//			
-//			wizardPageList.add(backMetaheuristicCapacityPlanningWizardPage);
-//			addPage(backMetaheuristicCapacityPlanningWizardPage);
-//		}
-//		
-//		return backMetaheuristicCapacityPlanningWizardPage;
-//		
-//	}
+
 	
 	@Override
 	public boolean performFinish() {
@@ -82,8 +132,13 @@ public class CapacityPlanningWizard extends Wizard {
 	@Override
 	public boolean canFinish(){
 		
-		return this.frontMetaheuristicCapacityPlanningWizardPage.isPageComplete() &&
-		this.backMetaheuristicCapacityPlanningWizardPage.isPageComplete();
+		boolean finished = true;
+		
+		for(WizardPage w : this.wizardPageList){
+			finished = finished && w.isPageComplete();
+		}
+		
+		return finished;
 		
 	}
 

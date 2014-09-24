@@ -25,7 +25,7 @@ public class DrivenCapacityPlanningARTActionDelegate extends BasicProcessAlgebra
 
 	@Override
 	public void run(IAction action) {
-		ActionCommands.capacityPlanning((IPepaModel) model,Config.SEARCHDRIVEN, Config.EVALTHRO);
+		ActionCommands.capacityPlanning((IPepaModel) model,Config.SEARCHDRIVEN, Config.EVALARPT);
 	}
 
 }

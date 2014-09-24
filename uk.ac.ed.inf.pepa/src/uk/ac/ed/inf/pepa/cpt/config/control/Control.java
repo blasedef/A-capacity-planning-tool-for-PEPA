@@ -10,8 +10,12 @@ public interface Control {
 	
 	public String getValue(String key);
 	
+	public String getValue(String component, String key);
+	
 	public String getType(String key);
 	
 	public String[] getKeys();
+	
+	public String[] getKeys(String s);
 	
 }

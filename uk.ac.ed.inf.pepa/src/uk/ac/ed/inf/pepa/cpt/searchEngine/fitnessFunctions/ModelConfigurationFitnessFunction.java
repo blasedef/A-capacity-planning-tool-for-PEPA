@@ -53,7 +53,7 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 		Double totalWeight = 0.0;
 		Double measured, target, wei, result, maxi, cost, d;
 		String[] keys = performanceMap.keySet().toArray(new String[workingMap.keySet().size()]);
-		Double penalty = Double.parseDouble(CPTAPI.getFitnessWeightControls().getValue(Config.FITPEN));
+		Double penalty = Double.parseDouble(CPTAPI.getCostFunctionControls().getValue(Config.FITPEN));
 		
 		for(int i = 0; i < keys.length;i++){
 			
@@ -89,16 +89,16 @@ public class ModelConfigurationFitnessFunction implements FitnessFunction {
 	
 	public Double assessFitness(HashMap<String,Double> domainMap, HashMap<String,Double> performanceMap){
 		
-		String[] keys = CPTAPI.getFitnessWeightControls().getKeys();
+		String[] keys = CPTAPI.getCostFunctionControls().getKeys();
 		Double resources, performance;
 		Double totalWeight = 0.0;
 		
 		for(int i = 0; i < keys.length; i++){
-			totalWeight += Double.parseDouble(CPTAPI.getFitnessWeightControls().getValue(keys[i]));
+			totalWeight += Double.parseDouble(CPTAPI.getCostFunctionControls().getValue(keys[i]));
 		}
 		
-		resources = Double.parseDouble(CPTAPI.getFitnessWeightControls().getValue(Config.FITRES))/totalWeight;
-		performance = Double.parseDouble(CPTAPI.getFitnessWeightControls().getValue(Config.FITPER))/totalWeight;
+		resources = Double.parseDouble(CPTAPI.getCostFunctionControls().getValue(Config.FITRES))/totalWeight;
+		performance = Double.parseDouble(CPTAPI.getCostFunctionControls().getValue(Config.FITPER))/totalWeight;
 		
 		return (resources*assessDomain(domainMap))+(performance*assessPerformance(performanceMap));
 		

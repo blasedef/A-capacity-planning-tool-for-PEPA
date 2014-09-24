@@ -74,8 +74,19 @@ public class CapacityUtilisationControl extends PerformanceControl {
 
 	@Override
 	public String[] getKeys() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<HashMap<String, Short>> processIds = 
+			((ProcessList) this.myOptions).getProcessIDOfSequentialComponents();
+		
+		ArrayList<String> output = new ArrayList<String>();
+		
+		for(HashMap<String,Short> h : processIds){
+			for(String s : h.keySet()){
+				output.add(s);
+			}
+		}
+		
+		return output.toArray(new String[output.size()]);
 	}
 
 	@Override
@@ -86,20 +97,39 @@ public class CapacityUtilisationControl extends PerformanceControl {
 
 	@Override
 	public String getValue(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		if(((ProcessList) this.myOptions).getSelectionState(key)){
+			return "True";
+		} else {
+			return "False";
+		}
 	}
 
 	@Override
 	public boolean setValue(String key, String value) {
-		// TODO Auto-generated method stub
-		return false;
+		if(value.equals("True")){
+			return this.setSelected(key, true);
+		} else {
+			return this.setSelected(key, false);
+		}
+		
 	}
 
 	@Override
 	public boolean setValue(String component, String key, String value) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public String[] getKeys(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getValue(String component, String key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

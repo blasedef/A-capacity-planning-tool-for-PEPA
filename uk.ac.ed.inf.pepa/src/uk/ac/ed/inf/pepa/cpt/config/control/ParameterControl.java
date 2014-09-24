@@ -38,4 +38,16 @@ public class ParameterControl implements Control {
 		return false;
 	}
 
+	@Override
+	public String[] getKeys(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getValue(String component, String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

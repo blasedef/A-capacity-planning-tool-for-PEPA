@@ -7,9 +7,10 @@ import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.CapacityPlanningWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.KeySingleValueWidget;
 
-public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanningWizardPage {
+public class CostFunctionCapacityPlanningWizardPage extends
+		CapacityPlanningWizardPage {
 
-	public FrontMetaheuristicCapacityPlanningWizardPage(String pageName) {
+	public CostFunctionCapacityPlanningWizardPage(String pageName) {
 		super();
 		this.setDescription(pageName);
 	}
@@ -39,10 +40,10 @@ public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanni
 	@Override
 	protected void constructPage(IValidationCallback cb, Composite container) {
 		
-		String[] keys = CPTAPI.getMHParameterControls().getKeys();
+		String[] keys = CPTAPI.getCostFunctionControls().getKeys();
 		
 		for(int i = 0; i < keys.length; i++){
-			widgets.add(new KeySingleValueWidget(cb, container,keys[i],CPTAPI.getMHParameterControls().getValue(keys[i]),CPTAPI.getMHParameterControls()));
+			widgets.add(new KeySingleValueWidget(cb, container,keys[i],CPTAPI.getCostFunctionControls().getValue(keys[i]),CPTAPI.getCostFunctionControls()));
 		}
 
 	}
