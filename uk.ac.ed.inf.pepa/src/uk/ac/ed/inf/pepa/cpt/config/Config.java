@@ -131,6 +131,9 @@ public class Config implements ConfigCallBack{
 	private IStatisticsCollector[] collectors;
 	private OptionMapParameters optionMapParameters;
 	
+	//for the filename
+	private String fileName;
+	
 	/*
 	 * Controllers
 	 */
@@ -302,6 +305,15 @@ public class Config implements ConfigCallBack{
 	
 	public String[] getLabels() {
 		return this.actionAndProcessSelectionController.getLabels();
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+		
+	}
+	
+	public String getFileName() {
+		return this.fileName;
 	}
 
 }

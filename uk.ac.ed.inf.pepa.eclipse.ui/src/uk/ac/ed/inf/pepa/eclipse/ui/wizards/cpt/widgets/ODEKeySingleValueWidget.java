@@ -11,18 +11,20 @@ import org.eclipse.swt.widgets.Text;
 import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 
-public class KeySingleValueWidget extends CapacityPlanningWidget {
+public class ODEKeySingleValueWidget extends CapacityPlanningWidget {
 	
-	private String key, value;
+	private String key, realKey, value;
 	protected Text text;
 
-	public KeySingleValueWidget(final IValidationCallback cb, Composite container, String key, String value, Control control) {
+
+	public ODEKeySingleValueWidget(final IValidationCallback cb, Composite container, String name, String key, String value, Control control) {
 		super(cb, container, control);
 	
 		
-		this.key = key;
+		this.key = name;
+		this.realKey = key;
 		this.value = value;
-			
+		
 		//pad
 		Label label = new Label(container, SWT.SINGLE | SWT.FILL);
 		label.setText("");
@@ -60,7 +62,7 @@ public class KeySingleValueWidget extends CapacityPlanningWidget {
 	@Override
 	public Response isValid() {
 			
-		Response response = new Response(control.setValue(this.key, text.getText()));
+		Response response = new Response(control.setValue(this.realKey, text.getText()));
 		
 		if(!response.valid){
 			response.setComplaint("Invalid entry: " + this.key + " " + text.getText());

@@ -12,28 +12,29 @@ import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 
-public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidget {
+public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlanningWidget {
 	
-	private String key, value1, value2;
-	private final Text text1, text2;
+	private String key, value1, value2, value3;
+	private final Text text1, text2, text3;
 
-	public KeyDoubleValueWidgetForWeightAndTarget(final IValidationCallback cb, 
-			Composite container, String key, String value1, String value2, Control control) {
+	public KeyTripleValueWidgetForMinimumMaximumAndWeight(final IValidationCallback cb, 
+			Composite container, 
+			String key, 
+			String value1, 
+			String value2, 
+			String value3, 
+			Control control) {
+		
 		super(cb, container, control);
 	
 		this.key = key;
 		this.value1 = value1;
 		this.value2 = value2;
+		this.value3 = value3;
 			
-		//pad
-		Label label = new Label(container, SWT.FILL);
-		label.setText("");
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-		label.setLayoutData(data);
-		
-		label = new Label(container, SWT.SINGLE | SWT.LEFT);
+		Label label = new Label(container, SWT.SINGLE | SWT.LEFT);
 		label.setText(this.key);
-		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
+		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		label.setLayoutData(data);
 		
 		text1 = new Text(container, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
@@ -66,21 +67,35 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 			
 		});
 		
-		label = new Label(container, SWT.FILL);
-		label.setText("");
-		data = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-		label.setLayoutData(data);
+		text3 = new Text(container, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
+		text3.setText("" + this.value3);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
+		text3.setLayoutData(data);
+		
+		text3.addListener(SWT.Modify, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				cb.validate();
+				
+			}
+			
+		});
 		
 	}
 
 	@Override
 	public Response isValid() {
 		
-		Response response = new Response(control.setValue(this.key, Config.LABTAR, text1.getText()) && 
-				control.setValue(this.key, Config.LABWEI, text2.getText()));
+		Response response = new Response((control.setValue(this.key, Config.LABMIN, text1.getText()) || 
+				control.setValue(this.key, Config.LABMAX, text2.getText())) &&
+				control.setValue(this.key, Config.LABWEI, text3.getText()) );
 		
 		if(!response.valid){
-			response.setComplaint("Invalid entry: " + this.key + " " + text1.getText() + " " + text2.getText());
+			response.setComplaint("Invalid entry: " + this.key 
+					+ " " + text1.getText() 
+					+ " " + text2.getText()
+					+ " " + text3.getText());
 		}
 		
 		return response;

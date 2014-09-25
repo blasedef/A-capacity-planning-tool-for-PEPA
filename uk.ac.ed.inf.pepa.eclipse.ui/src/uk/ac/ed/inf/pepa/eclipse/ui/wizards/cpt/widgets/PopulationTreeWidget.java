@@ -25,10 +25,10 @@ public class PopulationTreeWidget extends CapacityPlanningWidget {
 		String[] keys = control.getKeys();
 		
 		//pad
-		//pad
 		Label label = new Label(container, SWT.FILL);
 		label.setText("");
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		data.widthHint = 25;
 		label.setLayoutData(data);
 		
 		tree = new Tree(container, SWT.CHECK | SWT.BORDER );
@@ -45,12 +45,14 @@ public class PopulationTreeWidget extends CapacityPlanningWidget {
 		}); 
 		
 		data = new GridData(SWT.FILL, SWT.FILL, true, true, 14, 1);
+		data.widthHint = 550;
 		tree.setLayoutData(data);
 		
 		//pad
 		label = new Label(container, SWT.FILL);
 		label.setText("");
 		data = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		data.widthHint = 25;
 		label.setLayoutData(data);
 
 		

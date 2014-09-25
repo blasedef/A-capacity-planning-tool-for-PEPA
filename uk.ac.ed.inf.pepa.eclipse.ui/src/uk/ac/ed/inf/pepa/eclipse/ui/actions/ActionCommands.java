@@ -109,7 +109,7 @@ public class ActionCommands {
 		CPTAPI.setModel(model.getAST());
 		CPTAPI.getSearchControls().setValue(search);
 		CPTAPI.getEvaluationControls().setValue(evaluation);
-		CapacityPlanningWizard wizard = new CapacityPlanningWizard();
+		CapacityPlanningWizard wizard = new CapacityPlanningWizard(model);
 		WizardDialog dialog = new WizardDialog(Display.getDefault()
 				.getActiveShell(), wizard);
 		dialog.setPageSize(400, 400);

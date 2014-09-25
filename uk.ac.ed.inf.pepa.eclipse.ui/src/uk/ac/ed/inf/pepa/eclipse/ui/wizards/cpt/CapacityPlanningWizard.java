@@ -3,16 +3,24 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
+import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
+import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages.*;
 
 public class CapacityPlanningWizard extends Wizard {
+	
+	private static final String EXTENSION = "csv";
 	
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
 	
@@ -23,9 +31,9 @@ public class CapacityPlanningWizard extends Wizard {
 	private WizardPage performanceTargetCapacityPlanningWizardPage;
 	private WizardPage odeOptionCapacityPlanningWizardPage;
 	private WizardPage populationCapacityPlanningWizardPage;
-	private WizardPage saveAsCapacityPlanningWizardPage;
+	private WizardNewFileCreationPage saveAsCapacityPlanningWizardPage;
 	
-	public CapacityPlanningWizard(){
+	public CapacityPlanningWizard(IPepaModel model){
 		
 		wizardPageList = new ArrayList<WizardPage>();
 		
@@ -50,8 +58,14 @@ public class CapacityPlanningWizard extends Wizard {
 		populationCapacityPlanningWizardPage =
 			new PopulationCapacityPlanningWizardPage("Population cost: range and weight configuration...");
 		
-		saveAsCapacityPlanningWizardPage =
-			new SaveAsCapacityPlanningWizardPage("Save results as...");
+		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+				model.getUnderlyingResource(), EXTENSION));
+		
+		saveAsCapacityPlanningWizardPage = new SaveAsCapacityPlanningWizardPage(new StructuredSelection(handle), EXTENSION);
+		saveAsCapacityPlanningWizardPage.setTitle(CPTAPI.getSearchControls().getValue() + ": " + CPTAPI.getEvaluationControls().getValue());
+		saveAsCapacityPlanningWizardPage.setDescription("Save model configurations to");
+		saveAsCapacityPlanningWizardPage.setFileName(handle.getName());
 		
 		wizardPageList.add(frontMetaheuristicCapacityPlanningWizardPage);
 		wizardPageList.add(backMetaheuristicCapacityPlanningWizardPage);

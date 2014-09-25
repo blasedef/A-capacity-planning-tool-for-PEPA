@@ -3,8 +3,8 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
-import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.CapacityPlanningWidget;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.KeySingleValueWidget;
 
 public class CostFunctionCapacityPlanningWizardPage extends
@@ -16,35 +16,28 @@ public class CostFunctionCapacityPlanningWizardPage extends
 	}
 
 	@Override
-	public void completePage() {
-		
-		String inputError = "";
-		
-		boolean bool = true;
-		for (CapacityPlanningWidget w : widgets){
-			bool = bool & w.isValid().valid;
-			String temp = w.isValid().complaint;
-			if(temp.length() > 0)
-				inputError = temp;
-		}
-		
-		if(inputError.length() > 0){
-			setErrorMessage(inputError);
-		} else {
-			setErrorMessage(null);
-		}
-		
-		setPageComplete(bool);
-	}
-
-	@Override
 	protected void constructPage(IValidationCallback cb, Composite container) {
 		
-		String[] keys = CPTAPI.getCostFunctionControls().getKeys();
+		Control control = CPTAPI.getCostFunctionControls();
+		String[] keys = control.getKeys();
+		
+		//left pad
+		pad(container);
+		
+		Composite child = center(container);
+		
+		String[] titles = {"Setting","Value"};
+		
+		header(titles,child,4);
 		
 		for(int i = 0; i < keys.length; i++){
-			widgets.add(new KeySingleValueWidget(cb, container,keys[i],CPTAPI.getCostFunctionControls().getValue(keys[i]),CPTAPI.getCostFunctionControls()));
+			widgets.add(new KeySingleValueWidget(cb, child,keys[i],control.getValue(keys[i]),control));
 		}
+		
+		footer(child);
+		
+		//Left pad
+		pad(container);
 
 	}
 

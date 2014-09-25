@@ -12,26 +12,27 @@ import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 
-public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidget {
+public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWidget {
 	
 	private String key, value1, value2;
 	private final Text text1, text2;
 
-	public KeyDoubleValueWidgetForWeightAndTarget(final IValidationCallback cb, 
+	public KeyDoubleValueWidgetForMinimumAndMaximum(final IValidationCallback cb, 
 			Composite container, String key, String value1, String value2, Control control) {
 		super(cb, container, control);
 	
+		
 		this.key = key;
 		this.value1 = value1;
 		this.value2 = value2;
 			
 		//pad
-		Label label = new Label(container, SWT.FILL);
+		Label label = new Label(container, SWT.FILL );
 		label.setText("");
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
 		label.setLayoutData(data);
 		
-		label = new Label(container, SWT.SINGLE | SWT.LEFT);
+		label = new Label(container, SWT.SINGLE | SWT.LEFT );
 		label.setText(this.key);
 		data = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
 		label.setLayoutData(data);
@@ -66,7 +67,7 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 			
 		});
 		
-		label = new Label(container, SWT.FILL);
+		label = new Label(container, SWT.FILL );
 		label.setText("");
 		data = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
 		label.setLayoutData(data);
@@ -76,8 +77,8 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 	@Override
 	public Response isValid() {
 		
-		Response response = new Response(control.setValue(this.key, Config.LABTAR, text1.getText()) && 
-				control.setValue(this.key, Config.LABWEI, text2.getText()));
+		Response response = new Response(control.setValue(this.key, Config.LABMIN, text1.getText()) || 
+				control.setValue(this.key, Config.LABMAX, text2.getText()));
 		
 		if(!response.valid){
 			response.setComplaint("Invalid entry: " + this.key + " " + text1.getText() + " " + text2.getText());

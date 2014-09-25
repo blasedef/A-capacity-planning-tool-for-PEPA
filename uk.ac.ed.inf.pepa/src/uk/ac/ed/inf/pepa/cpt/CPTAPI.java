@@ -125,5 +125,15 @@ public class CPTAPI {
 		};
 		
 	}
+
+	public static void setFileName(String fileName) {
+		CPTAPI.configuration.setFileName(fileName);
+		
+	}
+	
+	public static String getFileName() {
+		return CPTAPI.configuration.getFileName();
+		
+	}
 	
 }

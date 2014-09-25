@@ -34,7 +34,7 @@ public class OptionMapParameters extends Parameters {
 		this.keyValueMap.put(OptionMap.ODE_STEADY_STATE_NORM, 1e-6);
 		
 		
-		this.keyTypeMap.put(OptionMap.ODE_START_TIME, Config.NATURAL);
+		this.keyTypeMap.put(OptionMap.ODE_START_TIME, Config.INTEGER);
 		this.keyTypeMap.put(OptionMap.ODE_STOP_TIME, Config.NATURAL);
 		this.keyTypeMap.put(OptionMap.ODE_STEP, Config.NATURAL);
 		this.keyTypeMap.put(OptionMap.ODE_ATOL, Config.DOUBLE);

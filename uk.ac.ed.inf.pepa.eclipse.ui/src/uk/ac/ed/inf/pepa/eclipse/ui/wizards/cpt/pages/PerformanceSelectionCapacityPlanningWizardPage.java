@@ -46,8 +46,6 @@ public class PerformanceSelectionCapacityPlanningWizardPage extends
 		}
 		
 		
-		
-		
 	}
 
 	@Override
@@ -55,21 +53,33 @@ public class PerformanceSelectionCapacityPlanningWizardPage extends
 		
 		setPageComplete(false);
 		
+		//left pad
+		pad(container);
+		
+		Composite child = centerVertical(container);
+		
+		footer(child);
+		
 		if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALARPT)){
-			this.widgets.add(new AverageResponseTreeWidget(cb, container, CPTAPI.getPerformanceControls()));
+			this.widgets.add(new AverageResponseTreeWidget(cb, child, CPTAPI.getPerformanceControls()));
 		}
 		
 		if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALTHRO)){
-			this.widgets.add(new ThroughputTreeWidget(cb, container, CPTAPI.getPerformanceControls()));
+			this.widgets.add(new ThroughputTreeWidget(cb, child, CPTAPI.getPerformanceControls()));
 		}
 		
 		if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALUTIL)){
-			this.widgets.add(new UtilCapacityTreeWidget(cb, container, CPTAPI.getPerformanceControls()));
+			this.widgets.add(new UtilCapacityTreeWidget(cb, child, CPTAPI.getPerformanceControls()));
 		}
 		
 		if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALPOPU)){
-			this.widgets.add(new PopulationTreeWidget(cb, container, CPTAPI.getPerformanceControls()));
+			this.widgets.add(new PopulationTreeWidget(cb, child, CPTAPI.getPerformanceControls()));
 		}
+		
+		footer(child);
+		
+		//Left pad
+		pad(container);
 	}
 
 }
