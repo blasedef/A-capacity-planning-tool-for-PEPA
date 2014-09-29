@@ -40,10 +40,18 @@ public class ActionList implements IOptionList {
 		
 	}
 	
-	public void toPrint(){
-		System.out.println("//");
-		for(Entry<String, ActionOptions> entry : myActionList.entrySet()){
-			entry.getValue().toPrint();
+	public String toPrint(){
+		String output = "";
+		for(String s : this.myActionToSelectedMap.keySet()){
+			if(this.myActionToSelectedMap.get(s)){
+				output = output + s + ";";
+			}
+		}
+		
+		if(output.length() > 0){
+			return output.substring(0, output.length() - 1);
+		} else {
+			return "";
 		}
 	}
 	

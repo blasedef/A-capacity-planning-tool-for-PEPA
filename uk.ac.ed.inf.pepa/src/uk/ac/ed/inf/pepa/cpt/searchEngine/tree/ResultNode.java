@@ -2,40 +2,148 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import uk.ac.ed.inf.pepa.cpt.Utils;
 
 public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode> {
 
-	private CandidateNode labConfiguration;
-	private MetaHeuristicNode psoConfiguration;
-	private ModelConfigurationCandidateNode modelConfiguration;
-	private Double fitness, hRunTime;
+//	private MetaHeuristicNode mhConfiguration;
+//	private ModelConfigurationCandidateNode modelConfiguration;
+	private Double cost, performanceCost, populationCost, totalPopulation;
+	private HashMap<String,Double> componentPopulationMap;
+	private HashMap<String,Double> performanceMap;
+	private HashMap<String,Double> metaheuristicParameterMap;
 	
-	public ResultNode(Double hRunTime,
-			CandidateNode labConfiguration,
-			MetaHeuristicNode psoConfiguration,
+	public String COMPONENT,MEASURED, PSO, TOTAL, POP, PER, TPOP;
+	
+	public ResultNode(MetaHeuristicNode mhConfiguration,
 			ModelConfigurationCandidateNode modelConfiguration){
 		
-		this.hRunTime = hRunTime;
-		this.labConfiguration = labConfiguration;
-		this.psoConfiguration = psoConfiguration;
-		this.modelConfiguration = modelConfiguration;
-		this.fitness = this.modelConfiguration.getFitness();
+		this.cost = modelConfiguration.getFitness();
+		this.performanceCost = modelConfiguration.getPerformanceResult();
+		this.populationCost = modelConfiguration.getPopulationResult();
+		this.totalPopulation = modelConfiguration.getTotalComponents();
+		this.componentPopulationMap = Utils.copyHashMap(modelConfiguration.getMyMap());
+		this.performanceMap = Utils.copyHashMap(modelConfiguration.getPerformanceMap());
+		this.metaheuristicParameterMap = Utils.copyHashMap(mhConfiguration.getMyMap());
+		
+		//required strings
+		this.COMPONENT = "Component population";
+		this.MEASURED = "Measured Performance";
+		this.PSO = "PSO parameters";
+		this.TOTAL = "Total cost";
+		this.POP = "Population cost";
+		this.PER = "Performance cost";
+		this.TPOP = "Total population";
 		
 	}
 	
-	public ModelConfigurationCandidateNode getMCN(){
-		return this.modelConfiguration;
+	private String mapAsCSVString(HashMap<String,Double> map){
+		String output = "";
+		
+		for(String s : map.keySet()){
+			output = output + s + ";" + map.get(s) + ";";
+		}
+		
+		return output.substring(0,output.length() - 1);
+	}
+	
+	private String mapAsNodeString(HashMap<String,Double> map){
+		String output = "";
+		
+		for(String s : map.keySet()){
+			output = output + s + "[" + map.get(s) + "]-";
+		}
+		
+		return output.substring(0,output.length() - 1);
+	}
+	
+
+	public String populationMapAsCSVString(){
+		return mapAsCSVString(componentPopulationMap);
+	}
+	
+	public String peformanceMapAsCSVString(){
+		return  mapAsCSVString(performanceMap);
+	}
+	
+	public String psoMapAsCSVString(){
+		return  mapAsCSVString(metaheuristicParameterMap);
+	}
+	
+	public String populationMapAsNodeString(){
+		return mapAsNodeString(componentPopulationMap);
+	}
+	
+	public String peformanceMapAsNodeString(){
+		return mapAsNodeString(performanceMap);
+	}
+	
+	public String psoMapAsNodeString(){
+		return mapAsNodeString(metaheuristicParameterMap);
+	}
+	
+	public String getTotalCostString(){
+		return "" + this.cost;
+	}
+	
+	public String getPopulationCostString(){
+		return "" + this.populationCost;
+	}
+	
+	public String getPerformanceCostString(){
+		return "" + this.performanceCost;
+	}
+	
+	public String getTotalPopulationString(){
+		return "" + this.totalPopulation;
+	}
+	
+	public String gapper(HashMap<String,Double> map){
+		String output = "";
+		for(int i = 0; i < map.size()*2; i++){
+			output = output + ";";
+		}
+		return output;
+	}
+	
+	public String componentPopulationGap(){
+		return gapper(this.componentPopulationMap);	
+	}
+	
+	public String performanceGap(){
+		return gapper(performanceMap);
+	}
+	
+	public String psoGap(){
+		return gapper(metaheuristicParameterMap);
+	}
+	
+	public String heading(){
+		return COMPONENT + componentPopulationGap() + ";"
+		+ TOTAL + ";"
+		+ PER + ";"
+		+ POP + ";"
+		+ MEASURED + performanceGap()
+		+ TPOP + ";;"
+		+ PSO + psoGap();
+	}
+	
+	public String toString(){
+		return populationMapAsCSVString() + ";;" 
+		+ getTotalCostString() + ";" 
+		+ getPerformanceCostString() + ";"
+		+ getPopulationCostString() + ";"
+		+ peformanceMapAsCSVString() + ";"
+		+ getTotalPopulationString() + ";;"
+		+ psoMapAsCSVString() ;
 	}
 	
 	public int compare(ResultNode c1, ResultNode c2){
 		
-		if(c1.getFitness() > c2.getFitness()){
+		if(c1.getCost() > c2.getCost()){
 			return -1;
-		} else if (c1.getFitness() < c2.getFitness()){
+		} else if (c1.getCost() < c2.getCost()){
 			return 1;
 		} else {
 			return 0;
@@ -43,16 +151,16 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		
 	}
 
-	private Double getFitness() {
-		return this.fitness;
+	private Double getCost() {
+		return this.cost;
 	}
 
 	@Override
 	public int compareTo(ResultNode arg0) {
 		
-		if(this.fitness > arg0.getFitness()){
+		if(this.cost > arg0.getCost()){
 			return -1;
-		} else if (this.fitness < arg0.getFitness()){
+		} else if (this.cost < arg0.getCost()){
 			return 1;
 		} else {
 			return 0;
@@ -61,56 +169,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof ResultNode){
-			ResultNode candidate = (ResultNode) obj;
-			if(this.modelConfiguration.getMyMap().toString().equals(candidate.getMCN().myMap.toString())){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return false;
 	}
 	
-	public JSONArray getMapAsList(HashMap<String,Double> map){
-		
-		JSONArray list = new JSONArray();
-		JSONObject obj = new JSONObject();
-		
-		for(Entry<String, Double> entry : map.entrySet()){
-			obj.put(entry.getKey(),entry.getValue());
-		}
-		
-		list.add(obj);
-		
-		return list;
-		
-	}
 	
-	public void print(JSONObject obj) {
-		
-		JSONArray list = new JSONArray();
-		JSONObject obj2 = new JSONObject();
-		
-		list.add(getMapAsList(this.modelConfiguration.getMyMap()));
-		list.add(getMapAsList(this.psoConfiguration.getMyMap()));
-		
-		obj2.put("modelconfigurationfitness",this.modelConfiguration.getFitness());
-		obj2.put("performanceCost",this.modelConfiguration.getPerformanceResult());
-		obj2.put("populationCost",this.modelConfiguration.getPopulationResult());
-		obj2.put("performanceMap",this.modelConfiguration.getPerformanceMap());
-		obj2.put("totalPopulation", this.modelConfiguration.getTotalComponents());
-		obj2.put("labfitness",this.labConfiguration.getFitness());
-		obj2.put("modelConfigurationRuntime",this.modelConfiguration.getRunTime());
-		obj2.put("psoRunTime",this.psoConfiguration.getRunTime());
-		obj2.put("labRunTime",this.hRunTime);
-		obj2.put("hasConverged",this.modelConfiguration.hasConverged());
-		
-		list.add(obj2);
-		
-		obj.put(this.modelConfiguration.getName(), list);
-		
-	}
+
 
 }

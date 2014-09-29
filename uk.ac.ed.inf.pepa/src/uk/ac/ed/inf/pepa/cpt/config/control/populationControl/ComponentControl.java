@@ -59,6 +59,11 @@ public class ComponentControl extends PopulationControl {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String toPrint() {
+		return "Component ranges;" + this.myComponentList.toPrint();
+	}
 
 
 }

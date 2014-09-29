@@ -131,5 +131,10 @@ public class CapacityUtilisationControl extends PerformanceControl {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String toPrint() {
+		return "Selected;" + this.myOptions.toPrint();
+	}
 
 }

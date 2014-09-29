@@ -41,12 +41,12 @@ public class SingleChoiceList {
 		return this.choices;
 	}
 	
-	public void printList(){
-		System.out.println("//");
-		System.out.println(this.label + " : " + this.value);
-		for(int i = 0; i < this.choices.length;i++){
-			System.out.println("Choice " + i + " : " + this.choices[i]);
-		}
+	public String toPrint(){
+		
+		String output = "";
+		output = this.label + " ; " + this.value;
+		
+		return output;
 	}
 
 }

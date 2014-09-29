@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.cpt.config.lists;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import uk.ac.ed.inf.pepa.cpt.config.Config;
@@ -30,6 +31,19 @@ public class PSOList extends RangeList {
 		}
 		
 		return valid;
+	}
+	
+	public void defaultUnits(){
+		
+		this.myHashMap = new HashMap<String, Parameters>();
+		
+		this.myHashMap.put(Config.LABEXP,new MetaheuristicSearchParameters(1.0,1.0,1.0));
+		this.myHashMap.put(Config.LABGEN,new MetaheuristicSearchParameters(2.0,2.0,1.0));
+		this.myHashMap.put(Config.LABPOP,new MetaheuristicSearchParameters(10.0,10.0,1.0));
+		this.myHashMap.put(Config.LABLOC,new MetaheuristicSearchParameters(10.0,10.0,1.0));
+		this.myHashMap.put(Config.LABGLO,new MetaheuristicSearchParameters(10.0,10.0,1.0));
+		this.myHashMap.put(Config.LABORG,new MetaheuristicSearchParameters(10.0,10.0,1.0));
+		
 	}
 
 }

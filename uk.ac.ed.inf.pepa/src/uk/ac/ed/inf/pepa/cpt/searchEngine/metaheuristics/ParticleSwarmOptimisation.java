@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import uk.ac.ed.inf.pepa.IProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
+//import uk.ac.ed.inf.pepa.cpt.ode.Dummy;
 import uk.ac.ed.inf.pepa.cpt.ode.FluidSteadyState;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ModelConfiguration;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.CandidateNode;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.MetaHeuristicNode;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ModelConfigurationCandidateNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.PSONode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ParticleSwarmOptimisationLabCandidateNode;
 
 public class ParticleSwarmOptimisation implements MetaHeuristics {
 	
@@ -33,39 +33,153 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 	    }
 	}
 	
-	private MetaHeuristicNode myNode;
+	private PSONode myNode;
 	private IProgressMonitor myMonitor;
 	private ArrayList<ModelConfiguration> population;
-	
-	
-	
 	private int threads;
 	private ExecutorService executor;
 	private SynchronizedCounter counter;
 
 	public ParticleSwarmOptimisation(HashMap<String, Double> parameters,
-			CandidateNode resultNode, 
+			ParticleSwarmOptimisationLabCandidateNode particleSwarmOptimisationLabCandidateNode, 
 			IProgressMonitor monitor) {
 		
-		this.myNode = new MetaHeuristicNode("ParticleSwarmOptimisation",
-				Utils.copyHashMap(parameters), 
-				resultNode);
-		resultNode.registerChild(this.myNode);
+		this.myNode = new PSONode("ParticleSwarmOptimisation", 
+				parameters, 
+				particleSwarmOptimisationLabCandidateNode);
+		
+		particleSwarmOptimisationLabCandidateNode.registerChild(this.myNode);
 		
 		this.myMonitor = monitor;
 		
 		this.population = new ArrayList<ModelConfiguration>();
 		
 		this.threads = this.myNode.getMyMap().get(Config.LABPOP).intValue();
-		//this.threads = 1;
-		
+	
 		this.executor = Executors.newFixedThreadPool(threads);
 		
 		startAlgorithm();
-		
+
 		this.executor.shutdown();
 		
 		this.myNode.updateFinishTime();
+		
+		
+	}
+	
+	public void startAlgorithm(){
+		
+		try{
+			
+			this.myMonitor.beginTask("Searching" + this.myNode.getName(), CPTAPI.totalPSOWork());
+			this.myMonitor.subTask("PSO " + this.myNode.getName() + " starting...");
+			
+			//set up population
+			setUpPopulation();
+			
+			//find current best
+			evaluateAll();
+			
+			int i = 1;
+			boolean anyParticlesStillMoving = true;
+
+			while((i < this.myNode.getMyMap().get(Config.LABGEN) && anyParticlesStillMoving)){
+				
+				this.myMonitor.subTask("Working... please wait: " + this.myNode.getName() + " is evaluating generation " + (i+1) + "." );
+				
+				boolean allParticlesHaveStopped = true;
+				
+				for(int j = 0; j < this.myNode.getMyMap().get(Config.LABPOP); j++){
+					move(population.get(j));
+					allParticlesHaveStopped = allParticlesHaveStopped && population.get(j).getNode().hasStopped();
+				}
+				
+				anyParticlesStillMoving = !allParticlesHaveStopped;
+				
+				evaluateAll();
+				
+				i++;
+				
+				if(this.myMonitor.isCanceled()){
+					throw new OperationCanceledException();
+				}
+			}
+			
+			this.myMonitor.subTask("Finished PSO run. " + this.myNode.getName());
+			
+		
+		}
+		finally {
+			this.myNode.updateFinishTime();
+			this.myMonitor.done();
+		}
+	
+	}
+	
+	/**
+	 * Create the particle population
+	 */
+	public void setUpPopulation(){
+		
+		HashMap<String, Double> parameters = getParameters();
+		HashMap<String, Double> velocity = getVelocity(parameters);
+		
+		for(int i = 0; i < this.myNode.getMyMap().get(Config.LABPOP);i++){
+			this.population.add(new ModelConfiguration(Utils.copyHashMap(parameters), 
+					Utils.copyHashMap(velocity),
+					null, 
+					myNode));
+			
+			parameters = getParameters();
+			velocity = getVelocity(parameters);
+		}
+	}
+	
+	/**
+	 * Cycle through all particles doing an ODE evaluation
+	 */
+	public void evaluateAll(){
+		
+//		System.out.println("Before evaluation: " + (System.currentTimeMillis() - CPTAPI.getTime()));
+//		CPTAPI.setTime(System.currentTimeMillis());
+		
+		this.counter = new SynchronizedCounter();
+		
+		for (int i = 0; i < this.population.size(); i++) {
+			
+			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
+				population.get(i).getGraph(), 
+				CPTAPI.getEstimators(), 
+				CPTAPI.getCollectors(), 
+				CPTAPI.getOptionMap(),
+				null,
+				population.get(i).getNode(),
+				this.counter);
+			this.executor.execute(worker);
+//			Runnable worker = new Dummy(CPTAPI.getLabels(), 
+//					population.get(i).getNode(),
+//					this.counter);
+//				this.executor.execute(worker);
+		}
+		
+		
+		//barrier 
+		while(this.counter.value() < population.size());
+		
+//		System.out.println("After evaluation: " + (System.currentTimeMillis() - CPTAPI.getTime()));
+//		CPTAPI.setTime(System.currentTimeMillis());
+		
+		for (int i = 0; i < this.population.size(); i++) {
+			
+			population.get(i).getNode().updateFitness();
+			if(this.myNode.getFittestNode().getMyMap().size() == 0){
+				this.myNode.setFittestNode(population.get(i).getNode());
+			} else if (population.get(i).getNode().getFitness() < this.myNode.getFittestNode().getFitness()){
+				this.myNode.setFittestNode(population.get(i).getNode());
+			}
+			
+			this.myMonitor.worked(1);
+		}
 		
 		
 	}
@@ -121,35 +235,6 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		return velocity;
 		
 	}
-	
-	public void startAlgorithm(){
-		
-		//set up population
-		setUpPopulation();
-		
-		//find current best
-		evaluateAll();
-		
-		int i = 0;
-		boolean anyParticlesStillMoving = true;
-
-		while((i < this.myNode.getMyMap().get(Config.LABGEN) && anyParticlesStillMoving)){
-			
-			boolean allParticlesHaveStopped = true;
-			
-			for(int j = 0; j < this.myNode.getMyMap().get(Config.LABPOP); j++){
-				move(population.get(j));
-				allParticlesHaveStopped = allParticlesHaveStopped && population.get(j).getNode().hasStopped();
-			}
-			
-			anyParticlesStillMoving = !allParticlesHaveStopped;
-			
-			evaluateAll();
-			
-			i++;
-		}
-	
-	}
 
 	/**
 	 * create new velocity for particle, move particle
@@ -164,6 +249,7 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		
 		originalVelocity = Utils.copyHashMap(modelConfiguration.getNode().getVelocity());
 		globalBestPosition = this.myNode.getFittestNode().getMyMap();
+		
 		localBestPosition = Utils.copyHashMap(modelConfiguration.getLocalBest().getMyMap());
 		newVelocity = new HashMap<String, Double>();
 		newPosition = new HashMap<String, Double>();
@@ -252,62 +338,6 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		
 		
 	}
-	
-	/**
-	 * Create the particle population
-	 */
-	public void setUpPopulation(){
-		
-		HashMap<String, Double> parameters = getParameters();
-		HashMap<String, Double> velocity = getVelocity(parameters);
-		
-		for(int i = 0; i < this.myNode.getMyMap().get(Config.LABPOP);i++){
-			this.population.add(new ModelConfiguration(Utils.copyHashMap(parameters), 
-					Utils.copyHashMap(velocity),
-					myMonitor, 
-					myNode));
-			
-			parameters = getParameters();
-			velocity = getVelocity(parameters);
-		}
-	}
-	
-	
-	/**
-	 * Cycle through all particles doing an ODE evaluation
-	 */
-	public void evaluateAll(){
-		
-		this.counter = new SynchronizedCounter();
-		
-		for (int i = 0; i < this.population.size(); i++) {
-			
-			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
-				population.get(i).getGraph(), 
-				CPTAPI.getEstimators(), 
-				CPTAPI.getCollectors(), 
-				CPTAPI.getOptionMap(),
-				null,
-				population.get(i).getNode(),
-				this.counter);
-			this.executor.execute(worker);
-		}
-		
-		
-		//barrier 
-		while(this.counter.value() < population.size());
-		
-		for (int i = 0; i < this.population.size(); i++) {
-				population.get(i).getNode().updateFitness();
-				if(population.get(i).getNode().getFitness() < this.myNode.getFittestNode().getFitness()){
-					this.myNode.setFittestNode(population.get(i).getNode());
-				}
-		}
-		
-		
-	}
-	
-	
 	
 
 }

@@ -44,7 +44,19 @@ public class AverageResponseTreeWidget extends CapacityPlanningWidget {
 		tree.addListener(SWT.Selection, new Listener() {
             
 			public void handleEvent(Event e) {
-				cb.validate();   
+				
+				TreeItem[] items = tree.getItems();
+				
+				for(TreeItem item : items){
+					boolean anyChecked = false;
+					TreeItem[] childItems = item.getItems();
+					for(TreeItem item2 : childItems){
+						anyChecked = anyChecked || item2.getChecked();
+					}
+					item.setChecked(anyChecked);
+				}
+				
+				cb.validate();
 			}
 		}); 
 		

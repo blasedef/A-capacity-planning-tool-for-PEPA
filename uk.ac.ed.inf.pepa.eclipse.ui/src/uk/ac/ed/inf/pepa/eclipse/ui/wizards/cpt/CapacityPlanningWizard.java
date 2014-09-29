@@ -20,10 +20,7 @@ import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages.*;
 
 public class CapacityPlanningWizard extends Wizard {
 	
-	private static final String EXTENSION = "csv";
-	
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
-	
 	private WizardPage frontMetaheuristicCapacityPlanningWizardPage;
 	private WizardPage backMetaheuristicCapacityPlanningWizardPage;
 	private WizardPage costFunctionCapacityPlanningWizardPage;
@@ -36,6 +33,9 @@ public class CapacityPlanningWizard extends Wizard {
 	public CapacityPlanningWizard(IPepaModel model){
 		
 		wizardPageList = new ArrayList<WizardPage>();
+		
+		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE))
+			CPTAPI.getPSORangeParameterControls().defaultUnits();
 		
 		frontMetaheuristicCapacityPlanningWizardPage = 
 			new FrontMetaheuristicCapacityPlanningWizardPage("Meta heuristic configuration");
@@ -58,14 +58,8 @@ public class CapacityPlanningWizard extends Wizard {
 		populationCapacityPlanningWizardPage =
 			new PopulationCapacityPlanningWizardPage("Population cost: range and weight configuration...");
 		
-		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
-				ResourceUtilities.changeExtension(
-				model.getUnderlyingResource(), EXTENSION));
-		
-		saveAsCapacityPlanningWizardPage = new SaveAsCapacityPlanningWizardPage(new StructuredSelection(handle), EXTENSION);
-		saveAsCapacityPlanningWizardPage.setTitle(CPTAPI.getSearchControls().getValue() + ": " + CPTAPI.getEvaluationControls().getValue());
-		saveAsCapacityPlanningWizardPage.setDescription("Save model configurations to");
-		saveAsCapacityPlanningWizardPage.setFileName(handle.getName());
+		saveAsCapacityPlanningWizardPage = new SaveAsCapacityPlanningWizardPage("Save as...",new StructuredSelection(
+				getHandle(model)));
 		
 		wizardPageList.add(frontMetaheuristicCapacityPlanningWizardPage);
 		wizardPageList.add(backMetaheuristicCapacityPlanningWizardPage);
@@ -136,11 +130,31 @@ public class CapacityPlanningWizard extends Wizard {
 	
 	
 
+	public IFile getHandle(IPepaModel model){
+		
+		IFile handle = ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+				model.getUnderlyingResource(), Config.EXTENSION));
+		
+		CPTAPI.setFileName(handle.getName());
+		
+		CPTAPI.setFolderName(ResourcesPlugin.getWorkspace().getRoot().getFile(
+				ResourceUtilities.changeExtension(
+						model.getUnderlyingResource(), Config.EXTENSION)).getRawLocation().removeLastSegments(1).toOSString());
+		
+		return handle;
+		
+	}
 	
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		CPTJob job = new CPTJob("Searching the model configuration space...");
+		
+		job.setUser(true);
+		job.schedule();
+		
+		return true;
 	}
 	
 	@Override

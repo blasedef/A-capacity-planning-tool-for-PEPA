@@ -36,10 +36,7 @@ public class ProcessOptions {
 		return this.selected;
 	}
 	
-	public void toPrint(){
-		System.out.println("label: " + this.myLabel 
-				+ ", process ID: " + this.myProcessId
-				+ ", coordinate: " + this.myCoordinate
-				+ ", selected: " + this.selected);
+	public String toPrint(){
+		return "";
 	}
 }

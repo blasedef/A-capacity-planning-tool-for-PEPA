@@ -3,48 +3,40 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-import uk.ac.ed.inf.pepa.cpt.Utils;
-import uk.ac.ed.inf.pepa.cpt.config.Config;
-
-public class MetaHeuristicNode implements Node {
+public abstract class MetaHeuristicNode implements Node {
 	
-	private int uid;
-	private HashMap<String,Double> myMap;
-	private String name;
-	private long timeCreated;
+	protected int uid;
+	protected HashMap<String,Double> myMap;
+	protected String name;
+	protected long timeCreated;
 	private long timeFinished;
-	private CandidateNode parent;
-	private ArrayList<CandidateNode> children;
-	private HashMap<Integer,Integer> childUIDToIndex;
-	private ModelConfigurationCandidateNode fittestNode;
+	protected CandidateNode parent;
+	protected ArrayList<CandidateNode> children;
+	protected HashMap<Integer,Integer> childUIDToIndex;
+	protected ModelConfigurationCandidateNode fittestNode;
+	public boolean isPSO;
 	
 	public MetaHeuristicNode(String name, 
-			HashMap<String,Double> parameters,
-			CandidateNode parent){
+			CandidateNode parent,
+			boolean isPSO){
 		
 		this.myMap = new HashMap<String,Double>();
 		this.children = new ArrayList<CandidateNode>();
 		this.childUIDToIndex = new HashMap<Integer, Integer>();
+		setUpUID();
 		
-		this.uid = Utils.getMetaheuristicNodeUID();
 		
-		if(parameters == null){
-			this.myMap.put("n/a", 0.0);
-		} else {
-			parameters.remove(Config.LABEXP);
-			this.myMap = parameters;
-		}
 		this.name = name + "-" + uid;
 		this.parent = parent;
 		this.timeCreated = System.currentTimeMillis();
 		this.fittestNode = new ModelConfigurationCandidateNode();
-		
+		this.isPSO = isPSO;
 	}
+	
+	public abstract void setUpUID();
 	
 	public String getName() {
 		return this.name;
@@ -73,33 +65,7 @@ public class MetaHeuristicNode implements Node {
 		childUIDToIndex.put(child.getUID(), children.size() - 1);
 	}
 
-	public void json(JSONObject obj) {
-		
-		JSONArray list = new JSONArray();
-		
-		jsonMyMap(list);
-		
-		obj.put(this.name,list);
-		
-		for(int i = 0; i < children.size();i++){
-			children.get(i).json(obj);
-		}
-		
-		
-		
-	}
 	
-	public void jsonMyMap(JSONArray list){
-		
-		JSONObject obj = new JSONObject();
-		
-		for(Entry<String, Double> entry : myMap.entrySet()){
-			obj.put(entry.getKey(),entry.getValue());
-		}
-		
-		list.add(obj);
-		
-	}
 
 	@Override
 	public HashMap<String, Double> getMyMap() {
@@ -111,25 +77,15 @@ public class MetaHeuristicNode implements Node {
 	}
 
 	public void setFittestNode(ModelConfigurationCandidateNode node) {
-		this.fittestNode = node;
-		
+		if(node != null){
+			this.fittestNode = node;
+		} 
 	}
+	
+	public abstract void fillQueue(PriorityQueue<ResultNode> resultsQueue, IProgressMonitor monitor);
 
-	public void fillQueue(PriorityQueue<ResultNode> resultsQueue) {
-		
-		for(int i = 0; i < this.children.size(); i++){
-			this.children.get(i).fillQueue((double) this.getRunTime(),resultsQueue);
-		}
-		
-	}
+	public abstract void setMyMap();
 
-	public void fillQueue(CandidateNode candidateNode, double runTime,
-			PriorityQueue<ResultNode> resultsQueue) {
-		
-		for(int i = 0; i < this.children.size(); i++){
-			((ModelConfigurationCandidateNode) this.children.get(i)).fillQueue(this, candidateNode, runTime,resultsQueue);
-		}
-		
-	}
-
+	public abstract void setResultsSize();
+	
 }

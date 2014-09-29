@@ -16,6 +16,27 @@ public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWi
 	
 	private String key, value1, value2;
 	private final Text text1, text2;
+	private boolean isMin;
+	
+	private class MyCallBack implements IValidationCallback {
+		
+		public void setMin() {
+			setWidgetMin();
+		}
+		
+		public void setMax() {
+			setWidgetMax();
+		}
+
+		@Override
+		public void validate() {
+			cb.validate();
+			
+		}
+		
+	}
+	
+	protected final MyCallBack myCallBack = new MyCallBack();
 
 	public KeyDoubleValueWidgetForMinimumAndMaximum(final IValidationCallback cb, 
 			Composite container, String key, String value1, String value2, Control control) {
@@ -25,6 +46,7 @@ public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWi
 		this.key = key;
 		this.value1 = value1;
 		this.value2 = value2;
+		this.isMin = true;
 			
 		//pad
 		Label label = new Label(container, SWT.FILL );
@@ -46,7 +68,8 @@ public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWi
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setMin();
+				myCallBack.validate();
 				
 			}
 			
@@ -61,7 +84,8 @@ public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWi
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setMax();
+				myCallBack.validate();
 				
 			}
 			
@@ -77,15 +101,33 @@ public class KeyDoubleValueWidgetForMinimumAndMaximum extends CapacityPlanningWi
 	@Override
 	public Response isValid() {
 		
-		Response response = new Response(control.setValue(this.key, Config.LABMIN, text1.getText()) || 
-				control.setValue(this.key, Config.LABMAX, text2.getText()));
-		
-		if(!response.valid){
-			response.setComplaint("Invalid entry: " + this.key + " " + text1.getText() + " " + text2.getText());
+		if(isMin){
+			Response response = new Response(control.setValue(this.key, Config.LABMIN, text1.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text1.getText());
+			}
+			return response;
+			
+		} else {
+			Response response = new Response(control.setValue(this.key, Config.LABMAX, text2.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text2.getText());
+			}
+			return response;
 		}
 		
-		return response;
 		
+		
+	}
+	
+	public void setWidgetMin(){
+		this.isMin = true;
+	}
+	
+	public void setWidgetMax(){
+		this.isMin = false;
 	}
 
 }

@@ -7,9 +7,11 @@ import uk.ac.ed.inf.pepa.cpt.config.lists.TargetList;
 public class TargetControl extends PopulationControl {
 	
 	private TargetList myTargetList;
+	private String type;
 
-	public TargetControl(TargetList targetList) {
+	public TargetControl(TargetList targetList, String type) {
 		this.myTargetList = targetList;
+		this.type = type;
 	}
 	
 	public String[] getKeys(){
@@ -77,5 +79,9 @@ public class TargetControl extends PopulationControl {
 		return this.myTargetList.getXKeys(s);
 	}
 
+	@Override
+	public String toPrint() {
+		return this.type + ";" + this.myTargetList.toPrint();
+	}
 
 }

@@ -18,4 +18,6 @@ public interface Control {
 	
 	public String[] getKeys(String s);
 	
+	public String toPrint();
+
 }

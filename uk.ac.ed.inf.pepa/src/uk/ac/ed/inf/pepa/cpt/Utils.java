@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
@@ -19,10 +17,12 @@ import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 public class Utils {
 	
-	private static int candidateNodeUID = -1;
 	private static int modelCandidateNodeUID = -1;
-	private static int metaheuristicNodeUID = -1;
-	
+	private static int hillClimbingLabCandidateNodeUID = -1;
+	private static int particleSwarmOptimisationLabCandidateNodeUID = -1;
+	private static int hcNodeUID = -1;
+	private static int psoNodeUID = -1;
+
 	public static String[] getSystemEquation(IParametricDerivationGraph graph) {
 		
 		ArrayList<String> components = new ArrayList<String>();
@@ -107,15 +107,24 @@ public class Utils {
 		return Utils.modelCandidateNodeUID;
 	}
 	
-	
-	public static int getCandidateNodeUID(){
-		Utils.candidateNodeUID++;
-		return Utils.candidateNodeUID;
+	public static int getHillClimbingLabCandidateNodeUID(){
+		Utils.hillClimbingLabCandidateNodeUID++;
+		return Utils.hillClimbingLabCandidateNodeUID;
 	}
 	
-	public static int getMetaheuristicNodeUID(){
-		Utils.metaheuristicNodeUID++;
-		return Utils.metaheuristicNodeUID;
+	public static int getParticleSwarmOptimisationLabCandidateNodeUID(){
+		Utils.particleSwarmOptimisationLabCandidateNodeUID++;
+		return Utils.particleSwarmOptimisationLabCandidateNodeUID;
+	}
+	
+	public static int getHCNodeUID(){
+		Utils.hcNodeUID++;
+		return Utils.hcNodeUID;
+	}
+	
+	public static int getPSONodeUID(){
+		Utils.psoNodeUID++;
+		return Utils.psoNodeUID;
 	}
 	
 	public static Double returnRandomInRange(Double min, Double max, String type){

@@ -2,11 +2,10 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Map.Entry;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
+import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.ModelConfigurationFitnessFunction;
@@ -23,24 +22,28 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	private Double populationResult;
 	private String familyUID;
 	private boolean evaluatedSuccessFully;
+	private HashMap<String,Double> parameters;
+	private MetaHeuristicNode parentMetaHeuristicNode;
 
 	public ModelConfigurationCandidateNode(String name,
-			HashMap<String, Double> parameters, 
-			HashMap<String,Double> velocity, 
-			MetaHeuristicNode parent) {
-		super(name, parameters, parent);
+			HashMap<String,Double> parameters,
+			HashMap<String,Double> velocity,
+			IProgressMonitor monitor,
+			MetaHeuristicNode parentMetaHeuristicNode) {
+		super(name, parentMetaHeuristicNode);
 		
+		this.parameters = parameters;
+		setMyMap();
 		this.performanceMap = new HashMap<String, Double>();
-		
 		this.performanceResult = 100000.0;
 		this.populationResult = 100000.0;
-		
 		this.sister = null;
 		this.generation = 0;
 		this.velocity = velocity;
 		this.fitnessFunction = new ModelConfigurationFitnessFunction();
 		this.familyUID = this.getName().split("-")[1];
 		this.evaluatedSuccessFully = true;
+		this.parentMetaHeuristicNode = parentMetaHeuristicNode;
 	}
 	
 	public Double getTotalComponents(){
@@ -56,15 +59,17 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	}
 	
 	public ModelConfigurationCandidateNode(){
-		super("temp",null,null);
+		super("temp",null);
 	}
 	
+	@Override
 	public void setUpUID(){
 		this.uid = Utils.getModelCandidateNodeUID();
 	}
 	
+	
 	public void setMyMap(HashMap<String,Double> myMap) {
-		this.myMap = myMap;
+		this.myMap = Utils.copyHashMap(myMap);
 	}
 	
 	public void setSister(ModelConfigurationCandidateNode node){
@@ -78,10 +83,12 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		
 	}
 
+	@Override
 	public int getGeneration(){
 		return this.generation;
 	}
 	
+	@Override
 	public void setGeneration(int generation){
 		this.generation = generation;
 	}
@@ -94,78 +101,18 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		
 	}
 	
+	@Override
 	public HashMap<String,Double> getMyMap() {
 		return myMap;
 	}
 	
-	@Override
-	public void jsonMyMap(JSONArray list){
-		
-		JSONObject obj = new JSONObject();
-		
-		obj.put("Domain", jsonDomain());
-		obj.put("Velocity", jsonVelocity());
-		obj.put("Performance", jsonPerformance());
-		obj.put("Generation", this.generation);
-		obj.put("Runtime", this.getRunTime());
-		obj.put("TC", this.getTotalComponents());
-		obj.put("perr", this.performanceResult);
-		obj.put("popr", this.populationResult);
-		obj.put("FUID", this.familyUID);
-		if(this.sister != null)
-			obj.put("Sister", this.sister.getName());
-		
-		list.add(obj);
-		
-	}
-	
-	public JSONArray jsonDomain(){
-		
-		JSONArray list = new JSONArray();
-		JSONObject obj = new JSONObject();
-		
-		for(Entry<String, Double> entry : myMap.entrySet()){
-			obj.put(entry.getKey(),entry.getValue());
-		}
-		
-		list.add(obj);
-		
-		return list;
-	}
-	
-	
-	public JSONArray jsonVelocity(){
-		
-		JSONArray list = new JSONArray();
-		JSONObject obj = new JSONObject();
-		
-		for(Entry<String, Double> entry : velocity.entrySet()){
-			obj.put(entry.getKey(),entry.getValue());
-		}
-		
-		list.add(obj);
-		
-		return list;
-	}
-	
-	public JSONArray jsonPerformance(){
-		
-		JSONArray list = new JSONArray();
-		JSONObject obj = new JSONObject();
-		
-		for(Entry<String, Double> entry : performanceMap.entrySet()){
-			obj.put(entry.getKey(),entry.getValue());
-		}
-		
-		list.add(obj);
-		
-		return list;
-	}
 	
 	/**
 	 * reads from local maps, uses fitness function object, returns results... 
 	 */
+	@Override
 	public void updateFitness(){
+		
 		if(this.evaluatedSuccessFully){
 			this.fitness = this.fitnessFunction.assessFitness(this.myMap, this.performanceMap);
 		} else {
@@ -176,10 +123,6 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		this.populationResult = ((ModelConfigurationFitnessFunction)this.fitnessFunction).population;
 	}
 	
-	public Double getFitness() {
-		return this.fitness;
-	}
-	
 	public HashMap<String, Double> getVelocity() {
 		return velocity;
 	}
@@ -188,14 +131,6 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		this.velocity = velocity;
 	}
 	
-	public boolean hasSister(){
-		
-		if(this.sister != null){
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 	public ModelConfigurationCandidateNode getSister(){
 		return this.sister;
@@ -257,13 +192,13 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 		return this.performanceMap;
 	}
 	
-	public void fillQueue(MetaHeuristicNode metaHeuristicNode,
-			CandidateNode candidateNode, double runTime,
-			PriorityQueue<ResultNode> resultsQueue) {
-		
-		resultsQueue.add(new ResultNode(runTime,candidateNode,metaHeuristicNode,this));
-		
-	}
+//	public void fillQueue(MetaHeuristicNode metaHeuristicNode,
+//			CandidateNode candidateNode, double runTime,
+//			PriorityQueue<ResultNode> resultsQueue) {
+//		
+//		resultsQueue.add(new ResultNode(runTime,candidateNode,metaHeuristicNode,this));
+//		
+//	}
 	
 	public Double getPerformanceResult() {
 		return performanceResult;
@@ -271,6 +206,30 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 
 	public Double getPopulationResult() {
 		return populationResult;
+	}
+
+	@Override
+	public void setMyMap() {
+		this.myMap = Utils.copyHashMap(this.parameters);
+	}
+
+	@Override
+	public void fillQueue(PriorityQueue<ResultNode> resultsQueue, IProgressMonitor monitor) {
+		
+		if(monitor.isCanceled()){
+			throw new OperationCanceledException();
+		}
+		
+		resultsQueue.add(new ResultNode(this.parentMetaHeuristicNode,this));
+		
+		monitor.subTask("Compiling results: " + resultsQueue.size() + " of " + CPTAPI.getResultSize());
+	}
+	
+	@Override
+	public void setResultsSize() {
+
+		CPTAPI.setTotalResults();
+		
 	}
 
 }

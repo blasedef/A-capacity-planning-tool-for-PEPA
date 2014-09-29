@@ -2,59 +2,137 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 
-import org.json.simple.JSONObject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 
-import uk.ac.ed.inf.pepa.IProgressMonitor;
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
-import uk.ac.ed.inf.pepa.cpt.Utils;
-import uk.ac.ed.inf.pepa.cpt.config.Config;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.MetaheuristicConfigurationLab;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.HillClimbingLab;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
+
 
 public class CPT {
 	
-	private MetaheuristicConfigurationLab root;
+	private HillClimbingLab root;
 	private IProgressMonitor monitor;
-	private JSONObject obj = new JSONObject();
 	private PriorityQueue<ResultNode> resultsQueue;
+	private IStatus myStatus;
 	
 	public CPT (IProgressMonitor monitor){
 		
 		this.monitor = monitor;
 		
-	}
-	
-	public void start() {
-		
-		this.root = new MetaheuristicConfigurationLab(Utils.copyHashMap(getParameters()), 
-				this.monitor);
+		CPTAPI.setTime(System.currentTimeMillis());
 		
 	}
 	
-	public HashMap<String,Double> getParameters(){
+	public IStatus start() {
 		
-		HashMap<String,Double>  parameters = new HashMap<String,Double>();
-		parameters.put("MetaheuristicConfigurationLab", 1.0);
-		boolean isSingleSearch = (CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE));
+		try{
 		
-		String[] keys = CPTAPI.getHCControls().getKeys();
-		
-		if(isSingleSearch){
-			parameters.put(Config.SEARCH, 1.0);
-		} else {
-			parameters.put(Config.SEARCH, 0.0);
+			this.monitor.beginTask("Searching", CPTAPI.toPrint().length + 2*(CPTAPI.totalHCLabWork() *
+					CPTAPI.totalHCWork() * CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork()));
+			
+			this.root = new HillClimbingLab(new SubProgressMonitor(monitor, (CPTAPI.totalHCLabWork() *
+					CPTAPI.totalHCWork() * CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork())));
+			
+			createResultsQueue();
+			
+			generateCSVFile();
+		} finally {
+			this.monitor.done();
 		}
 		
-		for(int i = 0; i < keys.length; i++){
-			parameters.put(keys[i], Double.parseDouble(CPTAPI.getHCControls().getValue(keys[i])));
+		return myStatus;
+		
+	}
+	
+	public void generateCSVFile(){
+		
+		try{
+			
+			String[] labels = new String[this.resultsQueue.size()];
+			
+			FileWriter writer = new FileWriter(CPTAPI.getFileName());
+			
+			String outputString = "";
+			
+			int rqs = this.resultsQueue.size();
+			
+			this.monitor.subTask("scanning results: " + rqs + " left");
+			rqs--;
+			
+			if(this.monitor.isCanceled()){
+				this.myStatus = Status.CANCEL_STATUS;
+				throw new OperationCanceledException();
+			}
+			
+			ResultNode rn = this.resultsQueue.poll();
+			outputString = rn.heading() + "\n";
+			outputString = outputString + rn.toString() + "\n";
+			CPTAPI.getResultList().add(rn);
+			labels[0] = rn.populationMapAsNodeString();
+			writer.append(outputString);
+			
+			this.monitor.worked(1);
+			
+			int i = 1;
+			
+			while(this.resultsQueue.size() > 0){
+				
+				rn = this.resultsQueue.poll();
+				
+				this.monitor.subTask("scanning results: " + rqs + " left");
+				rqs--;
+				
+				if(this.monitor.isCanceled()){
+					this.myStatus = Status.CANCEL_STATUS;
+					throw new OperationCanceledException();
+				}
+				
+				outputString = rn.toString() + "\n";
+				CPTAPI.getResultList().add(rn);
+				labels[i] = rn.populationMapAsNodeString();
+				i++;
+				writer.append(outputString);
+				this.monitor.worked(1);
+			}
+			
+			this.monitor.subTask("saving configuration...");
+			
+			writer.append("\n");
+			writer.append("Configuration \n");
+			
+			String[] configuration = CPTAPI.toPrint();
+			outputString = "";
+			
+			for(String s : configuration){
+				
+				if(this.monitor.isCanceled()){
+					this.myStatus = Status.CANCEL_STATUS;
+					throw new OperationCanceledException();
+				}
+				
+				outputString = outputString + s + "\n";
+				this.monitor.worked(1);
+			}
+			
+			this.monitor.subTask("complete.");
+			
+			writer.append(outputString);
+			
+			writer.close();
+			this.myStatus = Status.OK_STATUS;
 			
 		}
-		
-		return parameters;
-		
+		catch(IOException e){
+			e.printStackTrace();
+		}
+			
 	}
 	
 	public void createResultsQueue(){
@@ -94,31 +172,13 @@ public class CPT {
 	
 	private void fillQueue(){
 		
-		this.root.fillQueue(this.resultsQueue);
+		this.monitor.subTask("Compiling results...");
+		
+		this.root.fillQueue(this.resultsQueue,this.monitor);
+		
+		this.monitor.subTask("Compiled results");
 		
 	}
 	
-	public void printQueue() {
-		//TODO remove this?
-		createResultsQueue();
-		
-		JSONObject obj2 = new JSONObject();
-		
-		while(this.resultsQueue.size() > 1){
-			resultsQueue.poll().print(obj2);
-		}
-		
-		try {
-			 
-			FileWriter file = new FileWriter("/home/twig/Workspace/python/jsonToCSV/ordered.json");
-			file.write(obj2.toJSONString());
-			file.flush();
-			file.close();
-	 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 
 }

@@ -5,9 +5,11 @@ import uk.ac.ed.inf.pepa.cpt.config.parameters.Parameters;
 public class ParameterControl implements Control {
 	
 	Parameters myParameters;
+	String type;
 	
-	public ParameterControl(Parameters parameters){
+	public ParameterControl(Parameters parameters, String type){
 		
+		this.type = type;
 		this.myParameters = parameters;
 		
 	}
@@ -48,6 +50,11 @@ public class ParameterControl implements Control {
 	public String getValue(String component, String key) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toPrint() {
+		return this.type + ";" + myParameters.toPrint();
 	}
 
 }

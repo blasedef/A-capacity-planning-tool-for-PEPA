@@ -75,6 +75,11 @@ public class ListControl implements Control {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String toPrint() {
+		return this.myList.toPrint();
+	}
 	
 	
 

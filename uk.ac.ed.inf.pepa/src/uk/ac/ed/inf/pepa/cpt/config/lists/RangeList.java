@@ -41,12 +41,12 @@ public abstract class RangeList {
 		return this.myHashMap.get(target).getKeys();
 	}
 	
-	public void toPrint(){
+	public String toPrint(){
+		String output = "";
 		for(Entry<String, Parameters> entry : myHashMap.entrySet()){
-			System.out.println("//");
-			System.out.println(entry.getKey());
-			entry.getValue().toPrint();
+			output = output + entry.getKey() + ";" + entry.getValue().toPrint() + ";";
 		}
+		return output.substring(0, output.length() - 1);
 	}
 	
 	public abstract boolean valid();

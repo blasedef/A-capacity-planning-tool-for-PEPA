@@ -1,6 +1,9 @@
 package uk.ac.ed.inf.pepa.cpt.config;
 
+import java.util.ArrayList;
+
 import uk.ac.ed.inf.pepa.cpt.Utils;
+import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.cpt.config.control.EListControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.ListControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.ParameterControl;
@@ -17,16 +20,17 @@ import uk.ac.ed.inf.pepa.cpt.config.control.populationControl.RateControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.populationControl.TargetControl;
 import uk.ac.ed.inf.pepa.cpt.config.lists.ActionList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.ComponentList;
+import uk.ac.ed.inf.pepa.cpt.config.lists.DomainChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.EvaluatorChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.PSOList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.ProcessList;
-import uk.ac.ed.inf.pepa.cpt.config.lists.DomainChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.RateList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.SearchChoiceList;
 import uk.ac.ed.inf.pepa.cpt.config.lists.TargetList;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.CostFunctionParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.HillClimbingParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.OptionMapParameters;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
@@ -161,6 +165,15 @@ public class Config implements ConfigCallBack{
 	
 	//option map related
 	public ParameterControl optionMapController;
+	public long startTime;
+	private String folderName;
+	public static final String EXTENSION = "csv";
+	
+	private ArrayList<Control> controls;
+	public int resultSize;
+	
+	public ArrayList<ResultNode> resultQ;
+	public String[] resultLabels;
 	
 	/**
 	 * Configuration object, required for a cpt run.
@@ -187,49 +200,50 @@ public class Config implements ConfigCallBack{
 		 * set up controllers - so only use controllers to change underlying data
 		 */
 		
+		this.controls = new ArrayList<Control>();
+		
 		this.evaluationController = new EListControl(this.evaluatorChoiceList, this);
+		
+		this.controls.add(evaluationController);
 		
 		this.searchController = new ListControl(this.searchChoiceList);
 		
+		this.controls.add(searchController);
+		
 		this.domainController = new RListControl(this.domainChoiceList, this);
 		
-		this.hillController = new ParameterControl(this.hillClimbingParameters);
+		this.controls.add(domainController);
 		
-		this.optionMapController = new ParameterControl(this.optionMapParameters);
+		this.hillController = new ParameterControl(this.hillClimbingParameters, "Hill Climbing");
 		
-		this.costFunctionController = new ParameterControl(this.costFunctionParameters);
+		this.controls.add(hillController);
 		
-		this.psoRangeController = new PSOControl(psoList);
+		this.optionMapController = new ParameterControl(this.optionMapParameters, "ODE parameters");
+		
+		this.controls.add(optionMapController);
+		
+		this.costFunctionController = new ParameterControl(this.costFunctionParameters, "Cost function parameters");
+		
+		this.controls.add(costFunctionController);
+		
+		this.psoRangeController = new PSOControl(psoList, "Particle Swarm Optimisation");
+		
+		this.controls.add(psoRangeController);
 		
 		this.actionAndProcessSelectionController = new ThroughputControl(actionList, this.graph);
+		
 		this.rateAndComponentRangeAndWeightController = new ComponentControl(this.componentList);
 		
-		this.targetControl = new TargetControl(targetList);
+		this.controls.add(rateAndComponentRangeAndWeightController);
 		
-	}
-	
-	public void toPrint(){
+		this.targetControl = new TargetControl(targetList, "Targets");
 		
-		this.evaluatorChoiceList.printList();
-		this.searchChoiceList.printList();
-		this.domainChoiceList.printList();
+		this.controls.add(targetControl);
 		
-		this.costFunctionParameters.toPrint();
+		this.resultSize = 0;
 		
-		//this.experimentParameters.toPrint();
-		//this.generationParameters.toPrint();
-		this.hillClimbingParameters.toPrint();
+		this.resultQ = new ArrayList<ResultNode>();
 		
-		this.psoList.toPrint();
-		
-		this.componentList.toPrint();
-		this.rateList.toPrint();
-		
-		this.actionList.toPrint();
-		
-		this.processList.toPrint();
-		
-		this.targetList.toPrint();
 	}
 
 	public void setOptionMap(OptionMap optionMap) {
@@ -270,6 +284,8 @@ public class Config implements ConfigCallBack{
 			
 			this.actionAndProcessSelectionController = new PopulationLevelControl(processList);
 		}
+		
+		this.controls.add(actionAndProcessSelectionController);
 	}
 
 	@Override
@@ -314,6 +330,27 @@ public class Config implements ConfigCallBack{
 	
 	public String getFileName() {
 		return this.fileName;
+	}
+
+	public void setFolderName(String osString) {
+		this.folderName = osString;
+		
+	}
+
+	public String getFolderName() {
+		return this.folderName;
+	}
+	
+	public String[] toPrint(){
+		String[] output = new String[this.controls.size()];
+		int i = 0;
+		
+		for(Control c : this.controls){
+			output[i] = c.toPrint();
+			i++;
+		}
+		
+		return output;
 	}
 
 }

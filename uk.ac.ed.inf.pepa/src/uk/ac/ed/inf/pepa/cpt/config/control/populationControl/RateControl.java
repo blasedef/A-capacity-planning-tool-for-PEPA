@@ -60,4 +60,9 @@ public class RateControl extends PopulationControl {
 		return null;
 	}
 
+	@Override
+	public String toPrint() {
+		return this.myRateList.toPrint();
+	}
+
 }

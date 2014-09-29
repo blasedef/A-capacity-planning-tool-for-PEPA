@@ -67,7 +67,7 @@ public class ODEKeySingleValueWidget extends CapacityPlanningWidget {
 		if(!response.valid){
 			response.setComplaint("Invalid entry: " + this.key + " " + text.getText());
 		}
-		
+		System.out.println(control.toPrint());
 		return response;
 		
 	}

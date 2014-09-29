@@ -16,6 +16,27 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 	
 	private String key, value1, value2;
 	private final Text text1, text2;
+	private boolean isTar;
+	
+	private class MyCallBack implements IValidationCallback {
+		
+		public void setTar() {
+			setWidgetTar();
+		}
+		
+		public void setWei() {
+			setWidgetWei();
+		}
+
+		@Override
+		public void validate() {
+			cb.validate();
+			
+		}
+		
+	}
+	
+	protected final MyCallBack myCallBack = new MyCallBack();
 
 	public KeyDoubleValueWidgetForWeightAndTarget(final IValidationCallback cb, 
 			Composite container, String key, String value1, String value2, Control control) {
@@ -24,6 +45,7 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 		this.key = key;
 		this.value1 = value1;
 		this.value2 = value2;
+		this.isTar = true;
 			
 		//pad
 		Label label = new Label(container, SWT.FILL);
@@ -45,7 +67,8 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setTar();
+				myCallBack.validate();
 				
 			}
 			
@@ -60,7 +83,8 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setWei();
+				myCallBack.validate();
 				
 			}
 			
@@ -76,15 +100,31 @@ public class KeyDoubleValueWidgetForWeightAndTarget extends CapacityPlanningWidg
 	@Override
 	public Response isValid() {
 		
-		Response response = new Response(control.setValue(this.key, Config.LABTAR, text1.getText()) && 
-				control.setValue(this.key, Config.LABWEI, text2.getText()));
-		
-		if(!response.valid){
-			response.setComplaint("Invalid entry: " + this.key + " " + text1.getText() + " " + text2.getText());
+		if(isTar){
+			Response response = new Response(control.setValue(this.key, Config.LABTAR, text1.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text1.getText());
+			}
+			return response;
+			
+		} else {
+			Response response = new Response(control.setValue(this.key, Config.LABWEI, text2.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text2.getText());
+			}
+			return response;
 		}
 		
-		return response;
-		
+	}
+	
+	public void setWidgetTar(){
+		this.isTar = true;
+	}
+	
+	public void setWidgetWei(){
+		this.isTar = false;
 	}
 
 }

@@ -22,6 +22,23 @@ public class MetaheuristicSearchParameters extends Parameters {
 		this.keyTypeMap.put(Config.LABRAN, Config.INTEGER);
 		
 	}
+	
+	public MetaheuristicSearchParameters(Double min, Double max, Double ran) {
+		
+		this.keyValueMap = new HashMap<String,Double>();
+		this.keyTypeMap = new HashMap<String,String>();
+		
+		//default component parameters
+		this.keyValueMap.put(Config.LABMIN, min);
+		this.keyValueMap.put(Config.LABMAX, max);
+		this.keyValueMap.put(Config.LABRAN, ran);
+		
+		//type map
+		this.keyTypeMap.put(Config.LABMIN, Config.INTEGER);
+		this.keyTypeMap.put(Config.LABMAX, Config.INTEGER);
+		this.keyTypeMap.put(Config.LABRAN, Config.INTEGER);
+		
+	}
 
 	@Override
 	public boolean valid() {

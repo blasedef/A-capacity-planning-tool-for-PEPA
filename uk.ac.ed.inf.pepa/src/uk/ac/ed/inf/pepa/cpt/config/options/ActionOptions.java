@@ -29,8 +29,8 @@ public class ActionOptions {
 		return this.myActionId;
 	}
 	
-	public void toPrint(){
-		System.out.println("action : " + this.myLabel + ", index : " + this.myActionId + ", is selected : " + this.selected);
+	public String toPrint(){
+		return "";
 	}
 
 }

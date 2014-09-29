@@ -49,12 +49,12 @@ public abstract class Parameters {
 		return tempArray;
 	}
 	
-	public void toPrint(){
-		System.out.println("//");
+	public String toPrint(){
+		String output = "";
 		for(Entry<String, Double> entry : this.keyValueMap.entrySet()){
-			System.out.println(entry.getKey() + " : " + entry.getValue() + " : " + this.keyTypeMap.get(entry.getKey()));
+			output = output + entry.getKey() + " ; " + entry.getValue() + ";";
 		}
-
+		return output;
 	}
 
 }

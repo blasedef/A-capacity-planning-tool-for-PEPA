@@ -7,9 +7,11 @@ import uk.ac.ed.inf.pepa.cpt.config.lists.PSOList;
 public class PSOControl extends PopulationControl {
 	
 	private PSOList myPSOList;
+	private String type;
 
-	public PSOControl(PSOList componentList) {
+	public PSOControl(PSOList componentList, String type) {
 		this.myPSOList = componentList;
+		this.type = type;
 	}
 	
 	public String[] getKeys(){
@@ -48,8 +50,10 @@ public class PSOControl extends PopulationControl {
 
 	@Override
 	public boolean setValue(String key, String value) {
-		return this.myPSOList.setValue(key, Config.LABMIN, value) 
-		&& this.myPSOList.setValue(key, Config.LABMAX, value);
+		boolean min, max;
+		min = this.myPSOList.setValue(key, Config.LABMIN, value);
+		max = this.myPSOList.setValue(key, Config.LABMAX, value);
+		return min && max;
 	}
 
 	@Override
@@ -58,5 +62,13 @@ public class PSOControl extends PopulationControl {
 		return null;
 	}
 	
+	public void defaultUnits(){
+		this.myPSOList.defaultUnits();
+	}
+	
+	@Override
+	public String toPrint() {
+		return this.type + ";" + this.myPSOList.toPrint();
+	}
 
 }

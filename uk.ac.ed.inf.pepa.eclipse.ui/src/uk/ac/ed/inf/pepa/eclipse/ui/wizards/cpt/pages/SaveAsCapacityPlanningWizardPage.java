@@ -1,50 +1,78 @@
 package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 
 public class SaveAsCapacityPlanningWizardPage extends WizardNewFileCreationPage {
 	
-	protected String extension;
-
-	public SaveAsCapacityPlanningWizardPage(StructuredSelection structuredSelection, 
-			String extension) {
+	public SaveAsCapacityPlanningWizardPage(String title, IStructuredSelection selection) {
 		
-		super("", structuredSelection);
+		super(CPTAPI.getSearchControls().getValue() + ": " + CPTAPI.getEvaluationControls().getValue(), selection);
 		
-		if (extension == null) {
-			throw new NullPointerException("Extension cannot be null");
-		}
-		this.extension = extension;
+		setTitle(CPTAPI.getSearchControls().getValue() + ": " + CPTAPI.getEvaluationControls().getValue());
+		setDescription("Save model configurations to");
+		
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_");
+		Date date = new Date();
+		
+		String newFilename = dateFormat.format(date) + CPTAPI.getFileName();
+		
+		CPTAPI.setFileName(newFilename);
+		
+		setFileName(newFilename);
+		setPageComplete(false);
 		
 	}
 	
-	public String getExtension() {
-		return extension;
-	}
-
-	public void completePage() {
+	public boolean validatePage() {
 		
-		boolean complete = false;
+		Path frontPath = new Path(CPTAPI.getFolderName());
+		String fileName = getFileName();
+		String newName = frontPath.addTrailingSeparator().toOSString() + fileName;
+		CPTAPI.setFileName(newName);
 		
-		if (!super.validatePage())
-			complete = false;
+		
+		boolean complete, exists;
+		complete = false;
+		exists = doesFileExist();
 		
 		/* Check extension */
-		Path path = new Path(getFileName());
-		CPTAPI.setFileName(path.toOSString());
-		if (path.getFileExtension() == null || path.getFileExtension().compareToIgnoreCase(extension) != 0) {
+		Path path = new Path(fileName);
+		
+		if (path.getFileExtension() == null || path.getFileExtension().compareToIgnoreCase(Config.EXTENSION) != 0) {
 			this.setErrorMessage("Wrong extension. It must be a ."
-					+ extension + " file");
+					+ Config.EXTENSION + " file");
+		} else if (exists) {
+			this.setErrorMessage("File already exists!");
 			complete = false;
 		} else {
-			this.setMessage(null);
+			this.setErrorMessage(null);
 			complete = true;
 		}
-		setPageComplete(complete);
+		
+		return complete;
+	}
+	
+	public boolean doesFileExist(){
+		
+		File f = new File(CPTAPI.getFileName());
+		
+		if(f.exists()){
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 }

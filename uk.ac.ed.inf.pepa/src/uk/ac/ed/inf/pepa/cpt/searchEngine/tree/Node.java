@@ -5,5 +5,4 @@ import java.util.HashMap;
 public interface Node {
 	
 	public HashMap<String,Double> getMyMap();
-	
 }

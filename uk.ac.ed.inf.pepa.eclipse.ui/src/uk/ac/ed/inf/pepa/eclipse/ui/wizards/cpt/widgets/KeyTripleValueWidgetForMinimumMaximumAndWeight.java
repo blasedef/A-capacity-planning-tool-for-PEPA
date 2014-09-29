@@ -16,6 +16,40 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 	
 	private String key, value1, value2, value3;
 	private final Text text1, text2, text3;
+	private boolean isMin, isWei;
+	
+	private class MyCallBack implements IValidationCallback {
+		
+		public void setMin() {
+			setWidgetMin();
+		}
+		
+
+		public void setMax() {
+			setWidgetMax();
+		}
+		
+
+		public void setWei() {
+			setWidgetWei();
+		}
+		
+
+		public void setNotWei() {
+			setWidgetNotWei();
+		}
+
+
+
+		@Override
+		public void validate() {
+			cb.validate();
+			
+		}
+		
+	}
+	
+	protected final MyCallBack myCallBack = new MyCallBack();
 
 	public KeyTripleValueWidgetForMinimumMaximumAndWeight(final IValidationCallback cb, 
 			Composite container, 
@@ -31,6 +65,8 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 		this.value1 = value1;
 		this.value2 = value2;
 		this.value3 = value3;
+		this.isMin = true;
+		this.isWei = false;
 			
 		Label label = new Label(container, SWT.SINGLE | SWT.LEFT);
 		label.setText(this.key);
@@ -46,7 +82,9 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setMin();
+				myCallBack.setNotWei();
+				myCallBack.validate();
 				
 			}
 			
@@ -61,7 +99,9 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setMax();
+				myCallBack.setNotWei();
+				myCallBack.validate();
 				
 			}
 			
@@ -76,7 +116,8 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 			
 			@Override
 			public void handleEvent(Event event) {
-				cb.validate();
+				myCallBack.setWei();
+				myCallBack.validate();
 				
 			}
 			
@@ -87,18 +128,48 @@ public class KeyTripleValueWidgetForMinimumMaximumAndWeight extends CapacityPlan
 	@Override
 	public Response isValid() {
 		
-		Response response = new Response((control.setValue(this.key, Config.LABMIN, text1.getText()) || 
-				control.setValue(this.key, Config.LABMAX, text2.getText())) &&
-				control.setValue(this.key, Config.LABWEI, text3.getText()) );
-		
-		if(!response.valid){
-			response.setComplaint("Invalid entry: " + this.key 
-					+ " " + text1.getText() 
-					+ " " + text2.getText()
-					+ " " + text3.getText());
+		if(isMin && !isWei){
+			Response response = new Response(control.setValue(this.key, Config.LABMIN, text1.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text1.getText());
+			}
+			return response;
+		} else if (!isMin && !isWei){
+			Response response = new Response(control.setValue(this.key, Config.LABMAX, text2.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text2.getText());
+			}
+			return response;
+		} else {
+			Response response = new Response(control.setValue(this.key, Config.LABWEI, text3.getText()));
+			
+			if(!response.valid){
+				response.setComplaint("Invalid entry: " + this.key + " " + text3.getText());
+			}
+			return response;
 		}
 		
-		return response;
+	}
+	
+	public void setWidgetMin() {
+		this.isMin = true;
+		
+	}
+	
+	public void setWidgetMax() {
+		this.isMin = false;
+		
+	}
+	
+	public void setWidgetWei() {
+		this.isWei = true;
+		
+	}
+	
+	public void setWidgetNotWei() {
+		this.isWei = false;
 		
 	}
 

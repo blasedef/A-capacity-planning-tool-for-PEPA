@@ -2,7 +2,8 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.candidates;
 
 import java.util.HashMap;
 
-import uk.ac.ed.inf.pepa.IProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
@@ -21,15 +22,19 @@ public class ModelConfiguration implements Candidate {
 	private ModelConfigurationCandidateNode myLocalbest;
 	private ModelNode myModelNode;
 	private ASTVisitor setter;
+	private IProgressMonitor myMonitor;
 	
 	public ModelConfiguration(HashMap<String,Double> parameters,
 			HashMap<String,Double> velocity,
 			IProgressMonitor monitor, 
 			MetaHeuristicNode resultNode){
 		
+		this.myMonitor = monitor;
+		
 		this.myNode = new ModelConfigurationCandidateNode("ModelConfigurationCandidate",
-				Utils.copyHashMap(parameters),
+				parameters,
 				Utils.copyHashMap(velocity),
+				this.myMonitor,
 				resultNode);
 		
 		resultNode.registerChild(this.myNode);
@@ -65,8 +70,9 @@ public class ModelConfiguration implements Candidate {
 		}
 		
 		ModelConfigurationCandidateNode newNode = new ModelConfigurationCandidateNode("ModelConfigurationCandidate",
-				Utils.copyHashMap(parameters), 
+				Utils.copyHashMap(parameters),
 				Utils.copyHashMap(velocity),
+				this.myMonitor,
 				resultNode);
 		
 		newNode.setSister(this.myNode);
@@ -90,6 +96,5 @@ public class ModelConfiguration implements Candidate {
 	public ModelConfigurationCandidateNode getLocalBest() {
 		return this.myLocalbest;
 	}
-
 
 }

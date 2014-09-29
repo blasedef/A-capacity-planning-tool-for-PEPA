@@ -25,7 +25,7 @@ public class ProcessList implements IOptionList {
 	private HashMap<Short,String> myProcessIDToSequentialComponentMap;
 	private HashMap<Short,Integer> myProcessIDToIndexMap;
 	private HashMap<String,Short> myLabelToProcessIDMap;
-	private HashMap<String,Boolean> myComponentToSelectedMap;
+	private HashMap<Short,Boolean> myComponentToSelectedMap;
 	
 	public ProcessList(IParametricDerivationGraph graph){
 		
@@ -35,7 +35,7 @@ public class ProcessList implements IOptionList {
 		this.myProcessIDToIndexMap = new HashMap<Short,Integer>();
 		this.myProcessIDToSequentialComponentMap = new HashMap<Short,String>();
 		this.myLabelToProcessIDMap = new HashMap<String,Short>();
-		this.myComponentToSelectedMap = new HashMap<String,Boolean>();
+		this.myComponentToSelectedMap = new HashMap<Short,Boolean>();
 		
 		for(int i = 0; i < graph.getSequentialComponents().length;i++){
 			ISequentialComponent c = graph.getSequentialComponents()[i];
@@ -53,7 +53,7 @@ public class ProcessList implements IOptionList {
 				this.myProcessIDToSequentialComponentMap.put(processId, c.getName());
 				this.myProcessIDToIndexMap.put(processId, j);
 				this.myLabelToProcessIDMap.put(label, processId);
-				this.myComponentToSelectedMap.put(label, false);
+				this.myComponentToSelectedMap.put(processId, false);
 				j++;
 			}
 		}
@@ -101,7 +101,7 @@ public class ProcessList implements IOptionList {
 	public boolean setSelectedHandler(short processId, boolean selected){
 		if(this.myProcessIDToSequentialComponentMap.containsKey(processId)){
 			this.setSelected(processId, selected);
-			this.myComponentToSelectedMap.put(this.getLabel(processId), selected);
+			this.myComponentToSelectedMap.put(processId, selected);
 			return true;
 		} else {
 			return false;
@@ -120,11 +120,12 @@ public class ProcessList implements IOptionList {
 		String key = this.myProcessIDToSequentialComponentMap.get(processId);
 		int index = this.myProcessIDToIndexMap.get(processId);
 		this.myComponentToProcessOptionsMap.get(key)[index].setSelected(selected);
-		this.myComponentToSelectedMap.put(key, selected);
+		this.myComponentToSelectedMap.put(processId, selected);
 	}
 	
 	public boolean getSelectionState(String key){
-		return this.myComponentToSelectedMap.get(key);
+		short processID = getProcessId(key);
+		return this.myComponentToSelectedMap.get(processID);
 	}
 	
 	public Integer getSeqIndexFromProcessID(Short processId){
@@ -166,18 +167,18 @@ public class ProcessList implements IOptionList {
 	}
 	
 	
-	public void toPrint(){
-		System.out.println("//");
-		for(Entry<String, Integer> entry : myComponentIndexList.entrySet()){
-			
-			System.out.println("Component: " 
-					+ entry.getKey() 
-					+ ", index: " 
-					+ entry.getValue());
-			
-			for(int i = 0; i < myComponentToProcessOptionsMap.get(entry.getKey()).length;i++){
-				myComponentToProcessOptionsMap.get(entry.getKey())[i].toPrint();
+	public String toPrint(){
+		String output = "";
+		for(Short s : this.myComponentToSelectedMap.keySet()){
+			if(this.myComponentToSelectedMap.get(s)){
+				output = output + getLabel(s) + ";";
 			}
+		}
+		
+		if(output.length() > 0){
+			return output.substring(0, output.length() - 1);
+		} else {
+			return "";
 		}
 	}
 	
@@ -197,17 +198,12 @@ public class ProcessList implements IOptionList {
 	 * @param processId
 	 */
 	public boolean setSelectedART(short processId, boolean selected) {
-//		Integer[] setProcessIds = getSelectedProcessIds();		
 		Set<String> setOfRoots= new HashSet<String>();
 		
-//		for(int i = 0; i < setProcessIds.length;i++){
-//			setOfRoots.add(this.myProcessIDToSequentialComponentMap.get(setProcessIds[i].shortValue()));
-//		}
 		
-		for(String key : this.myComponentToSelectedMap.keySet()){
+		for(Short key : this.myComponentToSelectedMap.keySet()){
 			if(this.myComponentToSelectedMap.get(key)){
-				Short keyProcessId = this.getProcessId(key);
-				setOfRoots.add(this.myProcessIDToSequentialComponentMap.get(keyProcessId));
+				setOfRoots.add(this.myProcessIDToSequentialComponentMap.get(key));
 			}
 		}
 		
