@@ -111,6 +111,7 @@ public class FluidSteadyState implements Runnable {
 			differentialAnalysisExeceptionHandling();
 		}
 		
+		
 		this.node.setODEResults(labels, results);
 		
 		cb.increment();

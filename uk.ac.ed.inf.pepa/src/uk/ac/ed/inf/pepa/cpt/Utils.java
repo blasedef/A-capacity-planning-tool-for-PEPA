@@ -17,7 +17,7 @@ import uk.ac.ed.inf.pepa.parsing.ModelNode;
 
 public class Utils {
 	
-	private static int modelCandidateNodeUID = -1;
+	private static int modelCandidateNodeUID = -2;
 	private static int hillClimbingLabCandidateNodeUID = -1;
 	private static int particleSwarmOptimisationLabCandidateNodeUID = -1;
 	private static int hcNodeUID = -1;

@@ -1,6 +1,10 @@
 package uk.ac.ed.inf.pepa.cpt;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.config.control.Control;
@@ -11,15 +15,16 @@ import uk.ac.ed.inf.pepa.cpt.config.control.PopulationControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.populationControl.PSOControl;
 import uk.ac.ed.inf.pepa.cpt.config.control.populationControl.TargetControl;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.CPT;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.IResultTreeNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.Leaf;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.ModelProvider;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.Node;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.PACS;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
 import uk.ac.ed.inf.pepa.largescale.simulation.IStatisticsCollector;
 import uk.ac.ed.inf.pepa.parsing.ModelNode;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 
 public class CPTAPI {
 	
@@ -184,16 +189,44 @@ public class CPTAPI {
 		return CPTAPI.configuration.resultSize;
 	}
 	
-	public static ArrayList<ResultNode> getResultList(){
-		return CPTAPI.configuration.resultQ;
+	public static IResultTreeNode getResultNode(){
+		if(CPTAPI.configuration == null){
+			Node temp = new Node("top",null);
+			Node temp2 = new Node("no data",null);
+			temp2.addChild(new Leaf("no data 1",temp2));
+			temp2.addChild(new Leaf("no data 2",temp2));
+			temp.addChild(temp2);
+			return temp;
+		} else {
+			return CPTAPI.configuration.results;
+		}
+			
 	}
 	
-	public static void setResultLabels(String[] strings){
-		CPTAPI.configuration.resultLabels = strings;
+	public static void addResult(IResultTreeNode node){
+		CPTAPI.configuration.results.addChild(node);
 	}
 	
-	public static String[] getResultLabels(){
-		return CPTAPI.configuration.resultLabels;
+	public static void addResultToFront(IResultTreeNode node){
+		CPTAPI.configuration.results.addChildToFront(node);
+	}
+	
+	public static List getPACSList(){
+		if(CPTAPI.configuration == null){
+			return ModelProvider.INSTANCE.getpacs();
+		} else {
+			return CPTAPI.configuration.pacs.getpacs();
+		}
+			
+	}
+	
+	public static PACS getPACS(){
+		if(CPTAPI.configuration == null){
+			return null;
+		} else {
+			return CPTAPI.configuration.pacs;
+		}
+			
 	}
 	
 }

@@ -19,7 +19,7 @@ public class BackMetaheuristicCapacityPlanningWizardPage extends CapacityPlannin
 	protected void constructPage(IValidationCallback cb, Composite container) {
 		
 		Control control = CPTAPI.getPSORangeParameterControls();
-		String[] keys = control.getKeys();
+		String[] keys = {Config.LABEXP,Config.LABGEN,Config.LABORG,Config.LABLOC,Config.LABGLO};
 		
 		//left pad
 		pad(container);

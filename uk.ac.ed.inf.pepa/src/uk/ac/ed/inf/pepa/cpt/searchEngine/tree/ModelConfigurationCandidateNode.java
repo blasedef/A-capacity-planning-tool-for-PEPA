@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -11,7 +12,8 @@ import uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.FitnessFunction;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.fitnessFunctions.ModelConfigurationFitnessFunction;
 
 
-public class ModelConfigurationCandidateNode extends CandidateNode {
+public class ModelConfigurationCandidateNode extends CandidateNode 
+implements Comparator<ModelConfigurationCandidateNode>, Comparable<ModelConfigurationCandidateNode> {
 	
 	private ModelConfigurationCandidateNode sister;
 	private int generation;
@@ -180,6 +182,7 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	}
 
 	public void switchFlag() {
+		System.out.println("happens");
 		this.evaluatedSuccessFully = !this.evaluatedSuccessFully;
 		
 	}
@@ -191,14 +194,6 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 	public HashMap<String,Double> getPerformanceMap(){
 		return this.performanceMap;
 	}
-	
-//	public void fillQueue(MetaHeuristicNode metaHeuristicNode,
-//			CandidateNode candidateNode, double runTime,
-//			PriorityQueue<ResultNode> resultsQueue) {
-//		
-//		resultsQueue.add(new ResultNode(runTime,candidateNode,metaHeuristicNode,this));
-//		
-//	}
 	
 	public Double getPerformanceResult() {
 		return performanceResult;
@@ -230,6 +225,35 @@ public class ModelConfigurationCandidateNode extends CandidateNode {
 
 		CPTAPI.setTotalResults();
 		
+	}
+	
+	public int compare(ModelConfigurationCandidateNode c1, ModelConfigurationCandidateNode c2){
+		
+		if(c1.getFitness() > c2.getFitness()){
+			return 1;
+		} else if (c1.getFitness() < c2.getFitness()){
+			return -1;
+		} else {
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public int compareTo(ModelConfigurationCandidateNode arg0) {
+		
+		if(this.fitness > arg0.getFitness()){
+			return 1;
+		} else if (this.fitness < arg0.getFitness()){
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		return false;
 	}
 
 }

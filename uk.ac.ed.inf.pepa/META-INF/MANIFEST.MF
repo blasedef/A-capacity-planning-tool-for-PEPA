@@ -10,6 +10,7 @@ Export-Package: uk.ac.ed.inf.pepa,
  uk.ac.ed.inf.pepa.cpt.config,
  uk.ac.ed.inf.pepa.cpt.config.control,
  uk.ac.ed.inf.pepa.cpt.config.control.populationControl,
+ uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer,
  uk.ac.ed.inf.pepa.ctmc,
  uk.ac.ed.inf.pepa.ctmc.derivation;uses:="uk.ac.ed.inf.pepa",
  uk.ac.ed.inf.pepa.ctmc.derivation.common;
@@ -73,4 +74,5 @@ Bundle-ClassPath: .,
  lib/antlr-3.3-complete.jar
 Require-Bundle: org.junit4,
  uk.ac.ed.inf.systemsbiology;bundle-version="0.0.23"
-Import-Package: org.eclipse.core.runtime
+Import-Package: org.eclipse.core.runtime,
+ org.eclipse.swt.graphics

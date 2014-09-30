@@ -29,6 +29,18 @@
             name="State Space View "/>
       <view
             category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.cptview.CapacityPlanningView"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.view.cptview"
+            name="Capacity Planning Tree">
+      </view>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
+            class="uk.ac.ed.inf.pepa.eclipse.ui.view.cptview.CapacityPlanningListView"
+            id="uk.ac.ed.inf.pepa.eclipse.ui.view.cptlist"
+            name="Capacity Planning List">
+      </view>
+      <view
+            category="uk.ac.ed.inf.pepa.eclipse.ui.pepa"
             class="uk.ac.ed.inf.pepa.eclipse.ui.view.utilisationview.UtilisationView"
             id="uk.ac.ed.inf.pepa.eclipse.ui.utilisationView"
             name="Performance Evaluation"/>

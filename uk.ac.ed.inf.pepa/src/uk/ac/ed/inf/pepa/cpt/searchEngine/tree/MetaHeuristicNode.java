@@ -65,8 +65,6 @@ public abstract class MetaHeuristicNode implements Node {
 		childUIDToIndex.put(child.getUID(), children.size() - 1);
 	}
 
-	
-
 	@Override
 	public HashMap<String, Double> getMyMap() {
 		return this.myMap;

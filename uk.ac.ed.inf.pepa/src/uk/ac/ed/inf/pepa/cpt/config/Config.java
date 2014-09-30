@@ -30,7 +30,8 @@ import uk.ac.ed.inf.pepa.cpt.config.lists.TargetList;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.CostFunctionParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.HillClimbingParameters;
 import uk.ac.ed.inf.pepa.cpt.config.parameters.OptionMapParameters;
-import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.Node;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.PACS;
 import uk.ac.ed.inf.pepa.ctmc.solution.OptionMap;
 import uk.ac.ed.inf.pepa.largescale.IParametricDerivationGraph;
 import uk.ac.ed.inf.pepa.largescale.IPointEstimator;
@@ -172,8 +173,8 @@ public class Config implements ConfigCallBack{
 	private ArrayList<Control> controls;
 	public int resultSize;
 	
-	public ArrayList<ResultNode> resultQ;
-	public String[] resultLabels;
+	public Node results;
+	public PACS pacs;
 	
 	/**
 	 * Configuration object, required for a cpt run.
@@ -242,7 +243,9 @@ public class Config implements ConfigCallBack{
 		
 		this.resultSize = 0;
 		
-		this.resultQ = new ArrayList<ResultNode>();
+		this.results = new Node("Results",null);
+		
+		this.pacs = new PACS();
 		
 	}
 

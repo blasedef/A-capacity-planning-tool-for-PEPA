@@ -9,12 +9,14 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 
 //	private MetaHeuristicNode mhConfiguration;
 //	private ModelConfigurationCandidateNode modelConfiguration;
-	private Double cost, performanceCost, populationCost, totalPopulation;
+	private Double cost, performanceCost, populationCost, totalPopulation, runTime;
 	private HashMap<String,Double> componentPopulationMap;
 	private HashMap<String,Double> performanceMap;
 	private HashMap<String,Double> metaheuristicParameterMap;
+	private String name;
+	private boolean converged;
 	
-	public String COMPONENT,MEASURED, PSO, TOTAL, POP, PER, TPOP;
+	public String COMPONENT,MEASURED, PSO, TOTAL, POP, PER, TPOP, CONVERGED, RUNTIME;
 	
 	public ResultNode(MetaHeuristicNode mhConfiguration,
 			ModelConfigurationCandidateNode modelConfiguration){
@@ -26,6 +28,9 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		this.componentPopulationMap = Utils.copyHashMap(modelConfiguration.getMyMap());
 		this.performanceMap = Utils.copyHashMap(modelConfiguration.getPerformanceMap());
 		this.metaheuristicParameterMap = Utils.copyHashMap(mhConfiguration.getMyMap());
+		this.name = modelConfiguration.getName();
+		this.converged = modelConfiguration.hasConverged();
+		this.runTime = (double) modelConfiguration.getRunTime();
 		
 		//required strings
 		this.COMPONENT = "Component population";
@@ -35,6 +40,8 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		this.POP = "Population cost";
 		this.PER = "Performance cost";
 		this.TPOP = "Total population";
+		this.CONVERGED = "Converged";
+		this.RUNTIME = "Run time";
 		
 	}
 	
@@ -52,7 +59,7 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		String output = "";
 		
 		for(String s : map.keySet()){
-			output = output + s + "[" + map.get(s) + "]-";
+			output = output + s + "[" + map.get(s) + "] ";
 		}
 		
 		return output.substring(0,output.length() - 1);
@@ -142,9 +149,9 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	public int compare(ResultNode c1, ResultNode c2){
 		
 		if(c1.getCost() > c2.getCost()){
-			return -1;
-		} else if (c1.getCost() < c2.getCost()){
 			return 1;
+		} else if (c1.getCost() < c2.getCost()){
+			return -1;
 		} else {
 			return 0;
 		}
@@ -159,9 +166,9 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	public int compareTo(ResultNode arg0) {
 		
 		if(this.cost > arg0.getCost()){
-			return -1;
-		} else if (this.cost < arg0.getCost()){
 			return 1;
+		} else if (this.cost < arg0.getCost()){
+			return -1;
 		} else {
 			return 0;
 		}
@@ -173,6 +180,23 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	}
 	
 	
-
+	public String getName(){
+		return this.name;
+	}
+	
+	public String hasConverged(){
+		if(this.converged)
+			return "True";
+		else
+			return "False";
+	}
+	
+	public Double getTotalPopulation(){
+		return totalPopulation;
+	}
+	
+	public Double getRunTime(){
+		return runTime;
+	}
 
 }

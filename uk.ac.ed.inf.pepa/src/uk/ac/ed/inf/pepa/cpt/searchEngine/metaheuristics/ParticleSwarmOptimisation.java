@@ -10,6 +10,7 @@ import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 //import uk.ac.ed.inf.pepa.cpt.ode.Dummy;
+import uk.ac.ed.inf.pepa.cpt.ode.Dummy;
 import uk.ac.ed.inf.pepa.cpt.ode.FluidSteadyState;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ModelConfiguration;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.PSONode;
@@ -147,19 +148,19 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		
 		for (int i = 0; i < this.population.size(); i++) {
 			
-			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
-				population.get(i).getGraph(), 
-				CPTAPI.getEstimators(), 
-				CPTAPI.getCollectors(), 
-				CPTAPI.getOptionMap(),
-				null,
-				population.get(i).getNode(),
-				this.counter);
-			this.executor.execute(worker);
-//			Runnable worker = new Dummy(CPTAPI.getLabels(), 
-//					population.get(i).getNode(),
-//					this.counter);
-//				this.executor.execute(worker);
+//			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
+//				population.get(i).getGraph(), 
+//				CPTAPI.getEstimators(), 
+//				CPTAPI.getCollectors(), 
+//				CPTAPI.getOptionMap(),
+//				null,
+//				population.get(i).getNode(),
+//				this.counter);
+//			this.executor.execute(worker);
+			Runnable worker = new Dummy(CPTAPI.getLabels(), 
+					population.get(i).getNode(),
+					this.counter);
+				this.executor.execute(worker);
 		}
 		
 		

@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 
 import java.util.ArrayList;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -31,11 +32,11 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 	};
 
 	public CapacityPlanningWizardPage() {
-		super(CPTAPI.getSearchControls().getValue());
+		super(CPTAPI.getEvaluationControls().getValue());
 		
 		this.widgets = new ArrayList<CapacityPlanningWidget>();
 		
-		setTitle(CPTAPI.getSearchControls().getValue() + ": " + CPTAPI.getEvaluationControls().getValue());
+		setTitle(CPTAPI.getEvaluationControls().getValue());
 	}
 	
 	@Override

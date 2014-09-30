@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.ui,
  org.junit4
 Eclipse-LazyStart: true
 Bundle-Vendor: LFCS - The University of Edinburgh
-Export-Package: uk.ac.ed.inf.pepa.eclipse.ui;
+Export-Package: uk.ac.ed.inf.pepa.cpt.searchEngine.listen,
+ uk.ac.ed.inf.pepa.eclipse.ui;
   uses:="org.eclipse.jface.resource,
    uk.ac.ed.inf.pepa.eclipse.core,
    org.eclipse.ui,

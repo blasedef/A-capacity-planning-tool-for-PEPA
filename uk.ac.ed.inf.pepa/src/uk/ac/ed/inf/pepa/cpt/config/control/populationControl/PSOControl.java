@@ -53,7 +53,7 @@ public class PSOControl extends PopulationControl {
 		boolean min, max;
 		min = this.myPSOList.setValue(key, Config.LABMIN, value);
 		max = this.myPSOList.setValue(key, Config.LABMAX, value);
-		return min && max;
+		return min || max;
 	}
 
 	@Override

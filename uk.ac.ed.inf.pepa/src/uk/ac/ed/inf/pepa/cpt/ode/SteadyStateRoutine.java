@@ -39,7 +39,6 @@ public class SteadyStateRoutine {
 			}
 			lastError = computeDifference(lastSolution, solution);
 			System.arraycopy(solution, 0, lastSolution, 0, solution.length);
-			// System.out.println(timePoint + ":" + lastError);
 			if (lastError <= convergenceRequired) {
 				this.hasConverged = true;
 				this.monitor.setCanceled(true);
@@ -50,23 +49,10 @@ public class SteadyStateRoutine {
 		private double computeDifference(double[] lastSolution,
 				double[] solution) {
 			double normZero = 0.0d;
-			//double normEuclidean = 0.0d;
-			//double[] vf = null;
-			//try {
-			//	vf = solver.evaluateVectorField(0, lastSolution);
-			//} catch (DifferentialAnalysisException e) {
-			//	// TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}
 			for (int i = 0; i < solution.length; i++) {
-				// System.out.println(solution[i] + " - " + lastSolution[i]);
 				double compDifference = solution[i] - lastSolution[i];
 				normZero += Math.abs(compDifference);
-				//normEuclidean += Math.pow(vf[i], 2);
 			}
-			//normEuclidean = Math.sqrt(normEuclidean);
-			//System.out.printf("Time %f Relative error: %e Absolute error: %e\n",
-			//		 lastTimePoint, normZero, normEuclidean);
 			return normZero;
 		}
 
@@ -143,16 +129,14 @@ public class SteadyStateRoutine {
 						"Steady-state analysis not converged after t = "
 								+ lastTimePoint + ". Norm = " + lastError,
 						DifferentialAnalysisException.NOT_CONVERGED);
+				
 			
 			
 		} catch (InterruptedException e) {
 			if (!callback.hasConverged())
 				throw e; // interrupted by user
-			// else it has converged
 		} finally {
 			monitor.done();
 		}
-		// System.out.println("Last time: " + lastTimePoint);
-		// System.out.println("Last error: " + lastError);
 	}
 }

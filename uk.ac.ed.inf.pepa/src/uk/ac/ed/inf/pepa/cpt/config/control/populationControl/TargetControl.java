@@ -64,8 +64,13 @@ public class TargetControl extends PopulationControl {
 
 	@Override
 	public String getValue(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String output = "";
+		
+		for(String s : this.myTargetList.getYKeys()){
+			output = output + s + "[" + this.getValue(s, key) + "] ";
+		}
+		return output;
 	}
 
 	@Override

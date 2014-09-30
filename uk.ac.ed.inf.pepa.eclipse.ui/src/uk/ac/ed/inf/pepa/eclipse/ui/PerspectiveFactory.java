@@ -35,6 +35,10 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 	
 	private static final String PLOT_VIEW = PlotView.ID;
 	
+	private static final String CAPACITY_PLANNING_VIEW = "uk.ac.ed.inf.pepa.eclipse.ui.view.cptview";
+	
+	private static final String CAPACITY_PLANNING_LIST = "uk.ac.ed.inf.pepa.eclipse.ui.view.cptlist";
+	
 	public void createInitialLayout(IPageLayout layout) {
 		
 		String editorArea = layout.getEditorArea();
@@ -54,6 +58,8 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
 		right.addView(IPageLayout.ID_OUTLINE);
 		right.addView(PERFORMANCE_EVALUATION_VIEW);
+		right.addView(CAPACITY_PLANNING_VIEW);
+		right.addView(CAPACITY_PLANNING_LIST);
 		
 	}
 

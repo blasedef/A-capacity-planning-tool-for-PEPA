@@ -16,6 +16,7 @@ import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.eclipse.core.IPepaModel;
 import uk.ac.ed.inf.pepa.eclipse.core.ResourceUtilities;
+import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.listen.CapacityPlanningObserver;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages.*;
 
 public class CapacityPlanningWizard extends Wizard {
@@ -78,6 +79,8 @@ public class CapacityPlanningWizard extends Wizard {
 		addPage(odeOptionCapacityPlanningWizardPage);
 		addPage(populationCapacityPlanningWizardPage);
 		addPage(saveAsCapacityPlanningWizardPage);
+		
+		setWindowTitle(CPTAPI.getSearchControls().getValue());
 	}
 	
 	/**
@@ -149,7 +152,9 @@ public class CapacityPlanningWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		
-		CPTJob job = new CPTJob("Searching the model configuration space...");
+		final CapacityPlanningObserver observer = new CapacityPlanningObserver();
+		
+		final CPTJob job = new CPTJob("Searching the model configuration space...",observer);
 		
 		job.setUser(true);
 		job.schedule();

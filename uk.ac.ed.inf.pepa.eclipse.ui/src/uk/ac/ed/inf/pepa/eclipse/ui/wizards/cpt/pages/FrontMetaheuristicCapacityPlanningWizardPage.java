@@ -3,11 +3,14 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 import org.eclipse.swt.widgets.Composite;
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.config.control.Control;
 import uk.ac.ed.inf.pepa.eclipse.ui.dialogs.IValidationCallback;
 import uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.widgets.KeySingleValueWidget;
 
 public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanningWizardPage {
+	
+	
 
 	public FrontMetaheuristicCapacityPlanningWizardPage(String pageName) {
 		super();
@@ -18,7 +21,14 @@ public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanni
 	protected void constructPage(IValidationCallback cb, Composite container) {
 		
 		Control control = CPTAPI.getMHParameterControls();
-		String[] keys = control.getKeys();
+		String[] keys;
+		String[] hc = {Config.LABEXP,Config.LABGEN,Config.LABMUT};
+		String[] pso = {Config.LABEXP,Config.LABGEN,Config.LABORG,Config.LABLOC,Config.LABGLO};
+		
+		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE))
+			keys = pso;
+		else
+			keys = hc;
 		
 		//left pad
 		pad(container);
@@ -29,10 +39,9 @@ public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanni
 		
 		header(titles,child,4);
 		
-		
-		for(int i = 0; i < keys.length; i++){
+		for(int i = 0; i < keys.length; i++)
 			widgets.add(new KeySingleValueWidget(cb, child,keys[i],control.getValue(keys[i]),control));
-		}
+
 		
 		footer(child);
 		
@@ -41,5 +50,7 @@ public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanni
 		
 
 	}
+	
+
 
 }

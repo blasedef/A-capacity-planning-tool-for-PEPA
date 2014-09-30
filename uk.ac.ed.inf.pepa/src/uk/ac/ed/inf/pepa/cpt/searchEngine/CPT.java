@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -11,8 +12,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.HillClimbingLab;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.Leaf;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.viewer.Node;
 
 
 public class CPT {
@@ -20,12 +24,13 @@ public class CPT {
 	private HillClimbingLab root;
 	private IProgressMonitor monitor;
 	private PriorityQueue<ResultNode> resultsQueue;
+	private ArrayList<String> outputStrings;
 	private IStatus myStatus;
 	
 	public CPT (IProgressMonitor monitor){
 		
 		this.monitor = monitor;
-		
+		this.outputStrings = new ArrayList<String>();
 		CPTAPI.setTime(System.currentTimeMillis());
 		
 	}
@@ -55,13 +60,11 @@ public class CPT {
 		
 		try{
 			
-			String[] labels = new String[this.resultsQueue.size()];
-			
 			FileWriter writer = new FileWriter(CPTAPI.getFileName());
 			
-			String outputString = "";
 			
 			int rqs = this.resultsQueue.size();
+			int qSize = this.resultsQueue.size();
 			
 			this.monitor.subTask("scanning results: " + rqs + " left");
 			rqs--;
@@ -72,15 +75,39 @@ public class CPT {
 			}
 			
 			ResultNode rn = this.resultsQueue.poll();
-			outputString = rn.heading() + "\n";
-			outputString = outputString + rn.toString() + "\n";
-			CPTAPI.getResultList().add(rn);
-			labels[0] = rn.populationMapAsNodeString();
-			writer.append(outputString);
+			writer.append(rn.heading());
+			outputStrings.add(rn.toString() + "\n");
+			
+			int converged = 0; 
+			Double totalPopulation  = 0.0;
+			Double runTime = 0.0;
+			
+			Node tempNode = new Node(rn.getName(), CPTAPI.getResultNode());
+			
+			addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
+			addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
+			addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
+			addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
+			addNodes(rn.PER + ": ", rn.getPerformanceCostString(), tempNode);
+			addNodes(rn.POP + ": ", rn.getPopulationCostString(), tempNode);
+			addNodes(rn.TPOP + ": ", rn.getTotalPopulationString(), tempNode);
+			addNodes(rn.PSO + ": ", rn.psoMapAsNodeString(), tempNode);
+			addNodes(rn.CONVERGED + ": ", rn.hasConverged(), tempNode);
+			addNodes(rn.RUNTIME + ": ", "" + rn.getRunTime(), tempNode);
+			
+			CPTAPI.addResult(tempNode);
+			
+			if(rn.hasConverged().equals("True"))
+				converged++;
+			
+			totalPopulation += rn.getTotalPopulation();
+			runTime += rn.getRunTime();
 			
 			this.monitor.worked(1);
 			
 			int i = 1;
+			
+			
 			
 			while(this.resultsQueue.size() > 0){
 				
@@ -94,13 +121,43 @@ public class CPT {
 					throw new OperationCanceledException();
 				}
 				
-				outputString = rn.toString() + "\n";
-				CPTAPI.getResultList().add(rn);
-				labels[i] = rn.populationMapAsNodeString();
+				outputStrings.add(rn.toString() + "\n");
+				
+				tempNode = new Node(rn.getName(), CPTAPI.getResultNode());
+				
+				addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
+				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
+				addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
+				addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
+				addNodes(rn.PER + ": ", rn.getPerformanceCostString(), tempNode);
+				addNodes(rn.POP + ": ", rn.getPopulationCostString(), tempNode);
+				addNodes(rn.TPOP + ": ", rn.getTotalPopulationString(), tempNode);
+				addNodes(rn.PSO + ": ", rn.psoMapAsNodeString(), tempNode);
+				addNodes(rn.CONVERGED + ": ", rn.hasConverged(), tempNode);
+				addNodes(rn.RUNTIME + ": ", "" + rn.getRunTime(), tempNode);
+				
+				if(rn.hasConverged().equals("True"))
+					converged++;
+				
+				totalPopulation += rn.getTotalPopulation();
+				runTime += rn.getRunTime();
+				
+				CPTAPI.addResult(tempNode);
+				
+				CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
+						rn.getTotalCostString(), 
+						rn.peformanceMapAsNodeString(), 
+						rn.getTotalPopulationString());
+				
 				i++;
-				writer.append(outputString);
 				this.monitor.worked(1);
 			}
+			
+			for(i = outputStrings.size() - 1; i >= 0; i--){
+				writer.append(outputStrings.get(i));
+			}
+			
+			outputStrings = new ArrayList<String>();
 			
 			this.monitor.subTask("saving configuration...");
 			
@@ -108,7 +165,6 @@ public class CPT {
 			writer.append("Configuration \n");
 			
 			String[] configuration = CPTAPI.toPrint();
-			outputString = "";
 			
 			for(String s : configuration){
 				
@@ -117,13 +173,30 @@ public class CPT {
 					throw new OperationCanceledException();
 				}
 				
-				outputString = outputString + s + "\n";
+				outputStrings.add( s + "\n");
 				this.monitor.worked(1);
+			}
+			
+			for(i = 0; i < outputStrings.size(); i++){
+				writer.append(outputStrings.get(i));
 			}
 			
 			this.monitor.subTask("complete.");
 			
-			writer.append(outputString);
+			tempNode = new Node("Results evaluation", CPTAPI.getResultNode());
+			
+			addNodesToFront("Average model total population: ", ((Double) ((totalPopulation)  / qSize)).toString() + "", tempNode);
+			addNodesToFront("Average model evaluation run time: ", ((Double) ((runTime)  / qSize)).toString() + "ms", tempNode);
+			addNodesToFront("Total results: ", qSize + "", tempNode);
+			addNodesToFront("Number of models that didn't converge: ", qSize-converged +"", tempNode);
+			addNodesToFront("Percentage of models that converged: ", ((Double) ((converged * 100.0)  / qSize)).toString() + "%", tempNode);
+			
+			CPTAPI.addResultToFront(tempNode);
+			
+			CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
+					rn.getTotalCostString(), 
+					rn.peformanceMapAsNodeString(), 
+					rn.getTotalPopulationString());
 			
 			writer.close();
 			this.myStatus = Status.OK_STATUS;
@@ -133,6 +206,20 @@ public class CPT {
 			e.printStackTrace();
 		}
 			
+	}
+	
+	public void addNodes(String mid, String leaf, Node root){
+		Node midN = new Node(mid,root);
+		Leaf leafL = new Leaf(leaf,midN);
+		midN.addChild(leafL);
+		root.addChild(midN);
+	}
+	
+	public void addNodesToFront(String mid, String leaf, Node root){
+		Node midN = new Node(mid,root);
+		Leaf leafL = new Leaf(leaf,midN);
+		midN.addChildToFront(leafL);
+		root.addChildToFront(midN);
 	}
 	
 	public void createResultsQueue(){
@@ -179,6 +266,6 @@ public class CPT {
 		this.monitor.subTask("Compiled results");
 		
 	}
-	
+
 
 }
