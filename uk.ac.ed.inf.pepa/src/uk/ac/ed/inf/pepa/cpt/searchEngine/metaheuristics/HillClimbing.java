@@ -49,33 +49,36 @@ public class HillClimbing implements MetaHeuristics {
 	public void startAlgorithm(){
 		
 		HashMap<String,Double> parameters = getPSOParameters();
-		HashMap<String,Double> possibleParameters = mutateModelConfigurationLabParameters(parameters);
-		
 		
 		this.candidate = new ParticleSwarmOptimisationLab(parameters,
 				new SubProgressMonitor(this.myMonitor, CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork()), 
 				this.myNode);
 		
-		this.possibleCandidate = new ParticleSwarmOptimisationLab(this.candidate.getNode(), 
-				new SubProgressMonitor(this.myMonitor, CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork()));
-		
-		
-		int generations = this.myNode.getMyMap().get(Config.LABGEN).intValue();
-		
-		for(int i = 1; i < generations; i++){
+		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHDRIVEN)){
 			
-			if(this.myMonitor.isCanceled()){
-				throw new OperationCanceledException();
+			HashMap<String,Double> possibleParameters = mutateModelConfigurationLabParameters(parameters);
+		
+			this.possibleCandidate = new ParticleSwarmOptimisationLab(this.candidate.getNode(), 
+					new SubProgressMonitor(this.myMonitor, CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork()));
+			
+			
+			int generations = this.myNode.getMyMap().get(Config.LABGEN).intValue();
+			
+			for(int i = 1; i < generations; i++){
+				
+				if(this.myMonitor.isCanceled()){
+					throw new OperationCanceledException();
+				}
+				
+				this.possibleCandidate.setParameters(possibleParameters, 
+						this.myNode);
+				
+				if(possibleCandidate.getFitness() < candidate.getFitness()){
+					parameters = Utils.copyHashMap(possibleParameters);
+					candidate.setNode(possibleCandidate.getNode());
+				} 
+				possibleParameters = mutateModelConfigurationLabParameters(parameters);
 			}
-			
-			this.possibleCandidate.setParameters(possibleParameters, 
-					this.myNode);
-			
-			if(possibleCandidate.getFitness() < candidate.getFitness()){
-				parameters = Utils.copyHashMap(possibleParameters);
-				candidate.setNode(possibleCandidate.getNode());
-			} 
-			possibleParameters = mutateModelConfigurationLabParameters(parameters);
 		}
 		
 	}

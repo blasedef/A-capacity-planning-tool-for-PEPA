@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Capacity planning tool reference</title>
+</head>
+
+<body>
+<h1>Capacity Planning Tool</h1>
+
+<h3><a href="#componentPopulation">Component population</a></h3>
+		<p>
+			The number of components in a system. If we have:
+			<br> <b>Component[x]</b>
+			<br> x then is the population size of the resource in the system.
+		</p>
+
+
+<h3><a href="#componentPopulationRange">Component population range</a></h3>
+		<p>
+			The designer must specify an upper and lower limit to each component population size. This
+			provides a component population range.
+		</p>
+		
+<h3><a href="#modelConfigurationSearchSpace">Model configuration search space</a></h3>
+		<p>
+			The set of all possible <a href="#modelConfiguration">model configurations</a></h3>.
+		</p> 
+
+
+<h3><a href="#modelConfiguration">Model configuration</a></h3>
+		<p>
+			A <b>model configuration</b> is any model who has each of its <a href="#componentPopulation">component population</a></h3> sizes inside of their user defined <a href="#componentPopulationRange">component population ranges</a>.
+		</p> 
+
+<h3><a href="#pso">Particle Swarm Optimisation (PSO)</a></h3>
+	<p> A PSO is used to search through the <a href="#modelConfigurationSearchSpace">model configuration search space</a>. 
+	A particle moves through the <a href="#modelConfigurationSearchSpace">model configuration search space</a> 
+	looking for an optimal model configuration based on a user defined <a href="#costFunction">cost function</a>. 
+	The PSO in the CPT has five parameters: <a href="#ov">Original velocity</a>, <a href="#pb">personal best</a>, 
+	and <a href="#gb">global best</a> effect the behaviour of the particles. The designer can set the number of particles searching using the <a href="#pop">Population count</a>. 
+	<a href="#gen">Generation</a> is the number of moves by a particle. Lastly the designer can set the number of
+	times a PSO will run, the number of <a href="#exp">experiments</a>.
+	
+	<br> see <a href="http://en.wikipedia.org/wiki/Particle_swarm_optimization">wiki</a> for details.
+	</p>
+	
+<h3><a href="#psop">PSO parameters</a></h3>
+<ol>
+<li> <a href="#ov">Original velocity</a>
+<li> <a href="#pb">Personal best</a>
+<li> <a href="#gb">Global best</a>
+<li> <a href="#pop">Population count</a>
+<li> <a href="#gen">Generation</a>
+<li> <a href="#exp">Experiments</a>
+</ol>
+
+<h3><a href="#dpso">Driven Particle Swarm Optimisation (dPSO)</a></h3>
+	<p> A dPSO uses a Hill Climbing algorithm to find the optimum <a href="#psop">Particle Swarm Optimisation (PSO) parameters</a>. A Hill Climbing
+	algorithm has far fewer parameters to set than a PSO. It therefore offers the designer an easier interface than the single PSO. However it takes longer to 
+	complete than a single PSO due to the additional search. 
+	</p>
+	
+<h3><a href="#dpsop">dPSO parameters</a></h3>
+<ol>
+<li> <a href="#gen">Generation</a>
+<li> <a href="#exp">Experiments</a>
+</ol>
+
+<h3><a href="#ov">Original velocity</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#pb">Personal best</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#gb">Global best</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#pop">Population count</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#gen">Generations</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#exp">Experiments</a></h3>
+	<p>
+	</p>
+	
+<h3><a href="#costFunction">Cost function</a></h3>
+	<p>
+	</p>
+
+</html>

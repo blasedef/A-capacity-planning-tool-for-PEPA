@@ -5,4 +5,8 @@
 	<topic label="Analysis"> 
 		<topic label="Time Series Analysis" href="html/reference/timeSeriesAnalysis.html"/> 
 	</topic>
+ <topic label="Capacity Planning Tool">
+    <topic href="html/reference/CPT/cpt.html" label="Capacity Planning Tool">
+    </topic>
+ </topic>
 </toc>

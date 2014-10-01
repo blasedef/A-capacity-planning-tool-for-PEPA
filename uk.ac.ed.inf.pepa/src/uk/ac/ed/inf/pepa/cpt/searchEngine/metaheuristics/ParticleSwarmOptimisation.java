@@ -148,19 +148,19 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 		
 		for (int i = 0; i < this.population.size(); i++) {
 			
-//			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
-//				population.get(i).getGraph(), 
-//				CPTAPI.getEstimators(), 
-//				CPTAPI.getCollectors(), 
-//				CPTAPI.getOptionMap(),
-//				null,
-//				population.get(i).getNode(),
-//				this.counter);
-//			this.executor.execute(worker);
-			Runnable worker = new Dummy(CPTAPI.getLabels(), 
-					population.get(i).getNode(),
-					this.counter);
-				this.executor.execute(worker);
+			Runnable worker = new FluidSteadyState(CPTAPI.getLabels(), 
+				population.get(i).getGraph(), 
+				CPTAPI.getEstimators(), 
+				CPTAPI.getCollectors(), 
+				CPTAPI.getOptionMap(),
+				null,
+				population.get(i).getNode(),
+				this.counter);
+			this.executor.execute(worker);
+//			Runnable worker = new Dummy(CPTAPI.getLabels(), 
+//					population.get(i).getNode(),
+//					this.counter);
+//				this.executor.execute(worker);
 		}
 		
 		

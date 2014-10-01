@@ -22,8 +22,8 @@ public class FrontMetaheuristicCapacityPlanningWizardPage extends CapacityPlanni
 		
 		Control control = CPTAPI.getMHParameterControls();
 		String[] keys;
-		String[] hc = {Config.LABEXP,Config.LABGEN,Config.LABMUT};
-		String[] pso = {Config.LABEXP,Config.LABGEN,Config.LABORG,Config.LABLOC,Config.LABGLO};
+		String[] hc = {Config.LABEXP,Config.LABGEN};
+		String[] pso = {Config.LABEXP,Config.LABGEN,Config.LABPOP,Config.LABORG,Config.LABLOC,Config.LABGLO};
 		
 		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE))
 			keys = pso;

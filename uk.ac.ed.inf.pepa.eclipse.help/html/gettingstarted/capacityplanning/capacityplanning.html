@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 TRANSITIONAL//EN">
+<html>
+	<head>
+		<title>Capacity Planning</title>
+	</head>
+	<body>
+		<h3>This guide</h3>
+		<p>
+			This guide provides a step by step description of the <b>Capacity Planning Tool</b> (CPT).
+		</p>
+		<p>
+			It shows how to configure the tool in order to search for some <b> optimal model configuration</b> of system components. This page gives an
+			overview of the tool in order to provide insight into how the tool works, and therefore how to configure the tool for a search. We start with
+			a breif motivation, and then provide a high level view of the CPT.
+		</p>
+		<p>
+			Familiarity with PEPA is assumed. To learn more about PEPA
+			visit <a href="http://www.dcs.ed.ac.uk/pepa/">the PEPA web site</a>.
+		</p>
+		<h3>The Capacity Planning Tool</h3>
+		<center><h4>Motivation</h4></center>
+		<p>
+			Real systems are expected to service some <b>demand</b> with good <b>performance</b>. For example; a cloud based web-service
+			may have a Service Level Agreement (SLA). This SLA might stipulate that the web-service will have a number of clients
+			when operating (service demand) and must respond to all client requests within a certain time (performance).
+		</p>
+		<p>
+			Real systems are usually complex systems, and are <b>compositions of resources</b>. A naive approach to satisfying the SLA would be to 
+			continue adding resources to the system until the system starts performing as required. We want to avoid <b>over-provisioning</b>,
+			where we have under-used resources, these are adding to our operational cost unnecessarily. We want to avoid <b>under-provisioning</b>,
+			as this means our system is not going to meet the SLA.
+		</p>
+		<p>
+			We want an <b>optimum configuration</b> of resources, a configuration that uses the fewest number of resources, but still provides
+			the expected service demand with a good performance. Searching for optimal configurations is time consuming and difficult, the CPT
+			is an automated tool designed to aid the modeller in finding an optimal confguration, and in gaining some insight into the systems' behaviour 
+			when we consider the number of resources as a parameter.
+		</p>
+		<center><h4>Tool overview</h4></center>
+		
+		<center><img src="img/cptoverview.png"></center>
+		
+		<ol>
+		<li> The designer creates a PEPA model in the <a href="../editor.html">PEPA editor</a>.
+		<li> Then the designer starts the CPT choosing either a <a href="drivenPSOSearch.html">Driven Particle Swarm Optimisation (dPSO)</a> or
+			<a href="singlePSOSearch.html">Single Particle Swarm Optimisation (PSO)</a> search.
+		<li> The search engine creates ODE graphs in order to evaluate each model.
+		<li> The ODE evaluation passes back the measured performance.
+		<li> The CPT passes a tree view of the results, with the model configuration with the least cost at the top.
+		<li> The CPT also passes a list view of the results, sorted in ascending cost.
+		</ol>
+		
+		<center><h4>Performance evaluation</h4></center>
+		
+		The CPT can evaluate models on:
+		
+		<ol>
+		<li> Capacity Utilisation
+		<li> Population levels
+		<li> Throughput
+		<li> Average Response-Time
+		</ol>
+		
+				<center><h4>Search algorithm</h4></center>
+		
+		The CPT uses Particle Swarm Optimisation (PSO) to search through a model configuration search space. In a dPSO the CPT uses a Hill Climbing algorithm in
+		order to find the best PSO settings for a model configuration search.
+		
+	</body>
+</html>

@@ -11,9 +11,9 @@ public class HillClimbingParameters extends Parameters {
 		this.keyTypeMap = new HashMap<String,String>();
 		
 		//default mutation rate
-		this.keyValueMap.put(Config.LABMUT, 0.5);
-		this.keyValueMap.put(Config.LABEXP, 1.0);
-		this.keyValueMap.put(Config.LABGEN, 1.0);
+		this.keyValueMap.put(Config.LABMUT, 1.0);
+		this.keyValueMap.put(Config.LABEXP, 2.0);
+		this.keyValueMap.put(Config.LABGEN, 10.0);
 		
 		//type map
 		this.keyTypeMap.put(Config.LABMUT, Config.PERCENT);

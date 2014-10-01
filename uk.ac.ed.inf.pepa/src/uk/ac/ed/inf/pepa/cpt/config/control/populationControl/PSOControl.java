@@ -62,10 +62,6 @@ public class PSOControl extends PopulationControl {
 		return null;
 	}
 	
-	public void defaultUnits(){
-		this.myPSOList.defaultUnits();
-	}
-	
 	@Override
 	public String toPrint() {
 		return this.type + ";" + this.myPSOList.toPrint();

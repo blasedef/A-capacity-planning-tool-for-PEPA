@@ -23,7 +23,6 @@ public class CapacityPlanningWizard extends Wizard {
 	
 	List<WizardPage> wizardPageList = new ArrayList<WizardPage>();
 	private WizardPage frontMetaheuristicCapacityPlanningWizardPage;
-	private WizardPage backMetaheuristicCapacityPlanningWizardPage;
 	private WizardPage costFunctionCapacityPlanningWizardPage;
 	private WizardPage performanceSelectionCapacityPlanningWizardPage;
 	private WizardPage performanceTargetCapacityPlanningWizardPage;
@@ -35,14 +34,8 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		wizardPageList = new ArrayList<WizardPage>();
 		
-		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE))
-			CPTAPI.getPSORangeParameterControls().defaultUnits();
-		
 		frontMetaheuristicCapacityPlanningWizardPage = 
 			new FrontMetaheuristicCapacityPlanningWizardPage("Meta heuristic configuration");
-		
-		backMetaheuristicCapacityPlanningWizardPage = 
-			new BackMetaheuristicCapacityPlanningWizardPage("Driven Meta heuristic configuration");
 		
 		costFunctionCapacityPlanningWizardPage =
 			new CostFunctionCapacityPlanningWizardPage("Cost function configuration...");
@@ -63,7 +56,6 @@ public class CapacityPlanningWizard extends Wizard {
 				getHandle(model)));
 		
 		wizardPageList.add(frontMetaheuristicCapacityPlanningWizardPage);
-		wizardPageList.add(backMetaheuristicCapacityPlanningWizardPage);
 		wizardPageList.add(costFunctionCapacityPlanningWizardPage);
 		wizardPageList.add(performanceSelectionCapacityPlanningWizardPage);
 		wizardPageList.add(performanceTargetCapacityPlanningWizardPage);
@@ -72,7 +64,6 @@ public class CapacityPlanningWizard extends Wizard {
 		wizardPageList.add(saveAsCapacityPlanningWizardPage);
 		
 		addPage(frontMetaheuristicCapacityPlanningWizardPage);
-		addPage(backMetaheuristicCapacityPlanningWizardPage);
 		addPage(costFunctionCapacityPlanningWizardPage);
 		addPage(performanceSelectionCapacityPlanningWizardPage);
 		addPage(performanceTargetCapacityPlanningWizardPage);
@@ -90,14 +81,6 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		
 		if(page == frontMetaheuristicCapacityPlanningWizardPage){
-			if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHDRIVEN)){
-				return backMetaheuristicCapacityPlanningWizardPage;
-			} else {
-				return costFunctionCapacityPlanningWizardPage;
-			}
-		}
-		
-		if(page == backMetaheuristicCapacityPlanningWizardPage){
 			return costFunctionCapacityPlanningWizardPage;
 		}
 		

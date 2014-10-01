@@ -146,13 +146,6 @@
                style="toggle"
                tooltip="Aggregate arrays of components">
          </action>
-         <action
-               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.LatexifyActionDelegate"
-               id="uk.ac.ed.inf.pepa.eclipse.ui.latexify"
-               label="LaTeXify..."
-               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content"
-               style="push">
-         </action>
          <menu
                id="uk.ac.ed.inf.pepa.eclipse.ui.ode.menu"
                label="Scalable Analysis"
@@ -166,7 +159,7 @@
          </menu>
          <menu
                id="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu.CTMC"
-               label="CTMC"
+               label="Markovian Analysis"
                path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content">
             <groupMarker name="content"/>
             <groupMarker
@@ -179,7 +172,7 @@
          <menu
                id="uk.ac.ed.inf.pepa.eclipse.ui.cp.menu"
                label="Capacity Planning"
-               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content">
+               path="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/content2">
             <groupMarker
                   name="content">
             </groupMarker>
@@ -190,6 +183,13 @@
                   name="separator">
             </separator>
          </menu>
+         <action
+               class="uk.ac.ed.inf.pepa.eclipse.ui.actions.LatexifyActionDelegate"
+               id="uk.ac.ed.inf.pepa.eclipse.ui.latexify"
+               label="LaTeXify..."
+               menubarPath="uk.ac.ed.inf.pepa.eclipse.ui.editorMenu/additions"
+               style="push">
+         </action>
          <menu
                id="uk.ac.ed.inf.pepa.eclipse.ui.cp.pso.menu"
                label="Particle Swarm Optimisation (PSO)..."

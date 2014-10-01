@@ -36,4 +36,14 @@
 		href="html/gettingstarted/timeseriesanalysis.html"/>
 	<topic label="Importing from UML"
 		href="html/gettingstarted/importinguml.html"/>
+ <topic label="Capacity Planning">
+    <topic href="html/gettingstarted/capacityplanning/capacityplanning.html" label="Capacity Planning">
+    </topic>
+    <topic label="GUI">
+       <topic label="Driven Particle Swarm Optimisation (dPSO)">
+       </topic>
+       <topic label="Single Particle Swarm Optimisation (dPSO)">
+       </topic>
+    </topic>
+ </topic>
 </toc>
