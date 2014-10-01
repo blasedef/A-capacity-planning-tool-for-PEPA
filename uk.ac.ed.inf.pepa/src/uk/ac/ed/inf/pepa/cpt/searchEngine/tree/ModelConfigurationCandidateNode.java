@@ -182,7 +182,6 @@ implements Comparator<ModelConfigurationCandidateNode>, Comparable<ModelConfigur
 	}
 
 	public void switchFlag() {
-		System.out.println("happens");
 		this.evaluatedSuccessFully = !this.evaluatedSuccessFully;
 		
 	}

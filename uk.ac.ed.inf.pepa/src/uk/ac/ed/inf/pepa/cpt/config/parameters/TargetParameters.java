@@ -14,21 +14,24 @@ public class TargetParameters extends Parameters {
 		//default component parameters
 		this.keyValueMap.put(Config.LABTAR, 1.0);
 		this.keyValueMap.put(Config.LABWEI, 1.0);
+		this.keyValueMap.put(Config.FITPEN, 0.0);
 		
 		//type map
 		this.keyTypeMap.put(Config.LABTAR, Config.DOUBLE);
 		this.keyTypeMap.put(Config.LABWEI, Config.INTEGER);
+		this.keyTypeMap.put(Config.FITPEN, Config.INTEGER);
 	}
 
 	@Override
 	public boolean valid() {
-		Double tar, wei;
+		Double tar, wei, pen;
 		
 		tar = this.keyValueMap.get(Config.LABTAR);
 		wei = this.keyValueMap.get(Config.LABWEI);
+		pen = this.keyValueMap.get(Config.FITPEN);
 		
 		//no negatives..
-		return (tar >= 0) && (wei >= 0);
+		return (tar >= 0) && (wei >= 0) && (pen >= 0);
 	}
 
 }

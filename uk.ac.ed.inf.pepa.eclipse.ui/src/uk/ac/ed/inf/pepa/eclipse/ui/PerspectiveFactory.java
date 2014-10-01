@@ -58,8 +58,9 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
 		right.addView(IPageLayout.ID_OUTLINE);
 		right.addView(PERFORMANCE_EVALUATION_VIEW);
-		right.addView(CAPACITY_PLANNING_VIEW);
 		right.addView(CAPACITY_PLANNING_LIST);
+		right.addView(CAPACITY_PLANNING_VIEW);
+		
 		
 	}
 

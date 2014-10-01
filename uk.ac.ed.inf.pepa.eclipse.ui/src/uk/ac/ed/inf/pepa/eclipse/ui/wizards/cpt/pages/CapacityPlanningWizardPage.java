@@ -2,10 +2,10 @@ package uk.ac.ed.inf.pepa.eclipse.ui.wizards.cpt.pages;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,6 +23,7 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 	
 	protected ArrayList<CapacityPlanningWidget> widgets;
 	protected int fixedWidth = 600;
+	protected Composite parent;
 	
 	protected final IValidationCallback parentCallBack = new IValidationCallback() {
 
@@ -42,7 +43,11 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		
+		this.parent = parent;
+		
 		Composite container = new Composite(parent, SWT.NONE);
+		
+		constructPage(this.parentCallBack,container);
 		
 		Layout layout = new GridLayout(3,false);
 		container.setLayout(layout);
@@ -51,7 +56,6 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 		data.widthHint = fixedWidth;
 		container.setLayoutData(data);
 		
-		constructPage(this.parentCallBack,container);
 		setControl(container);
 	}
 	
@@ -95,10 +99,10 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 		return child;
 	}
 	
-	public Composite centerVertical(Composite container){
+	public Composite centerH(Composite container){
 		
 		Composite child = new Composite(container, SWT.NONE );
-		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
+		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false, 16, 1);
 		child.setLayoutData(data);
 		GridLayout layout = new GridLayout(16,false);
 		child.setLayout(layout);
@@ -106,24 +110,13 @@ public abstract class CapacityPlanningWizardPage extends WizardPage {
 		return child;
 	}
 	
-	public Composite centerScroll(Composite container){
+	public Composite centerVertical(Composite container){
 		
-		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL );
+		Composite child = new Composite(container, SWT.NONE );
 		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
-		data.widthHint = 600;
-		sc.setLayoutData(data);
-		
-		Composite child = new Composite(sc, SWT.NONE );
-		data = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
-		data.widthHint = 600;
 		child.setLayoutData(data);
 		GridLayout layout = new GridLayout(16,false);
 		child.setLayout(layout);
-		
-		sc.setContent(child);
-		sc.setMinSize(600, 2000);
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
 		
 		return child;
 	}

@@ -13,12 +13,12 @@ public class CostFunctionParameters extends Parameters {
 		//default fitness weights
 		this.keyValueMap.put(Config.FITRES, 1.0);
 		this.keyValueMap.put(Config.FITPER, 1.0);
-		this.keyValueMap.put(Config.FITPEN, 1.0);
+		//this.keyValueMap.put(Config.FITPEN, 0.0);
 		
 		//type map
 		this.keyTypeMap.put(Config.FITRES, Config.NATURAL);
 		this.keyTypeMap.put(Config.FITPER, Config.NATURAL);
-		this.keyTypeMap.put(Config.FITPEN, Config.NATURAL);
+		//this.keyTypeMap.put(Config.FITPEN, Config.INTEGER);
 		
 	}
 

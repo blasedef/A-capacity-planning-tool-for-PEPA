@@ -12,8 +12,8 @@ public class ComponentParameters extends Parameters {
 		this.keyTypeMap = new HashMap<String,String>();
 		
 		//default component parameters
-		this.keyValueMap.put(Config.LABMIN, d);
-		this.keyValueMap.put(Config.LABMAX, d + 10);
+		this.keyValueMap.put(Config.LABMIN, 1.0);
+		this.keyValueMap.put(Config.LABMAX, d);
 		this.keyValueMap.put(Config.LABRAN, 11.0);
 		this.keyValueMap.put(Config.LABWEI, 1.0);
 		
