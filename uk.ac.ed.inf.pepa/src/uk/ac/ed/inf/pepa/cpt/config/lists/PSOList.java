@@ -40,11 +40,11 @@ public class PSOList extends RangeList {
 		this.myHashMap = new HashMap<String, Parameters>();
 		
 		this.myHashMap.put(Config.LABEXP,new MetaheuristicSearchParameters(2.0,2.0,1.0));
-		this.myHashMap.put(Config.LABGEN,new MetaheuristicSearchParameters(100.0,100.0,1.0));
+		this.myHashMap.put(Config.LABGEN,new MetaheuristicSearchParameters(10.0,10.0,1.0));
 		this.myHashMap.put(Config.LABPOP,new MetaheuristicSearchParameters(10.0,10.0,1.0));
-		this.myHashMap.put(Config.LABLOC,new MetaheuristicSearchParameters(100.0,10.0,1.0));
-		this.myHashMap.put(Config.LABGLO,new MetaheuristicSearchParameters(100.0,10.0,1.0));
-		this.myHashMap.put(Config.LABORG,new MetaheuristicSearchParameters(100.0,10.0,1.0));
+		this.myHashMap.put(Config.LABLOC,new MetaheuristicSearchParameters(100.0,100.0,1.0));
+		this.myHashMap.put(Config.LABGLO,new MetaheuristicSearchParameters(100.0,100.0,1.0));
+		this.myHashMap.put(Config.LABORG,new MetaheuristicSearchParameters(100.0,100.0,1.0));
 		
 	}
 

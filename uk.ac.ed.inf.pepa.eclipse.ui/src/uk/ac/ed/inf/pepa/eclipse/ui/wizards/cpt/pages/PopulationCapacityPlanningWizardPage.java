@@ -27,12 +27,12 @@ public class PopulationCapacityPlanningWizardPage extends
 	@Override
 	protected void constructPage(IValidationCallback cb, Composite container) {
 		
+		this.cb = cb;
+		
 		//left pad
 		pad(container);
 		
 		centerScroll(container);
-		
-
 		
 		//left pad
 		pad(container);

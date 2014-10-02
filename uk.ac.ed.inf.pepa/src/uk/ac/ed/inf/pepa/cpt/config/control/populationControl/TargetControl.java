@@ -68,9 +68,9 @@ public class TargetControl extends PopulationControl {
 		String output = "";
 		
 		for(String s : this.myTargetList.getYKeys()){
-			output = output + s + "[" + this.getValue(s, key) + "] ";
+			output = output + s + " = " + this.getValue(s, key) + ", ";
 		}
-		return output;
+		return output.substring(0,output.length() - 2);
 	}
 
 	@Override

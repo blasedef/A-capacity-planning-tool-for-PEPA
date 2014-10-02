@@ -3,6 +3,7 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -11,7 +12,10 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+import com.sun.org.apache.bcel.internal.generic.IDIV;
+
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
+import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.HillClimbingLab;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
@@ -26,6 +30,7 @@ public class CPT {
 	private PriorityQueue<ResultNode> resultsQueue;
 	private ArrayList<String> outputStrings;
 	private IStatus myStatus;
+	private boolean higherIsGood;
 	
 	public CPT (IProgressMonitor monitor){
 		
@@ -81,13 +86,38 @@ public class CPT {
 			int converged = 0; 
 			Double totalPopulation  = 0.0;
 			Double runTime = 0.0;
+			boolean metPerformanceTarget = false;
+			int numberWhoMetTheTarget = 0;
+			HashMap<String,Double> individualTargetsMet = new HashMap<String, Double>();
+			HashMap<String,Double> temp = new HashMap<String, Double>();
+			
+			if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALARPT)){
+				this.higherIsGood = false;
+			} else {
+				this.higherIsGood = true;
+			}
 			
 			Node tempNode = new Node(rn.getName(), CPTAPI.getResultNode());
+			
+			Double targetPercent = rn.getPercentageOfMetPerformanceTargets(this.higherIsGood);
+			
+			metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
+			if(metPerformanceTarget)
+				numberWhoMetTheTarget++;
+			
+			temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
+			
+			for(String s: temp.keySet())
+				if(individualTargetsMet.containsKey(s))
+					individualTargetsMet.put(s, individualTargetsMet.get(s)+1);
+				else
+					individualTargetsMet.put(s,1.0);
 			
 			addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
 			addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
 			addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
 			addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
+			addNodes("Percentage of targets met: ",targetPercent.toString() , tempNode);
 			addNodes(rn.PER + ": ", rn.getPerformanceCostString(), tempNode);
 			addNodes(rn.POP + ": ", rn.getPopulationCostString(), tempNode);
 			addNodes(rn.TPOP + ": ", rn.getTotalPopulationString(), tempNode);
@@ -125,10 +155,17 @@ public class CPT {
 				
 				tempNode = new Node(rn.getName(), CPTAPI.getResultNode());
 				
+				targetPercent = rn.getPercentageOfMetPerformanceTargets(higherIsGood);
+				
+				metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
+				if(metPerformanceTarget)
+					numberWhoMetTheTarget++;
+				
 				addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
 				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
 				addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
 				addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
+				addNodes("Percentage of targets met: ",targetPercent.toString() , tempNode);
 				addNodes(rn.PER + ": ", rn.getPerformanceCostString(), tempNode);
 				addNodes(rn.POP + ": ", rn.getPopulationCostString(), tempNode);
 				addNodes(rn.TPOP + ": ", rn.getTotalPopulationString(), tempNode);
@@ -183,13 +220,19 @@ public class CPT {
 			
 			this.monitor.subTask("complete.");
 			
-			tempNode = new Node("Results evaluation", CPTAPI.getResultNode());
+			
+			if(metPerformanceTarget)
+				tempNode = new Node("Results evaluation: " + ": MET TARGET PERFORMANCE", CPTAPI.getResultNode());
+			else
+				tempNode = new Node("Results evaluation: " + ": FAILED MEETING PERFORMANCE TARGET", CPTAPI.getResultNode());
 			
 			addNodesToFront("Average model total population: ", ((Double) ((totalPopulation)  / qSize)).toString() + "", tempNode);
 			addNodesToFront("Average model evaluation run time: ", ((Double) ((runTime)  / qSize)).toString() + "ms", tempNode);
 			addNodesToFront("Total results: ", qSize + "", tempNode);
 			addNodesToFront("Number of models that didn't converge: ", qSize-converged +"", tempNode);
 			addNodesToFront("Percentage of models that converged: ", ((Double) ((converged * 100.0)  / qSize)).toString() + "%", tempNode);
+			addNodesToFront("Average performance targets met: ", this.mapAsNodeStringPercentage(individualTargetsMet, qSize), tempNode); 
+			addNodesToFront("Number of model configurations which met the target: ", numberWhoMetTheTarget+"", tempNode);
 			
 			CPTAPI.addResultToFront(tempNode);
 			
@@ -209,17 +252,17 @@ public class CPT {
 	}
 	
 	public void addNodes(String mid, String leaf, Node root){
-		Node midN = new Node(mid,root);
-		Leaf leafL = new Leaf(leaf,midN);
-		midN.addChild(leafL);
-		root.addChild(midN);
+		//Node midN = new Node(mid,root);
+		Leaf leafL = new Leaf(mid + leaf,root);
+		root.addChild(leafL);
+		//root.addChild(midN);
 	}
 	
 	public void addNodesToFront(String mid, String leaf, Node root){
-		Node midN = new Node(mid,root);
-		Leaf leafL = new Leaf(leaf,midN);
-		midN.addChildToFront(leafL);
-		root.addChildToFront(midN);
+		//Node midN = new Node(mid,root);
+		Leaf leafL = new Leaf(mid + leaf,root);
+		root.addChildToFront(leafL);
+		//root.addChildToFront(midN);
 	}
 	
 	public void createResultsQueue(){
@@ -265,6 +308,16 @@ public class CPT {
 		
 		this.monitor.subTask("Compiled results");
 		
+	}
+	
+	private String mapAsNodeStringPercentage(HashMap<String,Double> map, int size){
+		String output = "";
+		
+		for(String s : map.keySet()){
+			output = output + s + " = " + ((map.get(s)*100)/size) + "%, ";
+		}
+		
+		return output.substring(0,output.length() - 2);
 	}
 
 

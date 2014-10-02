@@ -3,7 +3,9 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
+import uk.ac.ed.inf.pepa.cpt.config.Config;
 
 public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode> {
 
@@ -65,6 +67,16 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		return output.substring(0,output.length() - 1);
 	}
 	
+	private String mapAsNodeStringEquals(HashMap<String,Double> map){
+		String output = "";
+		
+		for(String s : map.keySet()){
+			output = output + s + " = " + map.get(s);
+		}
+		
+		return output.substring(0,output.length() - 1);
+	}
+	
 
 	public String populationMapAsCSVString(){
 		return mapAsCSVString(componentPopulationMap);
@@ -83,7 +95,7 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	}
 	
 	public String peformanceMapAsNodeString(){
-		return mapAsNodeString(performanceMap);
+		return mapAsNodeStringEquals(performanceMap);
 	}
 	
 	public String psoMapAsNodeString(){
@@ -181,7 +193,15 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	
 	
 	public String getName(){
-		return this.name;
+		Double met;
+		if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALARPT))
+			met = getPercentageOfMetPerformanceTargets(false);
+		else 
+			met = getPercentageOfMetPerformanceTargets(true);
+		if(met >= 100.0)
+			return this.name + ": MET PERFORMANCE TARGET";
+		else
+			return this.name + ": FAILED PERFORMANCE TARGET";
 	}
 	
 	public String hasConverged(){
@@ -197,6 +217,53 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	
 	public Double getRunTime(){
 		return runTime;
+	}
+	
+	public Double getPercentageOfMetPerformanceTargets(boolean higherIsGood){
+		int low, high;
+		Double output;
+		low = 0;
+		high = 0;
+		for(String s: this.performanceMap.keySet()){
+			if(this.performanceMap.get(s) < Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+				low++;
+			else if (this.performanceMap.get(s) > Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+				high++;
+			else{
+				high++;
+				low++;
+			}
+		}
+		
+		if(higherIsGood)
+			output = ((double) high*100)/this.performanceMap.size();
+		else
+			output = ((double) low* 100)/this.performanceMap.size();
+		
+		return output;
+	}
+	
+	public HashMap<String,Double> getTargetMet(boolean higherIsGood){
+		int low, high;
+		HashMap<String,Double> output = new HashMap<String, Double>();
+		low = 0;
+		high = 0;
+		for(String s: this.performanceMap.keySet()){
+			if(this.performanceMap.get(s) < Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+				low++;
+			else if (this.performanceMap.get(s) > Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+				high++;
+			else{
+				high++;
+				low++;
+			}
+			if(higherIsGood)
+				output.put(s, (double) high);
+			else
+				output.put(s, (double) low);
+		}
+		
+		return output;
 	}
 
 }
