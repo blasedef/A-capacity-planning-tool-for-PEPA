@@ -10,6 +10,7 @@ import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ParticleSwarmOptimisationLab;
+import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.BruteForceLab;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.HCNode;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.HillClimbingLabCandidateNode;
 
@@ -34,7 +35,10 @@ public class HillClimbing implements MetaHeuristics {
 			this.myMonitor.beginTask("Searching", CPTAPI.totalHCWork() * CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork());
 			this.myMonitor.subTask(this.myNode.getName());
 			
-			startAlgorithm();
+			if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHBRUTE))
+				startBrute();
+			else
+				startAlgorithm();
 		
 		}
 		finally {
@@ -81,6 +85,17 @@ public class HillClimbing implements MetaHeuristics {
 			}
 		}
 		
+	}
+	
+	public void startBrute(){
+		
+		HashMap<String,Double> brute = new HashMap<String, Double>();
+		
+		brute.put("Brute", 1.0);
+		
+		this.candidate = new BruteForceLab(brute,
+				new SubProgressMonitor(this.myMonitor, CPTAPI.totalPSOLabWork() * CPTAPI.totalPSOWork()), 
+				this.myNode);
 	}
 	
 	/*
@@ -132,7 +147,7 @@ public class HillClimbing implements MetaHeuristics {
 			}
 		} else {
 			for(int i = 0; i < keys.length; i++){
-				parameters.put(keys[i], Double.parseDouble(CPTAPI.getPSORangeParameterControls().getValue(keys[i],Config.LABMIN)));
+				parameters.put(keys[i], Double.parseDouble(CPTAPI.getPSORangeParameterControls().getValue(keys[i])));
 			}
 		}
 

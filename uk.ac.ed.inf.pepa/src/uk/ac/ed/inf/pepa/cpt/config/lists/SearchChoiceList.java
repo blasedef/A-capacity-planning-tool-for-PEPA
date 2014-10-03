@@ -7,7 +7,7 @@ public class SearchChoiceList extends SingleChoiceList {
 	public SearchChoiceList() {
 		this.label = Config.SEARCH;
 		this.value = Config.SEARCHSINGLE;
-		this.choices = new String[] {Config.SEARCHSINGLE,Config.SEARCHDRIVEN};
+		this.choices = new String[] {Config.SEARCHSINGLE,Config.SEARCHDRIVEN, Config.SEARCHBRUTE};
 	}
 
 }

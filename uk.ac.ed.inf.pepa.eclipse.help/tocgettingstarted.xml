@@ -39,11 +39,45 @@
  <topic label="Capacity Planning">
     <topic href="html/gettingstarted/capacityplanning/capacityplanning.html" label="Capacity Planning">
     </topic>
-    <topic label="GUI">
-       <topic label="Driven Particle Swarm Optimisation (dPSO)">
+    <topic label="Driven">
+       <topic href="html/gettingstarted/capacityplanning/driven.html" label="Driven Particle Swarm Optimisation (dPSO)">
        </topic>
-       <topic label="Single Particle Swarm Optimisation (dPSO)">
+       <topic href="html/gettingstarted/capacityplanning/hillClimbingPage.html" label="Hill Climbing page">
        </topic>
+       <topic href="html/gettingstarted/capacityplanning/costFunctionPage.html" label="Cost Function page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/actionStateSelectionpage.html" label="Action/State selection page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/targetThresholdpage.html" label="Target/Threshold page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/odePage.html" label="ODE settings page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/componentPopulationPage.html" label="Component Populations page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/saveAsPage.html" label="Save as page">
+       </topic>
+    </topic>
+    <topic label="Single">
+       <topic href="html/gettingstarted/capacityplanning/single.html" label="Single Particle Swarm Optimisation (PSO)">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/psoPage.html" label="Particle Swarm Optimisation page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/costFunctionPage.html" label="Cost Function page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/actionStateSelectionpage.html" label="Action/State selection page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/targetThresholdpage.html" label="Target/Threshold page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/odePage.html" label="ODE settings page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/componentPopulationPage.html" label="Component Populations page">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/saveAsPage.html" label="Save as page">
+       </topic>
+    </topic>
+    <topic href="html/gettingstarted/capacityplanning/tableView.html" label="Capacity Planning Table">
+    </topic>
+    <topic href="html/gettingstarted/capacityplanning/treeView.html" label="Capacity Planning Tree">
     </topic>
  </topic>
 </toc>

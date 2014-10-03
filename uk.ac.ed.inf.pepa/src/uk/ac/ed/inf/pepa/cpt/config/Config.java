@@ -74,6 +74,7 @@ public class Config implements ConfigCallBack{
 	//Search type related hard coded strings
 	public static String SEARCHSINGLE = "Particle Swarm Optimisation";
 	public static String SEARCHDRIVEN = "Driven Particle Swarm Optimisation";
+	public static String SEARCHBRUTE = "Brute-force search";
 	
 	//lab parameter related hard coded strings
 	public static String LABEXP ="Experiments";
@@ -82,9 +83,9 @@ public class Config implements ConfigCallBack{
 	//lab parameter related hard coded strings - metaheuristic
 	public static String LABMUT ="Mutation rate";
 	public static String LABPOP ="Population count";
-	public static String LABLOC ="Personal best";
-	public static String LABGLO ="Global best";
-	public static String LABORG ="Original velocity";
+	public static String LABLOC ="Personal best weight";
+	public static String LABGLO ="Global best weight";
+	public static String LABORG ="Original velocity weight";
 	
 	//lab parameter (ranges) related hard coded strings - metaheuristic
 	public static String LABMIN ="Minimum";

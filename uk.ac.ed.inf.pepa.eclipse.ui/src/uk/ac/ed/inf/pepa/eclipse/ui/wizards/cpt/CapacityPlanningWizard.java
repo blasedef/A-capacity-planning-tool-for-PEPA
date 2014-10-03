@@ -34,6 +34,17 @@ public class CapacityPlanningWizard extends Wizard {
 		
 		wizardPageList = new ArrayList<WizardPage>();
 		
+		if(CPTAPI.getSearchControls().getValue().equals(Config.SEARCHBRUTE))
+			createBrutePages(model);
+		else
+			createPSOPages(model);
+			
+		setWindowTitle(CPTAPI.getSearchControls().getValue());
+	}
+	
+	public void createPSOPages(IPepaModel model){
+		
+		
 		frontMetaheuristicCapacityPlanningWizardPage = 
 			new FrontMetaheuristicCapacityPlanningWizardPage("Meta heuristic configuration");
 		
@@ -70,8 +81,42 @@ public class CapacityPlanningWizard extends Wizard {
 		addPage(odeOptionCapacityPlanningWizardPage);
 		addPage(populationCapacityPlanningWizardPage);
 		addPage(saveAsCapacityPlanningWizardPage);
+	}
+	
+	public void createBrutePages(IPepaModel model){
 		
-		setWindowTitle(CPTAPI.getSearchControls().getValue());
+		costFunctionCapacityPlanningWizardPage =
+			new CostFunctionCapacityPlanningWizardPage("Cost function configuration...");
+		
+		performanceSelectionCapacityPlanningWizardPage =
+			new PerformanceSelectionCapacityPlanningWizardPage("Performance cost: State/Action selection...");
+		
+		performanceTargetCapacityPlanningWizardPage =
+			new PerformanceTargetCapacityPlanningWizardPage("Performance cost: Target/Threshold values...");
+		
+		odeOptionCapacityPlanningWizardPage = 
+			new ODEOptionCapacityPlanningWizardPage("Performance cost: ODE configuration...");
+		
+		populationCapacityPlanningWizardPage =
+			new PopulationCapacityPlanningWizardPage("Population cost: range and weight configuration...");
+		
+		saveAsCapacityPlanningWizardPage = new SaveAsCapacityPlanningWizardPage("Save as...",new StructuredSelection(
+				getHandle(model)));
+		
+		wizardPageList.add(costFunctionCapacityPlanningWizardPage);
+		wizardPageList.add(performanceSelectionCapacityPlanningWizardPage);
+		wizardPageList.add(performanceTargetCapacityPlanningWizardPage);
+		wizardPageList.add(odeOptionCapacityPlanningWizardPage);
+		wizardPageList.add(populationCapacityPlanningWizardPage);
+		wizardPageList.add(saveAsCapacityPlanningWizardPage);
+		
+		addPage(costFunctionCapacityPlanningWizardPage);
+		addPage(performanceSelectionCapacityPlanningWizardPage);
+		addPage(performanceTargetCapacityPlanningWizardPage);
+		addPage(odeOptionCapacityPlanningWizardPage);
+		addPage(populationCapacityPlanningWizardPage);
+		addPage(saveAsCapacityPlanningWizardPage);
+
 	}
 	
 	/**

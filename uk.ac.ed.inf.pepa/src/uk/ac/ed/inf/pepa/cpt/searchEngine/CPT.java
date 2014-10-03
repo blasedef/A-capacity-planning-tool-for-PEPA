@@ -133,6 +133,11 @@ public class CPT {
 			totalPopulation += rn.getTotalPopulation();
 			runTime += rn.getRunTime();
 			
+			CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
+					rn.getTotalCostString(), 
+					rn.peformanceMapAsNodeString4SF(), 
+					rn.getTotalPopulationString());
+			
 			this.monitor.worked(1);
 			
 			int i = 1;
@@ -160,6 +165,14 @@ public class CPT {
 				metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
 				if(metPerformanceTarget)
 					numberWhoMetTheTarget++;
+				
+				temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
+				
+				for(String s: temp.keySet())
+					if(individualTargetsMet.containsKey(s))
+						individualTargetsMet.put(s, individualTargetsMet.get(s)+1);
+					else
+						individualTargetsMet.put(s,1.0);
 				
 				addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
 				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
@@ -235,11 +248,6 @@ public class CPT {
 			addNodesToFront("Number of model configurations which met the target: ", numberWhoMetTheTarget+"", tempNode);
 			
 			CPTAPI.addResultToFront(tempNode);
-			
-			CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
-					rn.getTotalCostString(), 
-					rn.peformanceMapAsNodeString(), 
-					rn.getTotalPopulationString());
 			
 			writer.close();
 			this.myStatus = Status.OK_STATUS;

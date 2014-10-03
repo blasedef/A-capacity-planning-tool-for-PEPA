@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.pepa.cpt.searchEngine.tree;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -77,6 +78,17 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		return output.substring(0,output.length() - 1);
 	}
 	
+	private String mapAsNodeStringEquals4SF(HashMap<String,Double> map){
+		String output = "";
+		DecimalFormat myFormat = new DecimalFormat("0.000");
+		
+		for(String s : map.keySet()){
+			output = output + s + " = " + myFormat.format(map.get(s));
+		}
+		
+		return output.substring(0,output.length() - 1);
+	}
+	
 
 	public String populationMapAsCSVString(){
 		return mapAsCSVString(componentPopulationMap);
@@ -98,12 +110,21 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		return mapAsNodeStringEquals(performanceMap);
 	}
 	
+	public String peformanceMapAsNodeString4SF(){
+		return mapAsNodeStringEquals(performanceMap);
+	}
+	
 	public String psoMapAsNodeString(){
 		return mapAsNodeString(metaheuristicParameterMap);
 	}
 	
 	public String getTotalCostString(){
 		return "" + this.cost;
+	}
+	
+	public String getTotalCostString4SF(){
+		DecimalFormat myFormat = new DecimalFormat("0.000");
+		return myFormat.format(this.cost);
 	}
 	
 	public String getPopulationCostString(){
@@ -249,14 +270,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		low = 0;
 		high = 0;
 		for(String s: this.performanceMap.keySet()){
-			if(this.performanceMap.get(s) < Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+			if(this.performanceMap.get(s) <= Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
 				low++;
-			else if (this.performanceMap.get(s) > Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
+			if (this.performanceMap.get(s) >= Double.parseDouble(CPTAPI.getTargetControl().getValue(s, Config.LABTAR)))
 				high++;
-			else{
-				high++;
-				low++;
-			}
 			if(higherIsGood)
 				output.put(s, (double) high);
 			else

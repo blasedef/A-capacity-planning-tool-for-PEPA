@@ -40,12 +40,12 @@ public class PSOControl extends PopulationControl {
 
 	@Override
 	public String getType(String key) {
-		return this.myPSOList.getType(key, Config.LABMIN);
+		return this.myPSOList.getType(key, Config.LABMAX);
 	}
 
 	@Override
 	public String getValue(String key) {
-		return this.myPSOList.getValue(key, Config.LABMIN);
+		return this.myPSOList.getValue(key, Config.LABMAX);
 	}
 
 	@Override
