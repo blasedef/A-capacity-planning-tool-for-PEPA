@@ -17,8 +17,8 @@ import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ParticleSwarmOptimisationLabCandi
 
 public class ParticleSwarmOptimisationLab extends Lab {
 	
-	private ParticleSwarmOptimisationLabCandidateNode myNode;
-	private IProgressMonitor myMonitor;
+	protected ParticleSwarmOptimisationLabCandidateNode myNode;
+	protected IProgressMonitor myMonitor;
 	
 	public ParticleSwarmOptimisationLab(HashMap<String,Double> parameters, 
 			IProgressMonitor monitor, 
@@ -32,7 +32,6 @@ public class ParticleSwarmOptimisationLab extends Lab {
 		this.myMonitor = monitor;
 		
 		startExperiment(parameters);
-
 		
 	}
 
@@ -44,7 +43,7 @@ public class ParticleSwarmOptimisationLab extends Lab {
 	public void setParameters(HashMap<String,Double> parameters,
 			HCNode resultNode){
 		
-		ParticleSwarmOptimisationLabCandidateNode newNode = new ParticleSwarmOptimisationLabCandidateNode("ModelConfigurationLab",
+		ParticleSwarmOptimisationLabCandidateNode newNode = new ParticleSwarmOptimisationLabCandidateNode("ParticleSwarmOptimisationLab",
 				parameters,
 				resultNode);
 		

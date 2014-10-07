@@ -39,7 +39,7 @@
  <topic label="Capacity Planning">
     <topic href="html/gettingstarted/capacityplanning/capacityplanning.html" label="Capacity Planning">
     </topic>
-    <topic label="Driven">
+    <topic label="Capacity planning: Driven Particle Swarm Optimisation (dPSO)">
        <topic href="html/gettingstarted/capacityplanning/driven.html" label="Driven Particle Swarm Optimisation (dPSO)">
        </topic>
        <topic href="html/gettingstarted/capacityplanning/hillClimbingPage.html" label="Hill Climbing page">
@@ -57,7 +57,7 @@
        <topic href="html/gettingstarted/capacityplanning/saveAsPage.html" label="Save as page">
        </topic>
     </topic>
-    <topic label="Single">
+    <topic label="Capacity planning: Particle Swarm Optimisation (PSO)">
        <topic href="html/gettingstarted/capacityplanning/single.html" label="Single Particle Swarm Optimisation (PSO)">
        </topic>
        <topic href="html/gettingstarted/capacityplanning/psoPage.html" label="Particle Swarm Optimisation page">
@@ -75,9 +75,13 @@
        <topic href="html/gettingstarted/capacityplanning/saveAsPage.html" label="Save as page">
        </topic>
     </topic>
-    <topic href="html/gettingstarted/capacityplanning/tableView.html" label="Capacity Planning Table">
-    </topic>
-    <topic href="html/gettingstarted/capacityplanning/treeView.html" label="Capacity Planning Tree">
+    <topic label="Capacity planning: The results">
+       <topic href="html/gettingstarted/capacityplanning/results.html" label="How to find the results">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/tableView.html" label="Capacity Planning Table">
+       </topic>
+       <topic href="html/gettingstarted/capacityplanning/treeView.html" label="Capacity Planning Tree">
+       </topic>
     </topic>
  </topic>
 </toc>

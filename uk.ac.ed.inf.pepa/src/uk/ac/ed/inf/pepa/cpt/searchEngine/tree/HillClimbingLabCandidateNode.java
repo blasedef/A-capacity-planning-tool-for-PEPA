@@ -20,14 +20,14 @@ public class HillClimbingLabCandidateNode extends CandidateNode {
 	
 	public void setMyMap() {
 		
-		boolean isSingleSearch = (CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE));
+		boolean isSingleSearch = (CPTAPI.getSearchControls().getValue().equals(Config.SEARCHSINGLE) || CPTAPI.getSearchControls().getValue().equals(Config.SEARCHBRUTE));
 		if(isSingleSearch){
 			this.myMap.put(Config.SEARCH, 1.0);
+			this.myMap.put(Config.LABEXP, 1.0);
 		} else {
 			this.myMap.put(Config.SEARCH, 0.0);
+			this.myMap.put(Config.LABEXP, Double.parseDouble(CPTAPI.getMHParameterControls().getValue(Config.LABEXP)));
 		}
-		
-		this.myMap.put(Config.LABEXP, Double.parseDouble(CPTAPI.getMHParameterControls().getValue(Config.LABEXP)));
 	}
 
 	@Override

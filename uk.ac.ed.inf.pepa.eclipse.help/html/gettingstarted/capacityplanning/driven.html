@@ -18,12 +18,12 @@
 	<h3>Overview</h3>
 	
 	<p>
-	Not all designers will have experience in using PSOs, and therefore may not know how to set the PSO
+	Not all designers will have experience of using PSOs, and therefore the user may not know how to set the PSO
 	parameters for a capacity planning search. A dPSO uses a Hill Climbing algorithm (HC) to 'drive' many 
 	PSO searches. The HC has two settings, experiment count and generations. The more experiments and 
 	generations that the HC is allowed, the higher the chance of finding good solutions, but the longer 
-	the search will take to return with results. This is an	automated heuristic and it will work on behalf 
-	of the designer in finding the best PSO parameters for an optimal model configuration search. It returns
+	the search will take to return results. This is an automated heuristic and it will work on behalf 
+	of the designer to find the best PSO parameters for an optimal model configuration search. It returns
 	with all the model configurations evaluated, but also the PSO parameters used to find these configurations.
 	This means the designer can use these PSO parameters in the future to run faster Single PSO searches.
 	</p>
@@ -34,8 +34,8 @@
 		<li> A Hill Climbing Lab creates a number of Hill Climbing experiments, each experiment is an HC	run. 
 		The designer can define the number of experiments to run; HC and PSO are stochastic heuristics, running a number 
 		of experiments increases the chance of a good outcome.
-		<li> A Hill Climbing Algorithm (each experiment) then iterates for a user defined number of generations. Each generation is 
-		an HC configuring the six parameters needed to create a PSO Lab: We expect the HC to test for a better PSO Lab each generation. 
+		<li> A Hill Climbing Algorithm (each experiment) then iterates for a user-defined number of generations. Each generation is 
+		a HC search to configure the six parameters needed to create a PSO Lab: We expect the HC search to test for a better PSO Lab each generation. 
 		The HC determines the parameters for the PSO Lab, and then starts the PSO Lab experiments.
 		<li> A PSO Lab returns with the model configurations found by its underlying PSO.
 		</ol>

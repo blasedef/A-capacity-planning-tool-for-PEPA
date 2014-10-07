@@ -55,7 +55,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 			output = output + s + ";" + map.get(s) + ";";
 		}
 		
-		return output.substring(0,output.length() - 1);
+		if(output.length() != 0)
+			return output.substring(0,output.length() - 1);
+		else
+			return "";
 	}
 	
 	private String mapAsNodeString(HashMap<String,Double> map){
@@ -65,7 +68,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 			output = output + s + "[" + map.get(s) + "] ";
 		}
 		
-		return output.substring(0,output.length() - 1);
+		if(output.length() != 0)
+			return output.substring(0,output.length() - 1);
+		else
+			return "";
 	}
 	
 	private String mapAsNodeStringEquals(HashMap<String,Double> map){
@@ -75,7 +81,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 			output = output + s + " = " + map.get(s);
 		}
 		
-		return output.substring(0,output.length() - 1);
+		if(output.length() != 0)
+			return output.substring(0,output.length() - 1);
+		else
+			return "";
 	}
 	
 	private String mapAsNodeStringEquals4SF(HashMap<String,Double> map){
@@ -86,7 +95,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 			output = output + s + " = " + myFormat.format(map.get(s));
 		}
 		
-		return output.substring(0,output.length() - 1);
+		if(output.length() != 0)
+			return output.substring(0,output.length() - 1);
+		else
+			return "";
 	}
 	
 
@@ -111,7 +123,7 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	}
 	
 	public String peformanceMapAsNodeString4SF(){
-		return mapAsNodeStringEquals(performanceMap);
+		return mapAsNodeStringEquals4SF(performanceMap);
 	}
 	
 	public String psoMapAsNodeString(){
@@ -124,7 +136,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	
 	public String getTotalCostString4SF(){
 		DecimalFormat myFormat = new DecimalFormat("0.000");
-		return myFormat.format(this.cost);
+		if(this.cost > 10000.0)
+			return "Did not converge";
+		else
+			return myFormat.format(this.cost);
 	}
 	
 	public String getPopulationCostString(){

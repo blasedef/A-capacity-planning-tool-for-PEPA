@@ -10,6 +10,7 @@ import uk.ac.ed.inf.pepa.cpt.CPTAPI;
 import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 //import uk.ac.ed.inf.pepa.cpt.ode.Dummy;
+import uk.ac.ed.inf.pepa.cpt.ode.Dummy;
 import uk.ac.ed.inf.pepa.cpt.ode.FluidSteadyState;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.ModelConfiguration;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.PSONode;
@@ -92,6 +93,7 @@ public class BruteForce implements MetaHeuristics {
 						pointer = min;
 				}
 			}
+			
 			return output;
 			
 		}
@@ -105,12 +107,13 @@ public class BruteForce implements MetaHeuristics {
 	private ExecutorService executor;
 	private SynchronizedCounter counter;
 	private Counter populationCounter;
+	private HashMap<String,Double> placeHolder;
 
 	public BruteForce(HashMap<String, Double> parameters,
 			ParticleSwarmOptimisationLabCandidateNode particleSwarmOptimisationLabCandidateNode, 
 			IProgressMonitor monitor) {
 		
-		this.myNode = new PSONode("ParticleSwarmOptimisation", 
+		this.myNode = new PSONode("Brute force", 
 				parameters, 
 				particleSwarmOptimisationLabCandidateNode);
 		
@@ -120,9 +123,13 @@ public class BruteForce implements MetaHeuristics {
 		
 		this.population = new ArrayList<ModelConfiguration>();
 		
-		this.threads = this.myNode.getMyMap().get(Config.LABPOP).intValue();
+		this.threads = 10;
 	
 		this.executor = Executors.newFixedThreadPool(threads);
+		
+		this.placeHolder = new HashMap<String, Double>();
+		
+		this.placeHolder.put("no data",0.0);
 		
 		startAlgorithm();
 
@@ -159,10 +166,9 @@ public class BruteForce implements MetaHeuristics {
 				count = count * Double.parseDouble(CPTAPI.getPopulationControls().getValue(keys[i], Config.LABRAN));
 			}
 			
-			
-			for(int i = 0; i < this.myNode.getMyMap().get(Config.LABPOP);i++){
-				this.population.add(new ModelConfiguration(Utils.copyHashMap(Utils.copyHashMap(this.populationCounter.getPopulations(new HashMap<String,Double>()))), 
-						null,
+			for(int i = 0; i < 10;i++){
+				this.population.add(new ModelConfiguration(Utils.copyHashMap(this.populationCounter.getPopulations(new HashMap<String,Double>())), 
+						this.placeHolder,
 						null, 
 						myNode));
 				count--;
@@ -175,13 +181,12 @@ public class BruteForce implements MetaHeuristics {
 				this.myMonitor.subTask("Working... please wait: " + this.myNode.getName() + " " + count + " left." );
 				
 				
-				for(int j = 0; j < this.myNode.getMyMap().get(Config.LABPOP); j++){
+				for(int j = 0; j < 10; j++){
 					population.get(j).setParameters(this.populationCounter.getPopulations(new HashMap<String, Double>()), 
-							null, 
+							this.placeHolder, 
 							myNode);
 					count--;
 				}
-				
 				
 				evaluateAll();
 				
@@ -225,7 +230,7 @@ public class BruteForce implements MetaHeuristics {
 //			Runnable worker = new Dummy(CPTAPI.getLabels(), 
 //			population.get(i).getNode(),
 //			this.counter);
-			
+//			
 			this.executor.execute(worker);
 		}
 		

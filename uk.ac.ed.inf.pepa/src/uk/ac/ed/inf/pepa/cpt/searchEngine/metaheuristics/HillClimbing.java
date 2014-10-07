@@ -89,8 +89,10 @@ public class HillClimbing implements MetaHeuristics {
 	
 	public void startBrute(){
 		
-		HashMap<String,Double> brute = new HashMap<String, Double>();
+		HashMap<String,Double> brute = getPSOParameters();
 		
+		brute.put(Config.LABEXP, 1.0);
+		brute.put(Config.LABGEN, 1.0);
 		brute.put("Brute", 1.0);
 		
 		this.candidate = new BruteForceLab(brute,

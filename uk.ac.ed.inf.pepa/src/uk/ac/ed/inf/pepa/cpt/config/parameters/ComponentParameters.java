@@ -14,7 +14,7 @@ public class ComponentParameters extends Parameters {
 		//default component parameters
 		this.keyValueMap.put(Config.LABMIN, 1.0);
 		this.keyValueMap.put(Config.LABMAX, d);
-		this.keyValueMap.put(Config.LABRAN, 11.0);
+		this.keyValueMap.put(Config.LABRAN, d);
 		this.keyValueMap.put(Config.LABWEI, 1.0);
 		
 		//type map

@@ -2,6 +2,7 @@ package uk.ac.ed.inf.pepa.cpt.searchEngine;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -88,7 +89,6 @@ public class CPT {
 			Double runTime = 0.0;
 			boolean metPerformanceTarget = false;
 			int numberWhoMetTheTarget = 0;
-			HashMap<String,Double> individualTargetsMet = new HashMap<String, Double>();
 			HashMap<String,Double> temp = new HashMap<String, Double>();
 			
 			if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALARPT)){
@@ -102,16 +102,10 @@ public class CPT {
 			Double targetPercent = rn.getPercentageOfMetPerformanceTargets(this.higherIsGood);
 			
 			metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
-			if(metPerformanceTarget)
+			if(targetPercent >= 100.0)
 				numberWhoMetTheTarget++;
 			
 			temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
-			
-			for(String s: temp.keySet())
-				if(individualTargetsMet.containsKey(s))
-					individualTargetsMet.put(s, individualTargetsMet.get(s)+1);
-				else
-					individualTargetsMet.put(s,1.0);
 			
 			addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
 			addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
@@ -134,7 +128,7 @@ public class CPT {
 			runTime += rn.getRunTime();
 			
 			CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
-					rn.getTotalCostString(), 
+					rn.getTotalCostString4SF(), 
 					rn.peformanceMapAsNodeString4SF(), 
 					rn.getTotalPopulationString());
 			
@@ -163,16 +157,10 @@ public class CPT {
 				targetPercent = rn.getPercentageOfMetPerformanceTargets(higherIsGood);
 				
 				metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
-				if(metPerformanceTarget)
+				if(targetPercent >= 100.0)
 					numberWhoMetTheTarget++;
 				
 				temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
-				
-				for(String s: temp.keySet())
-					if(individualTargetsMet.containsKey(s))
-						individualTargetsMet.put(s, individualTargetsMet.get(s)+1);
-					else
-						individualTargetsMet.put(s,1.0);
 				
 				addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
 				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
@@ -195,8 +183,8 @@ public class CPT {
 				CPTAPI.addResult(tempNode);
 				
 				CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
-						rn.getTotalCostString(), 
-						rn.peformanceMapAsNodeString(), 
+						rn.getTotalCostString4SF(), 
+						rn.peformanceMapAsNodeString4SF(), 
 						rn.getTotalPopulationString());
 				
 				i++;
@@ -239,12 +227,11 @@ public class CPT {
 			else
 				tempNode = new Node("Results evaluation: " + ": FAILED MEETING PERFORMANCE TARGET", CPTAPI.getResultNode());
 			
-			addNodesToFront("Average model total population: ", ((Double) ((totalPopulation)  / qSize)).toString() + "", tempNode);
-			addNodesToFront("Average model evaluation run time: ", ((Double) ((runTime)  / qSize)).toString() + "ms", tempNode);
+			DecimalFormat myFormat = new DecimalFormat("0.000");
+			addNodesToFront("Average model total population: ", (myFormat.format((Double) ((totalPopulation)  / qSize))).toString() + "", tempNode);
 			addNodesToFront("Total results: ", qSize + "", tempNode);
 			addNodesToFront("Number of models that didn't converge: ", qSize-converged +"", tempNode);
 			addNodesToFront("Percentage of models that converged: ", ((Double) ((converged * 100.0)  / qSize)).toString() + "%", tempNode);
-			addNodesToFront("Average performance targets met: ", this.mapAsNodeStringPercentage(individualTargetsMet, qSize), tempNode); 
 			addNodesToFront("Number of model configurations which met the target: ", numberWhoMetTheTarget+"", tempNode);
 			
 			CPTAPI.addResultToFront(tempNode);
@@ -316,16 +303,6 @@ public class CPT {
 		
 		this.monitor.subTask("Compiled results");
 		
-	}
-	
-	private String mapAsNodeStringPercentage(HashMap<String,Double> map, int size){
-		String output = "";
-		
-		for(String s : map.keySet()){
-			output = output + s + " = " + ((map.get(s)*100)/size) + "%, ";
-		}
-		
-		return output.substring(0,output.length() - 2);
 	}
 
 

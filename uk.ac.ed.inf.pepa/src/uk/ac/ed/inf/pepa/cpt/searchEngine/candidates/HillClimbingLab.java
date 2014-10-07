@@ -26,7 +26,7 @@ public class HillClimbingLab extends Lab {
 		
 		this.myMonitor = monitor;
 		
-		this.myNode = new HillClimbingLabCandidateNode("MetaheuristicConfigurationLab", null);
+		this.myNode = new HillClimbingLabCandidateNode("HillClimbingConfigurationLab", null);
 		
 		try{
 			

@@ -156,11 +156,11 @@ public class ParticleSwarmOptimisation implements MetaHeuristics {
 				null,
 				population.get(i).getNode(),
 				this.counter);
-			this.executor.execute(worker);
+
 //			Runnable worker = new Dummy(CPTAPI.getLabels(), 
 //					population.get(i).getNode(),
 //					this.counter);
-//				this.executor.execute(worker);
+				this.executor.execute(worker);
 		}
 		
 		
