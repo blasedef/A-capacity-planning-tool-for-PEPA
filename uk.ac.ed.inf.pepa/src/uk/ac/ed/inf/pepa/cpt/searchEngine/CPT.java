@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,10 +12,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import com.sun.org.apache.bcel.internal.generic.IDIV;
 
 import uk.ac.ed.inf.pepa.cpt.CPTAPI;
-import uk.ac.ed.inf.pepa.cpt.Utils;
 import uk.ac.ed.inf.pepa.cpt.config.Config;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.candidates.HillClimbingLab;
 import uk.ac.ed.inf.pepa.cpt.searchEngine.tree.ResultNode;
@@ -89,7 +86,6 @@ public class CPT {
 			Double runTime = 0.0;
 			boolean metPerformanceTarget = false;
 			int numberWhoMetTheTarget = 0;
-			HashMap<String,Double> temp = new HashMap<String, Double>();
 			
 			if(CPTAPI.getEvaluationControls().getValue().equals(Config.EVALARPT)){
 				this.higherIsGood = false;
@@ -104,8 +100,6 @@ public class CPT {
 			metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
 			if(targetPercent >= 100.0)
 				numberWhoMetTheTarget++;
-			
-			temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
 			
 			addNodes(rn.COMPONENT + ": ", rn.getPopulationMapAsNodeString(), tempNode);
 			addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
@@ -159,8 +153,6 @@ public class CPT {
 				metPerformanceTarget = metPerformanceTarget || targetPercent >= 100.0;
 				if(targetPercent >= 100.0)
 					numberWhoMetTheTarget++;
-				
-				temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
 				
 				addNodes(rn.COMPONENT + ": ", rn.getPopulationMapAsNodeString(), tempNode);
 				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
