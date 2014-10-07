@@ -204,164 +204,164 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="20">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="17"/>  
-  </dependency>  
-  <association id="21">    
+  <association id="20">    
     <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="22" name="sister"/>      
-      <multiplicity id="23" minimum="0" maximum="1"/>    
+      <attribute id="21" name="sister"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
   <association id="24">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="25" name="possibleCandidate"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="25" name="population"/>      
+      <multiplicity id="26" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="27">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="28" name="candidate"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="28" name="root"/>      
       <multiplicity id="29" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="30">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="31" name="resultsQueue"/>      
-      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="31" name="sister"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
+    <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="33">    
     <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="34" name="myNode"/>      
+      <attribute id="34" name="myLocalbest"/>      
       <multiplicity id="35" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="36">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="11"/>  
-  </realization>  
-  <association id="37">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="38" name="fitnessFunction"/>      
-      <multiplicity id="39" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="40">    
-    <bendpoint x="51" y="316"/>    
-    <bendpoint x="51" y="595"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
-  <association id="41">    
+  <association id="36">    
     <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="42" name="myLocalbest"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
+      <attribute id="37" name="myNode"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="44">    
+  <association id="39">    
+    <bendpoint x="1838" y="1316"/>    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="40" name="fittestNode"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="42">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="43">    
     <bendpoint x="1817" y="1316"/>    
     <end type="SOURCE" refId="17"/>    
     <end type="TARGET" refId="15"/>  
   </generalization>  
-  <realization id="45">    
+  <association id="44">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="45" name="candidate"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="48" name="counter"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="50">    
+    <bendpoint x="1859" y="1316"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="18"/>  
+  </realization>  
+  <nesting id="51">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <association id="52">    
+    <bendpoint x="985" y="316"/>    
+    <bendpoint x="985" y="595"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="53" name="myNode"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="55">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <realization id="57">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <association id="58">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="59" name="possibleCandidate"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="61">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="62" name="fitnessFunction"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="64">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </realization>  
+  <realization id="65">    
     <bendpoint x="555" y="316"/>    
     <bendpoint x="555" y="595"/>    
     <bendpoint x="555" y="1316"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
-  <association id="46">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="47" name="sister"/>      
-      <multiplicity id="48" minimum="0" maximum="1"/>    
+  <association id="66">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="67" name="resultsQueue"/>      
+      <multiplicity id="68" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
+    <end type="TARGET" refId="19" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="49">    
-    <bendpoint x="985" y="316"/>    
-    <bendpoint x="985" y="595"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="50" name="myNode"/>      
-      <multiplicity id="51" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="52">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
-  </nesting>  
-  <realization id="53">    
-    <end type="SOURCE" refId="5"/>    
+  <realization id="69">    
+    <bendpoint x="51" y="316"/>    
+    <bendpoint x="51" y="595"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
-  <generalization id="54">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <association id="55">    
-    <bendpoint x="1838" y="1316"/>    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="56" name="fittestNode"/>      
-      <multiplicity id="57" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="58">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="59" name="population"/>      
-      <multiplicity id="60" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="61">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="62">    
-    <bendpoint x="1859" y="1316"/>    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="18"/>  
-  </realization>  
-  <generalization id="63">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <association id="64">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="65" name="counter"/>      
-      <multiplicity id="66" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="67">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="68" name="root"/>      
-      <multiplicity id="69" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

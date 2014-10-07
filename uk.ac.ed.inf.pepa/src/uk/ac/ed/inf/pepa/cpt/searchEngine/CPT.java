@@ -107,7 +107,7 @@ public class CPT {
 			
 			temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
 			
-			addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
+			addNodes(rn.COMPONENT + ": ", rn.getPopulationMapAsNodeString(), tempNode);
 			addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
 			addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
 			addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
@@ -127,7 +127,7 @@ public class CPT {
 			totalPopulation += rn.getTotalPopulation();
 			runTime += rn.getRunTime();
 			
-			CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
+			CPTAPI.getPACS().addPAC(rn.getPopulationMapAsNodeString(), 
 					rn.getTotalCostString4SF(), 
 					rn.peformanceMapAsNodeString4SF(), 
 					rn.getTotalPopulationString());
@@ -162,7 +162,7 @@ public class CPT {
 				
 				temp = Utils.copyHashMap(rn.getTargetMet(higherIsGood));
 				
-				addNodes(rn.COMPONENT + ": ", rn.populationMapAsNodeString(), tempNode);
+				addNodes(rn.COMPONENT + ": ", rn.getPopulationMapAsNodeString(), tempNode);
 				addNodes(rn.TOTAL + ": ", rn.getTotalCostString(), tempNode);
 				addNodes(rn.MEASURED + ": ", rn.peformanceMapAsNodeString(), tempNode);
 				addNodes("Performance target: ", CPTAPI.getTargetControl().getValue(Config.LABTAR), tempNode);
@@ -182,7 +182,7 @@ public class CPT {
 				
 				CPTAPI.addResult(tempNode);
 				
-				CPTAPI.getPACS().addPAC(rn.populationMapAsNodeString(), 
+				CPTAPI.getPACS().addPAC(rn.getPopulationMapAsNodeString(), 
 						rn.getTotalCostString4SF(), 
 						rn.peformanceMapAsNodeString4SF(), 
 						rn.getTotalPopulationString());

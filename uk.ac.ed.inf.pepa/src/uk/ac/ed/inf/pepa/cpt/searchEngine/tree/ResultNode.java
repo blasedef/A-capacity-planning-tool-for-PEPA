@@ -114,7 +114,7 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 		return  mapAsCSVString(metaheuristicParameterMap);
 	}
 	
-	public String populationMapAsNodeString(){
+	public String getPopulationMapAsNodeString(){
 		return mapAsNodeString(componentPopulationMap);
 	}
 	
@@ -224,7 +224,10 @@ public class ResultNode implements Comparator<ResultNode>, Comparable<ResultNode
 	
 	@Override
 	public boolean equals(Object obj){
-		return false;
+		if (obj instanceof ResultNode)
+			return this.getPopulationMapAsNodeString().equals(((ResultNode) obj).getPopulationMapAsNodeString()); 
+		else
+			return false;
 	}
 	
 	
